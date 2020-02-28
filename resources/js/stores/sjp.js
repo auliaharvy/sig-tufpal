@@ -5,7 +5,7 @@ const state = () => ({
     
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
     sjp: {
-        destination_pool: '',
+        // destination_pool: '',
         departure_pool: '',
         vehicle: '',
         driver: '',
@@ -99,7 +99,7 @@ const actions = {
     },
     updateSjp({ state, commit }, payload) {
         return new Promise((resolve, reject) => {
-            $axios.put(`/sjp/${payload}`, state.sjp) //KIRIM PERMINTAAN KE SERVER UNTUK MENGUPDATE DATA BERDASARKAN PAYLOAD (ID) DAN DATA YANG AKAN DI UPDATE DI AMBIL DARI STATE CUSTOMER
+            $axios.post(`/sjp/adjust`, state.sjp) //KIRIM PERMINTAAN KE SERVER UNTUK MENGUPDATE DATA BERDASARKAN PAYLOAD (ID) DAN DATA YANG AKAN DI UPDATE DI AMBIL DARI STATE CUSTOMER
             .then((response) => {
                 commit('CLEAR_FORM') //BERSIHKAN FORM
                 resolve(response.data)

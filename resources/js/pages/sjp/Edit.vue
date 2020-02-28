@@ -3,7 +3,7 @@
         <div class="panel">
             <v-toolbar dark>
                 <h1>
-                    EDIT SJP
+                    SJP ADJUSMENT
                 </h1>
             </v-toolbar>
             <div class="panel-body">

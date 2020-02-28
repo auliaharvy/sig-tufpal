@@ -25,11 +25,18 @@
       :items="sjpstatuss.data"
       :search="search"
     >       
-        <template v-slot:item.actions="{ item }">
+        <template v-slot:item.receive="{ item }">
             <router-link :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
                 <v-btn color="success" small>Receive</v-btn>
-            </router-link>
-            <v-btn color="error" small @click="deleteSjpStatus(item.sjp_status_id)">Delete</v-btn>                         
+            </router-link>                       
+        </template>
+        <template v-slot:item.send_back="{ item }">
+            <router-link :to="{ name: 'sjpstatuss.add', params: {id: item.sjp_status_id} }">
+                <v-btn color="success" small>Send Back</v-btn>
+            </router-link>                       
+        </template>
+        <template v-slot:item.delete="{ item }">
+                <v-btn color="error" @click="deleteSjpStatus(item.sjp_status_id)" small>Delete</v-btn>                     
         </template>
     </v-data-table>
   </v-card>
@@ -72,6 +79,7 @@ export default {
                 { value: 'checker_sender', text: 'Checker Sender' },
                 { value: 'checker_receiver', text: 'Checker Receive' },
                 { value: 'sjp_number', text: 'SJP' },
+                { value: 'sjps_number', text: 'SJPS Number' },
                 { value: 'transaction', text: 'Transaction' },
                 { value: 'status', text: 'Status' },
                 { value: 'good_pallet', text: 'Good Pallet' },
@@ -81,7 +89,11 @@ export default {
                 { value: 'good_cement', text: 'Good Cement' },
                 { value: 'bad_cement', text: 'Bad Cement' },
                 { value: 'note', text: 'Note' },
-                { value: 'actions', text: 'Action'}
+                { value: 'created_at', text: 'Send at' },
+                { value: 'updated_at', text: 'Received at' },
+                { value: 'receive', text: 'Receive'},
+                { value: 'send_back', text: 'Send Back'},
+                { value: 'delete', text: 'Delete'}
             ],
             search: ''
         }
@@ -113,13 +125,13 @@ export default {
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         deleteSjpStatus(id) {
             this.$swal({
-                title: 'Kamu Yakin?',
-                text: "Tindakan ini akan menghapus secara permanent!",
+                title: 'Are you sure?',
+                text: "This will delete record Permanently!",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Iya, Lanjutkan!'
+                confirmButtonText: 'Yes!'
             }).then((result) => {
                 if (result.value) {
                     this.removeSjpStatus(id) //JIKA SETUJU MAKA PERMINTAAN HAPUS AKAN DI EKSEKUSI

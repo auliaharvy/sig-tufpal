@@ -25,12 +25,15 @@
       :items="pools.data"
       :search="search"
     >       
-        <template v-slot:item.actions="{ item }">
+    <template v-slot:item.total="{ item }">
+       {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }} 
+    </template>
+        <!-- <template v-slot:item.actions="{ item }">
             <router-link :to="{ name: 'pools.edit', params: {id: item.pool_pallet_id} }">
                 <v-btn color="success" small>Update</v-btn>
             </router-link>
             <v-btn color="error" small @click="deletePools(item.pool_pallet_id)">Delete</v-btn>                         
-        </template>
+        </template> -->
     </v-data-table>
   </v-card>
 </template>
@@ -69,6 +72,7 @@ export default {
         return {
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
             headers: [
+                { value: 'organization_name', text: 'Organization' },
                 { value: 'pool_name', text: 'Pool Name' },
                 { value: 'code', text: 'Pool Code' },
                 { value: 'type', text: 'Pool Type' },
@@ -78,7 +82,8 @@ export default {
                 { value: 'tbr_pallet', text: 'TBR Pallet' },
                 { value: 'ber_pallet', text: 'BER Pallet' },
                 { value: 'missing_pallet', text: 'Missing Pallet' },
-                { value: 'actions', text: 'Action'}
+                { value: 'total', text: 'Total Pallet' },
+                // { value: 'actions', text: 'Action'}
             ],
             search: ''
         }
@@ -110,19 +115,19 @@ export default {
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         deletePools(id) {
             this.$swal({
-                title: 'Kamu Yakin?',
-                text: "Tindakan ini akan menghapus secara permanent!",
+                title: 'Are you sure?',
+                text: "This will delete record Permanently!",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Iya, Lanjutkan!'
+                confirmButtonText: 'Yes!'
             }).then((result) => {
                 if (result.value) {
                     this.removePools(id) //JIKA SETUJU MAKA PERMINTAAN HAPUS AKAN DI EKSEKUSI
                 }
             })
-        }
+        },
     }
 }
 </script>

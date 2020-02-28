@@ -37,13 +37,25 @@
         </div>
        <div class="form-group" :class="{ 'has-error': errors.sender_user_id }">
             <label for="">Checker Sender</label>
-            <input type="text" class="form-control" v-model="pallettransfer.sender_user_id" :readonly="$route.name == 'pallettransfer.edit'">
+            <input type="text" class="form-control" v-model="pallettransfer.sender_user_id" :readonly="$route.name == 'pallettransfers.edit'">
             <p class="text-danger" v-if="errors.sender_user_id">{{ errors.sender_user_id[0] }}</p>
         </div>
-        <div class="form-group" :class="{ 'has-error': errors.receiver_user_id }">
+        <div class="form-group">
+            <label>Checker Sender</label>
+            <select class='form-control' v-model='pallettransfer.sender_user_id' :readonly="$route.name == 'pallettransfers.edit'">
+                <option v-for='data in authenticated' :value='authenticated.id'>{{ authenticated.name }}</option>
+            </select>
+        </div>
+        <!-- <div class="form-group" :class="{ 'has-error': errors.receiver_user_id }">
             <label for="">Checker Receiver</label>
             <input type="text" class="form-control" v-model="pallettransfer.receiver_user_id">
             <p class="text-danger" v-if="errors.receiver_user_id">{{ errors.receiver_user_id[0] }}</p>
+        </div> -->
+        <div class="form-group">
+            <label>Checker Receiver</label>
+            <select class='form-control' v-model='pallettransfer.receiver_user_id' :readonly="$route.name == 'pallettransfers.add'">
+                <option v-for='data in authenticated' :value='authenticated.id'>{{ authenticated.name }}</option>
+            </select>
         </div>
         <div class="form-group" :class="{ 'has-error': errors.good_pallet }">
             <label for="">Good Pallet</label>
@@ -74,7 +86,11 @@ import { mapActions, mapState, mapMutations } from 'vuex'
 export default {
     name: 'FormSjpStatus',
     created() {
-        this.getVehicles(),this.getPools(),this.getDrivers(),this.getTransporters(), this.getUserLists() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
+        this.getVehicles(), //LOAD DATA VEHICLES KETIKA COMPONENT DI-LOAD
+        this.getPools(), //LOAD DATA POOLS KETIKA COMPONENT DI-LOAD
+        this.getDrivers(), //LOAD DATA DRIVERS KETIKA COMPONENT DI-LOAD
+        this.getTransporters(), //LOAD DATA TRANSPORTER KETIKA COMPONENT DI-LOAD
+        this.getUserLogin() //LOAD DATA USER LOGIN KETIKA COMPONENT DI-LOAD
     },
    
     computed: {
@@ -95,7 +111,7 @@ export default {
             transporters: state => state.transporters //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
         ...mapState('user', {
-            users: state => state.users
+            authenticated: state => state.authenticated
         }),
     },
     methods: {
@@ -104,7 +120,7 @@ export default {
         ...mapActions('vehicle', ['getVehicles']),
         ...mapActions('driver', ['getDrivers']),
         ...mapActions('transporter', ['getTransporters']),
-        ...mapActions('user', ['getUserLists']),
+        ...mapActions('user', ['getUserLogin']),
        
     },
    

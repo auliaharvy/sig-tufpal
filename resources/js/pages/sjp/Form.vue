@@ -11,20 +11,24 @@
             <input type="text" class="form-control" v-model="sjp.departure_pool_pallet_id">
             <p class="text-danger" v-if="errors.departure_pool_pallet_id">{{ errors.departure_pool_pallet_id[0] }}</p>
         </div> -->
+        <!-- <div class="form-group">
+            <label>Departure Pool Pallet </label>
+            <select class='form-control' v-model='sjp.departure_pool_pallet_id'>
+                <option value='0' >Select Departure</option>
+                <option v-for='data in pools.data' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
+            </select>
+        </div> -->
+        <div class="form-group" :class="{ 'has-error': errors.departure_pool_pallet_id }">
+            <label for="">Departure Pool</label>
+            <p v-for='data in pools.data' :value='data.pool_pallet_id'>{{ data.pool_name }}</p>
+        </div>
         <div class="form-group">
-                            <label>Departure Pool Pallet</label>
-                            <select class='form-control' v-model='sjp.departure_pool_pallet_id'>
-                              <option value='0' >Select Departure</option>
-                              <option v-for='data in pools.data' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
-                            </select>
-                        </div>
-         <div class="form-group">
-                            <label>Destination Pool Pallet</label>
-                            <select class='form-control' v-model='sjp.destination_pool_pallet_id'>
-                              <option value='0' >Select Destination</option>
-                              <option v-for='data in pools.data' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
-                            </select>
-                        </div>
+            <label>Destination Pool Pallet</label>
+            <select class='form-control' v-model='sjp.destination_pool_pallet_id'>
+                <option value='0' >Select Destination</option>
+                <option v-for='data in pools.data' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
+            </select>
+        </div>
         <div class="form-group">
                             <label>Vehicle Number</label>
                             <select class='form-control' v-model='sjp.vehicle_id'>
@@ -92,6 +96,10 @@
             <input type="text" class="form-control" v-model="sjp.pallet_quantity">
             <p class="text-danger" v-if="errors.pallet_quantity">{{ errors.pallet_quantity[0] }}</p>
         </div>
+        <div class="form-group" :class="{ 'has-error': errors.created_by }">
+            <label for="">Created By</label>
+            <p>{{ authenticated.name }}</p>
+        </div>
     </div>
 </template>
 
@@ -122,6 +130,9 @@ export default {
          ...mapState('transporter', {
             transporters: state => state.transporters //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
+        ...mapState('user', {
+            authenticated: state => state.authenticated
+        }),
     },
     methods: {
         ...mapMutations('sjp', ['CLEAR_FORM']), 
@@ -132,6 +143,6 @@ export default {
     },
     destroyed() {
         this.CLEAR_FORM() //KETIKA COMPONENT DITINGGALKAN, BERSIHKAN DATA
-    }
+    },
 }
 </script>

@@ -31,6 +31,15 @@
                         <v-list-item-title color="black">{{ item.title}}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                <v-divider></v-divider> 
+                <v-list-item v-for="item in settings" :key="item.title" link router :to="item.route">
+                    <v-list-item-icon>
+                        <v-icon color="black">{{ item.icon}}</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">{{ item.title}}</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
             </v-list>
         </v-navigation-drawer>
 
@@ -63,14 +72,20 @@ export default {
                 { title: 'Surat Jalan Pallet', icon: 'mdi-file-document', route:'/sjp' },
                 { title: 'SJP Status', icon: 'mdi-file-document', route:'/sjpstatus' },
                 { title: 'Pallet Transfer', icon: 'mdi-call-received', route:'/pallettransfer' },
-                { title: 'Missing/BER Pallet', icon: 'mdi-close-circle', route:'/missing' },
+                { title: 'Missing/BER Pallet', icon: 'mdi-close-circle', route:'/bermissing' },
+                { title: 'Add New Pallet', icon: 'mdi-plus', route:'/newpallet',},
                 ],
             reports: [
                 { title: 'Report Dashboard', icon: 'mdi-monitor-dashboard' },
                 { title: 'Pallet Quantity', icon: 'mdi-numeric', route:'/poolpallet' },
-                { title: 'Pallet Movement', icon: 'mdi-truck', route:'/' },
+                { title: 'Transporter', icon: 'mdi-numeric', route:'/transporter', permission: 'read transporter'},
+                { title: 'Pallet Movement', icon: 'mdi-truck', route:'/palletmovement' },
                 { title: 'Pallet Deposit', icon: 'mdi-clipboard-flow', route:'/' },
-                { title: 'Pallet Geolocation', icon: 'mdi-google-maps' },
+                { title: 'Pallet Geolocation', icon: 'mdi-google-maps', route:'/map' },
+            ],
+            settings: [
+                { title: 'Setting', icon: 'mdi-monitor-dashboard', route:'/setting' },
+               
             ],
         }
     },

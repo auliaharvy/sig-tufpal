@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './pages/Home.vue'
+import Map from './pages/Map.vue'
 import Login from './pages/Login.vue'
 import store from './store.js'
+
+import PalletMovement from './pages/report/PalletMovement.vue'
 
 import IndexSjp from './pages/sjp/index.vue'
 import DataSjp from './pages/sjp/sjp.vue'
@@ -18,6 +21,11 @@ import IndexPool from './pages/pool/Index.vue'
 import DataPool from './pages/pool/Pool.vue'
 import AddPool from './pages/pool/AddPool.vue'
 import EditPool from './pages/pool/EditPool.vue'
+
+import IndexTransporter from './pages/transporter/Index.vue'
+import DataTransporter from './pages/transporter/Transporter.vue'
+import AddTransporter from './pages/transporter/AddTransporter.vue'
+import EditTransporter from './pages/transporter/EditTransporter.vue'
 
 import IndexPalletTransfer from './pages/pallettransfer/Index.vue'
 import DataPalletTransfer from './pages/pallettransfer/PalletTransfer.vue'
@@ -57,6 +65,16 @@ import IndexTransaction from './pages/transaction/Index.vue'
 import AddTransaction from './pages/transaction/Add.vue'
 import ViewTransaction from './pages/transaction/View.vue'
 import ListTransaction from './pages/transaction/List.vue'
+
+import IndexBermissing from './pages/bermissing/Index.vue'
+import DataBermissing from './pages/bermissing/Bermissing.vue'
+import AddBermissing from './pages/bermissing/AddBermissing.vue'
+import EditBermissing from './pages/bermissing/EditBermissing.vue'
+
+import IndexNewpallet from './pages/newpallet/Index.vue'
+import DataNewpallet from './pages/newpallet/Newpallet.vue'
+import AddNewpallet from './pages/newpallet/AddNewpallet.vue'
+import EditNewpallet from './pages/newpallet/EditNewpallet.vue'
 
 Vue.use(Router)
 
@@ -115,7 +133,56 @@ const router = new Router({
                 },
             ]
         },
-
+        {
+            path: '/bermissing',
+            component: IndexBermissing,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'bermissings.data',
+                    component: DataBermissing,
+                    meta: { title: 'Manage BER/Missing Pallet' }
+                },
+                {
+                    path: 'add',
+                    name: 'bermissings.add',
+                    component: AddBermissing,
+                    meta: { title: 'Add BER/Missing Pallet' }
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'bermissings.edit',
+                    component: EditBermissing,
+                    meta: { title: 'Edit BER/Missing Pallet' }
+                },
+            ]
+        },
+        {
+            path: '/newpallet',
+            component: IndexNewpallet,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'newpallets.data',
+                    component: DataNewpallet,
+                    meta: { title: 'Manage New Pallet' }
+                },
+                {
+                    path: 'add',
+                    name: 'newpallets.add',
+                    component: AddNewpallet,
+                    meta: { title: 'Add New Pallet' }
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'newpallets.edit',
+                    component: EditNewpallet,
+                    meta: { title: 'Edit New Pallet' }
+                },
+            ]
+        },
         {
             path: '/poolpallet',
             component: IndexPool,
@@ -138,6 +205,32 @@ const router = new Router({
                     name: 'pools.edit',
                     component: EditPool,
                     meta: { title: 'Edit Pool' }
+                },
+            ]
+        },
+
+        {
+            path: '/transporter',
+            component: IndexTransporter,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'transporters.data',
+                    component: DataTransporter,
+                    meta: { title: 'Manage Transporter' }
+                },
+                {
+                    path: 'add',
+                    name: 'transporters.add',
+                    component: AddTransporter,
+                    meta: { title: 'Add Transporter' }
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'transporters.edit',
+                    component: EditTransporter,
+                    meta: { title: 'Edit Transporter' }
                 },
             ]
         },
@@ -169,10 +262,24 @@ const router = new Router({
         },
 
 
+
+        {
+            path: '/palletmovement',
+            name: 'palletmovement',
+            component: PalletMovement,
+            meta: { requiresAuth: true }
+        },
+
         {
             path: '/',
             name: 'home',
             component: Home,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/map',
+            name: 'map',
+            component: Map,
             meta: { requiresAuth: true }
         },
         {

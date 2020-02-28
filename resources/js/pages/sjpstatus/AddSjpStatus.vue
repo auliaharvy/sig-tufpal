@@ -23,13 +23,17 @@
     import FormSjpStatus from './Form.vue'
     export default {
         name: 'AddSjpStatus',
+        created() {
+            this.editSjpStatus(this.$route.params.id), this.editSjp(this.$route.params.id) //LOAD SINGLE DATA CUSTOMER BERDASARKAN ID
+        },
         data() {
             return {
                 
             }
         },
         methods: {
-            ...mapActions('sjpstatus', ['submitSjpStatus']),
+            ...mapActions('sjpstatus', ['editSjpStatus', 'submitSjpStatus']),
+            ...mapActions('sjp', ['editSjp', 'updateSjp']),
             //KETIKA TOMBOL DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
             submit() {
                 //MELAKUKAN REQUEST KE SERVER UNTUK MENAMBAHKAN DATA

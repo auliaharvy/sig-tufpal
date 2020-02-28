@@ -3,13 +3,23 @@
         <div class="panel">
             <div class="panel-heading">
                 <router-link :to="{ name: 'sjps.add' }" class="v-btn btn-primary text-black"><v-btn>Add SJP</v-btn></router-link>
+                <!-- <v-btn>
+                    <download-excel 
+                    :data= "sjps.data"
+                    :before-generate = "startDownload"
+                    :before-finish = "finishDownload"
+                    type="csv"
+                    name="SJP.csv">
+                         Download Data
+                    </download-excel>
+                </v-btn> -->
             </div>
             <div class="panel-body">
               
                 <v-card>
                     <v-card-title>
                         Surat Jalan Pallet
-                        <v-spacer></v-spacer>
+                        <v-spacer></v-spacer>  
                         <v-text-field
                         v-model="search"
                         prepend-icon="mdi-search"
@@ -18,11 +28,30 @@
                         hide-details
                         ></v-text-field>
                     </v-card-title>
-                    <v-data-table :items="sjps.data" :headers="fields" :search="search">
-                        <template class="pa-5" v-slot:item.actions="{ item }">
-                            <router-link :to="{ name: 'sjpstatuss.add', params: {id: item.sjp_id} }"><v-btn color="success">Send</v-btn></router-link>
-                    
-                            <v-btn color="error" @click="deleteSjp(item.sjp_id)">Delete</v-btn>                        
+                    <v-data-table :items="sjps.data" :headers="fields" :search="search" dense>
+                        <template v-slot:item.state="{ item }">
+                            <v-chip class="label label-default" v-if="item.state == 0">Draft</v-chip>
+                            <v-chip class="label label-success" v-else-if="item.state == 1">Send</v-chip>
+                            <v-chip class="label label-primary" v-else>Send Back</v-chip>
+                        </template>
+
+                        <!-- <template  class="pa-5" v-slot:item.send="{ item }">
+                            <router-link :to="{ name: 'sjpstatuss.add', params: {id: item.sjp_number} }" v-if="sjps.state == 0">
+                                <v-btn color="success" small >Send</v-btn>
+                            </router-link>                        
+                        </template> -->
+                        <template v-slot:item.send="{ item }">
+                                <router-link :to="{ name: 'sjpstatuss.add', params: {id: item.sjp_id} }" v-if="item.state == 0">
+                                    <v-btn color="primary" small>Send</v-btn>
+                                </router-link>                        
+                            </template>
+
+                        <template class="pa-5" v-slot:item.adjusment="{ item }">
+                            <router-link :to="{ name: 'sjps.edit', params: {id: item.sjp_id} }"><v-btn color="success" small>Adjust</v-btn></router-link>                        
+                        </template>
+
+                        <template v-if="$can('delete sjps')" class="pa-5" v-slot:item.delete="{ item }">
+                            <v-btn color="error" @click="deleteSjp(item.sjp_id)" small>Delete</v-btn>                        
                         </template>
                     </v-data-table>
                      </v-card>
@@ -38,7 +67,7 @@
                 </b-table> -->
               	<!-- TABLE UNTUK MENAMPILKAN LIST CUSTOMER -->
 
-                <div class="row">
+                <!-- <div class="row"> -->
                     <!-- <div class="col-md-6">
                         <p v-if="sjps.data"><i class="fa fa-bars"></i> {{ sjps.data.length }} item dari {{ sjps.meta.total }} total data</p>
                     </div> -->
@@ -53,7 +82,7 @@
                                 ></b-pagination>
                         </div>
                     </div> -->
-                </div>
+                <!-- </div> -->
             </div>
         </div>
     </div>
@@ -83,9 +112,15 @@ export default {
                 { value: 'packaging', text: 'Packaging' },
                 { value: 'product_quantity', text: 'Product QTY' },
                 { value: 'status', text: 'Status' },
+                { value: 'state', text: 'State' },
+                { value: 'created_by', text: 'Created By' },
+                { value: 'adjust_by', text: 'Adjust By' },
                 { value: 'departure_time', text: 'Departure Time' },
                 { value: 'eta', text: 'ETA' },
-                { value: 'actions', text: 'Action' }
+                { value: 'send', text: 'Send Pallet' },
+                { value: 'adjusment', text: 'SJP Adjusment' },
+                { value: 'delete', text: 'Delete' }
+
             ],
             search: ''
         }
@@ -117,13 +152,13 @@ export default {
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         deleteSjp(id) {
             this.$swal({
-                title: 'Kamu Yakin?',
-                text: "Tindakan ini akan menghapus secara permanent!",
+                title: 'Are you sure?',
+                text: "This will delete record Permanently!",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Iya, Lanjutkan!'
+                confirmButtonText: 'Yes!'
             }).then((result) => {
                 if (result.value) {
                     this.removeSjp(id) //JIKA SETUJU MAKA PERMINTAAN HAPUS AKAN DI EKSEKUSI

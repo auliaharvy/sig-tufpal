@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Resources\SjpStatusCollection;
+use Illuminate\Support\Facades\Auth;
 use App\SjpStatus;
 use App\Sjp;
 use App\PoolPallet;
@@ -13,7 +14,24 @@ class PoolController extends Controller
 {
     public function index()
     {
-        $pool = new SjpStatusCollection(PoolPallet::paginate(10));
+        $pool_pallet = Auth::user()->reference_pool_pallet_id;
+        if($pool_pallet==null){
+        $pool = DB::table('pool_pallet as a')
+            ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
+            ->select('a.*', 'b.organization_name')
+            ->paginate(10)
+            ->toArray();
+        }
+        else{
+            $pool = DB::table('pool_pallet as a')
+            ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
+            ->select('a.*', 'b.organization_name')
+            ->where('a.pool_pallet_id',$pool_pallet)
+            ->paginate(10)
+            ->toArray();
+        }
+
+        // $pool = new SjpStatusCollection(PoolPallet::paginate(10));
 		 return $pool;
         // return response()->json(Sjp::all()->toArray());
     }

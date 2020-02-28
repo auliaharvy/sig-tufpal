@@ -17,7 +17,11 @@ import pool from './stores/pool.js'
 import vehicle from './stores/vehicle.js'
 import driver from './stores/driver.js'
 import transporter from './stores/transporter.js'
+import msttransaction from './stores/msttransaction.js'
+import organization from './stores/organization.js'
 import pallettransfer from './stores/pallettransfer.js'
+import bermissing from './stores/Bermissing.js'
+import newpallet from './stores/Newpallet.js'
 
 Vue.use(Vuex)
 
@@ -39,7 +43,11 @@ const store = new Vuex.Store({
         vehicle,
         driver,
         transporter,
-        pallettransfer
+        msttransaction,
+        organization,
+        pallettransfer,
+        bermissing,
+        newpallet
     },
     state: {
         token: localStorage.getItem('token'),

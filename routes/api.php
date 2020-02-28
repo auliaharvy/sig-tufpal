@@ -17,14 +17,23 @@ Route::post('/login', 'Auth\LoginController@login');
 
 Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('sjp', 'SjpController');
+    Route::post('/sjp/adjust', 'SjpController@adjust');
     Route::resource('sjpstatus', 'SjpStatusController');
     Route::resource('pallettransfer', 'PalletTransferController');
+    Route::resource('bermissing', 'BermissingpalletController');
+    Route::resource('newpallet', 'NewpalletController');
+    // Route::resource('palletmovement', 'PalletMovementController');
     Route::resource('pool', 'PoolController');
     Route::resource('driver', 'DriverController');
     Route::resource('vehicle', 'VehicleController');
     Route::resource('transporter', 'TransporterController');
+    Route::resource('msttransaction', 'MstTransactionController');
+    Route::resource('organization', 'OrganizationController');
     Route::post('/sjpstatus/receive', 'SjpStatusController@receive');
     Route::post('/pallettransfer/receive', 'PalletTransferController@receive');
+    Route::post('/bermissing/approve', 'BermissingpalletController@approve');
+
+
     Route::get('chart', 'API\DashboardController@chart');
     Route::get('export', 'API\DashboardController@exportData');
     Route::resource('/outlets', 'API\OutletController')->except(['show']);

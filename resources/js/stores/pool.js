@@ -17,9 +17,7 @@ const state = () => ({
         good_pallet: "",
         tbr_pallet: "",
         ber_pallet: "",
-        missing_pallet: "", 
-        
-        
+        missing_pallet: "",
     },
     page: 1
 })

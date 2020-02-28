@@ -9,7 +9,7 @@ class Sjp extends Model
 {
     use AutoNumberTrait;
     
-    protected $table = 'surat_jalan_pallet';
+   
 
     /**
      * The primary key for the model.
@@ -18,6 +18,7 @@ class Sjp extends Model
      */
     protected $primaryKey = 'sjp_id';
     protected $guarded = [];
+    protected $table = 'surat_jalan_pallet';
 
     public function getAutoNumberOptions()
     {

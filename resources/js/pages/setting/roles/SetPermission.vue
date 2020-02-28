@@ -11,7 +11,7 @@
                         <div class="form-group">
                             <label for="">Role</label>
                             <select class="form-control" v-model="role_user.role">
-                                <option value="">Pilih</option>
+                                <option value="">Select</option>
                                 <option v-for="(row, index) in roles" :value="row.name" :key="index">{{ row.name }}</option>
                             </select>
                             <p class="text-danger" v-if="errors.role_id">{{ errors.role_id[0] }}</p>
@@ -36,7 +36,7 @@
                         <div class="form-group">
                             <label for="">Role</label>
                             <select class="form-control" v-model="role_selected">
-                                <option value="">Pilih</option>
+                                <option value="">Select</option>
                                 <option v-for="(row, index) in roles" :value="row.id" :key="index">{{ row.name }}</option>
                             </select>
                             <p class="text-danger" v-if="errors.role_id">{{ errors.role_id[0] }}</p>
