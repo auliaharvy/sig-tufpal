@@ -14,49 +14,23 @@
                 <option v-for='data in users.data' :value='data.id'>{{ data.name }}</option>
             </select>
         </div> -->
-    
-       <div class="form-group" :class="{ 'has-error': errors.organization_id }">
-            <label for="">Organization</label>
-            <input type="text" class="form-control" v-model="pool.organization_id" :readonly="$route.name == 'pools.edit'">
-            <p class="text-danger" v-if="errors.organization_id">{{ errors.organization_id[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.code }">
-            <label for="">Code</label>
-            <input type="text" class="form-control" v-model="pool.code" :readonly="$route.name == 'pools.edit'">
-            <p class="text-danger" v-if="errors.code">{{ errors.code[0] }}</p>
-        </div>
         <div class="form-group">
-            <label>Pool Pallet Type:</label>
-            <select class='form-control' v-model='pool.type'>
-                <option value='0' >Select Type</option>
-                <option>{{ type }}</option>
+            <label>Organization</label>
+            <select class='form-control' v-model='pools.organization_id'>
+                <option value='0' >Select Organization</option>
+                <option v-for='data in organizations.data' :value='data.organization_id'>{{ data.organization_name }}</option>
             </select>
         </div>
-        <!-- <div class="form-group" :class="{ 'has-error': errors.sjp_id }">
-            <label for="">SJP Master</label>
-            <input type="text" class="form-control" v-model="sjpstatus.sjp_id">
-            <p class="text-danger" v-if="errors.sjp_id">{{ errors.sjp_id[0] }}</p>
-        </div> -->
     </div>
 </template>
 
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
 export default {
-    data() {
-        return {
-            //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
-            type: [
-                POOL_PALLET_DLI,
-                WAREHOUSE,
-                STATION,
-                DISTRIBUTOR/STORE,
-                WORKSHOP
-            ],
-            search: ''
-        }
-    },
-    name: 'FormPool',   
+    name: 'FormPool',
+    created() {
+        this.getOrganization()//LOAD DATA SJP KETIKA COMPONENT DI-LOAD
+    },   
     computed: {
         ...mapState(['errors']), //LOAD STATE ERROR UNTUK DITAMPILKAN KETIKA TERJADI ERROR VALIDASI
         ...mapState('pool', {
@@ -65,12 +39,15 @@ export default {
         ...mapState('pool', {
             pools: state => state.pools //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
+        ...mapState('organization', {
+            organizations: state => state.organizations
+        }),
     },
     methods: {
         ...mapMutations('pool', ['CLEAR_FORM']), 
         ...mapActions('pool', ['getPools']),
+        ...mapActions('organization', ['getOrganization']),
     },
-   
     destroyed() {
         this.CLEAR_FORM() //KETIKA COMPONENT DITINGGALKAN, BERSIHKAN DATA
     }
