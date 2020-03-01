@@ -26,9 +26,15 @@
       :search="search"
     >       
         <template v-slot:item.receive="{ item }">
-            <router-link :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
+
+            <router-link v-if="item.status == 'SENDING'" :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
                 <v-btn color="success" small>Receive</v-btn>
-            </router-link>                       
+               
+            </router-link>  
+            <router-link v-else :to="{ name: 'sjpstatuss.data', params: {id: item.sjp_status_id} }">
+               
+                <p>RECEIVED</p>
+            </router-link>                     
         </template>
         <template v-slot:item.send_back="{ item }">
             <router-link :to="{ name: 'sjpstatuss.add', params: {id: item.sjp_status_id} }">
@@ -70,7 +76,7 @@ import { mapActions, mapState } from 'vuex'
 export default {
     name: 'DataSjpStatus',
     created() {
-        this.getSjpStatus() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
+        this.getSjpStatuss() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
     },
     data() {
         return {
@@ -79,7 +85,7 @@ export default {
                 { value: 'checker_sender', text: 'Checker Sender' },
                 { value: 'checker_receiver', text: 'Checker Receive' },
                 { value: 'sjp_number', text: 'SJP' },
-                { value: 'sjps_number', text: 'SJPS Number' },
+               
                 { value: 'transaction', text: 'Transaction' },
                 { value: 'status', text: 'Status' },
                 { value: 'good_pallet', text: 'Good Pallet' },
@@ -114,14 +120,14 @@ export default {
     },
     watch: {
         page() {
-            this.getSjpStatus() //KETIKA VALUE PAGE TERJADI PERUBAHAN, MAKA REQUEST DATA BARU
+            this.getSjpStatuss() //KETIKA VALUE PAGE TERJADI PERUBAHAN, MAKA REQUEST DATA BARU
         },
         search() {
-            this.getSjpStatus(this.search) //KETIKA VALUE SEARCH TERJADI PERUBAHAN, MAKA REQUEST DATA BARU
+            this.getSjpStatuss(this.search) //KETIKA VALUE SEARCH TERJADI PERUBAHAN, MAKA REQUEST DATA BARU
         }
     },
     methods: {
-        ...mapActions('sjpstatus', ['getSjpStatus', 'removeSjpStatus']), 
+        ...mapActions('sjpstatus', ['getSjpStatuss', 'removeSjpStatus']), 
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         deleteSjpStatus(id) {
             this.$swal({

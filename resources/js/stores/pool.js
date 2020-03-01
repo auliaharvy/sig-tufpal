@@ -67,6 +67,17 @@ const actions = {
             })
         })
     },
+    getPoolForm({ commit, state }, payload) {
+        let search = typeof payload != 'undefined' ? payload:''
+        return new Promise((resolve, reject) => {
+            //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
+            $axios.get(`/poolform?page=${state.page}&q=${search}`)
+            .then((response) => {
+                commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
+                resolve(response.data)
+            })
+        })
+    },
     submitPools({ dispatch, commit, state }) {
         return new Promise((resolve, reject) => {
             //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER

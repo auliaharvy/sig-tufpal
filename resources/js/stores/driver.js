@@ -7,6 +7,8 @@ const state = () => ({
     driver: {
         driver_name: '',
         driver_address: '',
+        mobile_number:'',
+        email:'',
         
     },
     page: 1
@@ -41,6 +43,17 @@ const actions = {
         return new Promise((resolve, reject) => {
             //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
             $axios.get(`/driver?page=${state.page}&q=${search}`)
+            .then((response) => {
+                commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
+                resolve(response.data)
+            })
+        })
+    },
+    getDriverForm({ commit, state }, payload) {
+        let search = typeof payload != 'undefined' ? payload:''
+        return new Promise((resolve, reject) => {
+            //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
+            $axios.get(`/driverform?page=${state.page}&q=${search}`)
             .then((response) => {
                 commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
                 resolve(response.data)

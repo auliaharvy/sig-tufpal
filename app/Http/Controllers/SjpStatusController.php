@@ -70,9 +70,9 @@ class SjpStatusController extends Controller
             $destination_id = $sjp->departure_pool_pallet_id;
             $departure_id = $sjp->destination_pool_pallet_id;
         }
-
+        $checker = Auth::user()->id;
         $sjpStatus = SjpStatus::create([
-            'checker_send_user_id' => $request->checker_send_user_id, 
+            'checker_send_user_id' => $checker, 
             'checker_receive_user_id' => 5, 
             'sjp_id' => $request->sjp_id,
             'good_pallet' => $request->good_pallet, 
@@ -141,8 +141,9 @@ class SjpStatusController extends Controller
             $ber_pallet_awal = $update->ber_pallet; //ambil qty pallet awal
             $missing_pallet_awal = $update->missing_pallet; //ambil qty pallet awal
 
-            $update->checker_send_user_id = $request->checker_send_user_id;
-            $update->checker_receive_user_id = $request->checker_receive_user_id;
+            // $update->checker_send_user_id = $request->checker_send_user_id;
+            $receive = Auth::user()->id;
+            $update->checker_receive_user_id = $receive;
             $update->sjp_id = $request->sjp_id;
             $update->good_pallet = $request->good_pallet;
             $update->tbr_pallet = $request->tbr_pallet;

@@ -5,18 +5,21 @@ const state = () => ({
     
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
     sjpstatus: {
+        
         checker_send_user_id: '',
+        checker_receive_user_id: '',
         sjp_id: '',
+        transaction_id: '',
+        sjp_number: '',
+        status: '',
         good_pallet: '',
         tbr_pallet: '',
         ber_pallet: '',
         missing_pallet: '',
         good_cement: '',
         bad_cement: '',
-        transaction_id: '',
         note: '',
-        
-        
+     
     },
     page: 1
 })
@@ -38,21 +41,24 @@ const mutations = {
     CLEAR_FORM(state) {
         state.sjpstatus = {
             checker_send_user_id: '',
+            checker_receive_user_id: '',
             sjp_id: '',
+            transaction_id: '',
+            sjp_number: '',
+            status: '',
             good_pallet: '',
             tbr_pallet: '',
             ber_pallet: '',
             missing_pallet: '',
             good_cement: '',
             bad_cement: '',
-            transaction_id: '',
             note: '',
         }
     }
 }
 
 const actions = {
-    getSjpStatus({ commit, state }, payload) {
+    getSjpStatuss({ commit, state }, payload) {
         let search = typeof payload != 'undefined' ? payload:''
         return new Promise((resolve, reject) => {
             //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
@@ -69,7 +75,7 @@ const actions = {
             $axios.post(`/sjpstatus`, state.sjpstatus)
             .then((response) => {
                 //APABILA BERHASIL MAKA LOAD DATA CUSTOMER UNTUK MENGAMBIL DATA TERBARU
-                dispatch('getSjpStatus').then(() => {
+                dispatch('getSjpStatuss').then(() => {
                     resolve(response.data)
                 })
             })
@@ -103,7 +109,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             $axios.delete(`/sjpstatus/${payload}`) //KIRIM REQUEST KE SERVER BERDASARKAN PAYLOAD (ID)
             .then((response) => {
-                dispatch('getSjpStatus').then(() => resolve()) //AMBIL DATA CUSTOMER TERBARU
+                dispatch('getSjpStatuss').then(() => resolve()) //AMBIL DATA CUSTOMER TERBARU
             })
         })
     }

@@ -5,7 +5,7 @@ const state = () => ({
     
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
     sjp: {
-        // destination_pool: '',
+        destination_pool: '',
         departure_pool: '',
         vehicle: '',
         driver: '',
@@ -40,6 +40,7 @@ const mutations = {
     //RESET STATE CUSTOMER
     CLEAR_FORM(state) {
         state.sjp = {
+            sjp_id: '',
             destination_pool: '',
             departure_pool: '',
             vehicle: '',

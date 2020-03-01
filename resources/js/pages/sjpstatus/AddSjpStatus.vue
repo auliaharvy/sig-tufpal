@@ -23,9 +23,9 @@
     import FormSjpStatus from './Form.vue'
     export default {
         name: 'AddSjpStatus',
-        created() {
-            this.editSjpStatus(this.$route.params.id), this.editSjp(this.$route.params.id) //LOAD SINGLE DATA CUSTOMER BERDASARKAN ID
-        },
+        // created() {
+        //     this.editSjpStatus(this.$route.params.id), this.editSjp(this.$route.params.id) //LOAD SINGLE DATA CUSTOMER BERDASARKAN ID
+        // },
         data() {
             return {
                 

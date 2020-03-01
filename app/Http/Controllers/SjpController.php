@@ -56,7 +56,7 @@ class SjpController extends Controller
 
         $sjp = Sjp::create([
             'destination_pool_pallet_id' => $request->destination_pool_pallet_id, 
-            'departure_pool_pallet_id' => auth()->user()->reference_pool_pallet_id, 
+            'departure_pool_pallet_id' => Auth::user()->reference_pool_pallet_id, 
             'vehicle_id' => $request->vehicle_id, 
             'driver_id' => $request->driver_id, 
             'transporter_id' => $request->transporter_id, 

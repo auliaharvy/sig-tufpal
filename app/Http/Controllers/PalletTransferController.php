@@ -65,11 +65,11 @@ class PalletTransferController extends Controller
     {
         $pallet_transfer_id = $request->pallet_transfer_id;
         $transporter_id = $request->transporter_id;
-        $departure_id = $request->departure_pool_pallet_id;
+        $departure_id = Auth::user()->reference_pool_pallet_id;
         $destination_id = $request->destination_pool_pallet_id;
 
         $palletTransfer = PalletTransfer::create([
-            'departure_pool_pallet_id' => $request->departure_pool_pallet_id,
+            'departure_pool_pallet_id' => Auth::user()->reference_pool_pallet_id,
             'destination_pool_pallet_id' => $request->destination_pool_pallet_id,
             'sender_user_id' => $request->sender_user_id, 
             'receiver_user_id' => 5,
@@ -106,7 +106,7 @@ class PalletTransferController extends Controller
     {
         $pallet_transfer_id = $request->pallet_transfer_id;
         $transporter_id = $request->transporter_id;
-        $departure_id = $request->departure_pool_pallet_id;
+        // $departure_id = $request->departure_pool_pallet_id;
         $destination_id = $request->destination_pool_pallet_id;
 
         $palletTransfer = PalletTransfer::where('pallet_transfer_id',$pallet_transfer_id)->first();
@@ -115,7 +115,7 @@ class PalletTransferController extends Controller
         }
         else{
             $update = PalletTransfer::find($pallet_transfer_id);
-            $update->departure_pool_pallet_id = $request->departure_pool_pallet_id;
+            // $update->departure_pool_pallet_id = $request->departure_pool_pallet_id;
             $update->destination_pool_pallet_id = $request->destination_pool_pallet_id;
             $update->sender_user_id = $request->sender_user_id;
             $update->receiver_user_id = $request->receiver_user_id;

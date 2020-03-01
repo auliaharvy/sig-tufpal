@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label>Departure Pool Pallet</label>
             <select class='form-control' v-model='pallettransfer.departure_pool_pallet_id'>
                 <option value='0' >Select Departure</option>
                 <option v-for='data in pools.data' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
             </select>
-        </div>
+        </div> -->
         <div class="form-group">
             <label>Destination Pool Pallet</label>
             <select class='form-control' v-model='pallettransfer.destination_pool_pallet_id'>
