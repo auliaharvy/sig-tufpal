@@ -22,12 +22,13 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('pallettransfer', 'PalletTransferController');
     Route::resource('bermissing', 'BermissingpalletController');
     Route::resource('newpallet', 'NewpalletController');
-    // Route::resource('palletmovement', 'PalletMovementController');
+    Route::resource('palletmovement', 'PalletMovementController');
     Route::resource('pool', 'PoolController');
     Route::get('poolform', 'PoolController@getpoolpallet');
     Route::resource('driver', 'DriverController');
     Route::get('driverform', 'DriverController@getdriverform');
     Route::resource('vehicle', 'VehicleController');
+    Route::get('vehicleform', 'VehicleController@getvehicleform');
     Route::resource('transporter', 'TransporterController');
     Route::resource('msttransaction', 'MstTransactionController');
     Route::resource('organization', 'OrganizationController');

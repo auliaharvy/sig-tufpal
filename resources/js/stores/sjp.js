@@ -41,6 +41,8 @@ const mutations = {
     CLEAR_FORM(state) {
         state.sjp = {
             sjp_id: '',
+            driver_id:'',
+            vehicle_id:'',
             destination_pool: '',
             departure_pool: '',
             vehicle: '',
@@ -95,7 +97,7 @@ const actions = {
             .then((response) => {
                 commit('ASSIGN_FORM', response.data.data) //ASSIGN DATA TERSEBUT KE DALAM STATE CUSTOMER
                 resolve(response.data)
-            })
+            })  
         })
     },
     updateSjp({ state, commit }, payload) {

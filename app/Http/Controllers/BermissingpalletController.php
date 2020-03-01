@@ -27,7 +27,7 @@ class BermissingpalletController extends Controller
             ->join('transporter as e', 'a.transporter_id', '=', 'e.transporter_id')
             ->join('sjp_status as f', 'a.reference_sjp_status_id', '=', 'f.sjp_status_id')
             ->select('a.*', 'b.name as reporter', 'c.name as approver',
-                    'd.pool_name','e.transporter_name', 'f.sjp_number')
+                    'd.pool_name','e.transporter_name', 'f.sjps_number')
            
             ->paginate(10)
             ->toArray();
@@ -40,13 +40,13 @@ class BermissingpalletController extends Controller
             ->join('transporter as e', 'a.transporter_id', '=', 'e.transporter_id')
             ->join('sjp_status as f', 'a.reference_sjp_status_id', '=', 'f.sjp_status_id')
             ->select('a.*', 'b.name as reporter', 'c.name as approver',
-                    'd.pool_name','e.transporter_name', 'f.sjp_number')
-            ->where('d.pool_pallet_id',$pool_pallet)
+                    'd.pool_name','e.transporter_name', 'f.sjps_number')
+            ->where('a.pool_pallet_id',$pool_pallet)
             ->paginate(10)
             ->toArray();
         }
         
-        $bermissing = new BermissingpalletCollection(Bermissing::paginate(10));
+       
         return $bermissing;
         // //return response()->json(Bermissing::all()->toArray());
     }

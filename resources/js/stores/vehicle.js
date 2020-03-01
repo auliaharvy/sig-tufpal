@@ -46,6 +46,17 @@ const actions = {
             })
         })
     },
+    getVehicleForm({ commit, state }, payload) {
+        let search = typeof payload != 'undefined' ? payload:''
+        return new Promise((resolve, reject) => {
+            //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
+            $axios.get(`/vehicleform?page=${state.page}&q=${search}`)
+            .then((response) => {
+                commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
+                resolve(response.data)
+            })
+        })
+    },
   
 }
 

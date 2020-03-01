@@ -86,9 +86,9 @@ import { mapActions, mapState, mapMutations } from 'vuex'
 export default {
     name: 'FormSjpStatus',
     created() {
-        this.getVehicles(), //LOAD DATA VEHICLES KETIKA COMPONENT DI-LOAD
+        this.getVehicleForm(), //LOAD DATA VEHICLES KETIKA COMPONENT DI-LOAD
         this.getPools(), //LOAD DATA POOLS KETIKA COMPONENT DI-LOAD
-        this.getDrivers(), //LOAD DATA DRIVERS KETIKA COMPONENT DI-LOAD
+        this.getDriverForm(), //LOAD DATA DRIVERS KETIKA COMPONENT DI-LOAD
         this.getTransporters(), //LOAD DATA TRANSPORTER KETIKA COMPONENT DI-LOAD
         this.getUserLogin() //LOAD DATA USER LOGIN KETIKA COMPONENT DI-LOAD
     },
@@ -117,8 +117,8 @@ export default {
     methods: {
         ...mapMutations('sjpstatus', ['CLEAR_FORM']), 
         ...mapActions('pool', ['getPools']),
-        ...mapActions('vehicle', ['getVehicles']),
-        ...mapActions('driver', ['getDrivers']),
+        ...mapActions('vehicle', ['getVehicleForm']),
+        ...mapActions('driver', ['getDriverForm']),
         ...mapActions('transporter', ['getTransporters']),
         ...mapActions('user', ['getUserLogin']),
        

@@ -115,7 +115,7 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
     name: 'FormSjp',
     created() {
-        this.getVehicles(),this.getPoolForm(),this.getDriverForm(),this.getTransporters() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
+        this.getVehicleForm(),this.getPoolForm(),this.getDriverForm(),this.getTransporters() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
     },
     // created() {
     //     this.getPools() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
@@ -144,7 +144,7 @@ export default {
     methods: {
         ...mapMutations('sjp', ['CLEAR_FORM']), 
         ...mapActions('pool', ['getPoolForm']),
-        ...mapActions('vehicle', ['getVehicles']),
+        ...mapActions('vehicle', ['getVehicleForm']),
         ...mapActions('driver', ['getDriverForm']),
         ...mapActions('transporter', ['getTransporters']),
     },

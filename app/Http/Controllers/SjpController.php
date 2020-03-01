@@ -88,15 +88,29 @@ class SjpController extends Controller
     {
         $sjp = Sjp::find($id); //MELAKUKAN QUERY UNTUK MENGAMBIL DATA BERDASARKAN ID
         return response()->json(['status' => 'success', 'data' => $sjp]);
+
+        // $sjp = DB::table('surat_jalan_pallet as a')
+        // ->join('pool_pallet as b', 'a.destination_pool_pallet_id', '=', 'b.pool_pallet_id')
+        // ->join('pool_pallet as c', 'a.departure_pool_pallet_id', '=', 'c.pool_pallet_id')
+        // ->join('vehicle as d', 'a.vehicle_id', '=', 'd.vehicle_id')
+        // ->join('transporter as e', 'a.transporter_id', '=', 'e.transporter_id')
+        // ->join('driver as f', 'a.driver_id', '=', 'f.driver_id')
+        // // ->select('a.*', 'b.pool_name as dest_pool', 'c.pool_name as dept_pool',
+        // //         'd.vehicle_number','e.transporter_name', 'f.driver_name')
+        // ->select('*')
+        // ->where('sjp_id',$id)
+        
+        // ->get();
+        //  return response()->json(['status' => 'success', 'data' => $sjp]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id) //sjp adjusment
     {
         //VALIDASI DATA YANG DITERIMA
         $this->validate($request, [
-            'destination_pool_pallet_id' => 'required',
-            'departure_pool_pallet_id' => 'required',
-            'sjp_number' => 'required|string'
+            'vehicle_id' => 'required',
+            'driver_id' => 'required',
+            
         ]);
 
         $sjp = Sjp::find($id); //QUERY UNTUK MENGAMBIL DATA BERDASARKAN ID
@@ -113,7 +127,7 @@ class SjpController extends Controller
             return response()->json(['error' => 'Data not found'], 404);
         }
         else{
-            $update = Sjp::find($sjp);
+            $update = Sjp::find($sjp_id);
             $update->driver_id = $request->driver_id;
             $update->vehicle_id = $request->vehicle_id;
             $update->adjust_by = auth()->user()->id;

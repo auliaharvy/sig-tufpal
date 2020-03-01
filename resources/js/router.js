@@ -5,7 +5,8 @@ import Map from './pages/Map.vue'
 import Login from './pages/Login.vue'
 import store from './store.js'
 
-import PalletMovement from './pages/report/PalletMovement.vue'
+import IndexPalletMovement from './pages/report/index.vue'
+import DataPalletMovement from './pages/report/PalletMovement.vue'
 
 import IndexSjp from './pages/sjp/index.vue'
 import DataSjp from './pages/sjp/sjp.vue'
@@ -265,9 +266,16 @@ const router = new Router({
 
         {
             path: '/palletmovement',
-            name: 'palletmovement',
-            component: PalletMovement,
-            meta: { requiresAuth: true }
+            component: IndexPalletMovement,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'palletmovements.data',
+                    component: DataPalletMovement,
+                    meta: { title: 'Pallet Movement' }
+                },
+            ]
         },
 
         {

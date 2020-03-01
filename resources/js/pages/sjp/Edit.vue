@@ -19,7 +19,7 @@
 </template>
 <script>
     import { mapActions, mapState } from 'vuex'
-    import FormSjp from './Form.vue'
+    import FormSjp from './Formedit.vue'
     export default {
         name: 'EditSjp',
         created() {

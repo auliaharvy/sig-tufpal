@@ -1,57 +1,51 @@
 <template>
     <div class="col-md-12">
         <div class="panel">
+            
             <div class="panel-body">
               
-                <v-card>
-                    <v-card-title>
-                        Pallet Movement
-                        <v-spacer></v-spacer>
-                        <v-text-field
-                        v-model="search"
-                        prepend-icon="mdi-search"
-                        label="Search"
-                        single-line
-                        hide-details
-                        ></v-text-field>
-                    </v-card-title>
-                    <v-data-table :headers="fields" :search="search">
-                        <!-- <template class="pa-5" v-slot:item.send="{ item }">
-                            <router-link :to="{ name: 'sjpstatuss.add', params: {id: item.sjp_id} }"><v-btn color="success">Send</v-btn></router-link>                        
-                        </template>
-                        <template class="pa-5" v-slot:item.adjusment="{ item }">
-                            <router-link :to="{ name: 'sjps.edit', params: {id: item.sjp_id} }"><v-btn color="success">Adjust</v-btn></router-link>                        
-                        </template> -->
-                    </v-data-table>
-                     </v-card>
               	<!-- TABLE UNTUK MENAMPILKAN LIST SJP -->
-                <!-- <b-table striped hover bordered :items="sjps.data" :fields="fields" show-empty>
-                    
-                    
-                    <template slot="actions" slot-scope="row">
-                        <router-link :to="{ name: 'sjps.addsjpstat', params: {id: row.item.sjp_id} }" class="btn btn-warning btn-sm">Add SJP Status<i class="fa fa-pencil"></i></router-link>
-                        <router-link :to="{ name: 'sjps.edit', params: {id: row.item.sjp_id} }" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i></router-link>
-                        <button class="btn btn-danger btn-sm" @click="deleteSjp(row.item.sjp_id)"><i class="fa fa-trash"></i></button>
-                    </template>
-                </b-table> -->
+                <template>
+  <v-card>
+    <v-card-title>
+      Pallet Movement
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        prepend-icon="mdi-search"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
+    <v-data-table
+      :headers="headers"
+      :items="palletmovements.data"
+      :search="search"
+    >       
+        
+       
+    </v-data-table>
+  </v-card>
+</template>
               	<!-- TABLE UNTUK MENAMPILKAN LIST CUSTOMER -->
 
-                <div class="row">
+               
                     <!-- <div class="col-md-6">
-                        <p v-if="sjps.data"><i class="fa fa-bars"></i> {{ sjps.data.length }} item dari {{ sjps.meta.total }} total data</p>
-                    </div> -->
-                    <!-- <div class="col-md-6">
+                        <p v-if="sjpstatuss.data"><i class="fa fa-bars"></i> {{ sjpstatuss.data.length }} item dari {{ sjpstatuss.meta.total }} total data</p>
+                    </div>
+                    <div class="col-md-6">
                         <div class="pull-right">
                             <b-pagination
                                 v-model="page"
-                                :total-rows="sjps.meta.total"
-                                :per-page="sjps.meta.per_page"
-                                aria-controls="sjps"
-                                v-if="sjps.data && sjps.data.length > 0"
+                                :total-rows="sjpstatuss.meta.total"
+                                :per-page="sjpstatuss.meta.per_page"
+                                aria-controls="sjpstatuss"
+                                v-if="sjpstatuss.data && sjpstatuss.data.length > 0"
                                 ></b-pagination>
                         </div>
                     </div> -->
-                </div>
+                
             </div>
         </div>
     </div>
@@ -61,14 +55,14 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-    name: 'DataSjp',
+    name: 'DataPalletMovement',
     created() {
-        this.getSjp(), this.getSjpStatus() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
+        this.getPalletMovements() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
     },
     data() {
         return {
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
-            fields: [
+             headers: [
                 { value: 'sjps_number', text: 'SJP Status Number' },
                 { value: 'sjp_number', text: 'SJP Number' },
                 { value: 'transaction', text: 'Send/Send Back' },
@@ -94,49 +88,31 @@ export default {
         }
     },
     computed: {
-        ...mapState('sjp', {
-            sjps: state => state.sjps //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
-        }),
-        ...mapState('sjpstatus', {
-            sjpstatuss: state => state.sjpstatuss //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+        ...mapState('palletmovement', {
+            palletmovements: state => state.palletmovements //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
         //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {
             get() {
-                return this.$store.state.sjp.page
+                return this.$store.state.palletmovement.page
             },
             set(val) {
-                this.$store.commit('sjp/SET_PAGE', val)
-            },
+                this.$store.commit('palletmovement/SET_PAGE', val)
+            }
         }
     },
     watch: {
         page() {
-            this.getSjp() //KETIKA VALUE PAGE TERJADI PERUBAHAN, MAKA REQUEST DATA BARU
+            this.getPalletMovements() //KETIKA VALUE PAGE TERJADI PERUBAHAN, MAKA REQUEST DATA BARU
         },
         search() {
-            this.getSjp(this.search) //KETIKA VALUE SEARCH TERJADI PERUBAHAN, MAKA REQUEST DATA BARU
+            this.getPalletMovements(this.search) //KETIKA VALUE SEARCH TERJADI PERUBAHAN, MAKA REQUEST DATA BARU
         }
     },
     methods: {
-        ...mapActions('sjp', ['getSjp', 'removeSjp']), 
-        ...mapActions('sjpstatus', ['getSjpStatus', 'removeSjpStatus']), 
+        ...mapActions('palletmovement', ['getPalletMovements']), 
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
-        deleteSjp(id) {
-            this.$swal({
-                title: 'Kamu Yakin?',
-                text: "Tindakan ini akan menghapus secara permanent!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Iya, Lanjutkan!'
-            }).then((result) => {
-                if (result.value) {
-                    this.removeSjp(id) //JIKA SETUJU MAKA PERMINTAAN HAPUS AKAN DI EKSEKUSI
-                }
-            })
-        }
+        
     }
 }
 </script>

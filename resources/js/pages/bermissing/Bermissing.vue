@@ -96,7 +96,7 @@ export default {
                 { value: 'transporter_name', text: 'Transporter' },
                 { value: 'reporter', text: 'Reporter Name' },
                 { value: 'approver', text: 'Approver Name' },
-                { value: 'sjp_number', text: 'Reference SJP Number' },
+                { value: 'sjps_number', text: 'Reference SJP Number' },
                 { value: 'ber_pallet', text: 'BER Pallet' },
                 { value: 'missing_pallet', text: 'Missing Pallet' },
                 { value: 'reporter_prove', text: 'Berita Acara' },
