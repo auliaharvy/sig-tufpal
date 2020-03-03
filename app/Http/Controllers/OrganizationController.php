@@ -12,7 +12,7 @@ class OrganizationController extends Controller
 {
     public function index()
     {
-        $organization = new SjpStatusCollection(Organization::paginate(10));
+        $organization = new SjpStatusCollection(Organization::paginate(10000000));
 		 return $organization;
         // return response()->json(Sjp::all()->toArray());
     }

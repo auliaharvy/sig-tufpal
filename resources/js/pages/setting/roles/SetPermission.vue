@@ -24,7 +24,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-danger btn-sm" @click="setRole">Set Role</button>
+                            <button v-if="$can('set permission')" class="btn btn-danger btn-sm" @click="setRole">Set Role</button>
                         </div>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                             </div>
                         </div>
                         <div class="pull-right">
-                            <button class="btn btn-primary btn-sm" @click="setPermission">
+                            <button v-if="$can('set permission')" class="btn btn-primary btn-sm" @click="setPermission">
                                 <i class="fa fa-send"></i> Set Permission
                             </button>
                         </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <v-container fluid class=" primary pa-5">
+    <v-container fluid class="pa-5">
       <v-toolbar dark>
           <h1>
            WALLET SYSTEM
@@ -11,42 +11,114 @@
         Menu
       </h1 >
       <v-layout row wrap class="px-5">
-      <v-flex xs12 md3 lg3 v-for="item in items" :key="item.title" link >
-          <v-card link router :to="item.route" class="text-center ma-3">
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/sjp" class="text-center ma-3" v-if="$can('read sjps')">
             <v-card-title class="text-center" color="black">
-              <v-icon color="black" left>{{ item.icon }}</v-icon>
-              <span right> {{ item.title }} </span>
+              <v-icon color="black" left>mdi-file-document</v-icon>
+              <span right> Surat Jalan Pallet</span>
             </v-card-title>
           </v-card>
-      </v-flex>
+        </v-flex>
+        <v-flex xs12 md3 lg3 link >        
+          <v-card link router to="/sjpstatus" class="text-center ma-3" v-if="$can('read sjpstatuss')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-file-document</v-icon>
+              <span right> SJP Status</span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/pallettransfer" class="text-center ma-3" v-if="$can('read pallettransfers')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-file-document</v-icon>
+              <span right> Pallet Transfer</span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/bermissing" class="text-center ma-3" v-if="$can('read bermissingpallets')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-close-circle</v-icon>
+              <span right> BER/Missing Pallet</span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/newpallet" class="text-center ma-3" v-if="$can('read newpallet')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-plus</v-icon>
+              <span right> Add New Pallet</span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
       </v-layout>
       
       <h1 class="display-1 black--text">
         Report
       </h1>
       <v-layout row wrap class="px-5">
-      <v-flex xs12 md3 lg3 v-for="item in reports" :key="item.title" link>
-          <v-card link router :to="item.route" class="text-center ma-3">
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/dashboard" class="text-center ma-3" v-if="$can('read dashboard')">
             <v-card-title class="text-center" color="black">
-              <v-icon color="black" left>{{ item.icon }}</v-icon>
-              <span right> {{ item.title }} </span>
+              <v-icon color="black" left>mdi-monitor-dashboard</v-icon>
+              <span right> Dashboard </span>
             </v-card-title>
           </v-card>
-      </v-flex>
+        </v-flex>
+        <v-flex xs12 md3 lg3 link >        
+          <v-card link router to="/poolpallet" class="text-center ma-3" v-if="$can('read poolpallets')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-numeric</v-icon>
+              <span right> Pallet Quantity</span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/transporter" class="text-center ma-3" v-if="$can('read transporters')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-domain</v-icon>
+              <span right> Transporter</span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/palletmovement" class="text-center ma-3" v-if="$can('read palletmovement')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-transfer</v-icon>
+              <span right> Pallet Movement </span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <!-- <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/palletdeposit" class="text-center ma-3" v-if="$can('read palletdeposit')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-clipboard-flow</v-icon>
+              <span right> Pallet Deposit </span>
+            </v-card-title>
+          </v-card>
+        </v-flex> -->
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/map" class="text-center ma-3" v-if="$can('read location')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-google-maps</v-icon>
+              <span right> Pallet Geolocation </span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
       </v-layout>
 
       <h1 class="display-1 black--text">
         Setting
       </h1>
       <v-layout row wrap class="px-5">
-      <v-flex xs12 md3 lg3 v-for="item in settings" :key="item.title" link>
-          <v-card link router :to="item.route" class="text-center ma-3">
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/setting/role-permission" class="text-center ma-3" v-if="$can('read permission')">
             <v-card-title class="text-center" color="black">
-              <v-icon color="black" left>{{ item.icon }}</v-icon>
-              <span right> {{ item.title }} </span>
+              <v-icon color="black" left>mdi-lock</v-icon>
+              <span right> Role & Permission </span>
             </v-card-title>
           </v-card>
-      </v-flex>
+        </v-flex>
       </v-layout>
       </v-card>
     </v-container>

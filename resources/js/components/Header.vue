@@ -13,31 +13,150 @@
                 </v-list-item>
             </template>
             <v-divider></v-divider>
+            
             <v-list nav dense>
-                <v-list-item v-for="item in items" :key="item.title" link router :to="item.route">
+                <!--  Home -->
+                <h3> Menu </h3>
+                <v-list-item link router to="/">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-home</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Home</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <!-- Surat Jalan Pallet -->
+                <v-list-item link router to="/sjp" v-if="$can('read sjps')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-file-document</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Surat Jalan Pallet</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link router to="/sjpstatus" v-if="$can('read sjpstatuss')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-file-document</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">SJP Status</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link router to="/pallettransfer" v-if="$can('read pallettransfers')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-file-document</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Pallet Transfer</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link router to="/bermissing" v-if="$can('read bermissingpallets')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-file-document</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">BER/Missing Pallet</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link router to="/newpallet" v-if="$can('read newpallet')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-file-document</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Add New Pallet</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <!-- { title: 'Home', icon: 'mdi-home', route:'/' },
+                { title: 'Surat Jalan Pallet', icon: 'mdi-file-document', route:'/sjp' },
+                { title: 'SJP Status', icon: 'mdi-file-document', route:'/sjpstatus' },
+                { title: 'Pallet Transfer', icon: 'mdi-call-received', route:'/pallettransfer' },
+                { title: 'Missing/BER Pallet', icon: 'mdi-close-circle', route:'/bermissing' },
+                { title: 'Add New Pallet', icon: 'mdi-plus', route:'/newpallet',},
+                ], -->
+                <!-- <v-list-item v-for="item in items" :key="item.title" link router :to="item.route">
                     <v-list-item-icon>
                         <v-icon color="black">{{ item.icon}}</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
                         <v-list-item-title color="black">{{ item.title}}</v-list-item-title>
                     </v-list-item-content>
+                </v-list-item> -->
+
+                <v-divider></v-divider>
+                <h3> Report </h3>
+                <v-list-item link router to="/dashboard" v-if="$can('read dashboard')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-monitor-dashboard</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Dashboard</v-list-item-title>
+                    </v-list-item-content>
                 </v-list-item>
-                <v-divider></v-divider> 
-                <v-list-item v-for="item in reports" :key="item.title" link router :to="item.route">
+                <v-list-item link router to="/poolpallet" v-if="$can('read poolpallets')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-numeric</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Pallet Quantity</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link router to="/transporter" v-if="$can('read transporters')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-domain</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Transporter</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link router to="/palletmovement" v-if="$can('read palletmovement')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-transfer</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Pallet Movement</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <!-- <v-list-item link router to="/palletdeposit" v-if="$can('read palletdeposit')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-clipboard-flow</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Pallet Deposit</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item> -->
+                <v-list-item link router to="/map" v-if="$can('read location')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-google-maps</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Pallet Geolocation</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
+                <!-- { title: 'Report Dashboard', icon: 'mdi-monitor-dashboard' },
+                { title: 'Pallet Quantity', icon: 'mdi-numeric', route:'/poolpallet' },
+                { title: 'Transporter', icon: 'mdi-numeric', route:'/transporter', permission: 'read transporter'},
+                { title: 'Pallet Movement', icon: 'mdi-truck', route:'/palletmovement' },
+                { title: 'Pallet Deposit', icon: 'mdi-clipboard-flow', route:'/' },
+                { title: 'Pallet Geolocation', icon: 'mdi-google-maps', route:'/map' }, -->
+                <!-- <v-list-item v-for="item in reports" :key="item.title" link router :to="item.route" v-if="$can('read transporter')">
                     <v-list-item-icon>
                         <v-icon color="black">{{ item.icon}}</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
                         <v-list-item-title color="black">{{ item.title}}</v-list-item-title>
                     </v-list-item-content>
-                </v-list-item>
-                <v-divider></v-divider> 
-                <v-list-item v-for="item in settings" :key="item.title" link router :to="item.route">
+                </v-list-item> -->
+
+                
+                <v-divider></v-divider>
+                <h3> Setting </h3>
+                <v-list-item link router to="/setting/role-permission" v-if="$can('read permission')">
                     <v-list-item-icon>
-                        <v-icon color="black">{{ item.icon}}</v-icon>
+                        <v-icon color="black">mdi-lock</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
-                        <v-list-item-title color="black">{{ item.title}}</v-list-item-title>
+                        <v-list-item-title color="black">Role & Permission</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
@@ -45,11 +164,13 @@
 
         <v-app-bar app color="primary"> 
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-            <v-toolbar-title app class="text-uppercase font-weight-light">
+            <router-link to="/">
+            <v-toolbar-title link router to="/map" app class="text-uppercase font-weight-light">
                 <v-col class="text-center">
                     <img src="../assets/logotoolbar.png">
                 </v-col>
             </v-toolbar-title>
+            </router-link>
             <v-spacer></v-spacer>
             <v-btn @click="logout"> 
                 <span left>Logout</span>
@@ -82,10 +203,6 @@ export default {
                 { title: 'Pallet Movement', icon: 'mdi-truck', route:'/palletmovement' },
                 { title: 'Pallet Deposit', icon: 'mdi-clipboard-flow', route:'/' },
                 { title: 'Pallet Geolocation', icon: 'mdi-google-maps', route:'/map' },
-            ],
-            settings: [
-                { title: 'Setting', icon: 'mdi-monitor-dashboard', route:'/setting' },
-               
             ],
         }
     },

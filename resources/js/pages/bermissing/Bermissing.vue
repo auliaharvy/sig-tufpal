@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-heading">
-                <router-link :to="{ name: 'bermissings.add' }"><v-btn>Add BER/Missing Pallet</v-btn></router-link>
+                <router-link v-if="$can('create bermissingpallets')" :to="{ name: 'bermissings.add' }"><v-btn>Add BER/Missing Pallet</v-btn></router-link>
                 
             </div>
             <v-spacer />
@@ -15,15 +15,15 @@
                         <v-card-title>
                             BER/Missing Pallet
                             <v-spacer></v-spacer>
-                            <v-btn>
+                            <!-- <v-btn>
                             <download-excel 
                             :data= "bermissings.data"
                             type="csv"
                             name="PalletTransfers.csv">
                                 Download Data
                             </download-excel>
-                        </v-btn>
-                        <v-spacer></v-spacer>
+                            </v-btn> -->
+                            <v-spacer></v-spacer>
                             <v-text-field
                             v-model="search"
                             append-icon="mdi-magnify"
@@ -36,8 +36,6 @@
                         :headers="headers"
                         :items="bermissings.data"
                         :search="search"
-                        loading 
-                        loading-text="Loading... Please wait"
                         >       
                             <template v-slot:item.status="{ item }">
                                 <v-chip class="label label-default" v-if="item.status == 0">DRAFT REPORTED</v-chip>
@@ -133,7 +131,7 @@ export default {
     methods: {
         ...mapActions('bermissing', ['getBermissing', 'removeBermissing']), 
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
-        deleteBermissing(id) {
+        deleteBermissings(id) {
             this.$swal({
                 title: 'Are you sure?',
                 text: "This will delete record Permanently!",

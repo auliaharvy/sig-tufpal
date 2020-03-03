@@ -25,7 +25,7 @@ class SjpStatusController extends Controller
             ->join('mst_transaction as e', 'a.transaction_id', '=', 'e.id')
             ->select('a.*', 'b.name as checker_sender', 'c.name as checker_receiver',
                     'd.sjp_number','e.transaction')            
-            ->paginate(10)
+            ->paginate(1000000)
             ->toArray();
         }
         else{
@@ -39,7 +39,7 @@ class SjpStatusController extends Controller
             ->where('d.departure_pool_pallet_id',$pool_pallet)
             ->orWhere('d.destination_pool_pallet_id', $pool_pallet)
             
-            ->paginate(10)
+            ->paginate(10000000)
             ->toArray();
         }
         // // $sjp = new SjpCollection($sjp1);
@@ -62,6 +62,7 @@ class SjpStatusController extends Controller
         $sjp = DB::table('surat_jalan_pallet')->where('sjp_id',$sjp_id)->first();
         $transporter_id = $sjp->transporter_id;
         
+        
         if(($request->transaction_id)==1){ //send pool to wh
             $departure_id = $sjp->departure_pool_pallet_id;
             $destination_id = $sjp->destination_pool_pallet_id;
@@ -81,11 +82,17 @@ class SjpStatusController extends Controller
             'missing_pallet' => $request->missing_pallet, 
             'good_cement' => $request->good_cement, 
             'bad_cement' => $request->bad_cement, 
-            'updated_at' => $request->updated_at,
+            'updated_at' => null,
             'transaction_id' => $request->transaction_id,
             'note' => $request->note, 
-            'status' => 'SENDING',
+            'status' => 0,
         ]);
+
+
+        $state = Sjp::find($sjp_id);
+        $state->state=1;
+        $state->save();
+        
 
         $InventoryDept = PoolPallet::find($departure_id);
         $InventoryDept->good_pallet = (($InventoryDept->good_pallet)-($request->good_pallet));
@@ -153,7 +160,7 @@ class SjpStatusController extends Controller
             $update->bad_cement = $request->bad_cement;
             $update->transaction_id = $request->transaction_id;
             $update->note = $request->note;
-            $update->status = 'RECEIVED';
+            $update->status = 1;
             $update->save();
 
             $InventoryDest = PoolPallet::find($destination_id);
@@ -184,6 +191,10 @@ class SjpStatusController extends Controller
             $Sjpstat = Sjp::find($sjp_id);
             $Sjpstat->status = $status;
             $Sjpstat->save();
+
+            $state = Sjp::find($sjp_id);
+            $state->state=2;
+            $state->save();
 
 
         }

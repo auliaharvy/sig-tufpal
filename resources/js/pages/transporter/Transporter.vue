@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-heading">
-                <router-link :to="{ name: 'transporters.add' }"><v-btn>Add Transporters</v-btn></router-link>
+                <router-link v-if="$can('create transporters')" :to="{ name: 'transporters.add' }"><v-btn>Add Transporters</v-btn></router-link>
             </div>
             <div class="panel-body">
               
@@ -26,8 +26,19 @@
       :search="search"
     >       
     <template v-slot:item.total="{ item }">
-       {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }} 
+        <v-chip class="label"  color="red"  v-if="item.good_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet > item.pallet_quota">
+            {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
+        </v-chip> 
+        <v-chip class="label label-success"  v-if="item.good_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet < item.pallet_quota">
+            {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
+        </v-chip>
+        <v-chip class="label label-warning"  v-if="item.good_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet == item.pallet_quota">
+            {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
+        </v-chip>
     </template>
+    <!-- <template v-slot:item.total="{ item }">
+       {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }} 
+    </template> -->
         <!-- <template v-slot:item.actions="{ item }">
             <router-link :to="{ name: 'transporters.edit', params: {id: item.transporter_id} }">
                 <v-btn color="success" small>Update</v-btn>

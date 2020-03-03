@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './pages/Home.vue'
 import Map from './pages/Map.vue'
 import Login from './pages/Login.vue'
+import Dashboard from './pages/Dashboard.vue'
 import store from './store.js'
 
 import IndexPalletMovement from './pages/report/index.vue'
@@ -16,6 +17,7 @@ import EditSjp from './pages/sjp/Edit.vue'
 import IndexSjpStatus from './pages/sjpstatus/Index.vue'
 import DataSjpStatus from './pages/sjpstatus/SjpStatus.vue'
 import AddSjpStatus from './pages/sjpstatus/AddSjpStatus.vue'
+import SendbackSjpStatus from './pages/sjpstatus/SendbackSjpStatus.vue'
 import EditSjpStatus from './pages/sjpstatus/EditSjpStatus.vue'
 
 import IndexPool from './pages/pool/Index.vue'
@@ -125,6 +127,12 @@ const router = new Router({
                     name: 'sjpstatuss.add',
                     component: AddSjpStatus,
                     meta: { title: 'Add Sjp Status' }
+                },
+                {
+                    path: 'send/:id',
+                    name: 'sjpstatuss.sendback',
+                    component: SendbackSjpStatus,
+                    meta: { title: 'Send Back Sjp Status' }
                 },
                 {
                     path: 'edit/:id',
@@ -295,6 +303,13 @@ const router = new Router({
             name: 'login',
             component: Login
         },
+        {
+            path: '/dashboard',
+            name: 'dashboard',
+            component: Dashboard,
+            meta: { requiresAuth: true }
+        },
+
         {
             path: '/outlets',
             component: IndexOutlet,

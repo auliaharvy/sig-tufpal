@@ -23,7 +23,10 @@
       :items="palletmovements.data"
       :search="search"
     >       
-        
+        <template v-slot:item.status="{ item }">
+                            <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
+                            <v-chip class="label label-success" v-else-if="item.status == 1">Received</v-chip>
+                        </template>
        
     </v-data-table>
   </v-card>
@@ -66,6 +69,7 @@ export default {
                 { value: 'sjps_number', text: 'SJP Status Number' },
                 { value: 'sjp_number', text: 'SJP Number' },
                 { value: 'transaction', text: 'Send/Send Back' },
+                { value: 'status', text: 'Status' },
                 { value: 'dept_pool', text: 'Departure Pool' },
                 { value: 'dest_pool', text: 'Destination Pool' },
                 // { value: 'vehicle_number', text: 'Vehicle Number' },

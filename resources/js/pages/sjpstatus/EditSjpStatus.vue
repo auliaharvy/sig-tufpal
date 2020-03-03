@@ -3,7 +3,7 @@
         <div class="panel">
             <v-toolbar dark>
                 <h1>
-                    EDIT SJP STATUS
+                    RECEIVE SJP STATUS
                 </h1>
             </v-toolbar>
             <div class="panel-body">
@@ -19,7 +19,7 @@
 </template>
 <script>
     import { mapActions, mapState } from 'vuex'
-    import FormSjpStatus from './Form.vue'
+    import FormSjpStatus from './Formedit.vue'
     export default {
         name: 'EditSjpStatus',
         created() {

@@ -17,7 +17,7 @@ class NewpalletController extends Controller
             ->join('pool_pallet as b', 'a.pool_pallet_id', '=', 'b.pool_pallet_id')
             ->join('users as c', 'a.adder_user_id', '=', 'c.id')
             ->select('a.*', 'b.pool_name', 'c.name')
-            ->paginate(10)
+            ->paginate(10000000)
             ->toArray();
 		 return $newpallet;
         // return response()->json(Sjp::all()->toArray());

@@ -11,12 +11,18 @@ import JsonExcel from 'vue-json-excel'
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
 import { Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import QrcodeVue from 'qrcode.vue'
+import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
 
 Vue.use(Vuetify);
 Vue.use(VueSweetalert2)
 Vue.use(BootstrapVue)
 Vue.mixin(Permissions)
 Vue.component('downloadExcel', JsonExcel)
+Vue.component('QrcodeStream', QrcodeStream)
+Vue.component('QrcodeDropZone', QrcodeDropZone)
+Vue.component('QrcodeCapture', QrcodeCapture)
+Vue.component('QrcodeVue', QrcodeVue)
 Vue.component('l-map', LMap);
 Vue.component('l-tile-layer', LTileLayer);
 Vue.component('l-marker', LMarker);

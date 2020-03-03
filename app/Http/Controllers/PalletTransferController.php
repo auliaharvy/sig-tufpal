@@ -27,7 +27,7 @@ class PalletTransferController extends Controller
             ->select('a.*', 'b.pool_name as dep_pool', 'c.pool_name as dest_pool',
                     'd.name as sender_name','e.name as receiver_name', 'f.transporter_name',
                     'g.vehicle_number', 'h.driver_name')
-            ->paginate(10)
+            ->paginate(10000000)
             ->toArray();
         }
         else{
@@ -44,7 +44,7 @@ class PalletTransferController extends Controller
                     'g.vehicle_number', 'h.driver_name')
             ->where('b.pool_pallet_id',$pool_pallet)
             ->orWhere('c.pool_pallet_id',$pool_pallet)
-            ->paginate(10)
+            ->paginate(1000000)
             ->toArray();
         }
         // // $sjp = new SjpCollection($sjp1);
@@ -68,10 +68,11 @@ class PalletTransferController extends Controller
         $departure_id = Auth::user()->reference_pool_pallet_id;
         $destination_id = $request->destination_pool_pallet_id;
 
+        $checker = Auth::user()->id;
         $palletTransfer = PalletTransfer::create([
             'departure_pool_pallet_id' => Auth::user()->reference_pool_pallet_id,
             'destination_pool_pallet_id' => $request->destination_pool_pallet_id,
-            'sender_user_id' => $request->sender_user_id, 
+            'sender_user_id' => $checker, 
             'receiver_user_id' => 5,
             'vehicle_id' => $request->vehicle_id, 
             'driver_id' => $request->driver_id, 
@@ -114,11 +115,12 @@ class PalletTransferController extends Controller
             return response()->json(['error' => 'Data not found'], 404);
         }
         else{
+            $checker = Auth::user()->id;
             $update = PalletTransfer::find($pallet_transfer_id);
             // $update->departure_pool_pallet_id = $request->departure_pool_pallet_id;
             $update->destination_pool_pallet_id = $request->destination_pool_pallet_id;
             $update->sender_user_id = $request->sender_user_id;
-            $update->receiver_user_id = $request->receiver_user_id;
+            $update->receiver_user_id = $checker;
             $update->vehicle_id = $request->vehicle_id;
             $update->driver_id = $request->driver_id;
             $update->transporter_id = $request->transporter_id; 

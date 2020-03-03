@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-heading">
-                <router-link :to="{ name: 'pools.add' }"><v-btn>Add Pool Pallet</v-btn></router-link>
+                <router-link v-if="$can('create poolpallets')" :to="{ name: 'pools.add' }"><v-btn>Add Pool Pallet</v-btn></router-link>
             </div>
             <div class="panel-body">
               
@@ -26,7 +26,15 @@
       :search="search"
     >       
     <template v-slot:item.total="{ item }">
-       {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }} 
+        <v-chip class="label"  color="red"  v-if="item.good_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet > item.pallet_quota">
+            {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
+        </v-chip> 
+        <v-chip class="label label-success"  v-if="item.good_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet < item.pallet_quota">
+            {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
+        </v-chip>
+        <v-chip class="label label-warning"  v-if="item.good_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet == item.pallet_quota">
+            {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
+        </v-chip>
     </template>
         <!-- <template v-slot:item.actions="{ item }">
             <router-link :to="{ name: 'pools.edit', params: {id: item.pool_pallet_id} }">
@@ -85,6 +93,7 @@ export default {
                 { value: 'total', text: 'Total Pallet' },
                 // { value: 'actions', text: 'Action'}
             ],
+            total: null,
             search: ''
         }
     },
@@ -92,6 +101,7 @@ export default {
         ...mapState('pool', {
             pools: state => state.pools //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
+        
         //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {
             get() {

@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-heading">
-                <router-link :to="{ name: 'sjps.add' }" class="v-btn btn-primary text-black"><v-btn>Add SJP</v-btn></router-link>
+                <router-link :to="{ name: 'sjps.add' }" class="v-btn btn-primary text-black" v-if="$can('create sjps')"><v-btn>Add SJP</v-btn></router-link>
                 <!-- <v-btn>
                     <download-excel 
                     :data= "sjps.data"
@@ -29,10 +29,14 @@
                         ></v-text-field>
                     </v-card-title>
                     <v-data-table :items="sjps.data" :headers="fields" :search="search" dense>
+                        <template v-slot:item.status="{ item }">
+                            <v-chip class="label label-default" v-if="item.status == 'OPEN'">Open</v-chip>
+                            <v-chip class="label label-success" v-else-if="item.status == 'CLOSED'">Closed</v-chip>
+                        </template>
                         <template v-slot:item.state="{ item }">
                             <v-chip class="label label-default" v-if="item.state == 0">Draft</v-chip>
                             <v-chip class="label label-success" v-else-if="item.state == 1">Send</v-chip>
-                            <v-chip class="label label-primary" v-else>Send Back</v-chip>
+                            <v-chip class="label label-primary" v-else>Received</v-chip>
                         </template>
 
                         <!-- <template  class="pa-5" v-slot:item.send="{ item }">
@@ -41,13 +45,13 @@
                             </router-link>                        
                         </template> -->
                         <template v-slot:item.send="{ item }">
-                                <router-link :to="{ name: 'sjpstatuss.add', params: {id: item.sjp_id} }" v-if="item.state == 0">
+                                <router-link :to="{ name: 'sjpstatuss.add', params: {id: item.sjp_id} }" v-if="item.state == 0 && $can('create sjpstatuss')">
                                     <v-btn color="primary" small>Send</v-btn>
                                 </router-link>                        
                             </template>
 
                         <template class="pa-5" v-slot:item.adjusment="{ item }">
-                            <router-link :to="{ name: 'sjps.edit', params: {id: item.sjp_id} }"><v-btn color="success" small>Adjust</v-btn></router-link>                        
+                            <router-link :to="{ name: 'sjps.edit', params: {id: item.sjp_id} }" v-if="$can('update sjps')"><v-btn color="success" small>Adjust</v-btn></router-link>                        
                         </template>
 
                         <template v-if="$can('delete sjps')" class="pa-5" v-slot:item.delete="{ item }">
@@ -64,14 +68,14 @@
                         <router-link :to="{ name: 'sjps.edit', params: {id: row.item.sjp_id} }" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i></router-link>
                         <button class="btn btn-danger btn-sm" @click="deleteSjp(row.item.sjp_id)"><i class="fa fa-trash"></i></button>
                     </template>
-                </b-table> -->
+                </b-table>  -->
               	<!-- TABLE UNTUK MENAMPILKAN LIST CUSTOMER -->
 
-                <!-- <div class="row"> -->
-                    <!-- <div class="col-md-6">
+                <!-- <div class="row"> 
+                    <div class="col-md-6">
                         <p v-if="sjps.data"><i class="fa fa-bars"></i> {{ sjps.data.length }} item dari {{ sjps.meta.total }} total data</p>
                     </div> -->
-                    <!-- <div class="col-md-6">
+                     <!-- <div class="col-md-6">
                         <div class="pull-right">
                             <b-pagination
                                 v-model="page"
@@ -82,10 +86,10 @@
                                 ></b-pagination>
                         </div>
                     </div> -->
-                <!-- </div> -->
+                </div>
             </div>
         </div>
-    </div>
+    <!-- </div> -->
 </template>
 
 <script>

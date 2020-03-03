@@ -2,8 +2,7 @@
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-heading">
-                <router-link :to="{ name: 'pallettransfers.add' }"><v-btn>Add Pallet Transfer</v-btn></router-link>
-                
+                <router-link v-if="$can('create pallettransfers')" :to="{ name: 'pallettransfers.add' }"><v-btn>Add Pallet Transfer</v-btn></router-link>
             </div>
             <v-spacer />
                 
@@ -15,14 +14,14 @@
                         <v-card-title>
                             Pallet Transfer
                             <v-spacer></v-spacer>
-                            <v-btn>
+                            <!-- <v-btn>
                             <download-excel 
                             :data= "pallettransfers.data"
                             type="csv"
                             name="PalletTransfers.csv">
                                 Download Data
                             </download-excel>
-                        </v-btn>
+                            </v-btn> -->
                         <v-spacer></v-spacer>
                             <v-text-field
                             v-model="search"
@@ -36,8 +35,6 @@
                         :headers="headers"
                         :items="pallettransfers.data"
                         :search="search"
-                        loading 
-                        loading-text="Loading... Please wait"
                         >       
                             <template v-slot:item.status="{ item }">
                                 <v-chip class="label label-default" v-if="item.status == 0">SENDING</v-chip>

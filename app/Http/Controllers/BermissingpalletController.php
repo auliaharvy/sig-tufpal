@@ -23,13 +23,13 @@ class BermissingpalletController extends Controller
             $bermissing = DB::table('ber_missing_pallet as a')
             ->join('users as b', 'a.reporter_user_id', '=', 'b.id')
             ->join('users as c', 'a.approver_user_id', '=', 'c.id')
-            ->join('pool_pallet as d', 'a.pool_pallet_id', '=', 'd.pool_pallet_id')
-            ->join('transporter as e', 'a.transporter_id', '=', 'e.transporter_id')
-            ->join('sjp_status as f', 'a.reference_sjp_status_id', '=', 'f.sjp_status_id')
+            ->leftjoin('pool_pallet as d', 'a.pool_pallet_id', '=', 'd.pool_pallet_id')
+            ->leftjoin('transporter as e', 'a.transporter_id', '=', 'e.transporter_id')
+            ->leftjoin('sjp_status as f', 'a.reference_sjp_status_id', '=', 'f.sjp_status_id')
             ->select('a.*', 'b.name as reporter', 'c.name as approver',
                     'd.pool_name','e.transporter_name', 'f.sjps_number')
            
-            ->paginate(10)
+            ->paginate(10000000)
             ->toArray();
         }
         else{
@@ -42,7 +42,7 @@ class BermissingpalletController extends Controller
             ->select('a.*', 'b.name as reporter', 'c.name as approver',
                     'd.pool_name','e.transporter_name', 'f.sjps_number')
             ->where('a.pool_pallet_id',$pool_pallet)
-            ->paginate(10)
+            ->paginate(10000000)
             ->toArray();
         }
         

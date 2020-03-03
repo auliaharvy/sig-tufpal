@@ -2,69 +2,54 @@
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-heading">
-                <router-link :to="{ name: 'sjpstatuss.add' }"><v-btn>Add SJP Status</v-btn></router-link>
+                <router-link v-if="$can('create sjpstatuss')" :to="{ name: 'sjpstatuss.add' }"><v-btn>Add SJP Status</v-btn></router-link>
             </div>
+            <!-- <template>
+                <qrcode-stream></qrcode-stream>
+            </template> -->
             <div class="panel-body">
-              
               	<!-- TABLE UNTUK MENAMPILKAN LIST SJP -->
                 <template>
-  <v-card>
-    <v-card-title>
-      Surat Jalan Pallet Status
-      <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        prepend-icon="mdi-search"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field>
-    </v-card-title>
-    <v-data-table
-      :headers="headers"
-      :items="sjpstatuss.data"
-      :search="search"
-    >       
-        <template v-slot:item.receive="{ item }">
-
-            <router-link v-if="item.status == 'SENDING'" :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
-                <v-btn color="success" small>Receive</v-btn>
-               
-            </router-link>  
-            <router-link v-else :to="{ name: 'sjpstatuss.data', params: {id: item.sjp_status_id} }">
-               
-                <p>RECEIVED</p>
-            </router-link>                     
-        </template>
-        <template v-slot:item.send_back="{ item }">
-            <router-link :to="{ name: 'sjpstatuss.add', params: {id: item.sjp_status_id} }">
-                <v-btn color="success" small>Send Back</v-btn>
-            </router-link>                       
-        </template>
-        <template v-slot:item.delete="{ item }">
-                <v-btn color="error" @click="deleteSjpStatus(item.sjp_status_id)" small>Delete</v-btn>                     
-        </template>
-    </v-data-table>
-  </v-card>
-</template>
-              	<!-- TABLE UNTUK MENAMPILKAN LIST CUSTOMER -->
-
-               
-                    <!-- <div class="col-md-6">
-                        <p v-if="sjpstatuss.data"><i class="fa fa-bars"></i> {{ sjpstatuss.data.length }} item dari {{ sjpstatuss.meta.total }} total data</p>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="pull-right">
-                            <b-pagination
-                                v-model="page"
-                                :total-rows="sjpstatuss.meta.total"
-                                :per-page="sjpstatuss.meta.per_page"
-                                aria-controls="sjpstatuss"
-                                v-if="sjpstatuss.data && sjpstatuss.data.length > 0"
-                                ></b-pagination>
-                        </div>
-                    </div> -->
-                
+                    <v-card>
+                        <v-card-title>
+                            Surat Jalan Pallet Status
+                            <v-spacer></v-spacer>
+                            <v-text-field
+                                v-model="search"
+                                prepend-icon="mdi-search"
+                                label="Search"
+                                single-line
+                                hide-details
+                            ></v-text-field>
+                        </v-card-title>
+                        <v-data-table
+                        :headers="headers"
+                        :items="sjpstatuss.data"
+                        :search="search"
+                        >       
+                        <template v-slot:item.status="{ item }">
+                            <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
+                            <v-chip class="label label-success" v-else-if="item.status == 1">Received</v-chip>
+                        </template>
+                        <template v-if="$can('update sjpstatuss')" v-slot:item.receive="{ item }">
+                            <router-link v-if="item.status == 0" :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
+                                <v-btn color="success" small>Receive</v-btn>   
+                            </router-link>             
+                        </template>
+                        <template v-if="$can('create sjpstatuss')" v-slot:item.send_back="{ item }">
+                            <router-link v-if="item.transaction == 'SEND' && item.status == 1" :to="{ name: 'sjpstatuss.sendback', params: {id: item.sjp_status_id} }">
+                                <v-btn color="success" small>Send Back</v-btn>
+                            </router-link>                       
+                        </template>
+                        <template v-if="$can('delete sjps')" v-slot:item.delete="{ item }">
+                                <v-btn color="error" @click="deleteSjpStatus(item.sjp_status_id)" small>Delete</v-btn>                     
+                        </template>
+                        <!-- <template v-slot:item.qrcode="{ item }">
+                            <qrcode-vue :value="sjpstatuss.sjps_number" :size="size" level="H"></qrcode-vue>                    
+                        </template> -->
+                        </v-data-table>
+                    </v-card>
+                </template>
             </div>
         </div>
     </div>
@@ -85,7 +70,7 @@ export default {
                 { value: 'checker_sender', text: 'Checker Sender' },
                 { value: 'checker_receiver', text: 'Checker Receive' },
                 { value: 'sjp_number', text: 'SJP' },
-               
+                { value: 'sjps_number', text: 'SJP Status' },
                 { value: 'transaction', text: 'Transaction' },
                 { value: 'status', text: 'Status' },
                 { value: 'good_pallet', text: 'Good Pallet' },
@@ -95,8 +80,9 @@ export default {
                 { value: 'good_cement', text: 'Good Cement' },
                 { value: 'bad_cement', text: 'Bad Cement' },
                 { value: 'note', text: 'Note' },
-                { value: 'created_at', text: 'Send at' },
-                { value: 'updated_at', text: 'Received at' },
+                // { value: 'qrcode', text: 'QR Code' },
+                // { value: 'created_at', text: 'Send at' },
+                // { value: 'updated_at', text: 'Received at' },
                 { value: 'receive', text: 'Receive'},
                 { value: 'send_back', text: 'Send Back'},
                 { value: 'delete', text: 'Delete'}

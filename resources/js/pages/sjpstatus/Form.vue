@@ -2,12 +2,10 @@
     <div>
         <div class="form-group">
             <label>SJP Master</label>
-            <select class='form-control' v-model='sjpstatus.sjp_id'>
-                
+            <select class='form-control' v-model='sjpstatus.sjp_id' :readonly="$route.name == 'sjpstatuss.edit'">
                 <option v-for='data in sjps.data' v-bind:key='data.sjp_id' :value='data.sjp_id'>{{ data.sjp_number }}</option>
             </select>
         </div>
-      
         <!-- <div class="form-group" :class="{ 'has-error': errors.packaging }">
             <label for="">Transaction</label>
             <input type="text" class="form-control" v-model="sjpstatus.transaction_id">
@@ -15,7 +13,7 @@
         </div> -->
         <div class="form-group">
             <label>Select Transaction Type</label>
-            <select class='form-control' v-model='sjpstatus.transaction_id'>
+            <select class='form-control' v-model='sjpstatus.transaction_id' :readonly="$route.name == 'sjpstatuss.edit'">
                 <option v-for='data in msttransactions.data' v-bind:key='data.id' :value='data.id'>{{ data.transaction }}</option>
             </select>
         </div>
@@ -25,9 +23,7 @@
                 <option value='0' >Select User</option>
                 <option v-for='data in users.data' :value='data.id'>{{ data.name }}</option>
             </select>
-        </div> -->
-       
-        
+        </div> -->   
         <!-- <div class="form-group" :class="{ 'has-error': errors.created_by }">
             <label for="">Created By</label>
             <p>{{ authenticated.name }}</p>
@@ -38,8 +34,6 @@
             <input type="text" class="form-control" v-model="sjpstatus.checker_receive_user_id" :readonly="$route.name == 'sjpstatuss.add'">
             <p class="text-danger" v-if="errors.checker_receive_user_id">{{ errors.checker_receive_user_id[0] }}</p>
         </div>  -->
-       
-     
         <div class="form-group" :class="{ 'has-error': errors.good_pallet }">
             <label for="">Good Pallet</label>
             <input type="text" class="form-control" v-model="sjpstatus.good_pallet">
@@ -70,13 +64,11 @@
             <input type="text" class="form-control" v-model="sjpstatus.bad_cement">
             <p class="text-danger" v-if="errors.bad_cement">{{ errors.bad_cement[0] }}</p>
         </div>
-        
         <div class="form-group" :class="{ 'has-error': errors.note }">
             <label for="">Note</label>
             <input type="text" class="form-control" v-model="sjpstatus.note">
             <p class="text-danger" v-if="errors.note">{{ errors.note[0] }}</p>
-        </div>
-        
+        </div>    
     </div>
 </template>
 

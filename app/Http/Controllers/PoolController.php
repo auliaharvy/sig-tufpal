@@ -14,22 +14,22 @@ class PoolController extends Controller
 {
     public function index()
     {
-        // $pool_pallet = Auth::user()->reference_pool_pallet_id;
-        // if($pool_pallet==null){
+        $pool_pallet = Auth::user()->reference_pool_pallet_id;
+        if($pool_pallet==null){
         $pool = DB::table('pool_pallet as a')
             ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
             ->select('a.*', 'b.organization_name')
-            ->paginate(10)
+            ->paginate(10000000)
             ->toArray();
-        // }
-        // else{
-        //     $pool = DB::table('pool_pallet as a')
-        //     ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
-        //     ->select('a.*', 'b.organization_name')
-        //     ->whereNotIn('a.pool_pallet_id',[$pool_pallet])
-        //     ->paginate(10)
-        //     ->toArray();
-        // }
+        }
+        else{
+            $pool = DB::table('pool_pallet as a')
+            ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
+            ->select('a.*', 'b.organization_name')
+            ->where('a.pool_pallet_id',[$pool_pallet])
+            ->paginate(1000000)
+            ->toArray();
+        }
 
         // $pool = new SjpStatusCollection(PoolPallet::paginate(10));
 		 return $pool;
@@ -43,7 +43,7 @@ class PoolController extends Controller
         $pool = DB::table('pool_pallet as a')
             ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
             ->select('a.*', 'b.organization_name')
-            ->paginate(10)
+            ->paginate(1000)
             ->toArray();
         }
         else{
@@ -51,7 +51,7 @@ class PoolController extends Controller
             ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
             ->select('a.*', 'b.organization_name')
             ->whereNotIn('a.pool_pallet_id',[$pool_pallet])
-            ->paginate(10)
+            ->paginate(1000)
             ->toArray();
         }
 

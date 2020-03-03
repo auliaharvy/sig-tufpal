@@ -28,7 +28,7 @@ class SjpController extends Controller
             ->select('a.*', 'b.pool_name as dest_pool', 'c.pool_name as dept_pool',
                     'd.vehicle_number','e.transporter_name', 'f.driver_name')
            
-            ->paginate(10)
+            ->paginate(1000000)
             ->toArray();
         }
         else{
@@ -42,7 +42,7 @@ class SjpController extends Controller
                     'd.vehicle_number','e.transporter_name', 'f.driver_name')
             ->where('c.pool_pallet_id',$pool_pallet)
             ->orWhere('b.pool_pallet_id', $pool_pallet)
-            ->paginate(10)
+            ->paginate(1000000)
             ->toArray();
         }
        
@@ -130,7 +130,7 @@ class SjpController extends Controller
             $update = Sjp::find($sjp_id);
             $update->driver_id = $request->driver_id;
             $update->vehicle_id = $request->vehicle_id;
-            $update->adjust_by = auth()->user()->id;
+            $update->adjust_by = auth()->user()->name;
             $update->save();
         }
         $data = [

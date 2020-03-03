@@ -13,7 +13,7 @@ class TransporterController extends Controller
 {
     public function index()
     {
-        $transporter = new SjpStatusCollection(transporter::paginate(10));
+        $transporter = new SjpStatusCollection(transporter::paginate(10000000));
 		 return $transporter;
         // return response()->json(Sjp::all()->toArray());
     }
