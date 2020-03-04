@@ -9,8 +9,8 @@
             <div class="panel-body">
                 <bermissing-form></bermissing-form>
                 <div class="form-group">
-                    <v-btn class="success" @click.prevent="submit">
-                        Receive
+                    <v-btn :loading="loading" class="success" @click.prevent="submit()">
+                        {{ loading ? 'Loading...':'Approve' }}
                     </v-btn>
                 </div>
             </div>
@@ -22,14 +22,21 @@
     import FormBermissing from './Form.vue'
     export default {
         name: 'EditPalletTransfer',
+        data() {
+            return {
+                loading: false,
+            }
+        },
         created() {
             this.editBermissing(this.$route.params.id) //LOAD SINGLE DATA CUSTOMER BERDASARKAN ID
         },
         methods: {
             ...mapActions('bermissing', ['editBermissing', 'updateBermissing']),
             submit() {
+                this.loading = true
                 //MENGIRIM PERMINTAAN KE SERVER UNTUK ME-NGUBAH DATA
                 this.updateBermissing(this.$route.params.id).then(() => {
+                    this.loading = false
                     this.$router.push({ name: 'bermissings.data' }) //KETIKA UPDATE BERHASIL, MAKA REDIRECT KE HALAMAN LIST CUSTOMER
                 })
             }

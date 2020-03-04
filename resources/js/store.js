@@ -22,6 +22,8 @@ import organization from './stores/organization.js'
 import pallettransfer from './stores/pallettransfer.js'
 import bermissing from './stores/Bermissing.js'
 import newpallet from './stores/Newpallet.js'
+import damagedpallet from './stores/Damagedpallet.js'
+import repairedpallet from './stores/Repairedpallet.js'
 import palletmovement from './stores/palletmovement.js'
 Vue.use(Vuex)
 
@@ -48,7 +50,9 @@ const store = new Vuex.Store({
         pallettransfer,
         bermissing,
         newpallet,
-        palletmovement
+        palletmovement,
+        damagedpallet,
+        repairedpallet
     },
     state: {
         token: localStorage.getItem('token'),

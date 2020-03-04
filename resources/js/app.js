@@ -13,11 +13,13 @@ import { Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import QrcodeVue from 'qrcode.vue'
 import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
+import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 
 Vue.use(Vuetify);
 Vue.use(VueSweetalert2)
 Vue.use(BootstrapVue)
 Vue.mixin(Permissions)
+Vue.component('vue-bootstrap-typeahead', VueBootstrapTypeahead)
 Vue.component('downloadExcel', JsonExcel)
 Vue.component('QrcodeStream', QrcodeStream)
 Vue.component('QrcodeDropZone', QrcodeDropZone)

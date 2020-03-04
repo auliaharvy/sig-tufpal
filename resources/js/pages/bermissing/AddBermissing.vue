@@ -10,8 +10,8 @@
               	<!-- LOAD VIEW DARI FORM.VUE -->
                 <bermissing-form></bermissing-form>
                 <div class="form-group">
-                    <v-btn class="success" @click.prevent="submit">
-                        Add New
+                    <v-btn :loading="loading" class="success" @click.prevent="submit()">
+                        {{ loading ? 'Loading...':'Add' }}
                     </v-btn>
                 </div>
             </div>
@@ -25,15 +25,17 @@
         name: 'AddBermissing',
         data() {
             return {
-                
+                loading: false,
             }
         },
         methods: {
             ...mapActions('bermissing', ['submitBermissing']),
             //KETIKA TOMBOL DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
             submit() {
+                this.loading = true
                 //MELAKUKAN REQUEST KE SERVER UNTUK MENAMBAHKAN DATA
                 this.submitBermissing().then(() => {
+                    this.loading = false
                     //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
                     this.$router.push({ name: 'bermissings.data' })
                 })

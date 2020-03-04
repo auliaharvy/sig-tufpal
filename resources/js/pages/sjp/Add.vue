@@ -10,8 +10,8 @@
               	<!-- LOAD VIEW DARI FORM.VUE -->
                 <sjp-form></sjp-form>
                 <div class="form-group">
-                    <v-btn class="success" @click.prevent="submit">
-                        Add New
+                    <v-btn :loading="loading" class="success" @click.prevent="submit()">
+                        {{ loading ? 'Loading...':'Add' }}
                     </v-btn>
                 </div>
             </div>
@@ -25,15 +25,17 @@
         name: 'AddSjp',
         data() {
             return {
-                
+               loading: false, 
             }
         },
         methods: {
             ...mapActions('sjp', ['submitSjp']),
             //KETIKA TOMBOL DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
             submit() {
+                this.loading = true
                 //MELAKUKAN REQUEST KE SERVER UNTUK MENAMBAHKAN DATA
                 this.submitSjp().then(() => {
+                    this.loading = false
                     //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
                     this.$router.push({ name: 'sjps.data' })
                 })

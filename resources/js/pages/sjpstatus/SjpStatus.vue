@@ -31,16 +31,19 @@
                             <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
                             <v-chip class="label label-success" v-else-if="item.status == 1">Received</v-chip>
                         </template>
+
                         <template v-if="$can('update sjpstatuss')" v-slot:item.receive="{ item }">
-                            <router-link v-if="item.status == 0" :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
+                            <router-link v-if="item.status == 0 && authenticated.reference_pool_pallet_id == item.destination_pool_pallet_id " :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Receive</v-btn>   
                             </router-link>             
                         </template>
+
                         <template v-if="$can('create sjpstatuss')" v-slot:item.send_back="{ item }">
                             <router-link v-if="item.transaction == 'SEND' && item.status == 1" :to="{ name: 'sjpstatuss.sendback', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Send Back</v-btn>
                             </router-link>                       
                         </template>
+                        
                         <template v-if="$can('delete sjps')" v-slot:item.delete="{ item }">
                                 <v-btn color="error" @click="deleteSjpStatus(item.sjp_status_id)" small>Delete</v-btn>                     
                         </template>
@@ -93,6 +96,9 @@ export default {
     computed: {
         ...mapState('sjpstatus', {
             sjpstatuss: state => state.sjpstatuss //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+        }),
+        ...mapState('user', {
+            authenticated: state => state.authenticated
         }),
         //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {

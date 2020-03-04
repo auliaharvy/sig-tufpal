@@ -18,10 +18,13 @@ Route::post('/login', 'Auth\LoginController@login');
 Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('sjp', 'SjpController');
     Route::post('/sjp/adjust', 'SjpController@adjust');
+    Route::get('/sjpstatusbymaster/{id}', 'SjpStatusController@sjpstatusbymaster'); //get data untuk add sjp status
     Route::resource('sjpstatus', 'SjpStatusController');
     Route::resource('pallettransfer', 'PalletTransferController');
     Route::resource('bermissing', 'BermissingpalletController');
     Route::resource('newpallet', 'NewpalletController');
+    Route::resource('damagedpallet', 'DamagedpalletController');
+    Route::resource('repairedpallet', 'RepairedpalletController');
     Route::resource('palletmovement', 'PalletMovementController');
     Route::resource('pool', 'PoolController');
     Route::get('poolform', 'PoolController@getpoolpallet');

@@ -12,24 +12,24 @@
             <input type="text" class="form-control" v-model="newpallet.pool_pallet_id">
             <p class="text-danger" v-if="errors.pool_pallet_id">{{ errors.pool_pallet_id[0] }}</p>
         </div> -->
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label>Departure Pool Pallet </label>
             <select class='form-control' v-model='newpallet.pool_pallet_id'>
                 <option value='0' >Select Departure</option>
                 <option v-for='data in pools.data' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
             </select>
-        </div>
+        </div> -->
         <!-- <div class="form-group" :class="{ 'has-error': errors.adder_user_id }">
             <label for="">Adder User</label>
             <input type="text" class="form-control" v-model="newpallet.adder_user_id">
             <p class="text-danger" v-if="errors.adder_user_id">{{ errors.adder_user_id[0] }}</p>
         </div> -->
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label>Adder User</label>
             <select class='form-control' v-model='newpallet.adder_user_id'>
                 <option v-for='data in authenticated' :value='authenticated.id'>{{ authenticated.name }}</option>
             </select>
-        </div>
+        </div> -->
         <div class="form-group" :class="{ 'has-error': errors.good_pallet }">
             <label for="">Good Pallet</label>
             <input type="text" class="form-control" v-model="newpallet.good_pallet">
@@ -65,7 +65,7 @@ export default {
         }),
     },
     methods: {
-        ...mapMutations('bermissing', ['CLEAR_FORM']), 
+        ...mapMutations('newpallet', ['CLEAR_FORM']), 
         ...mapActions('pool', ['getPools']),
         ...mapActions('user', ['getUserLists']),
         ...mapActions('user', ['getUserLogin']),

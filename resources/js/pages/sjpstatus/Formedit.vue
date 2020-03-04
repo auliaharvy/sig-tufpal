@@ -38,7 +38,15 @@
             <p class="text-danger" v-if="errors.checker_receive_user_id">{{ errors.checker_receive_user_id[0] }}</p>
         </div>  -->
        
-     
+        <div>
+            <h3>Send Information</h3>
+            <p> Good Pallet : <b>{{ sjpstatus.good_pallet }}</b></p>
+            <p> TBR Pallet : <b>{{ sjpstatus.tbr_pallet }}</b></p>
+            <p> BER Pallet : <b>{{ sjpstatus.ber_pallet }}</b></p>
+            <p> Missing Pallet : <b>{{ sjpstatus.missing_pallet }}</b></p>
+            <p> Good  Cement : <b>{{ sjpstatus.good_cement }}</b></p>
+            <p> Bad Cement : <b>{{ sjpstatus.bad_cement }}</b> </p>
+        </div>
         <div class="form-group" :class="{ 'has-error': errors.good_pallet }">
             <label for="">Good Pallet</label>
             <input type="text" class="form-control" v-model="sjpstatus.good_pallet">
@@ -109,6 +117,7 @@ export default {
         ...mapActions('sjp', ['getSjp']),
         ...mapActions('msttransaction', ['getMstTransaction']),
         ...mapActions('user', ['getUserLogin']),
+        ...mapActions('sjpstatus', ['getSjpStatus']),
        
     },
    

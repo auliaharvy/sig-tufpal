@@ -63,7 +63,23 @@
                         <v-icon color="black">mdi-file-document</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
-                        <v-list-item-title color="black">Add New Pallet</v-list-item-title>
+                        <v-list-item-title color="black">New Pallet</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link router to="/damagedpallet" v-if="$can('read damagedpallet')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-file-document</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Damaged Pallet</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link router to="/repairedpallet" v-if="$can('read repairedpallet')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-file-document</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Repaired Pallet</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
                 <!-- { title: 'Home', icon: 'mdi-home', route:'/' },

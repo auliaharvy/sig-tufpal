@@ -87,9 +87,36 @@ const actions = {
             })
         })
       },
+      submitSjpStatusMaster({ dispatch, commit, state }) {
+        return new Promise((resolve, reject) => {
+            //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
+            $axios.post(`/sjpstatus`, state.sjpstatus)
+            .then((response) => {
+                //APABILA BERHASIL MAKA LOAD DATA CUSTOMER UNTUK MENGAMBIL DATA TERBARU
+                dispatch('getSjpStatuss').then(() => {
+                    resolve(response.data)
+                })
+            })
+            .catch((error) => {
+                //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
+                if (error.response.status == 422) {
+                    commit('SET_ERRORS', error.response.data.errors, { root: true })
+                }
+            })
+        })
+      },
       editSjpStatus({ commit }, payload) {
         return new Promise((resolve, reject) => {
             $axios.get(`/sjpstatus/${payload}`) //KIRIM PERMINTAAN KE SERVER UNTUK MENGAMBIL SINGLE DATA CUSTOMER BERDASARKAN PAYLOAD (ID)
+            .then((response) => {
+                commit('ASSIGN_FORM', response.data.data) //ASSIGN DATA TERSEBUT KE DALAM STATE CUSTOMER
+                resolve(response.data)
+            })
+        })
+    },
+    addSjpStatusbyMaster({ commit }, payload) {
+        return new Promise((resolve, reject) => {
+            $axios.get(`/sjpstatusbymaster/${payload}`) //KIRIM PERMINTAAN KE SERVER UNTUK MENGAMBIL SINGLE DATA CUSTOMER BERDASARKAN PAYLOAD (ID)
             .then((response) => {
                 commit('ASSIGN_FORM', response.data.data) //ASSIGN DATA TERSEBUT KE DALAM STATE CUSTOMER
                 resolve(response.data)

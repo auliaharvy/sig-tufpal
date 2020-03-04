@@ -17,7 +17,8 @@ class PalletMovementController extends Controller
     public function index()
     {
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
-        if($pool_pallet==null){
+        $role = Auth::user()->role;
+        if($pool_pallet==1 && $role<7){
         $palletmovement = DB::table('sjp_status as a')
                 // ->join('users as b', 'a.checker_send_user_id', '=', 'b.id')
                 // ->join('users as c', 'a.checker_receive_user_id', '=', 'c.id')

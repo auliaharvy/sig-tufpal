@@ -19,6 +19,7 @@ import DataSjpStatus from './pages/sjpstatus/SjpStatus.vue'
 import AddSjpStatus from './pages/sjpstatus/AddSjpStatus.vue'
 import SendbackSjpStatus from './pages/sjpstatus/SendbackSjpStatus.vue'
 import EditSjpStatus from './pages/sjpstatus/EditSjpStatus.vue'
+import AddSjpStatusbyMaster from './pages/sjpstatus/AddSjpStatusbyMaster.vue'
 
 import IndexPool from './pages/pool/Index.vue'
 import DataPool from './pages/pool/Pool.vue'
@@ -78,6 +79,16 @@ import IndexNewpallet from './pages/newpallet/Index.vue'
 import DataNewpallet from './pages/newpallet/Newpallet.vue'
 import AddNewpallet from './pages/newpallet/AddNewpallet.vue'
 import EditNewpallet from './pages/newpallet/EditNewpallet.vue'
+
+import IndexDamagedpallet from './pages/damagedpallet/Index.vue'
+import DataDamagedpallet from './pages/damagedpallet/Damagedpallet.vue'
+import AddDamagedpallet from './pages/damagedpallet/AddDamagedpallet.vue'
+import EditDamagedallet from './pages/damagedpallet/EditDamagedpallet.vue'
+
+import IndexRepairedpallet from './pages/repairedpallet/Index.vue'
+import DataRepairedpallet from './pages/repairedpallet/Repairedpallet.vue'
+import AddRepairedpallet from './pages/repairedpallet/AddRepairedpallet.vue'
+import EditRepairedpallet from './pages/repairedpallet/EditRepairedpallet.vue'
 
 Vue.use(Router)
 
@@ -140,6 +151,12 @@ const router = new Router({
                     component: EditSjpStatus,
                     meta: { title: 'Edit Sjp' }
                 },
+                {
+                    path: 'addsjp/:id',
+                    name: 'sjpstatuss.addsjp',
+                    component: AddSjpStatusbyMaster,
+                    meta: { title: 'Add Sjp Status' }
+                },
             ]
         },
         {
@@ -189,6 +206,56 @@ const router = new Router({
                     name: 'newpallets.edit',
                     component: EditNewpallet,
                     meta: { title: 'Edit New Pallet' }
+                },
+            ]
+        },
+        {
+            path: '/damagedpallet',
+            component: IndexDamagedpallet,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'damagedpallets.data',
+                    component: DataDamagedpallet,
+                    meta: { title: 'Manage Managed Pallet' }
+                },
+                {
+                    path: 'add',
+                    name: 'damagedpallets.add',
+                    component: AddDamagedpallet,
+                    meta: { title: 'Add Damaged Pallet' }
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'damagedpallets.edit',
+                    component: EditDamagedallet,
+                    meta: { title: 'Edit Damaged Pallet' }
+                },
+            ]
+        },
+        {
+            path: '/repairedpallet',
+            component: IndexRepairedpallet,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'repairedpallets.data',
+                    component: DataRepairedpallet,
+                    meta: { title: 'Manage Repaired Pallet' }
+                },
+                {
+                    path: 'add',
+                    name: 'repairedpallets.add',
+                    component: AddRepairedpallet,
+                    meta: { title: 'Add RepairedPallet' }
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'repairedpallets.edit',
+                    component: EditRepairedpallet,
+                    meta: { title: 'Edit Repaired Pallet' }
                 },
             ]
         },

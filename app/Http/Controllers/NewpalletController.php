@@ -31,6 +31,10 @@ class NewpalletController extends Controller
 
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'good_pallet' => 'required',
+        ]);
+
         $new_pallet_id = $request->new_pallet_id;
         $pool_pallet_id = auth()->user()->reference_pool_pallet_id;
 

@@ -17,7 +17,8 @@ class SjpStatusController extends Controller
     public function index()
     {
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
-        if($pool_pallet==null){
+        $role = Auth::user()->role;
+        if($pool_pallet==1 && $role<7){
         $sjpstatus = DB::table('sjp_status as a')
             ->join('users as b', 'a.checker_send_user_id', '=', 'b.id')
             ->join('users as c', 'a.checker_receive_user_id', '=', 'c.id')
@@ -55,7 +56,76 @@ class SjpStatusController extends Controller
         return response()->json(['status' => 'success', 'data' => $sjpstatus]);
     }
 
+    public function sjpstatusbymaster($sjp_id)
+    {
+        $sjp = Sjp::find($sjp_id); //MELAKUKAN QUERY UNTUK MENGAMBIL DATA BERDASARKAN ID
+        return response()->json(['status' => 'success', 'data' => $sjp]);
+       
+    }
+
     public function store(Request $request)
+    {
+        $sjp_id = $request->sjp_id;
+        $sjp_status_id = $request->sjp_status_id;
+        $sjp = DB::table('surat_jalan_pallet')->where('sjp_id',$sjp_id)->first();
+        $transporter_id = $sjp->transporter_id;
+        
+        
+        if(($request->transaction_id)==1){ //send pool to wh
+            $departure_id = $sjp->departure_pool_pallet_id;
+            $destination_id = $sjp->destination_pool_pallet_id;
+        }
+        else{ //statuss = 2 or send wh to pool
+            $destination_id = $sjp->departure_pool_pallet_id;
+            $departure_id = $sjp->destination_pool_pallet_id;
+        }
+        $checker = Auth::user()->id;
+        $sjpStatus = SjpStatus::create([
+            'checker_send_user_id' => $checker, 
+            'checker_receive_user_id' => 5, 
+            'sjp_id' => $request->sjp_id,
+            'good_pallet' => $request->good_pallet, 
+            'tbr_pallet' => $request->tbr_pallet, 
+            'ber_pallet' => $request->ber_pallet, 
+            'missing_pallet' => $request->missing_pallet, 
+            'good_cement' => $request->good_cement, 
+            'bad_cement' => $request->bad_cement, 
+            'updated_at' => null,
+            'transaction_id' => $request->transaction_id,
+            'note' => $request->note, 
+            'status' => 0,
+        ]);
+
+
+        $state = Sjp::find($sjp_id);
+        $state->state=1;
+        $state->save();
+        
+
+        $InventoryDept = PoolPallet::find($departure_id);
+        $InventoryDept->good_pallet = (($InventoryDept->good_pallet)-($request->good_pallet));
+        $InventoryDept->tbr_pallet = (($InventoryDept->tbr_pallet)-($request->tbr_pallet));
+        $InventoryDept->ber_pallet = (($InventoryDept->ber_pallet)-($request->ber_pallet));
+        $InventoryDept->missing_pallet = (($InventoryDept->missing_pallet)-($request->missing_pallet));
+        $InventoryDept->save();
+
+        $InventoryTrans = Transporter::find($transporter_id);
+        $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)+($request->good_pallet));
+        $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)+($request->tbr_pallet));
+        $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet)); //anggeplah 0
+        $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet)); //anggeplah 0
+        $InventoryTrans->save();
+
+        $data = [
+            'data' => $sjpStatus,
+            'status' => (bool) $sjpStatus,
+            'message' => $sjpStatus ? 'SJP Status Record Created!' : 'Error Creating SJP Status Record' 
+        ];
+
+        return response()->json($data);
+    }
+
+    public function sendBack(Request $request)
     {
         $sjp_id = $request->sjp_id;
         $sjp_status_id = $request->sjp_status_id;

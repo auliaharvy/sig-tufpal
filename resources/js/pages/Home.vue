@@ -38,7 +38,7 @@
         <v-flex xs12 md3 lg3 link >
           <v-card link router to="/bermissing" class="text-center ma-3" v-if="$can('read bermissingpallets')">
             <v-card-title class="text-center" color="black">
-              <v-icon color="black" left>mdi-close-circle</v-icon>
+              <v-icon color="black" left>mdi-file-document</v-icon>
               <span right> BER/Missing Pallet</span>
             </v-card-title>
           </v-card>
@@ -46,8 +46,24 @@
         <v-flex xs12 md3 lg3 link >
           <v-card link router to="/newpallet" class="text-center ma-3" v-if="$can('read newpallet')">
             <v-card-title class="text-center" color="black">
-              <v-icon color="black" left>mdi-plus</v-icon>
-              <span right> Add New Pallet</span>
+              <v-icon color="black" left>mdi-file-document</v-icon>
+              <span right>New Pallet</span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/damagedpallet" class="text-center ma-3" v-if="$can('read damagedpallet')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-file-document</v-icon>
+              <span right>Damaged Pallet</span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/repairedpallet" class="text-center ma-3" v-if="$can('read repairedpallet')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-file-document</v-icon>
+              <span right>Repaired Pallet</span>
             </v-card-title>
           </v-card>
         </v-flex>

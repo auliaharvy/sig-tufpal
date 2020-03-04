@@ -33,29 +33,30 @@
             <label>Destination Pool Pallet</label>
             <select class='form-control' v-model='sjp.destination_pool_pallet_id'>
                 <option value='0' >Select Destination</option>
-                <option v-for='data in pools.data' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
+                <option v-for='data in pools.data' v-bind:key='data.pool_pallet_id' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
             </select>
         </div>
         <div class="form-group">
-                            <label>Vehicle Number</label>
-                            <select class='form-control' v-model='sjp.vehicle_id'>
-                              <option value='0' >Select Vehicle</option>
-                              <option v-for='data in vehicles.data' :value='data.vehicle_id'>{{ data.vehicle_number }}</option>
-                            </select>
-                        </div>
+            <label>Vehicle Number</label>
+            <select class='form-control' v-model='sjp.vehicle_id'>
+                <option value='0' >Select Vehicle</option>
+                <option v-for='data in vehicles.data' v-bind:key='data.vehicle_id' :value='data.vehicle_id'>{{ data.vehicle_number }}</option>
+            </select>
+        </div>
        
         <div class="form-group">
-                            <label>Driver Name</label>
-                            <select class='form-control' v-model='sjp.driver_id'>
-                              <option value='0' >Select Driver</option>
-                              <option v-for='data in drivers.data' :value='data.driver_id'>{{ data.driver_name }}</option>
-                            </select>
-                        </div>
+            <label>Driver Name</label>
+            <select class='form-control' v-model='sjp.driver_id'>
+                <option value='0' >Select Driver</option>
+                <option v-for='data in drivers.data' v-bind:key='data.driver_id' :value='data.driver_id'>{{ data.driver_name }}</option>
+            </select>
+        </div>
+
         <div class="form-group">
             <label>Transporter Name</label>
             <select class='form-control' v-model='sjp.transporter_id'>
                 <option value='0' >Select Transporter</option>
-                <option v-for='data in transporters.data' :value='data.transporter_id'>{{ data.transporter_name }}</option>
+                <option v-for='data in transporters.data' v-bind:key='data.transporter_id'  :value='data.transporter_id'>{{ data.transporter_name }}</option>
             </select>
         </div>               
         <!-- <div class="form-group" :class="{ 'has-error': errors.transporter_id }">

@@ -44,14 +44,14 @@
                                 <v-btn color="success" small >Send</v-btn>
                             </router-link>                        
                         </template> -->
-                        <template v-slot:item.send="{ item }">
-                                <router-link :to="{ name: 'sjpstatuss.add', params: {id: item.sjp_id} }" v-if="item.state == 0 && $can('create sjpstatuss')">
-                                    <v-btn color="primary" small>Send</v-btn>
-                                </router-link>                        
-                            </template>
+                        <template v-if="$can('create sjpstatuss') "  v-slot:item.send="{ item }">
+                            <router-link :to="{ name: 'sjpstatuss.addsjp', params: {id: item.sjp_id} }" v-if="item.state == 0 && authenticated.reference_pool_pallet_id == item.departure_pool_pallet_id">
+                                <v-btn color="primary" small>Send</v-btn>
+                            </router-link>                        
+                        </template>
 
-                        <template class="pa-5" v-slot:item.adjusment="{ item }">
-                            <router-link :to="{ name: 'sjps.edit', params: {id: item.sjp_id} }" v-if="$can('update sjps')"><v-btn color="success" small>Adjust</v-btn></router-link>                        
+                        <template v-if="$can('update sjps')" class="pa-5" v-slot:item.adjusment="{ item }">
+                            <router-link :to="{ name: 'sjps.edit', params: {id: item.sjp_id} }" v-if="item.status == 'OPEN'"><v-btn color="success" small>Adjust</v-btn></router-link>                        
                         </template>
 
                         <template v-if="$can('delete sjps')" class="pa-5" v-slot:item.delete="{ item }">
@@ -132,6 +132,9 @@ export default {
     computed: {
         ...mapState('sjp', {
             sjps: state => state.sjps //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+        }),
+        ...mapState('user', {
+            authenticated: state => state.authenticated
         }),
         //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {

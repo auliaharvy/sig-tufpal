@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DateTime;
 use App\Http\Resources\SjpCollection;
 use App\Sjp;
+use App\PoolPallet;
 use DB;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,8 @@ class SjpController extends Controller
 		//  return $sjp;
         // return response()->json(Sjp::all()->toArray());
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
-        if($pool_pallet==null){
+        $role = Auth::user()->role;
+        if($pool_pallet==1 && $role<7){
             $sjp = DB::table('surat_jalan_pallet as a')
             ->join('pool_pallet as b', 'a.destination_pool_pallet_id', '=', 'b.pool_pallet_id')
             ->join('pool_pallet as c', 'a.departure_pool_pallet_id', '=', 'c.pool_pallet_id')
@@ -53,10 +55,18 @@ class SjpController extends Controller
     public function store(Request $request)
     {
         $now = new DateTime();
-
-        $sjp = Sjp::create([
+        $pool_pallet = Auth::user()->reference_pool_pallet_id;
+        $pallet = PoolPallet::find($pool_pallet); //jgn lupa add model poolpallet
+        $qty_pool = $pallet->good_pallet;
+        $pallet_qty = $request->pallet_quantity;
+        if($pallet_qty>$qty_pool)
+        {
+            return response()->json(['error' => 'Pallet Melebihi Qty yang ada'], 404);
+        }
+        else{
+            $sjp = Sjp::create([
             'destination_pool_pallet_id' => $request->destination_pool_pallet_id, 
-            'departure_pool_pallet_id' => Auth::user()->reference_pool_pallet_id, 
+            'departure_pool_pallet_id' => $pool_pallet, 
             'vehicle_id' => $request->vehicle_id, 
             'driver_id' => $request->driver_id, 
             'transporter_id' => $request->transporter_id, 
@@ -82,7 +92,45 @@ class SjpController extends Controller
         ];
 
         return response()->json($data);
+        }
+
+        
     }
+
+    //Codingan Pertama
+    // public function store(Request $request)
+    // {
+    //     $now = new DateTime();
+
+    //     $sjp = Sjp::create([
+    //         'destination_pool_pallet_id' => $request->destination_pool_pallet_id, 
+    //         'departure_pool_pallet_id' => Auth::user()->reference_pool_pallet_id, 
+    //         'vehicle_id' => $request->vehicle_id, 
+    //         'driver_id' => $request->driver_id, 
+    //         'transporter_id' => $request->transporter_id, 
+    //         //'sjp_number' => $request->sjp_number, 
+    //         'no_do' => $request->no_do, 
+    //         'product_name' => $request->product_name, 
+    //         'packaging' => $request->packaging, 
+    //         'product_quantity' => $request->product_quantity, 
+    //         'status' => 'OPEN',
+    //         'state' => 0,
+    //         'created_by' => auth()->user()->name,
+    //         'created_at' => $now,
+    //         'updated_at' => null,
+    //         'departure_time' => $request->departure_time, 
+    //         'eta' => $request->eta, 
+    //         'pallet_quantity' => $request->pallet_quantity, 
+    //     ]);
+
+    //     $data = [
+    //         'data' => $sjp,
+    //         'status' => (bool) $sjp,
+    //         'message' => $sjp ? 'Surat jalan Pallet Record Created!' : 'Error Creating Surat jalan Pallet Record' 
+    //     ];
+
+    //     return response()->json($data);
+    // }
 
     public function edit($id)
     {

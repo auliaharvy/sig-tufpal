@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="form-group">
-            <label>SJP Master</label>
+            <label>SJP Number</label>
             <select class='form-control' v-model='sjpstatus.sjp_id' :readonly="$route.name == 'sjpstatuss.edit'">
                 <option v-for='data in sjps.data' v-bind:key='data.sjp_id' :value='data.sjp_id'>{{ data.sjp_number }}</option>
             </select>
@@ -102,7 +102,6 @@ export default {
         ...mapActions('sjp', ['getSjp']),
         ...mapActions('msttransaction', ['getMstTransaction']),
         ...mapActions('user', ['getUserLogin']),
-       
     },
    
     destroyed() {
