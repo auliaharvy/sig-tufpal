@@ -9,6 +9,9 @@ import store from './store.js'
 import IndexPalletMovement from './pages/report/index.vue'
 import DataPalletMovement from './pages/report/PalletMovement.vue'
 
+import IndexSjpadjusment from './pages/report/sjpadjusment/index.vue'
+import DataSjpadjusment from './pages/report/sjpadjusment/Sjpadjusment.vue'
+
 import IndexSjp from './pages/sjp/index.vue'
 import DataSjp from './pages/sjp/sjp.vue'
 import AddSjp from './pages/sjp/Add.vue'
@@ -338,6 +341,20 @@ const router = new Router({
         },
 
 
+
+        {
+            path: '/sjpadjusment',
+            component: IndexSjpadjusment,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'sjpadjusments.data',
+                    component: DataSjpadjusment,
+                    meta: { title: 'SJP Adjusment' }
+                },
+            ]
+        },
 
         {
             path: '/palletmovement',

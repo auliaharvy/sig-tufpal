@@ -24,9 +24,11 @@
       :search="search"
     >       
         <template v-slot:item.status="{ item }">
-                            <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
-                            <v-chip class="label label-success" v-else-if="item.status == 1">Received</v-chip>
-                        </template>
+            <!-- <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
+            <v-chip class="label label-success" v-else-if="item.status == 1">Received</v-chip> -->
+            <p v-if="item.status == 0">Sending</p>
+            <p class="text-blue" v-else-if="item.status == 1">Received</p>
+        </template>
        
     </v-data-table>
   </v-card>

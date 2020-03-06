@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('damagedpallet', 'DamagedpalletController');
     Route::resource('repairedpallet', 'RepairedpalletController');
     Route::resource('palletmovement', 'PalletMovementController');
+    Route::resource('sjpadjusment', 'SjpadjusmentController');
     Route::resource('pool', 'PoolController');
     Route::get('poolform', 'PoolController@getpoolpallet');
     Route::resource('driver', 'DriverController');

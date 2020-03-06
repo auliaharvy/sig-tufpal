@@ -196,20 +196,29 @@ class SjpController extends Controller
             $update->adjust_by = auth()->user()->name;
             $update->save();
 
-            $sjp_number = $sjp->sjp_number;
+            
+
+        }
+
+        $sjp_number = $sjp->sjp_number;
             $vehicle_id = $sjp->vehicle_id;
             $vehicle = Vehicle::find($vehicle_id);
             $driver_id = $sjp->driver_id;
             $driver = Driver::find($driver_id);
             $checker = Auth::user()->name;
+            $new_vehicle_id = $request->vehicle_id;
+            $new_vehicle = Vehicle::find($new_vehicle_id);
+            $new_driver_id = $request->driver_id;
+            $new_driver = Driver::find($new_driver_id); 
             $sjpadusment = Sjpadjusment::create([
                 'sjp_number' => $sjp_number,
                 'vehicle' => $vehicle->vehicle_number,
+                'new_vehicle' => $new_vehicle->vehicle_number,
                 'driver' => $driver->driver_name,
+                'new_driver' => $new_driver->driver_name,
                 'adjust_by' => $checker, 
             ]);
 
-        }
         $data = [
             'data' => $update,
             'status' => (bool) $update,

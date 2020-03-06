@@ -132,6 +132,14 @@
                         <v-list-item-title color="black">Pallet Movement</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item link router to="/sjpadjusment" v-if="$can('read sjpadjusment')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-truck</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">SJP Adjusment</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
                 <!-- <v-list-item link router to="/palletdeposit" v-if="$can('read palletdeposit')">
                     <v-list-item-icon>
                         <v-icon color="black">mdi-clipboard-flow</v-icon>

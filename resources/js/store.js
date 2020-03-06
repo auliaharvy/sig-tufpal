@@ -25,6 +25,7 @@ import newpallet from './stores/Newpallet.js'
 import damagedpallet from './stores/Damagedpallet.js'
 import repairedpallet from './stores/Repairedpallet.js'
 import palletmovement from './stores/palletmovement.js'
+import sjpadjusment from './stores/sjpadjusment.js'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -51,6 +52,7 @@ const store = new Vuex.Store({
         bermissing,
         newpallet,
         palletmovement,
+        sjpadjusment,
         damagedpallet,
         repairedpallet
     },
