@@ -32,7 +32,7 @@ class NewpalletController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'good_pallet' => 'required',
+            'good_pallet' => 'required|integer|gt:0',
         ]);
 
         $new_pallet_id = $request->new_pallet_id;

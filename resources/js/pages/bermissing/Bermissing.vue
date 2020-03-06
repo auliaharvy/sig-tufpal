@@ -38,10 +38,12 @@
                         :search="search"
                         >       
                             <template v-slot:item.status="{ item }">
-                                <v-chip class="label label-default" v-if="item.status == 0">DRAFT REPORTED</v-chip>
-                                <v-chip class="label label-primary" v-if="item.status == 1">APPROVED</v-chip>
+                                <!-- <v-chip class="label label-default" v-if="item.status == 0">DRAFT REPORTED</v-chip>
+                                <v-chip class="label label-primary" v-if="item.status == 1">APPROVED</v-chip> -->
                                 <!-- <span class="label label-primary" v-if="item.status == 0">SENDING</span>
                                 <span class="label label-success" v-else-if="item.status == 1">RECEIVED</span> -->
+                                <p v-if="item.status == 0">DRAFT REPORTED</p>
+                                <p class="text-blue" v-if="item.status == 1">APPROVED</p>
                             </template>
                             <template v-slot:item.approve="{ item }">
                                 <router-link :to="{ name: 'bermissings.edit', params: {id: item.ber_missing_pallet_id} }" v-if="item.status == 0 && $can('update bermissingpallets')" >

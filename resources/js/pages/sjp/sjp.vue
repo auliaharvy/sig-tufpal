@@ -30,13 +30,18 @@
                     </v-card-title>
                     <v-data-table :items="sjps.data" :headers="fields" :search="search" dense>
                         <template v-slot:item.status="{ item }">
-                            <v-chip class="label label-default" v-if="item.status == 'OPEN'">Open</v-chip>
-                            <v-chip class="label label-success" v-else-if="item.status == 'CLOSED'">Closed</v-chip>
+                            <!-- <v-chip class="label label-default" v-if="item.status == 'OPEN'">Open</v-chip>
+                            <v-chip class="label label-success" v-else-if="item.status == 'CLOSED'">Closed</v-chip> -->
+                            <p v-if="item.status == 'OPEN'">Open</p>
+                            <p class="text-blue" v-else-if="item.status == 'CLOSED'">Closed</p>
                         </template>
                         <template v-slot:item.state="{ item }">
-                            <v-chip class="label label-default" v-if="item.state == 0">Draft</v-chip>
+                            <!-- <v-chip class="label label-default" v-if="item.state == 0">Draft</v-chip>
                             <v-chip class="label label-success" v-else-if="item.state == 1">Send</v-chip>
-                            <v-chip class="label label-primary" v-else>Received</v-chip>
+                            <v-chip class="label label-primary" v-else>Received</v-chip> -->
+                            <p v-if="item.state == 0">Draft</p>
+                            <p class="text-green" v-else-if="item.state == 1">Send</p>
+                            <p class="text-blue" v-else>Received</p>
                         </template>
 
                         <!-- <template  class="pa-5" v-slot:item.send="{ item }">

@@ -27,7 +27,7 @@ class PalletTransferController extends Controller
             ->join('driver as h', 'a.driver_id', '=', 'h.driver_id')
             ->select('a.*', 'b.pool_name as dep_pool', 'c.pool_name as dest_pool',
                     'd.name as sender_name','e.name as receiver_name', 'f.transporter_name',
-                    'g.vehicle_number', 'h.driver_name')
+                    'g.vehicle_number', 'h.driver_name', 'b.pool_pallet_id as departure', 'c.pool_pallet_id as destination')
             ->paginate(10000000)
             ->toArray();
         }
@@ -42,7 +42,7 @@ class PalletTransferController extends Controller
             ->join('driver as h', 'a.driver_id', '=', 'h.driver_id')
             ->select('a.*', 'b.pool_name as dep_pool', 'c.pool_name as dest_pool',
                     'd.name as sender_name','e.name as receiver_name', 'f.transporter_name',
-                    'g.vehicle_number', 'h.driver_name')
+                    'g.vehicle_number', 'h.driver_name', 'b.pool_pallet_id as departure', 'c.pool_pallet_id as destination')
             ->where('b.pool_pallet_id',$pool_pallet)
             ->orWhere('c.pool_pallet_id',$pool_pallet)
             ->paginate(1000000)
@@ -69,38 +69,51 @@ class PalletTransferController extends Controller
         $departure_id = Auth::user()->reference_pool_pallet_id;
         $destination_id = $request->destination_pool_pallet_id;
 
-        $checker = Auth::user()->id;
-        $palletTransfer = PalletTransfer::create([
-            'departure_pool_pallet_id' => Auth::user()->reference_pool_pallet_id,
-            'destination_pool_pallet_id' => $request->destination_pool_pallet_id,
-            'sender_user_id' => $checker, 
-            'receiver_user_id' => 5,
-            'vehicle_id' => $request->vehicle_id, 
-            'driver_id' => $request->driver_id, 
-            'transporter_id' => $request->transporter_id, 
-            'good_pallet' => $request->good_pallet, 
-            'tbr_pallet' => $request->tbr_pallet, 
-            'reason' => $request->reason, 
-            'note' => $request->note, 
-            'status' => 0,
+        $this->validate($request, [
+            'good_pallet' => 'required|integer|gt:-1',
+            'tbr_pallet' => 'required|integer|gt:-1',
+            'reason' => 'required',
         ]);
 
         $InventoryDept = PoolPallet::find($departure_id);
-        $InventoryDept->good_pallet = (($InventoryDept->good_pallet)-($request->good_pallet));
-        $InventoryDept->tbr_pallet = (($InventoryDept->tbr_pallet)-($request->tbr_pallet));
-        $InventoryDept->save();
+        $good_pallet = $InventoryDept->good_pallet;
+        $tbr_pallet  = $InventoryDept->tbr_pallet;
+        if($good_pallet<$request->good_pallet || $tbr_pallet < $request->$tbr_pallet){
+            return response()->json(['error' => 'Qty Pallet melebihi pallet yang ada'], 404);
+        }    
+        else{
+            $checker = Auth::user()->id;
+            $palletTransfer = PalletTransfer::create([
+                'departure_pool_pallet_id' => Auth::user()->reference_pool_pallet_id,
+                'destination_pool_pallet_id' => $request->destination_pool_pallet_id,
+                'sender_user_id' => $checker, 
+                'receiver_user_id' => 5,
+                'vehicle_id' => $request->vehicle_id, 
+                'driver_id' => $request->driver_id, 
+                'transporter_id' => $request->transporter_id, 
+                'good_pallet' => $request->good_pallet, 
+                'tbr_pallet' => $request->tbr_pallet, 
+                'reason' => $request->reason, 
+                'note' => $request->note, 
+                'status' => 0,
+            ]);
 
-        $InventoryTrans = Transporter::find($transporter_id);
-        $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)+($request->good_pallet));
-        $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)+($request->tbr_pallet));
-        $InventoryTrans->save();
+            $InventoryDept = PoolPallet::find($departure_id);
+            $InventoryDept->good_pallet = (($InventoryDept->good_pallet)-($request->good_pallet));
+            $InventoryDept->tbr_pallet = (($InventoryDept->tbr_pallet)-($request->tbr_pallet));
+            $InventoryDept->save();
 
-        $data = [
-            'data' => $palletTransfer,
-            'status' => (bool) $palletTransfer,
-            'message' => $palletTransfer ? 'Pallet Transfer Record Created!' : 'Error Creating Pallet Transfer Record' 
-        ];
+            $InventoryTrans = Transporter::find($transporter_id);
+            $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)+($request->good_pallet));
+            $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)+($request->tbr_pallet));
+            $InventoryTrans->save();
 
+            $data = [
+                'data' => $palletTransfer,
+                'status' => (bool) $palletTransfer,
+                'message' => $palletTransfer ? 'Pallet Transfer Record Created!' : 'Error Creating Pallet Transfer Record' 
+            ];
+        }
         return response()->json($data);
     }
 
@@ -111,11 +124,22 @@ class PalletTransferController extends Controller
         // $departure_id = $request->departure_pool_pallet_id;
         $destination_id = $request->destination_pool_pallet_id;
 
+        $this->validate($request, [
+            'good_pallet' => 'required|integer|gt:-1',
+            'tbr_pallet' => 'required|integer|gt:-1',
+        ]);
+
         $palletTransfer = PalletTransfer::where('pallet_transfer_id',$pallet_transfer_id)->first();
         if (empty($palletTransfer)){
             return response()->json(['error' => 'Data not found'], 404);
         }
         else{
+            $InventoryTrans = Transporter::find($transporter_id);
+            $good_pallet = $InventoryTrans->good_pallet;
+            $tbr_pallet  = $InventoryTrans->tbr_pallet;
+            if($good_pallet<$request->good_pallet || $tbr_pallet<$request->tbr_pallet){
+                return response()->json(['error' => 'Qty Pallet melebihi pallet yang ada'], 404);
+            }    
             $checker = Auth::user()->id;
             $update = PalletTransfer::find($pallet_transfer_id);
             // $update->departure_pool_pallet_id = $request->departure_pool_pallet_id;

@@ -10,7 +10,7 @@
               	<!-- LOAD VIEW DARI FORM.VUE -->
                 <sjpstatus-form></sjpstatus-form>
                 <div class="form-group">
-                    <v-btn :loading="loading" class="success" @click.prevent="submit()">
+                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
                         {{ loading ? 'Loading...':'Add' }}
                     </v-btn>
                 </div>
@@ -32,7 +32,8 @@
         // },
         data() {
             return {
-               loading: false, 
+                loading: false, 
+                errormsg:'' ,
             }
         },
         methods: {
@@ -43,11 +44,15 @@
                 this.loading = true
                 //MELAKUKAN REQUEST KE SERVER UNTUK MENAMBAHKAN DATA
                 this.submitSjpStatus().then(() => {
-                    this.loading = false
                     //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
                     this.$router.push({ name: 'sjpstatuss.data' })
+                }).catch((error) => {
+                //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
+                    if (error.response.status == 404) {
+                        this.loading = false
+                    }
                 })
-            }
+            },
         },
         components: {
             'sjpstatus-form': FormSjpStatus //MEMBUAT CUSTOM TAG UNTUK ME-LOAD FILE FORM.VUE

@@ -7,6 +7,9 @@ use DateTime;
 use App\Http\Resources\SjpCollection;
 use App\Sjp;
 use App\PoolPallet;
+use App\Sjpadjusment;
+use App\Vehicle;
+use App\Driver;
 use DB;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -59,9 +62,21 @@ class SjpController extends Controller
         $pallet = PoolPallet::find($pool_pallet); //jgn lupa add model poolpallet
         $qty_pool = $pallet->good_pallet;
         $pallet_qty = $request->pallet_quantity;
+
+        $this->validate($request, [
+            // 'destination_pool_pallet_id' => 'required',
+            // 'vehicle_id' => 'required',
+            // 'driver_id' => 'required',
+            // 'transporter_id' => 'required',
+            'no_do' => 'required|string',
+            'product_name' => 'required|string',
+            'pallet_quantity' => 'required|integer|gt:-1',
+            'packaging' => 'required|integer|gt:-1',
+            'product_quantity' => 'required|integer|gt:-1',
+        ]);
         if($pallet_qty>$qty_pool)
         {
-            return response()->json(['error' => 'Pallet Melebihi Qty yang ada'], 404);
+            return response()->json(['error' => 'Pallet Melebihi Quantity yang ada'], 404);
         }
         else{
             $sjp = Sjp::create([
@@ -180,6 +195,20 @@ class SjpController extends Controller
             $update->vehicle_id = $request->vehicle_id;
             $update->adjust_by = auth()->user()->name;
             $update->save();
+
+            $sjp_number = $sjp->sjp_number;
+            $vehicle_id = $sjp->vehicle_id;
+            $vehicle = Vehicle::find($vehicle_id);
+            $driver_id = $sjp->driver_id;
+            $driver = Driver::find($driver_id);
+            $checker = Auth::user()->name;
+            $sjpadusment = Sjpadjusment::create([
+                'sjp_number' => $sjp_number,
+                'vehicle' => $vehicle->vehicle_number,
+                'driver' => $driver->driver_name,
+                'adjust_by' => $checker, 
+            ]);
+
         }
         $data = [
             'data' => $update,

@@ -37,13 +37,15 @@
                         :search="search"
                         >       
                             <template v-slot:item.status="{ item }">
-                                <v-chip class="label label-default" v-if="item.status == 0">SENDING</v-chip>
-                                <v-chip class="label label-primary" v-if="item.status == 1">RECEIVED</v-chip>
+                                <!-- <v-chip class="label label-default" v-if="item.status == 0">SENDING</v-chip>
+                                <v-chip class="label label-primary" v-if="item.status == 1">RECEIVED</v-chip> -->
                                 <!-- <span class="label label-primary" v-if="item.status == 0">SENDING</span>
                                 <span class="label label-success" v-else-if="item.status == 1">RECEIVED</span> -->
+                                <p v-if="item.status == 0">SENDING</p>
+                                <p class="text-blue" v-if="item.status == 1">RECEIVED</p>
                             </template>
-                            <template v-slot:item.receive="{ item }">
-                                <router-link :to="{ name: 'pallettransfers.edit', params: {id: item.pallet_transfer_id} }" v-if="item.status == 0 && $can('update pallettransfers')" >
+                            <template v-if="$can('update pallettransfers')" v-slot:item.receive="{ item }">
+                                <router-link :to="{ name: 'pallettransfers.edit', params: {id: item.pallet_transfer_id} }" v-if="item.status == 0 && authenticated.reference_pool_pallet_id == item.destination" >
                                     <v-btn color="success" small>Receive</v-btn>
                                 </router-link>                        
                             </template>
@@ -110,6 +112,9 @@ export default {
     computed: {
         ...mapState('pallettransfer', {
             pallettransfers: state => state.pallettransfers //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+        }),
+        ...mapState('user', {
+            authenticated: state => state.authenticated
         }),
         //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {

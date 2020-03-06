@@ -49,12 +49,12 @@
         <!-- <template>
             <v-file-input show-size counter multiple label="Prove Upload" v-model="bermissing.reporter_prove"></v-file-input>
         </template> -->
-        <div class="form-group" :class="{ 'has-error': errors.reporter_prove }">
+        <!-- <div class="form-group" :class="{ 'has-error': errors.reporter_prove }">
             <label for="">Prove</label>
             <input type="file" class="form-control" accept="image/*" @change="uploadImage($event)" id="file-input">
             <p class="text-warning">Leave blank if you don't want to change photo</p>
             <p class="text-danger" v-if="errors.reporter_prove">{{ errors.reporter_prove[0] }}</p>
-        </div>
+        </div> -->
         <div class="form-group" :class="{ 'has-error': errors.note }">
             <label for="">Note</label>
             <input type="text" class="form-control" v-model="bermissing.note">
@@ -80,12 +80,6 @@ export default {
         ...mapState('pool', {
             pools: state => state.pools //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
-        ...mapState('vehicle', {
-            vehicles: state => state.vehicles //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
-        }),
-        ...mapState('driver', {
-            drivers: state => state.drivers //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
-        }),
          ...mapState('transporter', {
             transporters: state => state.transporters //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
@@ -100,9 +94,6 @@ export default {
         ...mapActions('driver', ['getDrivers']),
         ...mapActions('transporter', ['getTransporters']),
         ...mapActions('user', ['getUserLogin']),
-        uploadImage(event) {
-            this.bermissing.reporter_prove = event.target.files[0]
-        },
        
     },
    
@@ -111,4 +102,3 @@ export default {
     }
 }
 </script>
-

@@ -38,6 +38,11 @@
                 this.updateSjp(this.$route.params.id).then(() => {
                     this.loading = false
                     this.$router.push({ name: 'sjps.data' }) //KETIKA UPDATE BERHASIL, MAKA REDIRECT KE HALAMAN LIST CUSTOMER
+                }).catch((error) => {
+                //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
+                    if (error.response.status == 404) {
+                        this.loading = false
+                    }
                 })
             }
         },

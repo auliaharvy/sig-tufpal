@@ -74,6 +74,8 @@ export default {
                 { value: 'dp_number', text: 'DP Number' },
                 { value: 'name', text: 'Reporter' },
                 { value: 'pool_name', text: 'Pool Pallet' },
+                { value: 'transporter_name', text: 'Transporter' },
+                { value: 'sjps_number', text: 'SJPS Number' },
                 { value: 'tbr_pallet', text: 'TBR Pallet' },
                 { value: 'note', text: 'Note' },
             ],

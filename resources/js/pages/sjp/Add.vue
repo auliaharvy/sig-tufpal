@@ -38,6 +38,11 @@
                     this.loading = false
                     //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
                     this.$router.push({ name: 'sjps.data' })
+                }).catch((error) => {
+                //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
+                    if (error.response.status == 404) {
+                        this.loading = false
+                    }
                 })
             }
         },

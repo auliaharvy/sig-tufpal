@@ -49,7 +49,7 @@ class BermissingpalletController extends Controller
         
        
         return $bermissing;
-        // //return response()->json(Bermissing::all()->toArray());
+        // //return response()->json(Bermissing::all()->toArray());a
     }
 
     public function show($ber_missing_pallet_id)

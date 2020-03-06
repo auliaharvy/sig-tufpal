@@ -28,20 +28,25 @@
                         :search="search"
                         >       
                         <template v-slot:item.status="{ item }">
-                            <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
-                            <v-chip class="label label-success" v-else-if="item.status == 1">Received</v-chip>
+                            <!-- <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
+                            <v-chip class="label label-success" v-else-if="item.status == 1">Received</v-chip> -->
+                            <p v-if="item.status == 0">Sending</p>
+                            <p class="text-blue" v-else-if="item.status == 1">Received</p>
                         </template>
 
                         <template v-if="$can('update sjpstatuss')" v-slot:item.receive="{ item }">
-                            <router-link v-if="item.status == 0 && authenticated.reference_pool_pallet_id == item.destination_pool_pallet_id " :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
+                            <router-link v-if="item.status == 0 && item.transaction_id == 1 && authenticated.reference_pool_pallet_id == item.destination_pool_pallet_id " :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Receive</v-btn>   
-                            </router-link>             
+                            </router-link>     
+                            <router-link v-else-if="item.status == 0 && item.transaction_id == 2 && authenticated.reference_pool_pallet_id == item.departure_pool_pallet_id " :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
+                                <v-btn color="success" small>Receive</v-btn>   
+                            </router-link>          
                         </template>
 
-                        <template v-if="$can('create sjpstatuss')" v-slot:item.send_back="{ item }">
-                            <router-link v-if="item.transaction == 'SEND' && item.status == 1" :to="{ name: 'sjpstatuss.sendback', params: {id: item.sjp_status_id} }">
+                        <template v-if="$can('create sjpstatuss') " v-slot:item.send_back="{ item }">
+                            <router-link v-if="item.transaction_id == 1 && item.status == 1 && item.is_sendback == 0 && authenticated.reference_pool_pallet_id == item.destination_pool_pallet_id" :to="{ name: 'sjpstatuss.sendback', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Send Back</v-btn>
-                            </router-link>                       
+                            </router-link>                      
                         </template>
                         
                         <template v-if="$can('delete sjps')" v-slot:item.delete="{ item }">
@@ -73,8 +78,8 @@ export default {
                 { value: 'checker_sender', text: 'Checker Sender' },
                 { value: 'checker_receiver', text: 'Checker Receive' },
                 { value: 'sjp_number', text: 'SJP' },
-                { value: 'sjps_number', text: 'SJP Status' },
-                { value: 'transaction', text: 'Transaction' },
+                // { value: 'sjps_number', text: 'SJP Status' },
+                { value: 'transaction', text: 'SJP Status' },
                 { value: 'status', text: 'Status' },
                 { value: 'good_pallet', text: 'Good Pallet' },
                 { value: 'tbr_pallet', text: 'TBR Pallet' },
