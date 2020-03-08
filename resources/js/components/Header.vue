@@ -140,6 +140,22 @@
                         <v-list-item-title color="black">SJP Adjusment</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item link router to="/sjppalletsend" v-if="$can('read sjppalletsend')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-send</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">SJP Pallet Send</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link router to="/sjppalletreceive" v-if="$can('read sjppalletreceive')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-send</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">SJP Pallet Receive</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
                 <!-- <v-list-item link router to="/palletdeposit" v-if="$can('read palletdeposit')">
                     <v-list-item-icon>
                         <v-icon color="black">mdi-clipboard-flow</v-icon>

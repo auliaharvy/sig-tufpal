@@ -11,7 +11,7 @@ class DriverController extends Controller
 {
     public function index()
     {
-        $driver = new SjpStatusCollection(Driver::paginate(10));
+        $driver = new SjpStatusCollection(Driver::paginate(100000));
 		 return $driver;
         // return response()->json(Sjp::all()->toArray());
     }
@@ -37,7 +37,7 @@ class DriverController extends Controller
          
             ->where('sjp.driver_id',NULL)
             ->where('plt.driver_id',NULL)
-            ->paginate(100)
+            ->paginate(10000)
             ->toArray();
        
        

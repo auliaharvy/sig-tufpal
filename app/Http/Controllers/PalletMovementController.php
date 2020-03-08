@@ -17,6 +17,7 @@ class PalletMovementController extends Controller
     public function index()
     {
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
+        $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
         if($pool_pallet==1 && $role<7){
         $palletmovement = DB::table('sjp_status as a')
@@ -26,7 +27,11 @@ class PalletMovementController extends Controller
                 ->join('pool_pallet as b', 'd.destination_pool_pallet_id', '=', 'b.pool_pallet_id')
                 ->join('pool_pallet as c', 'd.departure_pool_pallet_id', '=', 'c.pool_pallet_id')
                 ->join('mst_transaction as e', 'a.transaction_id', '=', 'e.id')
-                ->select('a.*','d.sjp_number','e.transaction','b.pool_name as dest_pool', 'c.pool_name as dept_pool','d.pallet_quantity','d.departure_time','d.eta')            
+                ->join('transporter as f', 'd.transporter_id', '=', 'f.transporter_id')
+                ->join('vehicle as g', 'd.vehicle_id', '=', 'g.vehicle_id')
+                ->select('a.*','d.sjp_number','e.transaction','b.pool_name as dest_pool', 
+                         'c.pool_name as dept_pool','d.pallet_quantity','d.departure_time','d.eta',
+                         'f.transporter_name', 'g.vehicle_number')            
                 ->paginate(1000000)
                 ->toArray();
         }
@@ -38,9 +43,14 @@ class PalletMovementController extends Controller
                 ->join('pool_pallet as b', 'd.destination_pool_pallet_id', '=', 'b.pool_pallet_id')
                 ->join('pool_pallet as c', 'd.departure_pool_pallet_id', '=', 'c.pool_pallet_id')
                 ->join('mst_transaction as e', 'a.transaction_id', '=', 'e.id')
-                ->select('a.*','d.sjp_number','e.transaction','b.pool_name as dest_pool', 'c.pool_name as dept_pool','d.pallet_quantity','d.departure_time','d.eta') 
+                ->join('transporter as f', 'd.transporter_id', '=', 'f.transporter_id')
+                ->join('vehicle as g', 'd.vehicle_id', '=', 'g.vehicle_id')
+                ->select('a.*','d.sjp_number','e.transaction','b.pool_name as dest_pool', 
+                         'c.pool_name as dept_pool','d.pallet_quantity','d.departure_time','d.eta',
+                         'f.transporter_name', 'g.vehicle_number')   
                 ->where('d.departure_pool_pallet_id',$pool_pallet)
                 ->orWhere('d.destination_pool_pallet_id', $pool_pallet)
+                ->orWhere('d.transporter_id', $transporter)
                 ->where('a.status', 0)            
                 ->paginate(1000000)
                 ->toArray();

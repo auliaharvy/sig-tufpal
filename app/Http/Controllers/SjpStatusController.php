@@ -270,7 +270,7 @@ class SjpStatusController extends Controller
             $sjpSendback->save();
 
             $state = Sjp::find($sjp_id);
-            $state->state=1;
+            $state->state=3;
             $state->save();
             
             // Membuat log transaksi send
@@ -456,6 +456,9 @@ class SjpStatusController extends Controller
                 //     ]);
                 // }
                 
+                $state = Sjp::find($sjp_id);
+                $state->state=2;
+                $state->save();
                 // $status = 'CLOSED';
                 // $Sjpstat = Sjp::find($sjp_id);
                 // $Sjpstat->status = $status;
@@ -592,8 +595,9 @@ class SjpStatusController extends Controller
                 
                 //membuat ber missing pallet record ketika ada pallet ber/missing
                 if(($request->ber_pallet)>0 || ($request->missing_pallet>0)){
+                    $receive = Auth::user()->id;
                     $Bermissing = Bermissing::create([
-                        'reporter_user_id' => $request->checker_receive_user_id, 
+                        'reporter_user_id' => $receive, 
                         'approver_user_id' => 5, 
                         'transporter_id' => $transporter_id,
                         'reference_sjp_status_id' => $sjp_status_id,
@@ -602,18 +606,21 @@ class SjpStatusController extends Controller
                         'status' => 0,
                         'note' => 'TERDAPAT PALLET YANG BER/HILANG SAAT RECEIVE OLEH CHECKER',  
                     ]);
-                    $transporterbermissingreport = Transporter::find($transporter_id);
-                    $transporterbermissing = $transporterbermissingreport->transporter_name;
-                    $Bermissingreported = Bermissingreported::create([
-                        'reporter_user_id' => $request->checker_receive_user_id, 
-                        'approver_user_id' => 5, 
-                        'transporter_id' => $transporter_id,
-                        'reference_sjp_status_id' => $sjp_status_id,
-                        'ber_pallet' => $request->ber_pallet, 
-                        'missing_pallet' => $request->missing_pallet,
-                        'status' => 0,
-                        'note' => 'TERDAPAT PALLET YANG BER/HILANG SAAT RECEIVE OLEH CHECKER',  
-                    ]);
+                    // $reporter = Auth::user()->name;
+                    // $sjps_number    = $update->sjps_number;
+                    // $palletbermissingpool = PoolPallet::find($departure_id);
+                    // $palletbermissingtrans = Transporter::find($transporter_id);
+                    // $transporterbermissing = $palletbermissingtrans->transporter_name;
+                    // $Bermissingreported = Bermissingreported::create([
+                    //     'reporter' => $reporter, 
+                    //     'pool_pallet' => 5, 
+                    //     'transporter_id' => $palletbermissingtrans->transporter_name,
+                    //     'reference_sjp_status_id' => $sjps_number,
+                    //     'ber_pallet' => $request->ber_pallet, 
+                    //     'missing_pallet' => $request->missing_pallet,
+                    //     'status' => 0,
+                    //     'note' => 'TERDAPAT PALLET YANG BER/HILANG SAAT RECEIVE OLEH CHECKER',  
+                    // ]);
                 }
                 // if(($request->tbr_pallet)>0){
                 //     $Damage = Damagedpallet::create([
@@ -628,6 +635,10 @@ class SjpStatusController extends Controller
                 $Sjpstat = Sjp::find($sjp_id);
                 $Sjpstat->status = $status;
                 $Sjpstat->save();
+
+                $state = Sjp::find($sjp_id);
+                $state->state=4;
+                $state->save();
 
 
                 $data = [

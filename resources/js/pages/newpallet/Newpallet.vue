@@ -76,6 +76,9 @@ export default {
                 { value: 'pool_name', text: 'Pool Pallet' },
                 { value: 'good_pallet', text: 'Good Pallet' },
                 { value: 'vendor', text: 'Vendor' },
+                { value: 'vehicle', text: 'Vehicle Number' },
+                { value: 'driver', text: 'Driver' },
+                { value: 'created_at', text: 'Created At' },
                 { value: 'note', text: 'Note' },
             ],
             search: ''

@@ -12,6 +12,12 @@ import DataPalletMovement from './pages/report/PalletMovement.vue'
 import IndexSjpadjusment from './pages/report/sjpadjusment/index.vue'
 import DataSjpadjusment from './pages/report/sjpadjusment/Sjpadjusment.vue'
 
+import IndexSjpsend from './pages/report/sjppalletsend/index.vue'
+import DataSjpsend from './pages/report/sjppalletsend/Sjppalletsend.vue'
+
+import IndexSjpreceive from './pages/report/sjppalletreceive/index.vue'
+import DataSjpreceive from './pages/report/sjppalletreceive/Sjppalletreceive.vue'
+
 import IndexSjp from './pages/sjp/index.vue'
 import DataSjp from './pages/sjp/sjp.vue'
 import AddSjp from './pages/sjp/Add.vue'
@@ -360,6 +366,33 @@ const router = new Router({
                     name: 'sjpadjusments.data',
                     component: DataSjpadjusment,
                     meta: { title: 'SJP Adjusment' }
+                },
+            ]
+        },
+
+        {
+            path: '/sjppalletsend',
+            component: IndexSjpsend,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'sjppalletsend.data',
+                    component: DataSjpsend,
+                    meta: { title: 'SJP Pallet Send' }
+                },
+            ]
+        },
+        {
+            path: '/sjppalletreceive',
+            component: IndexSjpreceive,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'sjppalletreceive.data',
+                    component: DataSjpreceive,
+                    meta: { title: 'SJP Pallet Receive' }
                 },
             ]
         },

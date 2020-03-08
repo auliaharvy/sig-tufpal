@@ -35,6 +35,16 @@
             <input type="text" class="form-control" v-model="newpallet.good_pallet">
             <p class="text-danger" v-if="errors.good_pallet">{{ errors.good_pallet[0] }}</p>
         </div>
+        <div class="form-group" :class="{ 'has-error': errors.driver }">
+            <label for="">Driver</label>
+            <input type="text" class="form-control" v-model="newpallet.driver">
+            <p class="text-danger" v-if="errors.driver">{{ errors.driver[0] }}</p>
+        </div>
+        <div class="form-group" :class="{ 'has-error': errors.vehicle }">
+            <label for="">Vehicle</label>
+            <input type="text" class="form-control" v-model="newpallet.vehicle">
+            <p class="text-danger" v-if="errors.vehicle">{{ errors.vehicle[0] }}</p>
+        </div>
         <div class="form-group" :class="{ 'has-error': errors.note }">
             <label for="">Note</label>
             <input type="text" class="form-control" v-model="newpallet.note">

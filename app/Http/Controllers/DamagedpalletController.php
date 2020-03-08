@@ -20,7 +20,8 @@ class DamagedpalletController extends Controller
         //     ->paginate(10000000)
         //     ->toArray();
         //  return $damagedpallet;
-         $pool_pallet = Auth::user()->reference_pool_pallet_id;
+        $pool_pallet = Auth::user()->reference_pool_pallet_id;
+        $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
         if($pool_pallet==1 && $role<7){
             $damagedpallet = DB::table('damaged_pallet as a')
@@ -43,6 +44,7 @@ class DamagedpalletController extends Controller
             ->select('a.*', 'b.name',
                     'c.pool_name','d.transporter_name', 'e.sjps_number')
             ->where('a.pool_pallet_id',$pool_pallet)
+            ->orWhere('a.transporter_id', $transporter)
             ->paginate(10000000)
             ->toArray();
         }

@@ -12,6 +12,9 @@
                     <v-btn :loading="loading" class="success" @click.prevent="submit()">
                         {{ loading ? 'Loading...':'Approve' }}
                     </v-btn>
+                    <v-btn class="error px-5" @click.prevent="resetLoading()">
+                        Reset
+                    </v-btn>
                 </div>
             </div>
         </div>
@@ -19,7 +22,7 @@
 </template>
 <script>
     import { mapActions, mapState } from 'vuex'
-    import FormBermissing from './Form.vue'
+    import FormBermissing from './Formedit.vue'
     export default {
         name: 'EditPalletTransfer',
         data() {
@@ -36,9 +39,11 @@
                 this.loading = true
                 //MENGIRIM PERMINTAAN KE SERVER UNTUK ME-NGUBAH DATA
                 this.updateBermissing(this.$route.params.id).then(() => {
-                    this.loading = false
                     this.$router.push({ name: 'bermissings.data' }) //KETIKA UPDATE BERHASIL, MAKA REDIRECT KE HALAMAN LIST CUSTOMER
                 })
+            },
+            resetLoading() {
+                this.loading = false
             }
         },
         components: {

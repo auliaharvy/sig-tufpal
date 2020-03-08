@@ -197,6 +197,8 @@ class SjpController extends Controller
         }
 
             $sjp_number = $sjp->sjp_number;
+            $transporter_id = $sjp->vehicle_id;
+            $transporter = Transporter::find($transporter_id);
             $vehicle_id = $sjp->vehicle_id;
             $vehicle = Vehicle::find($vehicle_id);
             $driver_id = $sjp->driver_id;
@@ -208,6 +210,7 @@ class SjpController extends Controller
             $new_driver = Driver::find($new_driver_id); 
             $sjpadusment = Sjpadjusment::create([
                 'sjp_number' => $sjp_number,
+                'transporter' => $transporter->transporter_name,
                 'vehicle' => $vehicle->vehicle_number,
                 'new_vehicle' => $new_vehicle->vehicle_number,
                 'driver' => $driver->driver_name,

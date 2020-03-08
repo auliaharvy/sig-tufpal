@@ -17,6 +17,8 @@ Route::post('/login', 'Auth\LoginController@login');
 
 Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('sjp', 'SjpController');
+    Route::resource('sjppalletsend', 'SjppalletsendController');
+    Route::resource('sjppalletreceive', 'SjppalletreceiveController');
     Route::post('/sjp/adjust', 'SjpController@adjust');
     Route::get('/sjpstatusbymaster/{id}', 'SjpStatusController@sjpstatusbymaster'); //get data untuk add sjp status
     Route::resource('sjpstatus', 'SjpStatusController');
@@ -24,7 +26,11 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/sjpstatus/receive', 'SjpStatusController@receive');
     Route::post('/sjpstatus/receivesendback', 'SjpStatusController@receivesendback');
     Route::resource('pallettransfer', 'PalletTransferController');
+    Route::resource('pallettransfersend', 'PalletTransfersendController');
+    Route::resource('pallettransferreceive', 'PalletTransferreceiveController');  
     Route::resource('bermissing', 'BermissingpalletController');
+    Route::resource('bermissingreported', 'BermissingpalletreportedController');
+    Route::resource('bermissingapproved', 'BermissingpalletapprovedController');
     Route::resource('newpallet', 'NewpalletController');
     Route::resource('damagedpallet', 'DamagedpalletController');
     Route::resource('repairedpallet', 'RepairedpalletController');

@@ -12,6 +12,8 @@ import customer from './stores/customer.js'
 import transaction from './stores/transaction.js'
 import dashboard from './stores/dashboard.js'
 import sjp from './stores/sjp.js'
+import sjppalletsend from './stores/sjppalletsend.js'
+import sjppalletreceive from './stores/sjppalletreceive.js'
 import sjpstatus from './stores/sjpstatus.js'
 import pool from './stores/pool.js'
 import vehicle from './stores/vehicle.js'
@@ -20,7 +22,11 @@ import transporter from './stores/transporter.js'
 import msttransaction from './stores/msttransaction.js'
 import organization from './stores/organization.js'
 import pallettransfer from './stores/pallettransfer.js'
+import pallettransfersend from './stores/pallettransfersend.js'
+import pallettransferreceive from './stores/pallettransferreceive.js'
 import bermissing from './stores/Bermissing.js'
+import bermissingreported from './stores/bermissingreported.js'
+import bermissingapproved from './stores/bermissingapproved.js'
 import newpallet from './stores/Newpallet.js'
 import damagedpallet from './stores/Damagedpallet.js'
 import repairedpallet from './stores/Repairedpallet.js'
@@ -41,6 +47,8 @@ const store = new Vuex.Store({
         transaction,
         dashboard,
         sjp,
+        sjppalletsend,
+        sjppalletreceive,
         sjpstatus,
         pool,
         vehicle,
@@ -49,7 +57,11 @@ const store = new Vuex.Store({
         msttransaction,
         organization,
         pallettransfer,
+        pallettransfersend,
+        pallettransferreceive,
         bermissing,
+        bermissingreported,
+        bermissingapproved,
         newpallet,
         palletmovement,
         sjpadjusment,

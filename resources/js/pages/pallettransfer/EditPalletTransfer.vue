@@ -12,6 +12,9 @@
                     <v-btn :loading="loading" class="success" @click.prevent="submit()">
                         {{ loading ? 'Loading...':'Receive' }}
                     </v-btn>
+                    <v-btn class="error px-5" @click.prevent="resetLoading()">
+                        Reset
+                    </v-btn>
                 </div>
             </div>
         </div>
@@ -36,9 +39,11 @@
                 this.loading = true
                 //MENGIRIM PERMINTAAN KE SERVER UNTUK ME-NGUBAH DATA
                 this.updatePalletTransfer(this.$route.params.id).then(() => {
-                    this.loading = false
                     this.$router.push({ name: 'pallettransfers.data' }) //KETIKA UPDATE BERHASIL, MAKA REDIRECT KE HALAMAN LIST CUSTOMER
                 })
+            },
+            resetLoading() {
+                this.loading = false
             }
         },
         components: {

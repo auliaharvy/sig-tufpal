@@ -41,7 +41,9 @@
                             <v-chip class="label label-primary" v-else>Received</v-chip> -->
                             <p v-if="item.state == 0">Draft</p>
                             <p class="text-green" v-else-if="item.state == 1">Send</p>
-                            <p class="text-blue" v-else>Received</p>
+                            <p class="text-blue" v-else-if="item.state == 2">Received</p>
+                            <p class="text-green" v-else-if="item.state == 3">Send Back</p>
+                            <p class="text-blue" v-else>Send Back Received </p>
                         </template>
 
                         <!-- <template  class="pa-5" v-slot:item.send="{ item }">

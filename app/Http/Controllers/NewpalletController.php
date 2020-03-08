@@ -32,7 +32,7 @@ class NewpalletController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'good_pallet' => 'required|integer|gt:0',
+            'good_pallet' => 'required|integer|gt:-1',
         ]);
 
         $new_pallet_id = $request->new_pallet_id;
@@ -41,7 +41,9 @@ class NewpalletController extends Controller
         $newpallet = Newpallet::create([
             'adder_user_id' => auth()->user()->id,
             'pool_pallet_id' => auth()->user()->reference_pool_pallet_id, 
-            'good_pallet' => $request->good_pallet, 
+            'good_pallet' => $request->good_pallet,
+            'vehicle' => $request->vehicle,
+            'driver' => $request->driver, 
             'vendor' => 'Pallet Vendor', 
             'note' => $request->note, 
         ]);

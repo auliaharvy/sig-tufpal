@@ -2,12 +2,13 @@
   <div class="container">
     <v-card>  
       <v-toolbar>
-        <v-toolbar-title>Pallet Quantity</v-toolbar-title>
+        <v-toolbar-title>Pallet Quantity : </v-toolbar-title>
       </v-toolbar>
-      <pie-chart v-if="dashboards" :chartdata="datasetsfull"/>
-      <template v-for='data in dashboards.data'>
-        <p>{{ data.good_pallet}}</p>
-      </template>
+        <h4 align="center">Pool Pallet : </h4>
+        <pie-chart :chartdata="datasetsfull"/>
+        <h4 align="center">Transporter : </h4>
+        <pie-chart :chartdata="datasetsfull1"/>
+     
     </v-card>
   </div>
 </template>
@@ -47,7 +48,7 @@ export default {
     computed: {
           datasetsfull (state) {
             return {
-              labels: [ this.$store.state.authenticated  ],
+              labels: [ "Pool Pallet DLI", "Workshop DLI", "BCTD", "Sukabumi" ],
               datasets: [
               {
                 label: 'Data One',
@@ -55,11 +56,27 @@ export default {
                                   '#E46651',
                                   '#00D8FF',
                                   '#DD1B16'],
-                data: [ this.$store.state.dashboards.data.pool_pallet]
+                data: [ 1000,100,100,50]
               }
                   ]
                 }
               },
+              datasetsfull1 (state) {
+              return {
+                labels: [ "Transporter DLI", "Mitra" ],
+                datasets: [
+                {
+                  label: 'Data One',
+                  backgroundColor: ['#41B883',
+                                    '#E46651',
+                                    '#00D8FF',
+                                    '#DD1B16'],
+                  data: [ 800,100]
+                }
+                    ]
+                  }
+              },
+              
         ...mapState('dashboard', {
             dashboards: state => state.dashboards //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
