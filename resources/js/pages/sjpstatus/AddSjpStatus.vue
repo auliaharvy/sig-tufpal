@@ -10,8 +10,11 @@
               	<!-- LOAD VIEW DARI FORM.VUE -->
                 <sjpstatus-form></sjpstatus-form>
                 <div class="form-group">
-                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
+                    <v-btn :loading="loading" class="success" @click.prevent="submit()">
                         {{ loading ? 'Loading...':'Add' }}
+                    </v-btn>
+                    <v-btn class="error px-5" @click.prevent="resetLoading()">
+                        Reset
                     </v-btn>
                 </div>
             </div>
@@ -20,6 +23,7 @@
 </template>
 <script>
     import { mapActions, mapState, mapMutations } from 'vuex'
+    import VueButtonSpinner from 'vue-button-spinner';
     import FormSjpStatus from './Form.vue'
     export default {
         name: 'AddSjpStatus',
@@ -32,8 +36,7 @@
         // },
         data() {
             return {
-                loading: false, 
-                errormsg:'' ,
+                loading: false,
             }
         },
         methods: {
@@ -46,16 +49,15 @@
                 this.submitSjpStatus().then(() => {
                     //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
                     this.$router.push({ name: 'sjpstatuss.data' })
-                }).catch((error) => {
-                //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
-                    if (error.response.status == 404) {
-                        this.loading = false
-                    }
                 })
             },
+            resetLoading() {
+                this.loading = false
+            }
         },
         components: {
-            'sjpstatus-form': FormSjpStatus //MEMBUAT CUSTOM TAG UNTUK ME-LOAD FILE FORM.VUE
+            'sjpstatus-form': FormSjpStatus,
+            VueButtonSpinner 
         }
     }
 </script>

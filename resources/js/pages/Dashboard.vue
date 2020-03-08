@@ -1,10 +1,13 @@
-<template>
+<template >
   <div class="container">
     <v-card>  
       <v-toolbar>
         <v-toolbar-title>Pallet Quantity</v-toolbar-title>
       </v-toolbar>
-      <pie-chart :chartdata="datasetsfull"/>
+      <pie-chart v-if="dashboards" :chartdata="datasetsfull"/>
+      <template v-for='data in dashboards.data'>
+        <p>{{ data.good_pallet}}</p>
+      </template>
     </v-card>
   </div>
 </template>
@@ -15,9 +18,13 @@ import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'Dashboard',
+  created() {
+        this.getPoolsDashboard() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD 
+    },
   components: { PieChart },
     data() {
         return {
+            loaded: false,
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
             chartdata: [
                 { value: 'organization_name', text: 'Organization' },
@@ -34,14 +41,13 @@ export default {
                 // { value: 'actions', text: 'Action'}
             ],
             total: null,
-            pool_name: [],
             search: ''
         }
     },
     computed: {
-          datasetsfull () {
+          datasetsfull (state) {
             return {
-              labels: ['Pool Pallet DLI', 'Warehouse', 'Station', 'Distributor'],
+              labels: [ this.$store.state.authenticated  ],
               datasets: [
               {
                 label: 'Data One',
@@ -49,13 +55,13 @@ export default {
                                   '#E46651',
                                   '#00D8FF',
                                   '#DD1B16'],
-                data: [100,50,40,20]
+                data: [ this.$store.state.dashboards.data.pool_pallet]
               }
                   ]
                 }
               },
-        ...mapState('pool', {
-            pools: state => state.pools //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+        ...mapState('dashboard', {
+            dashboards: state => state.dashboards //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
         ...mapState('user', {
             authenticated: state => state.authenticated
@@ -64,6 +70,8 @@ export default {
         
     }, 
     methods: {
+        ...mapActions('dashboard', ['getPoolsDashboard']), 
+        //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         
     }
 }

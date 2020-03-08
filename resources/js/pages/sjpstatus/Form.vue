@@ -6,17 +6,18 @@
                 <option v-for='data in sjps.data' v-bind:key='data.sjp_id' :value='data.sjp_id'>{{ data.sjp_number }}</option>
             </select>
         </div>
+        
         <!-- <div class="form-group" :class="{ 'has-error': errors.packaging }">
             <label for="">Transaction</label>
             <input type="text" class="form-control" v-model="sjpstatus.transaction_id">
             <p class="text-danger" v-if="errors.transaction_id">{{ errors.transaction_id[0] }}</p>
         </div> -->
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label>Select Transaction Type</label>
             <select class='form-control' v-model='sjpstatus.transaction_id' :readonly="$route.name == 'sjpstatuss.edit'">
                 <option v-for='data in msttransactions.data' v-bind:key='data.id' :value='data.id'>{{ data.transaction }}</option>
             </select>
-        </div>
+        </div> -->
         <!-- <div class="form-group">
             <label>Checker Sender:</label>
             <select class='form-control' v-model='sjpstatus.checker_send_user_id'>
@@ -39,31 +40,31 @@
             <input type="text" class="form-control" v-model="sjpstatus.good_pallet">
             <p class="text-danger" v-if="errors.good_pallet">{{ errors.good_pallet[0] }}</p>
         </div>
-        <div class="form-group" :class="{ 'has-error': errors.tbr_pallet }">
+        <!-- <div class="form-group" :class="{ 'has-error': errors.tbr_pallet }">
             <label for="">Tbr Pallet</label>
             <input type="text" class="form-control" v-model="sjpstatus.tbr_pallet">
             <p class="text-danger" v-if="errors.tbr_pallet">{{ errors.tbr_pallet[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.ber_pallet }">
+        </div> -->
+        <!-- <div class="form-group" :class="{ 'has-error': errors.ber_pallet }">
             <label for="">Ber Pallet</label>
             <input type="text" class="form-control" v-model="sjpstatus.ber_pallet">
             <p class="text-danger" v-if="errors.ber_pallet">{{ errors.ber_pallet[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.missing_pallet }">
+        </div> -->
+        <!-- <div class="form-group" :class="{ 'has-error': errors.missing_pallet }">
             <label for="">Missing Pallet</label>
             <input type="text" class="form-control" v-model="sjpstatus.missing_pallet">
             <p class="text-danger" v-if="errors.missing_pallet">{{ errors.missing_pallet[0] }}</p>
-        </div>
+        </div> -->
         <div class="form-group" :class="{ 'has-error': errors.good_cement }">
             <label for="">Good Cement</label>
             <input type="text" class="form-control" v-model="sjpstatus.good_cement">
             <p class="text-danger" v-if="errors.good_cement">{{ errors.good_cement[0] }}</p>
         </div>
-        <div class="form-group" :class="{ 'has-error': errors.bad_cement }">
+        <!-- <div class="form-group" :class="{ 'has-error': errors.bad_cement }">
             <label for="">Bad Cement</label>
             <input type="text" class="form-control" v-model="sjpstatus.bad_cement">
             <p class="text-danger" v-if="errors.bad_cement">{{ errors.bad_cement[0] }}</p>
-        </div>
+        </div> -->
         <div class="form-group" :class="{ 'has-error': errors.note }">
             <label for="">Note</label>
             <input type="text" class="form-control" v-model="sjpstatus.note">

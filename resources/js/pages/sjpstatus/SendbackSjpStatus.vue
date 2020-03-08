@@ -20,7 +20,7 @@
 </template>
 <script>
     import { mapActions, mapState, mapMutations } from 'vuex'
-    import FormSjpStatus from './Form.vue'
+    import FormSjpStatus from './Formsendback.vue'
     export default {
         name: 'SendbackSjpStatus',
         created() {
@@ -38,7 +38,7 @@
             submit() {
                 this.loading = true
                 //MELAKUKAN REQUEST KE SERVER UNTUK MENAMBAHKAN DATA
-                this.submitSjpStatus().then(() => {
+                this.submitSjpStatussendback().then(() => {
                     this.loading = false
                     //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
                     this.$router.push({ name: 'sjpstatuss.data' })

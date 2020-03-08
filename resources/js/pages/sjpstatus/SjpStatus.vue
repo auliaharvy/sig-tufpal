@@ -1,9 +1,9 @@
 <template>
     <div class="col-md-12">
         <div class="panel">
-            <div class="panel-heading">
+            <!-- <div class="panel-heading">
                 <router-link v-if="$can('create sjpstatuss')" :to="{ name: 'sjpstatuss.add' }"><v-btn>Add SJP Status</v-btn></router-link>
-            </div>
+            </div> -->
             <!-- <template>
                 <qrcode-stream></qrcode-stream>
             </template> -->
@@ -38,7 +38,7 @@
                             <router-link v-if="item.status == 0 && item.transaction_id == 1 && authenticated.reference_pool_pallet_id == item.destination_pool_pallet_id " :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Receive</v-btn>   
                             </router-link>     
-                            <router-link v-else-if="item.status == 0 && item.transaction_id == 2 && authenticated.reference_pool_pallet_id == item.departure_pool_pallet_id " :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
+                            <router-link v-else-if="item.status == 0 && item.transaction_id == 2 && authenticated.reference_pool_pallet_id == item.departure_pool_pallet_id " :to="{ name: 'sjpstatuss.editsendback', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Receive</v-btn>   
                             </router-link>          
                         </template>
@@ -75,9 +75,13 @@ export default {
         return {
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
             headers: [
+                // { value: 'dept_pool', text: 'Departure' },
                 { value: 'checker_sender', text: 'Checker Sender' },
+                // { value: 'dest_pool', text: 'Destination' },
                 { value: 'checker_receiver', text: 'Checker Receive' },
                 { value: 'sjp_number', text: 'SJP' },
+                { value: 'transporter_name', text: 'Transporter' },
+                { value: 'vehicle_number', text: 'Vehicle' },
                 // { value: 'sjps_number', text: 'SJP Status' },
                 { value: 'transaction', text: 'SJP Status' },
                 { value: 'status', text: 'Status' },

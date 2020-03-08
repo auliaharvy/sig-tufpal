@@ -41,43 +41,19 @@
         <div>
             <h3>Send Information</h3>
             <p> Good Pallet : <b>{{ sjpstatus.good_pallet }}</b></p>
-            <p> TBR Pallet : <b>{{ sjpstatus.tbr_pallet }}</b></p>
-            <p> BER Pallet : <b>{{ sjpstatus.ber_pallet }}</b></p>
-            <p> Missing Pallet : <b>{{ sjpstatus.missing_pallet }}</b></p>
             <p> Good  Cement : <b>{{ sjpstatus.good_cement }}</b></p>
-            <p> Bad Cement : <b>{{ sjpstatus.bad_cement }}</b> </p>
+            
         </div>
         <div class="form-group" :class="{ 'has-error': errors.good_pallet }">
             <label for="">Good Pallet</label>
             <input type="text" class="form-control" v-model="sjpstatus.good_pallet">
             <p class="text-danger" v-if="errors.good_pallet">{{ errors.good_pallet[0] }}</p>
         </div>
-        <div class="form-group" :class="{ 'has-error': errors.tbr_pallet }">
-            <label for="">Tbr Pallet</label>
-            <input type="text" class="form-control" v-model="sjpstatus.tbr_pallet">
-            <p class="text-danger" v-if="errors.tbr_pallet">{{ errors.tbr_pallet[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.ber_pallet }">
-            <label for="">Ber Pallet</label>
-            <input type="text" class="form-control" v-model="sjpstatus.ber_pallet">
-            <p class="text-danger" v-if="errors.ber_pallet">{{ errors.ber_pallet[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.missing_pallet }">
-            <label for="">Missing Pallet</label>
-            <input type="text" class="form-control" v-model="sjpstatus.missing_pallet">
-            <p class="text-danger" v-if="errors.missing_pallet">{{ errors.missing_pallet[0] }}</p>
-        </div>
         <div class="form-group" :class="{ 'has-error': errors.good_cement }">
             <label for="">Good Cement</label>
             <input type="text" class="form-control" v-model="sjpstatus.good_cement">
             <p class="text-danger" v-if="errors.good_cement">{{ errors.good_cement[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.bad_cement }">
-            <label for="">Bad Cement</label>
-            <input type="text" class="form-control" v-model="sjpstatus.bad_cement">
-            <p class="text-danger" v-if="errors.bad_cement">{{ errors.bad_cement[0] }}</p>
-        </div>
-        
+        </div>       
         <div class="form-group" :class="{ 'has-error': errors.note }">
             <label for="">Note</label>
             <input type="text" class="form-control" v-model="sjpstatus.note">

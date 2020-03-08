@@ -18,7 +18,8 @@ const state = () => ({
         status: '',
         departure_time: '',
         eta: '',
-        pallet_quantity: '16'
+        pallet_quantity: '16',
+        loading: false,
         
     },
     page: 1
@@ -56,7 +57,8 @@ const mutations = {
             status: '',
             departure_time: '',
             eta: '',
-            pallet_quantity: ''
+            pallet_quantity: '',
+            loading: false,
         }
     }
 }
@@ -106,6 +108,12 @@ const actions = {
             .then((response) => {
                 commit('CLEAR_FORM') //BERSIHKAN FORM
                 resolve(response.data)
+            })
+            .catch((error) => {
+                //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
+                if (error.response.status == 422) {
+                    commit('SET_ERRORS', error.response.data.errors, { root: true })
+                }
             })
         })
     },

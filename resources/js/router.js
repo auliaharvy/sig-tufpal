@@ -20,9 +20,11 @@ import EditSjp from './pages/sjp/Edit.vue'
 import IndexSjpStatus from './pages/sjpstatus/Index.vue'
 import DataSjpStatus from './pages/sjpstatus/SjpStatus.vue'
 import AddSjpStatus from './pages/sjpstatus/AddSjpStatus.vue'
-import SendbackSjpStatus from './pages/sjpstatus/SendbackSjpStatus.vue'
+// import SendbackSjpStatus from './pages/sjpstatus/SendbackSjpStatus.vue'
 import EditSjpStatus from './pages/sjpstatus/EditSjpStatus.vue'
+import EditSjpStatussendback from './pages/sjpstatus/EditSjpStatussendback.vue'
 import AddSjpStatusbyMaster from './pages/sjpstatus/AddSjpStatusbyMaster.vue'
+import SendbackSjpStatus from './pages/sjpstatus/AddSjpStatussendback.vue'
 
 import IndexPool from './pages/pool/Index.vue'
 import DataPool from './pages/pool/Pool.vue'
@@ -137,16 +139,22 @@ const router = new Router({
                     meta: { title: 'Manage Sjp Status' }
                 },
                 {
-                    path: 'add',
+                    path: 'send',
                     name: 'sjpstatuss.add',
                     component: AddSjpStatus,
                     meta: { title: 'Add Sjp Status' }
                 },
                 {
-                    path: 'send/:id',
+                    path: 'sendback/:id',
                     name: 'sjpstatuss.sendback',
                     component: SendbackSjpStatus,
                     meta: { title: 'Send Back Sjp Status' }
+                },
+                {
+                    path: 'editsendback/:id',
+                    name: 'sjpstatuss.editsendback',
+                    component: EditSjpStatussendback,
+                    meta: { title: 'Edit Sjp Sendback' }
                 },
                 {
                     path: 'edit/:id',

@@ -18,8 +18,7 @@ const state = () => ({
         missing_pallet: 0,
         good_cement: 0,
         bad_cement: 0,
-        note: '',
-     
+        note: '', 
     },
     page: 1
 })
@@ -70,9 +69,27 @@ const actions = {
         })
     },
     submitSjpStatus({ dispatch, commit, state }) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {  
             //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
             $axios.post(`/sjpstatus`, state.sjpstatus)
+            .then((response) => {
+                //APABILA BERHASIL MAKA LOAD DATA CUSTOMER UNTUK MENGAMBIL DATA TERBARU
+                dispatch('getSjpStatuss').then(() => {
+                    resolve(response.data)
+                })
+            })
+            .catch((error) => {
+                //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
+                if (error.response.status == 422) {
+                    commit('SET_ERRORS', error.response.data.errors, { root: true })
+                }
+            })
+        })
+      },
+      submitSjpStatussendback({ dispatch, commit, state }) {
+        return new Promise((resolve, reject) => {
+            //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
+            $axios.post(`/sjpstatus/sendback`, state.sjpstatus)
             .then((response) => {
                 //APABILA BERHASIL MAKA LOAD DATA CUSTOMER UNTUK MENGAMBIL DATA TERBARU
                 dispatch('getSjpStatuss').then(() => {
@@ -126,6 +143,21 @@ const actions = {
     updateSjpStatus({ state, commit }, payload) {
         return new Promise((resolve, reject) => {
             $axios.post(`/sjpstatus/receive`, state.sjpstatus) //KIRIM PERMINTAAN KE SERVER UNTUK MENGUPDATE DATA BERDASARKAN PAYLOAD (ID) DAN DATA YANG AKAN DI UPDATE DI AMBIL DARI STATE CUSTOMER
+            .then((response) => {
+                commit('CLEAR_FORM') //BERSIHKAN FORM
+                resolve(response.data)
+            })
+            .catch((error) => {
+                //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
+                if (error.response.status == 422) {
+                    commit('SET_ERRORS', error.response.data.errors, { root: true })
+                }
+            })
+        })
+    },
+    updateSjpStatussendback({ state, commit }, payload) {
+        return new Promise((resolve, reject) => {
+            $axios.post(`/sjpstatus/receivesendback`, state.sjpstatus) //KIRIM PERMINTAAN KE SERVER UNTUK MENGUPDATE DATA BERDASARKAN PAYLOAD (ID) DAN DATA YANG AKAN DI UPDATE DI AMBIL DARI STATE CUSTOMER
             .then((response) => {
                 commit('CLEAR_FORM') //BERSIHKAN FORM
                 resolve(response.data)

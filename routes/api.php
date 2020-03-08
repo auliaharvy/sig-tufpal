@@ -20,6 +20,9 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/sjp/adjust', 'SjpController@adjust');
     Route::get('/sjpstatusbymaster/{id}', 'SjpStatusController@sjpstatusbymaster'); //get data untuk add sjp status
     Route::resource('sjpstatus', 'SjpStatusController');
+    Route::post('/sjpstatus/sendback', 'SjpStatusController@sendback');
+    Route::post('/sjpstatus/receive', 'SjpStatusController@receive');
+    Route::post('/sjpstatus/receivesendback', 'SjpStatusController@receivesendback');
     Route::resource('pallettransfer', 'PalletTransferController');
     Route::resource('bermissing', 'BermissingpalletController');
     Route::resource('newpallet', 'NewpalletController');
@@ -36,7 +39,6 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('transporter', 'TransporterController');
     Route::resource('msttransaction', 'MstTransactionController');
     Route::resource('organization', 'OrganizationController');
-    Route::post('/sjpstatus/receive', 'SjpStatusController@receive');
     Route::post('/pallettransfer/receive', 'PalletTransferController@receive');
     Route::post('/bermissing/approve', 'BermissingpalletController@approve');
 

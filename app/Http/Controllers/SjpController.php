@@ -8,6 +8,7 @@ use App\Http\Resources\SjpCollection;
 use App\Sjp;
 use App\PoolPallet;
 use App\Sjpadjusment;
+use App\Transporter;
 use App\Vehicle;
 use App\Driver;
 use DB;
@@ -22,6 +23,7 @@ class SjpController extends Controller
 		//  return $sjp;
         // return response()->json(Sjp::all()->toArray());
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
+        $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
         if($pool_pallet==1 && $role<7){
             $sjp = DB::table('surat_jalan_pallet as a')
@@ -47,6 +49,7 @@ class SjpController extends Controller
                     'd.vehicle_number','e.transporter_name', 'f.driver_name')
             ->where('c.pool_pallet_id',$pool_pallet)
             ->orWhere('b.pool_pallet_id', $pool_pallet)
+            ->orWhere('e.transporter_id', $transporter)
             ->paginate(1000000)
             ->toArray();
         }
@@ -70,15 +73,10 @@ class SjpController extends Controller
             // 'transporter_id' => 'required',
             'no_do' => 'required|string',
             'product_name' => 'required|string',
-            'pallet_quantity' => 'required|integer|gt:-1',
+            'pallet_quantity' => 'required|integer|gt:-1|lte:'.$qty_pool,
             'packaging' => 'required|integer|gt:-1',
             'product_quantity' => 'required|integer|gt:-1',
         ]);
-        if($pallet_qty>$qty_pool)
-        {
-            return response()->json(['error' => 'Pallet Melebihi Quantity yang ada'], 404);
-        }
-        else{
             $sjp = Sjp::create([
             'destination_pool_pallet_id' => $request->destination_pool_pallet_id, 
             'departure_pool_pallet_id' => $pool_pallet, 
@@ -93,8 +91,9 @@ class SjpController extends Controller
             'status' => 'OPEN',
             'state' => 0,
             'created_by' => auth()->user()->name,
-            'created_at' => $now,
-            'updated_at' => null,
+            'is_sendback' => 0,
+            // 'created_at' => $now,
+            // 'updated_at' => null,
             'departure_time' => $request->departure_time, 
             'eta' => $request->eta, 
             'pallet_quantity' => $request->pallet_quantity, 
@@ -106,10 +105,7 @@ class SjpController extends Controller
             'message' => $sjp ? 'Surat jalan Pallet Record Created!' : 'Error Creating Surat jalan Pallet Record' 
         ];
 
-        return response()->json($data);
-        }
-
-        
+        return response()->json($data);      
     }
 
     //Codingan Pertama
@@ -200,7 +196,7 @@ class SjpController extends Controller
 
         }
 
-        $sjp_number = $sjp->sjp_number;
+            $sjp_number = $sjp->sjp_number;
             $vehicle_id = $sjp->vehicle_id;
             $vehicle = Vehicle::find($vehicle_id);
             $driver_id = $sjp->driver_id;

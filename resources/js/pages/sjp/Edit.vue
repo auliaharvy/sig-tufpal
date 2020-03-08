@@ -12,6 +12,9 @@
                     <v-btn :loading="loading" class="success" @click.prevent="submit()">
                         {{ loading ? 'Loading...':'Adjust' }}
                     </v-btn>
+                    <v-btn class="error px-5" @click.prevent="resetLoading()">
+                        Reset
+                    </v-btn>
                 </div>
             </div>
         </div>
@@ -36,14 +39,11 @@
                 this.loading = true
                 //MENGIRIM PERMINTAAN KE SERVER UNTUK ME-NGUBAH DATA
                 this.updateSjp(this.$route.params.id).then(() => {
-                    this.loading = false
                     this.$router.push({ name: 'sjps.data' }) //KETIKA UPDATE BERHASIL, MAKA REDIRECT KE HALAMAN LIST CUSTOMER
-                }).catch((error) => {
-                //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
-                    if (error.response.status == 404) {
-                        this.loading = false
-                    }
                 })
+            },
+            resetLoading() {
+                this.loading = false
             }
         },
         components: {
