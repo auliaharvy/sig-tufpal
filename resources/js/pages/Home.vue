@@ -129,6 +129,22 @@
             </v-card-title>
           </v-card>
         </v-flex>
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/pallettransfersend" class="text-center ma-3" v-if="$can('read pallettransfersend')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-transfer</v-icon>
+              <span right> SJP Pallet Transfer Send </span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/pallettransferreceive" class="text-center ma-3" v-if="$can('read pallettransferreceive')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-transfer</v-icon>
+              <span right> SJP Pallet Transfer Receive </span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
         <!-- <v-flex xs12 md3 lg3 link >
           <v-card link router to="/palletdeposit" class="text-center ma-3" v-if="$can('read palletdeposit')">
             <v-card-title class="text-center" color="black">

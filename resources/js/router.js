@@ -18,6 +18,12 @@ import DataSjpsend from './pages/report/sjppalletsend/Sjppalletsend.vue'
 import IndexSjpreceive from './pages/report/sjppalletreceive/index.vue'
 import DataSjpreceive from './pages/report/sjppalletreceive/Sjppalletreceive.vue'
 
+import IndexPallettransfersend from './pages/report/pallettransfersend/index.vue'
+import DataPallettransfersend from './pages/report/pallettransfersend/Pallettransfersend.vue'
+
+import IndexPallettransferreceive from './pages/report/pallettransferreceive/index.vue'
+import DataPallettransferreceive from './pages/report/pallettransferreceive/Pallettransferreceive.vue'
+
 import IndexSjp from './pages/sjp/index.vue'
 import DataSjp from './pages/sjp/sjp.vue'
 import AddSjp from './pages/sjp/Add.vue'
@@ -393,6 +399,33 @@ const router = new Router({
                     name: 'sjppalletreceive.data',
                     component: DataSjpreceive,
                     meta: { title: 'SJP Pallet Receive' }
+                },
+            ]
+        },
+
+        {
+            path: '/pallettransfersend',
+            component: IndexPallettransfersend,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'pallettransfersend.data',
+                    component: DataPallettransfersend,
+                    meta: { title: 'SJP Pallet Transfer Send' }
+                },
+            ]
+        },
+        {
+            path: '/pallettransferreceive',
+            component: IndexPallettransferreceive,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'pallettransferreceive.data',
+                    component: DataPallettransferreceive,
+                    meta: { title: 'SJP Pallet Transfer Receive' }
                 },
             ]
         },
