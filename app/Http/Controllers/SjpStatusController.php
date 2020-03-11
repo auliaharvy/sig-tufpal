@@ -27,6 +27,7 @@ class SjpStatusController extends Controller
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
         $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
+        $status = 'OPEN';
         if($pool_pallet==1 && $role<7){
         $sjpstatus = DB::table('sjp_status as a')
             ->join('users as b', 'a.checker_send_user_id', '=', 'b.id')
@@ -40,7 +41,8 @@ class SjpStatusController extends Controller
             ->select('a.*', 'b.name as checker_sender', 'c.name as checker_receiver',
                     'd.sjp_number','e.transaction', 'd.is_sendback', 'd.destination_pool_pallet_id'
                     , 'd.departure_pool_pallet_id', 'd.transporter_id', 'f.vehicle_number'
-                    , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool' )            
+                    , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool' )
+            // ->where('d.status',$status)            
             ->paginate(1000000)
             ->toArray();
         }
@@ -57,10 +59,12 @@ class SjpStatusController extends Controller
             ->select('a.*', 'b.name as checker_sender', 'c.name as checker_receiver',
                     'd.sjp_number','e.transaction', 'd.is_sendback', 'd.destination_pool_pallet_id'
                     , 'd.departure_pool_pallet_id', 'd.transporter_id', 'f.vehicle_number'
-                    , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool' )       
+                    , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool')       
+            // ->where('d.status', $status)
             ->where('d.departure_pool_pallet_id',$pool_pallet)
             ->orWhere('d.destination_pool_pallet_id', $pool_pallet)
             ->orWhere('d.transporter_id', $transporter)
+            ->where('d.status', $status)
             ->paginate(10000000)
             ->toArray();
         }
@@ -127,6 +131,8 @@ class SjpStatusController extends Controller
             
             // $destination_id = $sjp->destination_pool_pallet_id;
             $checker = Auth::user()->id;
+            DB::beginTransaction();
+            try{
             $sjpStatus = SjpStatus::create([
                 'checker_send_user_id' => $checker, 
                 'checker_receive_user_id' => 5, 
@@ -196,14 +202,19 @@ class SjpStatusController extends Controller
             $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet)); //anggeplah 0
             $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet)); //anggeplah 0
             $InventoryTrans->save();
-
-            $data = [
-                'data' => $sjpStatus,
-                'status' => (bool) $sjpStatus,
-                'message' => $sjpStatus ? 'SJP Status Record Created!' : 'Error Creating SJP Status Record' 
-            ];
-
-            return response()->json($data);
+            
+            DB::commit();
+            return response()->json(['status' => 'success'], 200);
+            // $data = [
+            //     'data' => $sjpStatus,
+            //     'status' => (bool) $sjpStatus,
+            //     'message' => $sjpStatus ? 'SJP Status Record Created!' : 'Error Creating SJP Status Record' 
+            // ];
+            // return response()->json($data);
+            } catch (\Exception $e) {
+                DB::rollback();
+                return response()->json(['status' => 'error', 'data' => $e->getMessage()], 200);
+            }
         //}           
     }
 
@@ -249,6 +260,8 @@ class SjpStatusController extends Controller
             // }
             
             $checker = Auth::user()->id;
+            DB::beginTransaction();
+            try{
             $sjpStatus = SjpStatus::create([
                 'checker_send_user_id' => $checker, 
                 'checker_receive_user_id' => 5, 
@@ -314,13 +327,19 @@ class SjpStatusController extends Controller
             $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet)); //anggeplah 0
             $InventoryTrans->save();
 
-            $data = [
-                'data' => $sjpStatus,
-                'status' => (bool) $sjpStatus,
-                'message' => $sjpStatus ? 'SJP Status Record Created!' : 'Error Creating SJP Status Record' 
-            ];
+            DB::commit();
+            return response()->json(['status' => 'success'], 200);
+            // $data = [
+            //     'data' => $sjpStatus,
+            //     'status' => (bool) $sjpStatus,
+            //     'message' => $sjpStatus ? 'SJP Status Record Created!' : 'Error Creating SJP Status Record' 
+            // ];
 
-            return response()->json($data);
+            // return response()->json($data);
+            } catch (\Exception $e) {
+                DB::rollback();
+                return response()->json(['status' => 'error', 'data' => $e->getMessage()], 200);
+            }
         //}           
     }
 
@@ -374,6 +393,8 @@ class SjpStatusController extends Controller
             // }
             // else{
                 $update = SjpStatus::find($sjp_status_id);
+                DB::beginTransaction();
+                try{
                 $good_pallet_awal = $update->good_pallet; //ambil qty pallet awal
                 $good_cement_awal = $update->good_cement; //ambil qty cement awal
                 // $ber_pallet_awal = $update->ber_pallet; //ambil qty pallet awal
@@ -464,13 +485,19 @@ class SjpStatusController extends Controller
                 // $Sjpstat->status = $status;
                 // $Sjpstat->save();
 
-                $data = [
-                    'data' => $update,
-                    'status' => (bool) $update,
-                    'message' => $update ? 'SJP Status Record Updated!' : 'Error Updating SJP Status Record' 
-                ];
-        
-                return response()->json($data);
+                DB::commit();
+                return response()->json(['status' => 'success'], 200);
+                // $data = [
+                //     'data' => $sjpStatus,
+                //     'status' => (bool) $sjpStatus,
+                //     'message' => $sjpStatus ? 'SJP Status Record Created!' : 'Error Creating SJP Status Record' 
+                // ];
+
+                // return response()->json($data);
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    return response()->json(['status' => 'error', 'data' => $e->getMessage()], 200);
+                }
             // }
             
         }    
@@ -531,6 +558,8 @@ class SjpStatusController extends Controller
             // }
             // else{
                 $update = SjpStatus::find($sjp_status_id);
+                DB::beginTransaction();
+                try{
                 $good_pallet_awal = $update->good_pallet; //ambil qty pallet awal
                 // $good_cement_awal = $update->good_cement; //ambil qty cement awal
                 $tbr_pallet_awal = $update->tbr_pallet;
@@ -641,14 +670,19 @@ class SjpStatusController extends Controller
                 $state->save();
 
 
-                $data = [
-                    'data' => $update,
-                    'status' => (bool) $update,
-                    'message' => $update ? 'SJP Status Record Updated!' : 'Error Updating SJP Status Record' 
-                ];
-        
-                return response()->json($data);
-            // }
+                DB::commit();
+                return response()->json(['status' => 'success'], 200);
+                // $data = [
+                //     'data' => $sjpStatus,
+                //     'status' => (bool) $sjpStatus,
+                //     'message' => $sjpStatus ? 'SJP Status Record Created!' : 'Error Creating SJP Status Record' 
+                // ];
+
+                // return response()->json($data);
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    return response()->json(['status' => 'error', 'data' => $e->getMessage()], 200);
+                }
             
         }    
     }

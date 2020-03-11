@@ -68,7 +68,7 @@ export default {
              headers: [
                 { value: 'sjp_number', text: 'SJP Number' },
                 { value: 'sjp_status', text: 'SJP Status' },
-                { value: 'sender', text: 'Sender' },
+                { value: 'receiver', text: 'Receiver' },
                 { value: 'departure_pool', text: 'Departure' },
                 { value: 'destination_pool', text: 'Destination' },
                 { value: 'transporter', text: 'Transporter' },

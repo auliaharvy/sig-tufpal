@@ -111,6 +111,7 @@ class BermissingpalletController extends Controller
             'ber_pallet' => $request->ber_pallet, 
             'missing_pallet' => $request->missing_pallet, 
             'reporter_prove' => $request->reporter_prove,
+            'berita_acara' => $request->berita_acara,
             'status' => 0,
             'note' => $request->note, 
         ]);
@@ -131,6 +132,7 @@ class BermissingpalletController extends Controller
                 'ber_pallet' => $request->ber_pallet,
                 'missing_pallet' => $request->missing_pallet,
                 'prove' => $request->reporter_prove,
+                'berita_acara' => $request->berita_acara,
                 'note' => $request->note,
             ]);
          }
@@ -149,6 +151,7 @@ class BermissingpalletController extends Controller
                 'ber_pallet' => $request->ber_pallet,
                 'missing_pallet' => $request->missing_pallet,
                 'prove' => $request->reporter_prove,
+                'berita_acara' => $request->berita_acara,
                 'note' => $request->note,
             ]);
          }
@@ -253,7 +256,8 @@ class BermissingpalletController extends Controller
                     'reference_sjp_status' => $update->reference_sjp_status,
                     'ber_pallet' => $request->ber_pallet,
                     'missing_pallet' => $request->missing_pallet,
-                    'prove' => $request->reporter_prove,
+                    'prove' => $update->reporter_prove,
+                    'berita_acara' => $request->berita_acara,
                     'note' => $request->note,
                 ]);
             }
@@ -270,7 +274,8 @@ class BermissingpalletController extends Controller
                     'reference_sjp_status' => $update->reference_sjp_status,
                     'ber_pallet' => $request->ber_pallet,
                     'missing_pallet' => $request->missing_pallet,
-                    'prove' => $request->reporter_prove,
+                    'prove' => $update->reporter_prove,
+                    'berita_acara' => $request->berita_acara,
                     'note' => $request->note,
                 ]);
             }

@@ -24,6 +24,7 @@ class SjpController extends Controller
         // return response()->json(Sjp::all()->toArray());
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
         $transporter = Auth::user()->reference_transporter_id;
+        $status = 'OPEN';
         $role = Auth::user()->role;
         if($pool_pallet==1 && $role<7){
             $sjp = DB::table('surat_jalan_pallet as a')
@@ -34,7 +35,7 @@ class SjpController extends Controller
             ->join('driver as f', 'a.driver_id', '=', 'f.driver_id')
             ->select('a.*', 'b.pool_name as dest_pool', 'c.pool_name as dept_pool',
                     'd.vehicle_number','e.transporter_name', 'f.driver_name')
-           
+            // ->where('a.status', $status)
             ->paginate(1000000)
             ->toArray();
         }
@@ -47,6 +48,7 @@ class SjpController extends Controller
             ->join('driver as f', 'a.driver_id', '=', 'f.driver_id')
             ->select('a.*', 'b.pool_name as dest_pool', 'c.pool_name as dept_pool',
                     'd.vehicle_number','e.transporter_name', 'f.driver_name')
+            // ->where('a.status', $status) 
             ->where('c.pool_pallet_id',$pool_pallet)
             ->orWhere('b.pool_pallet_id', $pool_pallet)
             ->orWhere('e.transporter_id', $transporter)

@@ -80,10 +80,10 @@ export default {
         return {
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
             headers: [
-                { value: 'organization_name', text: 'Organization' },
+                // { value: 'organization_name', text: 'Organization' },
                 { value: 'pool_name', text: 'Pool Name' },
                 { value: 'code', text: 'Pool Code' },
-                { value: 'type', text: 'Pool Type' },
+                // { value: 'type', text: 'Pool Type' },
                 { value: 'pool_address', text: 'Pool Address' },
                 { value: 'pallet_quota', text: 'Pallet Quota' },
                 { value: 'good_pallet', text: 'Good Pallet' },

@@ -50,12 +50,12 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => $request->password,
-                'role' => $request->role,
+                // 'role' => $request->role,
                 'photo' => $name,
-                'outlet_id' => $request->outlet_id,
+                // 'outlet_id' => $request->outlet_id,
                 'role' => 3
             ]);
-            $user->assignRole('courier');
+           
             DB::commit();
             return response()->json(['status' => 'success'], 200);
         } catch (\Exception $e) {

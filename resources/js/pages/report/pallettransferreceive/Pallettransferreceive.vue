@@ -68,7 +68,7 @@ export default {
              headers: [
                 { value: 'tp_number', text: 'TP Number' },
                 { value: 'pallet_transfer_status', text: 'Transfer Status' },
-                { value: 'sender', text: 'Sender' },
+                { value: 'receiver', text: 'Receiver' },
                 { value: 'departure_pool', text: 'Departure' },
                 { value: 'destination_pool', text: 'Destination' },
                 { value: 'transporter', text: 'Transporter' },

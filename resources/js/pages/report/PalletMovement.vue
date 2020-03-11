@@ -68,7 +68,7 @@ export default {
         return {
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
              headers: [
-                { value: 'sjps_number', text: 'SJP Status Number' },
+                // { value: 'sjps_number', text: 'SJP Status Number' },
                 { value: 'sjp_number', text: 'SJP Number' },
                 { value: 'transaction', text: 'Send/Send Back' },
                 { value: 'status', text: 'Status' },
@@ -84,8 +84,8 @@ export default {
                 { value: 'ber_pallet', text: 'BER Pallet' },
                 { value: 'missing_pallet', text: 'Missing Pallet' },
                 // { value: 'product_name', text: 'Product' },
-                { value: 'departure_time', text: 'Departure Time' },
-                { value: 'eta', text: 'ETA' },
+                // { value: 'departure_time', text: 'Departure Time' },
+                // { value: 'eta', text: 'ETA' },
                 // { value: 'send', text: 'Send Pallet' },
                 // { value: 'adjusment', text: 'Adjusment SJP' },
               
