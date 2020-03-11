@@ -61,6 +61,10 @@
                             <router-link :to="{ name: 'sjps.edit', params: {id: item.sjp_id} }" v-if="item.status == 'OPEN'"><v-btn color="success" small>Adjust</v-btn></router-link>                        
                         </template>
 
+                        <template v-if="$can('update sjpsdest')" class="pa-5" v-slot:item.changedest="{ item }">
+                            <router-link :to="{ name: 'sjps.editdestination', params: {id: item.sjp_id} }" v-if="item.status == 'OPEN'"><v-btn color="success" small>Change Dest</v-btn></router-link>                        
+                        </template>
+
                         <template v-if="$can('delete sjps')" class="pa-5" v-slot:item.delete="{ item }">
                             <v-btn color="error" @click="deleteSjp(item.sjp_id)" small>Delete</v-btn>                        
                         </template>
@@ -130,6 +134,7 @@ export default {
                 { value: 'eta', text: 'ETA' },
                 { value: 'send', text: 'Send Pallet' },
                 { value: 'adjusment', text: 'SJP Adjusment' },
+                { value: 'changedest', text: 'SJP Destination Change' },
                 { value: 'delete', text: 'Delete' }
 
             ],

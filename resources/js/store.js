@@ -32,6 +32,7 @@ import damagedpallet from './stores/Damagedpallet.js'
 import repairedpallet from './stores/Repairedpallet.js'
 import palletmovement from './stores/palletmovement.js'
 import sjpadjusment from './stores/sjpadjusment.js'
+import sjpchangedestination from './stores/sjpchangedestination.js'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -49,6 +50,8 @@ const store = new Vuex.Store({
         sjp,
         sjppalletsend,
         sjppalletreceive,
+        sjpadjusment,
+        sjpchangedestination,
         sjpstatus,
         pool,
         vehicle,
@@ -64,7 +67,6 @@ const store = new Vuex.Store({
         bermissingapproved,
         newpallet,
         palletmovement,
-        sjpadjusment,
         damagedpallet,
         repairedpallet
     },

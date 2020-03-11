@@ -514,18 +514,24 @@ class SjpStatusController extends Controller
         $driver_id = $sjp->driver_id;
         $vehicle_id = $sjp->vehicle_id;
         $status = 'CLOSED';
-        $InventoryTrans = Transporter::find($transporter_id); //cek qty pallet di transporter
-        $good_pallet = $InventoryTrans->good_pallet;
-        $tbr_pallet = $InventoryTrans->tbr_pallet;
-        $ber_pallet = $InventoryTrans->ber_pallet;
-        $missing_pallet = $InventoryTrans->missing_pallet;
+        $update = SjpStatus::find($sjp_status_id);
+        $good_pallet = $update->good_pallet;
+        $tbr_pallet = $update->tbr_pallet;
+        $ber_pallet = $update->ber_pallet;
+        $missing_pallet = $update->missing_pallet;
         $total = $good_pallet+$tbr_pallet+$ber_pallet+$missing_pallet;
+        // $InventoryTrans = Transporter::find($transporter_id); //cek qty pallet di transporter
+        // $good_pallet = $InventoryTrans->good_pallet;
+        // $tbr_pallet = $InventoryTrans->tbr_pallet;
+        // $ber_pallet = $InventoryTrans->ber_pallet;
+        // $missing_pallet = $InventoryTrans->missing_pallet;
+        // $total = $good_pallet+$tbr_pallet+$ber_pallet+$missing_pallet;
        
         $this->validate($request, [
-            'good_pallet' => 'required|integer|gt:-1|lte:'.$good_pallet,
-            'tbr_pallet' => 'required|integer|gt:-1|lte:'.$tbr_pallet,
-            'ber_pallet' => 'required|integer|gt:-1|lte:'.$good_pallet,
-            'missing_pallet' => 'required|integer|gt:-1|lte:'.$good_pallet,
+            'good_pallet' => 'required|integer|gt:-1|lte:'.$total,
+            'tbr_pallet' => 'required|integer|gt:-1|lte:'.$total,
+            'ber_pallet' => 'required|integer|gt:-1|lte:'.$total,
+            'missing_pallet' => 'required|integer|gt:-1|lte:'.$total,
             // 'good_cement' => 'required|integer|gt:-1|',
             // 'bad_cement' => 'required|integer|gt:-1'
         ]);

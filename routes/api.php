@@ -20,6 +20,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('sjppalletsend', 'SjppalletsendController');
     Route::resource('sjppalletreceive', 'SjppalletreceiveController');
     Route::post('/sjp/adjust', 'SjpController@adjust');
+    Route::post('/sjp/changedestination', 'SjpController@changedestination');
     Route::get('/sjpstatusbymaster/{id}', 'SjpStatusController@sjpstatusbymaster'); //get data untuk add sjp status
     Route::resource('sjpstatus', 'SjpStatusController');
     Route::post('/sjpstatus/sendback', 'SjpStatusController@sendback');
@@ -36,6 +37,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('repairedpallet', 'RepairedpalletController');
     Route::resource('palletmovement', 'PalletMovementController');
     Route::resource('sjpadjusment', 'SjpadjusmentController');
+    Route::resource('sjpchangedestination', 'SjpchangedestinationController');
     Route::resource('pool', 'PoolController');
     Route::get('poolform', 'PoolController@getpoolpallet');
     Route::resource('driver', 'DriverController');

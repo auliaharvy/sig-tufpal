@@ -8,6 +8,7 @@ use App\Http\Resources\SjpCollection;
 use App\Sjp;
 use App\PoolPallet;
 use App\Sjpadjusment;
+use App\Sjpchangedestination;
 use App\Transporter;
 use App\Vehicle;
 use App\Driver;
@@ -193,13 +194,10 @@ class SjpController extends Controller
             $update->vehicle_id = $request->vehicle_id;
             $update->adjust_by = auth()->user()->name;
             $update->save();
-
-            
-
         }
 
             $sjp_number = $sjp->sjp_number;
-            $transporter_id = $sjp->vehicle_id;
+            $transporter_id = $sjp->transporter_id;
             $transporter = Transporter::find($transporter_id);
             $vehicle_id = $sjp->vehicle_id;
             $vehicle = Vehicle::find($vehicle_id);
@@ -217,6 +215,58 @@ class SjpController extends Controller
                 'new_vehicle' => $new_vehicle->vehicle_number,
                 'driver' => $driver->driver_name,
                 'new_driver' => $new_driver->driver_name,
+                'adjust_by' => $checker, 
+            ]);
+
+        $data = [
+            'data' => $update,
+            'status' => (bool) $update,
+            'message' => $update ? 'SJP Record Updated!' : 'Error Updating SJP  Record' 
+        ];
+
+        return response()->json($data);
+    }
+
+    public function changedestination(Request $request)
+    {
+        $sjp_id = $request->sjp_id;
+
+        $sjp = Sjp::where('sjp_id',$sjp_id)->first();
+        if (empty($sjp)){
+            return response()->json(['error' => 'Data not found'], 404);
+        }
+        else{
+            $update = Sjp::find($sjp_id);
+            // $update->driver_id = $request->driver_id;
+            // $update->driver_id = $request->driver_id;
+            // $update->vehicle_id = $request->vehicle_id;
+            $update->destination_pool_pallet_id = $request->destination_pool_pallet_id;
+            $update->adjust_by = auth()->user()->name;
+            $update->save();
+        }
+
+            $sjp_number = $sjp->sjp_number;
+            $transporter_id = $sjp->transporter_id;
+            $transporter = Transporter::find($transporter_id);
+            $vehicle_id = $sjp->vehicle_id;
+            $vehicle = Vehicle::find($vehicle_id);
+            $destination_pool_pallet_id = $sjp->destination_pool_pallet_id;
+            $destination = PoolPallet::find($destination_pool_pallet_id);
+            $new_destination_id = $request->destination_pool_pallet_id;
+            $new_destination = PoolPallet::find($new_destination_id);
+            // $driver_id = $sjp->driver_id;
+            // $driver = Driver::find($driver_id);
+            $checker = Auth::user()->name;
+            // $new_vehicle_id = $request->vehicle_id;
+            // $new_vehicle = Vehicle::find($new_vehicle_id);
+            // $new_driver_id = $request->driver_id;
+            // $new_driver = Driver::find($new_driver_id); 
+            $sjpchangedest = Sjpchangedestination::create([
+                'sjp_number' => $sjp_number,
+                // 'transporter' => $transporter->transporter_name,
+                // 'vehicle' => $vehicle->vehicle_number,
+                'destination' => $destination->pool_name,
+                'new_destination' => $new_destination->pool_name,
                 'adjust_by' => $checker, 
             ]);
 

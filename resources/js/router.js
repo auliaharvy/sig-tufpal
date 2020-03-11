@@ -12,6 +12,9 @@ import DataPalletMovement from './pages/report/PalletMovement.vue'
 import IndexSjpadjusment from './pages/report/sjpadjusment/index.vue'
 import DataSjpadjusment from './pages/report/sjpadjusment/Sjpadjusment.vue'
 
+import IndexSjpchangedest from './pages/report/sjpchangedest/index.vue'
+import DataSjpchangedest from './pages/report/sjpchangedest/Sjpchangedest.vue'
+
 import IndexSjpsend from './pages/report/sjppalletsend/index.vue'
 import DataSjpsend from './pages/report/sjppalletsend/Sjppalletsend.vue'
 
@@ -28,6 +31,7 @@ import IndexSjp from './pages/sjp/index.vue'
 import DataSjp from './pages/sjp/sjp.vue'
 import AddSjp from './pages/sjp/Add.vue'
 import EditSjp from './pages/sjp/Edit.vue'
+import EditSjpdest from './pages/sjp/Editdest.vue'
 
 import IndexSjpStatus from './pages/sjpstatus/Index.vue'
 import DataSjpStatus from './pages/sjpstatus/SjpStatus.vue'
@@ -134,6 +138,12 @@ const router = new Router({
                     name: 'sjps.edit',
                     component: EditSjp,
                     meta: { title: 'Edit Sjp' }
+                },
+                {
+                    path: 'changedestination/:id',
+                    name: 'sjps.editdestination',
+                    component: EditSjpdest,
+                    meta: { title: 'Edit Sjp Destination' }
                 },
                 
             ]
@@ -372,6 +382,20 @@ const router = new Router({
                     name: 'sjpadjusments.data',
                     component: DataSjpadjusment,
                     meta: { title: 'SJP Adjusment' }
+                },
+            ]
+        },
+
+        {
+            path: '/sjpchangedestination',
+            component: IndexSjpchangedest,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'sjpschangedestination.data',
+                    component: DataSjpchangedest,
+                    meta: { title: 'SJP Change Destination' }
                 },
             ]
         },

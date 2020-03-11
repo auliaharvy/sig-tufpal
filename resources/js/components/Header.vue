@@ -140,6 +140,14 @@
                         <v-list-item-title color="black">SJP Adjusment</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item link router to="/sjpchangedestination" v-if="$can('read sjpchangedestination')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-transfer</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">SJP Change Destination</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
                 <v-list-item link router to="/sjppalletsend" v-if="$can('read sjppalletsend')">
                     <v-list-item-icon>
                         <v-icon color="black">mdi-send</v-icon>

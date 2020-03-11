@@ -57,11 +57,11 @@
                 <option v-for='data in authenticated' :value='authenticated.id'>{{ authenticated.name }}</option>
             </select>
         </div> -->
-        <div>
+        <!-- <div>
             <h3>Send Information</h3>
             <p> Good Pallet : <b>{{ pallettransfer.good_pallet }}</b></p>
             <p> TBR Pallet : <b>{{ pallettransfer.tbr_pallet }}</b></p>
-        </div>
+        </div> -->
         <div class="form-group" :class="{ 'has-error': errors.good_pallet }">
             <label for="">Good Pallet</label>
             <input type="text" class="form-control" v-model="pallettransfer.good_pallet">
