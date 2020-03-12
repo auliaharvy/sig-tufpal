@@ -10,6 +10,12 @@
                         <v-card-title>
                         SJP PALLET SEND
                         <v-spacer></v-spacer>
+                        <download-excel
+                            :data   = "sjppalletsends.data"
+                            type = "csv"
+                            name = "sjppalletsend.csv">
+                            <v-btn class="success"> <v-icon>mdi-download</v-icon> </v-btn>
+                        </download-excel>
                         <v-text-field
                             v-model="search"
                             prepend-icon="mdi-search"
@@ -60,10 +66,12 @@ import { mapActions, mapState } from 'vuex'
 export default {
     name: 'DataSjpPalletSend',
     created() {
-        this.getSjpPalletSend() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
+        this.getSjpPalletSend();
+        setInterval(this.getNow, 1000); //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
     },
     data() {
         return {
+            timestamp:'',
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
              headers: [
                 { value: 'sjp_number', text: 'SJP Number' },
@@ -110,6 +118,13 @@ export default {
     },
     methods: {
         ...mapActions('sjppalletsend', ['getSjpPalletSend']), 
+        getNow: function() {
+                    const today = new Date();
+                    const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                    const dateTime = date +' '+ time;
+                    this.timestamp = dateTime;
+                }
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         
     }
