@@ -576,10 +576,15 @@ class SjpStatusController extends Controller
                 $receive = Auth::user()->id;
                 $update->checker_receive_user_id = $receive;
                 // $update->sjp_id = $request->sjp_id;
-                $update->good_pallet = $request->good_pallet;
-                $update->tbr_pallet = $request->tbr_pallet;
-                $update->ber_pallet = $request->ber_pallet;
-                $update->missing_pallet = $request->missing_pallet;
+                $goodpalletrcv = $request->good_pallet;
+                $tbr_palletrcv = $request->tbr_pallet;
+                $ber_palletrcv = $request->ber_pallet;
+                $missing_palletrcv = $request->missing_pallet;
+
+                $update->good_pallet = $goodpalletrcv;
+                $update->tbr_pallet = $tbr_palletrcv;
+                $update->ber_pallet = $ber_palletrcv;
+                $update->missing_pallet = $missing_palletrcv;
                 // $update->good_cement = $request->good_cement;
                 // $update->bad_cement = $request->bad_cement;
                 $update->transaction_id = 2;
@@ -588,15 +593,32 @@ class SjpStatusController extends Controller
                 $update->save();
 
                 $InventoryDest = PoolPallet::find($destination_id);
-                $InventoryDest->good_pallet = (($InventoryDest->good_pallet)+($request->good_pallet)); //hanya receive good pallet
-                $InventoryDest->tbr_pallet = (($InventoryDest->tbr_pallet)+($request->tbr_pallet)); 
+                $InventoryDest->good_pallet = (($InventoryDest->good_pallet)+($goodpalletrcv)); //hanya receive good pallet
+                $InventoryDest->tbr_pallet = (($InventoryDest->tbr_pallet)+($tbr_palletrcv)); 
                 // $InventoryDest->ber_pallet = (($InventoryDest->ber_pallet)+($request->ber_pallet)); // ber & missing dicatat di transporter
                 // $InventoryDest->missing_pallet = (($InventoryDest->missing_pallet)+($request->missing_pallet)); // ber & missing dicatat di transporter
                 $InventoryDest->save();
 
                 $InventoryTrans = Transporter::find($transporter_id);
-                $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
-                $InventoryTrans->tbr_pallet = (($InventoryTrans->good_pallet)-($request->tbr_pallet)); 
+                if($tbr_pallet_awal==0){ //jika saat send tidak terdapat tbr pallet
+                    $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
+                   
+                }
+                else if(($request->tbr_pallet)>$tbr_pallet_awal){ //jika rcv tbr pallet lebih besar dari yang di send
+                    $selisihtbr = ($request->tbr_pallet)-$tbr_pallet_awal;
+                    $selisihgood = $good_pallet_awal-($request->good_pallet);
+                    if($selisihgood==$selisihtbr){
+                        $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($tbr_pallet_awal));
+                        $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
+                    }
+                    
+                }
+                else{
+                    $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($request->good_pallet));
+                    $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($request->tbr_pallet));
+                }
+                // $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
+                // $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($request->tbr_pallet)); 
                 $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet)); 
                 $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet));
                 $InventoryTrans->save();

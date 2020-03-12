@@ -33,24 +33,37 @@ class PalletTransferController extends Controller
             ->select('a.*', 'b.pool_name as dep_pool', 'c.pool_name as dest_pool',
                     'd.name as sender_name','e.name as receiver_name', 'f.transporter_name',
                     'g.vehicle_number', 'h.driver_name', 'b.pool_pallet_id as departure', 'c.pool_pallet_id as destination')
+            ->where('a.status',0)
             ->paginate(10000000)
             ->toArray();
         }
         else{
             $pallettransfer = DB::table('pallet_transfer as a')
-            ->join('pool_pallet as b', 'a.departure_pool_pallet_id', '=', 'b.pool_pallet_id')
-            ->join('pool_pallet as c', 'a.destination_pool_pallet_id', '=', 'c.pool_pallet_id')
+             ->join(DB::raw('(SELECT * FROM pool_pallet WHERE pool_pallet_id = "$pool_pallet")b'),
+            function($join){
+                $join->on('a.destination_pool_pallet_id','=','b.pool_pallet_id');
+            })
+           
+            ->join(DB::raw('(SELECT * FROM pool_pallet WHERE pool_pallet_id = "$pool_pallet")c'),
+            function($join){
+                $join->on('a.departure_pool_pallet_id','=','c.pool_pallet_id');
+            })
+            
             ->join('users as d', 'a.sender_user_id', '=', 'd.id')
             ->join('users as e', 'a.receiver_user_id', '=', 'e.id')
+             ->leftJoin(DB::raw('(SELECT * FROM transporter WHERE transporter_id = "$transporter")f'),
+            function($join){
+                $join->on('a.transporter_id','=','f.transporter_id');
+            })
+           
+          
             ->join('transporter as f', 'a.transporter_id', '=', 'f.transporter_id')
             ->join('vehicle as g', 'a.vehicle_id', '=', 'g.vehicle_id')
             ->join('driver as h', 'a.driver_id', '=', 'h.driver_id')
             ->select('a.*', 'b.pool_name as dep_pool', 'c.pool_name as dest_pool',
                     'd.name as sender_name','e.name as receiver_name', 'f.transporter_name',
                     'g.vehicle_number', 'h.driver_name', 'b.pool_pallet_id as departure', 'c.pool_pallet_id as destination')
-            ->where('b.pool_pallet_id',$pool_pallet)
-            ->orWhere('c.pool_pallet_id',$pool_pallet)
-            ->orWhere('a.transporter_id',$transporter)
+            ->where('a.status',0)
             ->paginate(1000000)
             ->toArray();
         }
