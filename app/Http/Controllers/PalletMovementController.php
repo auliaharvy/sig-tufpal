@@ -31,7 +31,8 @@ class PalletMovementController extends Controller
                 ->join('vehicle as g', 'd.vehicle_id', '=', 'g.vehicle_id')
                 ->select('a.*','d.sjp_number','e.transaction','b.pool_name as dest_pool', 
                          'c.pool_name as dept_pool','d.pallet_quantity','d.departure_time','d.eta',
-                         'f.transporter_name', 'g.vehicle_number')            
+                         'f.transporter_name', 'g.vehicle_number')   
+		->where('a.status',0)         
                 ->paginate(1000000)
                 ->toArray();
         }

@@ -20,9 +20,8 @@ use DB;
 
 class SjpStatusController extends Controller
 {
- 
-
-    public function index()
+    
+public function index()
     {
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
         $transporter = Auth::user()->reference_transporter_id;
@@ -42,7 +41,7 @@ class SjpStatusController extends Controller
                     'd.sjp_number','e.transaction', 'd.is_sendback', 'd.destination_pool_pallet_id'
                     , 'd.departure_pool_pallet_id', 'd.transporter_id', 'f.vehicle_number'
                     , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool' )
-            // ->where('d.status',$status)            
+            ->where('d.status',$status)            
             ->paginate(1000000)
             ->toArray();
         }
@@ -50,7 +49,10 @@ class SjpStatusController extends Controller
             $sjpstatus = DB::table('sjp_status as a')
             ->join('users as b', 'a.checker_send_user_id', '=', 'b.id')
             ->join('users as c', 'a.checker_receive_user_id', '=', 'c.id')
-            ->join('surat_jalan_pallet as d', 'a.sjp_id', '=', 'd.sjp_id')
+            ->leftJoin(DB::raw('(SELECT * FROM surat_jalan_pallet WHERE STATUS = "OPEN")d'),
+            function($join){
+                $join->on('a.sjp_id','=','d.sjp_id');
+            })
             ->join('mst_transaction as e', 'a.transaction_id', '=', 'e.id')
             ->join('vehicle as f', 'd.vehicle_id', '=', 'f.vehicle_id')
             ->join('transporter as g', 'd.transporter_id', '=', 'g.transporter_id')
@@ -59,12 +61,10 @@ class SjpStatusController extends Controller
             ->select('a.*', 'b.name as checker_sender', 'c.name as checker_receiver',
                     'd.sjp_number','e.transaction', 'd.is_sendback', 'd.destination_pool_pallet_id'
                     , 'd.departure_pool_pallet_id', 'd.transporter_id', 'f.vehicle_number'
-                    , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool')       
-            // ->where('d.status', $status)
+                    , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool' )       
             ->where('d.departure_pool_pallet_id',$pool_pallet)
             ->orWhere('d.destination_pool_pallet_id', $pool_pallet)
             ->orWhere('d.transporter_id', $transporter)
-            ->where('d.status', $status)
             ->paginate(10000000)
             ->toArray();
         }
@@ -573,133 +573,141 @@ class SjpStatusController extends Controller
                 $missing_pallet_awal = $update->missing_pallet; //ambil qty pallet awal
                 $sjps_number    = $update->sjps_number;
                 // $update->checker_send_user_id = $request->checker_send_user_id;
-                $receive = Auth::user()->id;
-                $update->checker_receive_user_id = $receive;
-                // $update->sjp_id = $request->sjp_id;
                 $goodpalletrcv = $request->good_pallet;
                 $tbr_palletrcv = $request->tbr_pallet;
                 $ber_palletrcv = $request->ber_pallet;
                 $missing_palletrcv = $request->missing_pallet;
-
-                $update->good_pallet = $goodpalletrcv;
-                $update->tbr_pallet = $tbr_palletrcv;
-                $update->ber_pallet = $ber_palletrcv;
-                $update->missing_pallet = $missing_palletrcv;
-                // $update->good_cement = $request->good_cement;
-                // $update->bad_cement = $request->bad_cement;
-                $update->transaction_id = 2;
-                $update->note = $request->note;
-                $update->status = 1;
-                $update->save();
-
-                $InventoryDest = PoolPallet::find($destination_id);
-                $InventoryDest->good_pallet = (($InventoryDest->good_pallet)+($goodpalletrcv)); //hanya receive good pallet
-                $InventoryDest->tbr_pallet = (($InventoryDest->tbr_pallet)+($tbr_palletrcv)); 
-                // $InventoryDest->ber_pallet = (($InventoryDest->ber_pallet)+($request->ber_pallet)); // ber & missing dicatat di transporter
-                // $InventoryDest->missing_pallet = (($InventoryDest->missing_pallet)+($request->missing_pallet)); // ber & missing dicatat di transporter
-                $InventoryDest->save();
-
-                $InventoryTrans = Transporter::find($transporter_id);
-                if($tbr_pallet_awal==0){ //jika saat send tidak terdapat tbr pallet
-                    $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
-                   
-                }
-                else if(($request->tbr_pallet)>$tbr_pallet_awal){ //jika rcv tbr pallet lebih besar dari yang di send
-                    $selisihtbr = ($request->tbr_pallet)-$tbr_pallet_awal;
-                    $selisihgood = $good_pallet_awal-($request->good_pallet);
-                    if($selisihgood==$selisihtbr){
-                        $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($tbr_pallet_awal));
-                        $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
-                    }
-                    
+                if($tbr_palletrcv>($total-$goodpalletrcv)){
+                    $data = array("error" => "qty yang diinput melebihi yang dikirim");
+                    return response()->json(['status' => 'error', 'data' => $data->error], 200);
                 }
                 else{
-                    $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($request->good_pallet));
-                    $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($request->tbr_pallet));
-                }
-                // $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
-                // $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($request->tbr_pallet)); 
-                $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet)); 
-                $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet));
-                $InventoryTrans->save();
-
-                // Membuat log transaksi Receive
-                $receiver = Auth::user()->name;
-                $sjp_number = $sjp->sjp_number;
-                $sjps_number = 'RECEIVE SENDBACK';
-                $palletsenddept = PoolPallet::find($departure_id);
-                $palletsenddest = PoolPallet::find($destination_id);
-                $palletsendtrans = Transporter::find($transporter_id);
-                $palletsenddriver = Driver::find($driver_id);
-                $palletsendvehicle = Vehicle::find($vehicle_id);
-                $Sjpreceive = Sjppalletreceive::create([
-                    'sjp_number' => $sjp_number,
-                    'sjp_status' => $sjps_number,
-                    'receiver' => $receiver,
-                    'departure_pool' => $palletsenddept->pool_name, 
-                    'destination_pool' => $palletsenddest->pool_name,
-                    'transporter' => $palletsendtrans->transporter_name,
-                    'driver' => $palletsenddriver->driver_name,
-                    'vehicle' => $palletsendvehicle->vehicle_number,
-                    'good_pallet' => $request->good_pallet, 
-                    'tbr_pallet' => $request->tbr_pallet, 
-                    'ber_pallet' => $request->ber_pallet, 
-                    'missing_pallet' => $request->missing_pallet, 
-                    // 'good_cement' => $request->good_cement,
-                    // 'bad_cement' => $request->bad_cement,
-                    'note' => $request->note,
-                ]);
-                
-                //membuat ber missing pallet record ketika ada pallet ber/missing
-                if(($request->ber_pallet)>0 || ($request->missing_pallet>0)){
                     $receive = Auth::user()->id;
-                    $Bermissing = Bermissing::create([
-                        'reporter_user_id' => $receive, 
-                        'approver_user_id' => 5, 
-                        'transporter_id' => $transporter_id,
-                        'reference_sjp_status_id' => $sjp_status_id,
+                    $update->checker_receive_user_id = $receive;
+                    // $update->sjp_id = $request->sjp_id;
+                    
+
+                    $update->good_pallet = $goodpalletrcv;
+                    $update->tbr_pallet = $tbr_palletrcv;
+                    $update->ber_pallet = $ber_palletrcv;
+                    $update->missing_pallet = $missing_palletrcv;
+                    // $update->good_cement = $request->good_cement;
+                    // $update->bad_cement = $request->bad_cement;
+                    $update->transaction_id = 2;
+                    $update->note = $request->note;
+                    $update->status = 1;
+                    $update->save();
+
+                    $InventoryDest = PoolPallet::find($destination_id);
+                    $InventoryDest->good_pallet = (($InventoryDest->good_pallet)+($goodpalletrcv)); //hanya receive good pallet
+                    $InventoryDest->tbr_pallet = (($InventoryDest->tbr_pallet)+($tbr_palletrcv)); 
+                    // $InventoryDest->ber_pallet = (($InventoryDest->ber_pallet)+($request->ber_pallet)); // ber & missing dicatat di transporter
+                    // $InventoryDest->missing_pallet = (($InventoryDest->missing_pallet)+($request->missing_pallet)); // ber & missing dicatat di transporter
+                    $InventoryDest->save();
+
+                    $InventoryTrans = Transporter::find($transporter_id);
+                    if($tbr_pallet_awal==0){ //jika saat send tidak terdapat tbr pallet
+                        $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
+                       
+                    }
+                    else if(($request->tbr_pallet)>$tbr_pallet_awal){ //jika rcv tbr pallet lebih besar dari yang di send
+                        $selisihtbr = ($request->tbr_pallet)-$tbr_pallet_awal;
+                        $selisihgood = $good_pallet_awal-($request->good_pallet);
+                        if($selisihgood==$selisihtbr){
+                            $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($tbr_pallet_awal));
+                            $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
+                        }
+                        
+                    }
+                    else{
+                        $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($request->good_pallet));
+                        $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($request->tbr_pallet));
+                    }
+                    // $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
+                    // $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($request->tbr_pallet)); 
+                    $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet)); 
+                    $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet));
+                    $InventoryTrans->save();
+
+                    // Membuat log transaksi Receive
+                    $receiver = Auth::user()->name;
+                    $sjp_number = $sjp->sjp_number;
+                    $sjps_number = 'RECEIVE SENDBACK';
+                    $palletsenddept = PoolPallet::find($departure_id);
+                    $palletsenddest = PoolPallet::find($destination_id);
+                    $palletsendtrans = Transporter::find($transporter_id);
+                    $palletsenddriver = Driver::find($driver_id);
+                    $palletsendvehicle = Vehicle::find($vehicle_id);
+                    $Sjpreceive = Sjppalletreceive::create([
+                        'sjp_number' => $sjp_number,
+                        'sjp_status' => $sjps_number,
+                        'receiver' => $receiver,
+                        'departure_pool' => $palletsenddept->pool_name, 
+                        'destination_pool' => $palletsenddest->pool_name,
+                        'transporter' => $palletsendtrans->transporter_name,
+                        'driver' => $palletsenddriver->driver_name,
+                        'vehicle' => $palletsendvehicle->vehicle_number,
+                        'good_pallet' => $request->good_pallet, 
+                        'tbr_pallet' => $request->tbr_pallet, 
                         'ber_pallet' => $request->ber_pallet, 
-                        'missing_pallet' => $request->missing_pallet,
-                        'status' => 0,
-                        'note' => 'TERDAPAT PALLET YANG BER/HILANG SAAT RECEIVE OLEH CHECKER',  
+                        'missing_pallet' => $request->missing_pallet, 
+                        // 'good_cement' => $request->good_cement,
+                        // 'bad_cement' => $request->bad_cement,
+                        'note' => $request->note,
                     ]);
-                    // $reporter = Auth::user()->name;
-                    // $sjps_number    = $update->sjps_number;
-                    // $palletbermissingpool = PoolPallet::find($departure_id);
-                    // $palletbermissingtrans = Transporter::find($transporter_id);
-                    // $transporterbermissing = $palletbermissingtrans->transporter_name;
-                    // $Bermissingreported = Bermissingreported::create([
-                    //     'reporter' => $reporter, 
-                    //     'pool_pallet' => 5, 
-                    //     'transporter_id' => $palletbermissingtrans->transporter_name,
-                    //     'reference_sjp_status_id' => $sjps_number,
-                    //     'ber_pallet' => $request->ber_pallet, 
-                    //     'missing_pallet' => $request->missing_pallet,
-                    //     'status' => 0,
-                    //     'note' => 'TERDAPAT PALLET YANG BER/HILANG SAAT RECEIVE OLEH CHECKER',  
-                    // ]);
+                    
+                    //membuat ber missing pallet record ketika ada pallet ber/missing
+                    if(($request->ber_pallet)>0 || ($request->missing_pallet>0)){
+                        $receive = Auth::user()->id;
+                        $Bermissing = Bermissing::create([
+                            'reporter_user_id' => $receive, 
+                            'approver_user_id' => 5, 
+                            'transporter_id' => $transporter_id,
+                            'reference_sjp_status_id' => $sjp_status_id,
+                            'ber_pallet' => $request->ber_pallet, 
+                            'missing_pallet' => $request->missing_pallet,
+                            'status' => 0,
+                            'note' => 'TERDAPAT PALLET YANG BER/HILANG SAAT RECEIVE OLEH CHECKER',  
+                        ]);
+                        // $reporter = Auth::user()->name;
+                        // $sjps_number    = $update->sjps_number;
+                        // $palletbermissingpool = PoolPallet::find($departure_id);
+                        // $palletbermissingtrans = Transporter::find($transporter_id);
+                        // $transporterbermissing = $palletbermissingtrans->transporter_name;
+                        // $Bermissingreported = Bermissingreported::create([
+                        //     'reporter' => $reporter, 
+                        //     'pool_pallet' => 5, 
+                        //     'transporter_id' => $palletbermissingtrans->transporter_name,
+                        //     'reference_sjp_status_id' => $sjps_number,
+                        //     'ber_pallet' => $request->ber_pallet, 
+                        //     'missing_pallet' => $request->missing_pallet,
+                        //     'status' => 0,
+                        //     'note' => 'TERDAPAT PALLET YANG BER/HILANG SAAT RECEIVE OLEH CHECKER',  
+                        // ]);
+                    }
+                    // if(($request->tbr_pallet)>0){
+                    //     $Damage = Damagedpallet::create([
+                    //         'reporter_user_id' => $request->checker_receive_user_id, 
+                    //         'transporter_id' => $transporter_id,
+                    //         'reference_sjp_status_id' => $sjp_status_id,
+                    //         'tbr_pallet' => $request->tbr_pallet, 
+                    //         'note' => 'PALLET RUSAK/TBR DITEMUKAN SAAT RECEIVE OLEH CHECKER',  
+                    //     ]);
+                    // }
+                    $status = 'CLOSED';
+                    $Sjpstat = Sjp::find($sjp_id);
+                    $Sjpstat->status = $status;
+                    $Sjpstat->save();
+
+                    $state = Sjp::find($sjp_id);
+                    $state->state=4;
+                    $state->save();
+
+
+                    DB::commit();
+                    return response()->json(['status' => 'success'], 200);
                 }
-                // if(($request->tbr_pallet)>0){
-                //     $Damage = Damagedpallet::create([
-                //         'reporter_user_id' => $request->checker_receive_user_id, 
-                //         'transporter_id' => $transporter_id,
-                //         'reference_sjp_status_id' => $sjp_status_id,
-                //         'tbr_pallet' => $request->tbr_pallet, 
-                //         'note' => 'PALLET RUSAK/TBR DITEMUKAN SAAT RECEIVE OLEH CHECKER',  
-                //     ]);
-                // }
-                $status = 'CLOSED';
-                $Sjpstat = Sjp::find($sjp_id);
-                $Sjpstat->status = $status;
-                $Sjpstat->save();
-
-                $state = Sjp::find($sjp_id);
-                $state->state=4;
-                $state->save();
-
-
-                DB::commit();
-                return response()->json(['status' => 'success'], 200);
+                
                 // $data = [
                 //     'data' => $sjpStatus,
                 //     'status' => (bool) $sjpStatus,

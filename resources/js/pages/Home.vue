@@ -3,7 +3,7 @@
     <v-container fluid class="pa-5">
       <v-toolbar dark>
           <h1>
-           WALLET SYSTEM
+           TUFPAL SYSTEM
           </h1>
         </v-toolbar>
       <v-card class="pa-5">

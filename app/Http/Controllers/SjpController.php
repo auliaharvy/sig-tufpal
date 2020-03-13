@@ -25,8 +25,8 @@ class SjpController extends Controller
         // return response()->json(Sjp::all()->toArray());
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
         $transporter = Auth::user()->reference_transporter_id;
-        $status = 'OPEN';
         $role = Auth::user()->role;
+        $status = 'OPEN';
         if($pool_pallet==1 && $role<7){
             $sjp = DB::table('surat_jalan_pallet as a')
             ->join('pool_pallet as b', 'a.destination_pool_pallet_id', '=', 'b.pool_pallet_id')
@@ -36,23 +36,24 @@ class SjpController extends Controller
             ->join('driver as f', 'a.driver_id', '=', 'f.driver_id')
             ->select('a.*', 'b.pool_name as dest_pool', 'c.pool_name as dept_pool',
                     'd.vehicle_number','e.transporter_name', 'f.driver_name')
-            // ->where('a.status', $status)
+             ->where('a.status',$status) 
             ->paginate(1000000)
             ->toArray();
         }
         else{
-            $sjp = DB::table('surat_jalan_pallet as a')
-            ->join('pool_pallet as b', 'a.destination_pool_pallet_id', '=', 'b.pool_pallet_id')
-            ->join('pool_pallet as c', 'a.departure_pool_pallet_id', '=', 'c.pool_pallet_id')
+            $sjp = DB::table(DB::raw('(SELECT * FROM surat_jalan_pallet WHERE status = "OPEN")a'))
+            ->join('pool_pallet as b', 'a.departure_pool_pallet_id', '=', 'b.pool_pallet_id')
+            ->join('pool_pallet as c', 'a.destination_pool_pallet_id', '=', 'c.pool_pallet_id')
             ->join('vehicle as d', 'a.vehicle_id', '=', 'd.vehicle_id')
             ->join('transporter as e', 'a.transporter_id', '=', 'e.transporter_id')
             ->join('driver as f', 'a.driver_id', '=', 'f.driver_id')
             ->select('a.*', 'b.pool_name as dest_pool', 'c.pool_name as dept_pool',
                     'd.vehicle_number','e.transporter_name', 'f.driver_name')
-            // ->where('a.status', $status) 
-            ->where('c.pool_pallet_id',$pool_pallet)
-            ->orWhere('b.pool_pallet_id', $pool_pallet)
-            ->orWhere('e.transporter_id', $transporter)
+           
+          
+            ->where('b.pool_pallet_id',$pool_pallet)
+            ->orWhere('c.pool_pallet_id',$pool_pallet)
+            ->orWhere('a.transporter_id',$transporter)
             ->paginate(1000000)
             ->toArray();
         }

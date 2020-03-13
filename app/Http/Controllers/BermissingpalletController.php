@@ -21,7 +21,6 @@ class BermissingpalletController extends Controller
 		//  return $sjp;
         // return response()->json(Sjp::all()->toArray());
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
-        $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
         if($pool_pallet==1 && $role<7){
             $bermissing = DB::table('ber_missing_pallet as a')
@@ -32,7 +31,7 @@ class BermissingpalletController extends Controller
             ->leftJoin('sjp_status as f', 'a.reference_sjp_status_id', '=', 'f.sjp_status_id')
             ->select('a.*', 'b.name as reporter', 'c.name as approver',
                     'd.pool_name','e.transporter_name', 'f.sjps_number')
-           
+            ->where('a.status',1)
             ->paginate(10000000)
             ->toArray();
         }
@@ -46,7 +45,7 @@ class BermissingpalletController extends Controller
             ->select('a.*', 'b.name as reporter', 'c.name as approver',
                     'd.pool_name','e.transporter_name', 'f.sjps_number')
             ->where('a.pool_pallet_id',$pool_pallet)
-            ->orWhere('a.transporter_id',$transporter)
+            ->where('a.status',1)
             ->paginate(10000000)
             ->toArray();
         }

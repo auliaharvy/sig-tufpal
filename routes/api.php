@@ -27,8 +27,8 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/sjpstatus/receive', 'SjpStatusController@receive');
     Route::post('/sjpstatus/receivesendback', 'SjpStatusController@receivesendback');
     Route::resource('pallettransfer', 'PalletTransferController');
-    Route::resource('pallettransfersend', 'PalletTransfersendController');
-    Route::resource('pallettransferreceive', 'PalletTransferreceiveController');  
+    Route::resource('pallettransfersend', 'PallettransfersendController');
+    Route::resource('pallettransferreceive', 'PallettransferreceiveController');  
     Route::resource('bermissing', 'BermissingpalletController');
     Route::resource('bermissingreported', 'BermissingpalletreportedController');
     Route::resource('bermissingapproved', 'BermissingpalletapprovedController');
