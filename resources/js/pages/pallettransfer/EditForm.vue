@@ -62,27 +62,57 @@
             <p> Good Pallet : <b>{{ pallettransfer.good_pallet }}</b></p>
             <p> TBR Pallet : <b>{{ pallettransfer.tbr_pallet }}</b></p>
         </div> -->
-        <div class="form-group" :class="{ 'has-error': errors.good_pallet }">
-            <label for="">Good Pallet</label>
-            <input type="text" class="form-control" v-model="pallettransfer.good_pallet">
-            <p class="text-danger" v-if="errors.good_pallet">{{ errors.good_pallet[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.tbr_pallet }">
-            <label for="">Tbr Pallet</label>
-            <input type="text" class="form-control" v-model="pallettransfer.tbr_pallet">
-            <p class="text-danger" v-if="errors.tbr_pallet">{{ errors.tbr_pallet[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.reason }">
-            <label for="">Reason</label>
-            <input type="text" class="form-control" v-model="pallettransfer.reason">
-            <p class="text-danger" v-if="errors.reason">{{ errors.reason[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.note }">
-            <label for="">Note</label>
-            <input type="text" class="form-control" v-model="pallettransfer.note">
-            <p class="text-danger" v-if="errors.note">{{ errors.note[0] }}</p>
-        </div>
-        
+        <v-layout row wrap class="px-5">
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group" :class="{ 'has-error': errors.tp_number }" :readonly="true">
+                    <label for="">TP Number</label>
+                    <input type="text" class="form-control" v-model="pallettransfer.tp_number" :readonly="true">
+                    <p class="text-danger" v-if="errors.tp_number">{{ errors.tp_number[0] }}</p>
+                </div>
+            </v-flex>
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group">
+                    <label>Send From</label>
+                    <select class='form-control' v-model='pallettransfer.departure_pool_pallet_id' :readonly="true"> 
+                        <option disabled v-for='data in pools.data' v-bind:key='data.departure_pool_pallet_id' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
+                    </select>
+                </div>
+            </v-flex>
+            
+        </v-layout>
+
+        <v-layout row wrap class="px-5">
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group" :class="{ 'has-error': errors.good_pallet }">
+                    <label for="">Good Pallet</label>
+                    <input type="text" class="form-control" v-model="pallettransfer.good_pallet">
+                    <p class="text-danger" v-if="errors.good_pallet">{{ errors.good_pallet[0] }}</p>
+                </div>
+            </v-flex>
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group" :class="{ 'has-error': errors.tbr_pallet }">
+                    <label for="">Tbr Pallet</label>
+                    <input type="text" class="form-control" v-model="pallettransfer.tbr_pallet">
+                    <p class="text-danger" v-if="errors.tbr_pallet">{{ errors.tbr_pallet[0] }}</p>
+                </div>
+            </v-flex>
+        </v-layout>
+        <v-layout row wrap class="px-5">
+            <v-flex class="px-5" xs12 md12 lg12>
+                <div class="form-group" :class="{ 'has-error': errors.reason }">
+                    <label for="">Reason</label>
+                    <input type="text" class="form-control" v-model="pallettransfer.reason" :readonly="true">
+                    <p class="text-danger" v-if="errors.reason">{{ errors.reason[0] }}</p>
+                </div>
+            </v-flex>
+            <v-flex class="px-5" xs12 md12 lg12>
+                <div class="form-group" :class="{ 'has-error': errors.note }">
+                    <label for="">Note</label>
+                    <input type="text" class="form-control" v-model="pallettransfer.note">
+                    <p class="text-danger" v-if="errors.note">{{ errors.note[0] }}</p>
+                </div>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 

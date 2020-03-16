@@ -36,31 +36,40 @@
                 <option v-for='data in authenticated' :value='authenticated.id'>{{ authenticated.name }}</option>
             </select>
         </div> -->
-        <div class="form-group" :class="{ 'has-error': errors.ber_pallet }">
-            <label for="">BER Pallet</label>
-            <input type="text" class="form-control" v-model="bermissing.ber_pallet">
-            <p class="text-danger" v-if="errors.ber_pallet">{{ errors.ber_pallet[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.missing_pallet }">
-            <label for="">Missing Pallet</label>
-            <input type="text" class="form-control" v-model="bermissing.missing_pallet">
-            <p class="text-danger" v-if="errors.missing_pallet">{{ errors.missing_pallet[0] }}</p>
-        </div>
-        <!-- <template>
-            <v-file-input show-size counter multiple label="Prove Upload" v-model="bermissing.reporter_prove"></v-file-input>
-        </template> -->
-        <!-- <div class="form-group" :class="{ 'has-error': errors.reporter_prove }">
-            <label for="">Prove</label>
-            <input type="file" class="form-control" accept="image/*" @change="uploadImage($event)" id="file-input">
-            <p class="text-warning">Leave blank if you don't want to change photo</p>
-            <p class="text-danger" v-if="errors.reporter_prove">{{ errors.reporter_prove[0] }}</p>
-        </div> -->
-        <div class="form-group" :class="{ 'has-error': errors.note }">
-            <label for="">Note</label>
-            <input type="text" class="form-control" v-model="bermissing.note">
-            <p class="text-danger" v-if="errors.note">{{ errors.note[0] }}</p>
-        </div>
-        
+        <v-layout row wrap class="px-5">
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group" :class="{ 'has-error': errors.ber_pallet }">
+                    <label for="">BER Pallet</label>
+                    <input type="text" class="form-control" v-model="bermissing.ber_pallet">
+                    <p class="text-danger" v-if="errors.ber_pallet">{{ errors.ber_pallet[0] }}</p>
+                </div>
+            </v-flex>
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group" :class="{ 'has-error': errors.missing_pallet }">
+                    <label for="">Missing Pallet</label>
+                    <input type="text" class="form-control" v-model="bermissing.missing_pallet">
+                    <p class="text-danger" v-if="errors.missing_pallet">{{ errors.missing_pallet[0] }}</p>
+                </div>
+            </v-flex>
+        </v-layout>
+
+        <v-layout row wrap class="px-5">
+            <v-flex class="px-5" xs12 md12 lg12>
+                <div class="form-group" :class="{ 'has-error': errors.reporter_prove }">
+                    <label for="">Berita Acara</label>
+                    <input type="file" class="form-control" accept="image/*" @change="uploadImage($event)" id="file-input">
+                    <p class="text-black">Leave blank if you don't want to change photo</p>
+                    <p class="text-danger" v-if="errors.photo">{{ errors.reporter_prove[0] }}</p>
+                </div>
+            </v-flex>
+            <v-flex class="px-5" xs12 md12 lg12>
+                <div class="form-group" :class="{ 'has-error': errors.note }">
+                    <label for="">Note</label>
+                    <input type="text" class="form-control" v-model="bermissing.note">
+                    <p class="text-danger" v-if="errors.note">{{ errors.note[0] }}</p>
+                </div>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 
@@ -71,12 +80,22 @@ export default {
     created() {
       this.getPools(),this.getTransporters(), this.getUserLogin() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
     },
+    data() {
+        return {
+            bermissing: {
+                ber_pallet: '',
+                missing_pallet: '',
+                reporter_prove: '',
+                note: '',
+            }
+        }
+    },
    
     computed: {
         ...mapState(['errors']), //LOAD STATE ERROR UNTUK DITAMPILKAN KETIKA TERJADI ERROR VALIDASI
-        ...mapState('bermissing', {
-            bermissing: state => state.bermissing //LOAD DATA CUSTOMER DARI STATE CUSTOMER
-        }),
+        // ...mapState('bermissing', {
+        //     bermissing: state => state.bermissing //LOAD DATA CUSTOMER DARI STATE CUSTOMER
+        // }),
         ...mapState('pool', {
             pools: state => state.pools //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
@@ -89,12 +108,31 @@ export default {
     },
     methods: {
         ...mapMutations('bermissing', ['CLEAR_FORM']), 
+        ...mapActions('bermissing', ['submitBermissing']),
         ...mapActions('pool', ['getPools']),
         ...mapActions('vehicle', ['getVehicles']),
         ...mapActions('driver', ['getDrivers']),
         ...mapActions('transporter', ['getTransporters']),
         ...mapActions('user', ['getUserLogin']),
-       
+       uploadImage(event) {
+            this.bermissing.reporter_prove = event.target.files[0]
+        },
+        submit() {
+            let form = new FormData()
+            form.append('ber_pallet', this.bermissing.ber_pallet)
+            form.append('missing_pallet', this.bermissing.missing_pallet)
+            form.append('reporter_prove', this.bermissing.reporter_prove)
+            form.append('note', this.bermissing.note)
+                this.submitBermissing(form).then(() => {
+                    this.bermissing = {
+                        ber_pallet: '',
+                        missing_pallet: '',
+                        reporter_prove: '',
+                        note: '',
+                    }
+                    this.$router.push({ name: 'bermissings.data' })
+                })
+        }
     },
    
     destroyed() {

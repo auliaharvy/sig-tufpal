@@ -29,14 +29,34 @@
                 <option v-for='data in pools.data' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
             </select>
         </div> -->
-       <p>SJP NUMBER: {{sjp.sjp_number}}</p>
-       <div class="form-group">
-            <label>Destination Pool Pallet</label>
-            <select class='form-control' v-model='sjp.destination_pool_pallet_id'>
-                <option value='0' >Select Destination</option>
-                <option v-for='data in pools.data' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
-            </select>
-        </div>
+       <v-layout row wrap class="px-5">
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group" :class="{ 'has-error': errors.sjp_number }" :readonly="true">
+                    <label for="">SJP Number</label>
+                    <input type="text" class="form-control" v-model="sjp.sjp_number" :readonly="true">
+                    <p class="text-danger" v-if="errors.sjp_number">{{ errors.sjp_number[0] }}</p>
+                </div>
+            </v-flex>
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group">
+                    <label>Transporter Name</label>
+                    <select class='form-control' v-model='sjp.transporter_id' :readonly="true">
+                        <option disabled v-for='data in transporters.data' v-bind:key='data.transporter_id'  :value='data.transporter_id'>{{ data.transporter_name }}</option>
+                    </select>
+                </div>
+            </v-flex>
+        </v-layout>
+        <v-layout row wrap class="px-5">
+            <v-flex class="px-5" xs12 md12 lg12>
+                <div class="form-group">
+                        <label>Destination Pool Pallet</label>
+                        <select class='form-control' v-model='sjp.destination_pool_pallet_id'>
+                            <option value='0' >Select Destination</option>
+                            <option v-for='data in pools.data' v-bind:key='data.destination_pool_pallet_id' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
+                        </select>
+                    </div>
+            </v-flex>
+        </v-layout>
         <!-- <div class="form-group">
                             <label>Change Vehicle Number</label>
                             <select class='form-control' v-model='sjp.vehicle_id'>

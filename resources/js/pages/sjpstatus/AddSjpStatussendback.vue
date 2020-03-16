@@ -9,12 +9,9 @@
             <div class="panel-body">
               	<!-- LOAD VIEW DARI FORM.VUE -->
                 <sjpstatus-form></sjpstatus-form>
-                <div class="form-group">
+                <div class="form-group px-7">
                     <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
-                        {{ loading ? 'Loading...':'Add' }}
-                    </v-btn>
-                    <v-btn class="error px-5" @click.prevent="resetLoading()">
-                        Reset
+                        {{ loading ? 'Loading...':'Sendback' }}
                     </v-btn>
                 </div>
             </div>
@@ -33,12 +30,6 @@
         created() {
             this.editSjpStatus(this.$route.params.id), this.editSjp(this.$route.params.id) //LOAD SINGLE DATA CUSTOMER BERDASARKAN ID
         },
-        data() {
-            return {
-                loading: false, 
-                errormsg:'' ,
-            }
-        },
         created() {
             this.editSjpStatus(this.$route.params.id) //LOAD SINGLE DATA CUSTOMER BERDASARKAN ID
         },
@@ -47,16 +38,17 @@
             ...mapActions('sjp', ['editSjp', 'updateSjp']),
             //KETIKA TOMBOL DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
             submit() {
-                this.loading = true
                 //MELAKUKAN REQUEST KE SERVER UNTUK MENAMBAHKAN DATA
                 this.submitSjpStatussendback().then(() => {
                     //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
                     this.$router.push({ name: 'sjpstatuss.data' })
                 })
             },
-            resetLoading() {
-                this.loading = false
-            }
+        },
+        computed: {
+        ...mapState('sjpstatus', {
+            loading: state => state.loading //LOAD DATA CUSTOMER DARI STATE CUSTOMER
+        }),
         },
         components: {
             'sjpstatus-form': FormSjpStatus //MEMBUAT CUSTOM TAG UNTUK ME-LOAD FILE FORM.VUE

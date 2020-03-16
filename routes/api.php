@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('pallettransfersend', 'PallettransfersendController');
     Route::resource('pallettransferreceive', 'PallettransferreceiveController');  
     Route::resource('bermissing', 'BermissingpalletController');
+    Route::post('/bermissing/disapprove', 'BermissingpalletController@disapprove');
     Route::resource('bermissingreported', 'BermissingpalletreportedController');
     Route::resource('bermissingapproved', 'BermissingpalletapprovedController');
     Route::resource('newpallet', 'NewpalletController');

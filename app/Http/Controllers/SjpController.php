@@ -27,7 +27,7 @@ class SjpController extends Controller
         $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
         $status = 'OPEN';
-        if($pool_pallet==1 && $role<7){
+        if($pool_pallet==1 && $role<6){
             $sjp = DB::table('surat_jalan_pallet as a')
             ->join('pool_pallet as b', 'a.destination_pool_pallet_id', '=', 'b.pool_pallet_id')
             ->join('pool_pallet as c', 'a.departure_pool_pallet_id', '=', 'c.pool_pallet_id')
@@ -47,10 +47,8 @@ class SjpController extends Controller
             ->join('vehicle as d', 'a.vehicle_id', '=', 'd.vehicle_id')
             ->join('transporter as e', 'a.transporter_id', '=', 'e.transporter_id')
             ->join('driver as f', 'a.driver_id', '=', 'f.driver_id')
-            ->select('a.*', 'b.pool_name as dest_pool', 'c.pool_name as dept_pool',
+            ->select('a.*', 'b.pool_name as dept_pool', 'c.pool_name as dest_pool',
                     'd.vehicle_number','e.transporter_name', 'f.driver_name')
-           
-          
             ->where('b.pool_pallet_id',$pool_pallet)
             ->orWhere('c.pool_pallet_id',$pool_pallet)
             ->orWhere('a.transporter_id',$transporter)
@@ -71,11 +69,11 @@ class SjpController extends Controller
         $pallet_qty = $request->pallet_quantity;
 
         $this->validate($request, [
-            // 'destination_pool_pallet_id' => 'required',
-            // 'vehicle_id' => 'required',
-            // 'driver_id' => 'required',
-            // 'transporter_id' => 'required',
-            'no_do' => 'required|string',
+            'destination_pool_pallet_id' => 'required',
+            'vehicle_id' => 'required',
+            'driver_id' => 'required',
+            'transporter_id' => 'required',
+            'no_do' => 'required|string|unique:surat_jalan_pallet,no_do',
             'product_name' => 'required|string',
             'pallet_quantity' => 'required|integer|gt:-1|lte:'.$qty_pool,
             'packaging' => 'required|integer|gt:-1',
@@ -185,6 +183,11 @@ class SjpController extends Controller
     {
         $sjp_id = $request->sjp_id;
 
+        $this->validate($request, [
+            'vehicle_id' => 'required',
+            'driver_id' => 'required',
+            
+        ]);
         $sjp = Sjp::where('sjp_id',$sjp_id)->first();
         if (empty($sjp)){
             return response()->json(['error' => 'Data not found'], 404);

@@ -16,7 +16,7 @@ export default {
       url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       attribution:'© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       zoom: 12,
-      center: [-6.254981, 106.826773],
+      center: [-6.235899925231934, 106.8031005859375],
       bounds: null,
     };
   }

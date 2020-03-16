@@ -62,7 +62,7 @@
                         </template>
 
                         <template v-if="$can('update sjpsdest')" class="pa-5" v-slot:item.changedest="{ item }">
-                            <router-link :to="{ name: 'sjps.editdestination', params: {id: item.sjp_id} }" v-if="item.status == 'OPEN'"><v-btn color="success" small>Change Dest</v-btn></router-link>                        
+                            <router-link :to="{ name: 'sjps.editdestination', params: {id: item.sjp_id} }" v-if="item.status == 'OPEN' && item.state <= 2"><v-btn color="success" small>Change Dest</v-btn></router-link>                        
                         </template>
 
                         <template v-if="$can('delete sjps')" class="pa-5" v-slot:item.delete="{ item }">
@@ -115,23 +115,23 @@ export default {
         return {
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
             fields: [
-                { value: 'dept_pool', text: 'Departure Pool' },
-                { value: 'dest_pool', text: 'Destination Pool' },
+                // { value: 'dept_pool', text: 'Departure Pool' },
+                // { value: 'dest_pool', text: 'Destination Pool' },
                 { value: 'sjp_number', text: 'SJP Number' },
                 { value: 'vehicle_number', text: 'Vehicle Number' },
-                { value: 'driver_name', text: 'Driver Name' },
-                { value: 'transporter_name', text: 'Transporter Name' },
+                // { value: 'driver_name', text: 'Driver Name' },
+                // { value: 'transporter_name', text: 'Transporter Name' },
                 { value: 'pallet_quantity', text: 'Pallet Quantity' },
-                { value: 'no_do', text: 'DO No' },
-                { value: 'product_name', text: 'Product' },
-                { value: 'packaging', text: 'Packaging' },
-                { value: 'product_quantity', text: 'Product QTY' },
-                { value: 'status', text: 'Status' },
+                // { value: 'no_do', text: 'DO No' },
+                // { value: 'product_name', text: 'Product' },
+                // { value: 'packaging', text: 'Packaging' },
+                // { value: 'product_quantity', text: 'Product QTY' },
+                // { value: 'status', text: 'Status' },
                 { value: 'state', text: 'State' },
-                { value: 'created_by', text: 'Created By' },
-                { value: 'adjust_by', text: 'Adjust By' },
-                { value: 'departure_time', text: 'Departure Time' },
-                { value: 'eta', text: 'ETA' },
+                // { value: 'created_by', text: 'Created By' },
+                // { value: 'adjust_by', text: 'Adjust By' },
+                // { value: 'departure_time', text: 'Departure Time' },
+                // { value: 'eta', text: 'ETA' },
                 { value: 'send', text: 'Send Pallet' },
                 { value: 'adjusment', text: 'SJP Adjusment' },
                 { value: 'changedest', text: 'SJP Destination Change' },

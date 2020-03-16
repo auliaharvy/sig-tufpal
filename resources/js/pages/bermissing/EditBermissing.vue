@@ -3,17 +3,17 @@
         <div class="panel">
             <v-toolbar dark>
                 <h1>
-                    EDIT BER MISSING
+                    APPROVAL BER MISSING
                 </h1>
             </v-toolbar>
             <div class="panel-body">
-                <bermissing-form></bermissing-form>
-                <div class="form-group">
-                    <v-btn :loading="loading" class="success" @click.prevent="submit()">
+                <bermissing-form ref="FormBermissing"></bermissing-form>
+                <div class="form-group px-7">
+                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
                         {{ loading ? 'Loading...':'Approve' }}
                     </v-btn>
-                    <v-btn class="error px-5" @click.prevent="resetLoading()">
-                        Reset
+                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="disapprove()">
+                        {{ loading ? 'Loading...':'Disapprove' }}
                     </v-btn>
                 </div>
             </div>
@@ -25,26 +25,29 @@
     import FormBermissing from './Formedit.vue'
     export default {
         name: 'EditPalletTransfer',
-        data() {
-            return {
-                loading: false,
-            }
-        },
         created() {
             this.editBermissing(this.$route.params.id) //LOAD SINGLE DATA CUSTOMER BERDASARKAN ID
         },
         methods: {
-            ...mapActions('bermissing', ['editBermissing', 'updateBermissing']),
+            ...mapActions('bermissing', ['editBermissing', 'updateBermissing', 'updateBermissingDisapprove']),
             submit() {
-                this.loading = true
+                this.$refs.FormBermissing.submit()
                 //MENGIRIM PERMINTAAN KE SERVER UNTUK ME-NGUBAH DATA
-                this.updateBermissing(this.$route.params.id).then(() => {
+                // this.updateBermissing(this.$route.params.id).then(() => {
+                //     this.$router.push({ name: 'bermissings.data' }) //KETIKA UPDATE BERHASIL, MAKA REDIRECT KE HALAMAN LIST CUSTOMER
+                // })
+            },
+            disapprove() {
+                //MENGIRIM PERMINTAAN KE SERVER UNTUK ME-NGUBAH DATA
+                this.updateBermissingDisapprove(this.$route.params.id).then(() => {
                     this.$router.push({ name: 'bermissings.data' }) //KETIKA UPDATE BERHASIL, MAKA REDIRECT KE HALAMAN LIST CUSTOMER
                 })
             },
-            resetLoading() {
-                this.loading = false
-            }
+        },
+        computed: {
+        ...mapState('sjp', {
+            loading: state => state.loading //LOAD DATA CUSTOMER DARI STATE CUSTOMER
+        }),
         },
         components: {
             'bermissing-form': FormBermissing

@@ -36,7 +36,26 @@
                         :headers="headers"
                         :items="bermissings.data"
                         :search="search"
-                        >       
+                        >   
+                            <template v-slot:item.reporter_prove="{ item }">
+                                <img :src="'../storage/bermissing/reporter_prove/' + item.reporter_prove" :width="70" :height="100" :alt="item.bmp_number"> </img>
+                                <v-btn dark color="success" text small @click.stop="dialog = true">
+                                    show
+                                </v-btn>
+                                <v-dialog  v-model="dialog" max-width="500">
+                                    <v-card>
+                                        <v-card-title class="headline">Berita Acara</v-card-title>
+                                        <v-card-text>
+                                        <img :src="'../storage/bermissing/reporter_prove/' + item.reporter_prove"  :alt="item.bmp_number"> </img>
+                                        </v-card-text>
+                                        <v-card-actions>
+                                        <router-link :to="{ name: 'bermissings.edit', params: {id: item.ber_missing_pallet_id} }" v-if="item.status == 0 && $can('update bermissingpallets')" >
+                                            <v-btn color="success" small>Approval</v-btn>
+                                        </router-link> 
+                                        </v-card-actions>
+                                    </v-card>
+                                    </v-dialog>
+                            </template>
                             <template v-slot:item.status="{ item }">
                                 <!-- <v-chip class="label label-default" v-if="item.status == 0">DRAFT REPORTED</v-chip>
                                 <v-chip class="label label-primary" v-if="item.status == 1">APPROVED</v-chip> -->
@@ -47,7 +66,7 @@
                             </template>
                             <template v-slot:item.approve="{ item }">
                                 <router-link :to="{ name: 'bermissings.edit', params: {id: item.ber_missing_pallet_id} }" v-if="item.status == 0 && $can('update bermissingpallets')" >
-                                    <v-btn color="success" small>Approve</v-btn>
+                                    <v-btn color="success" small>Approval</v-btn>
                                 </router-link>                        
                             </template>
                             <template v-slot:item.delete="{ item }">
@@ -89,6 +108,7 @@ export default {
     },
     data() {
         return {
+            dialog: false,
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
             headers: [
                 { value: 'bmp_number', text: 'BMP Number' },
@@ -99,8 +119,8 @@ export default {
                 { value: 'sjps_number', text: 'Reference SJP Number' },
                 { value: 'ber_pallet', text: 'BER Pallet' },
                 { value: 'missing_pallet', text: 'Missing Pallet' },
-                { value: 'reporter_prove', text: 'Image Prove' },
-                { value: 'berita_acara', text: 'Berita Acara' },
+                { value: 'reporter_prove', text: 'Berita Acara' },
+                // { value: 'berita_acara', text: 'Berita Acara' },
                 { value: 'status', text: 'Status' },
                 { value: 'note', text: 'Note' },
                 { value: 'approve', text: 'Approve'},

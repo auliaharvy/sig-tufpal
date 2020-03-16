@@ -8,12 +8,9 @@
             </v-toolbar>
             <div class="panel-body">
                 <sjpstatus-form></sjpstatus-form>
-                <div class="form-group">
-                    <v-btn :loading="loading" class="success" @click.prevent="submit()">
-                        {{ loading ? 'Loading...':'Add' }}
-                    </v-btn>
-                    <v-btn class="error px-5" @click.prevent="resetLoading()">
-                        Reset
+                <div class="form-group px-7">
+                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
+                        {{ loading ? 'Loading...':'Send' }}
                     </v-btn>
                 </div>
             </div>
@@ -25,11 +22,6 @@
     import FormSjpStatus from './Form.vue'
     export default {
         name: 'AddSjpStatusbyMaster',
-        data() {
-            return {
-               loading: false, 
-            }
-        },
         created() {
             this.addSjpStatusbyMaster(this.$route.params.id) //LOAD SINGLE DATA CUSTOMER BERDASARKAN ID
         },
@@ -38,16 +30,18 @@
             ...mapActions('sjp', ['editSjp', 'updateSjp']),
             //KETIKA TOMBOL DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
             submit() {
-                this.loading = true
                 //MELAKUKAN REQUEST KE SERVER UNTUK MENAMBAHKAN DATA
                 this.submitSjpStatus().then(() => {
                     //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
                     this.$router.push({ name: 'sjpstatuss.data' })
                 })
             },
-            resetLoading() {
-                this.loading = false
-            }
+        },
+
+        computed: {
+        ...mapState('sjpstatus', {
+            loading: state => state.loading //LOAD DATA CUSTOMER DARI STATE CUSTOMER
+        }),
         },
         components: {
             'sjpstatus-form': FormSjpStatus

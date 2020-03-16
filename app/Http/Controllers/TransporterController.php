@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Resources\SjpStatusCollection;
+use Illuminate\Support\Facades\Auth;
 use App\Transporter;
 use App\SjpStatus;
 use App\Sjp;
@@ -13,8 +14,29 @@ class TransporterController extends Controller
 {
     public function index()
     {
-        $transporter = new SjpStatusCollection(transporter::paginate(10000000));
+        $transporter = Auth::user()->reference_transporter_id;
+        $role = Auth::user()->role;
+        $pool_pallet = Auth::user()->reference_pool_pallet_id;
+        if($transporter==null && $role<6 ){
+        $transporter = DB::table('transporter as a')
+            ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
+            ->select('a.*', 'b.organization_name')
+            ->paginate(10000000)
+            ->toArray();
+        }
+        else{
+            $transporter = DB::table('transporter as a')
+            ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
+            ->select('a.*', 'b.organization_name')
+            ->where('a.transporter_id',$transporter)
+            ->paginate(1000000)
+            ->toArray();
+        }
+
+        // $pool = new SjpStatusCollection(PoolPallet::paginate(10));
 		 return $transporter;
+        // $transporter = new SjpStatusCollection(transporter::paginate(10000000));
+		//  return $transporter;
         // return response()->json(Sjp::all()->toArray());
     }
 

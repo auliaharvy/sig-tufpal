@@ -27,7 +27,7 @@ public function index()
         $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
         $status = 'OPEN';
-        if($pool_pallet==1 && $role<7){
+        if($pool_pallet==1 && $role<6){
         $sjpstatus = DB::table('sjp_status as a')
             ->join('users as b', 'a.checker_send_user_id', '=', 'b.id')
             ->join('users as c', 'a.checker_receive_user_id', '=', 'c.id')
@@ -107,11 +107,11 @@ public function index()
         $total = $good_pallet+$tbr_pallet+$ber_pallet+$missing_pallet;
         
         $this->validate($request, [
-            'good_pallet' => 'required|integer|gt:-1|lte:'.$pallet_qty,
+            'good_pallet' => 'required|integer|gt:-1|in:'.$pallet_qty,
             // 'tbr_pallet' => 'required|integer|gt:-1',
             // 'ber_pallet' => 'required|integer|gt:-1',
             // 'missing_pallet' => 'required|integer|gt:-1',
-            'good_cement' => 'required|integer|gt:-1|lte:'.$cement_qty,
+            // 'good_cement' => 'required|integer|gt:-1|in:'.$cement_qty,
             // 'bad_cement' => 'required|integer|gt:-1'
         ]);
         // if($pallet_qty<$total)
@@ -141,7 +141,7 @@ public function index()
                 // 'tbr_pallet' => 0, 
                 // 'ber_pallet' => 0, 
                 // 'missing_pallet' => 0, 
-                'good_cement' => $request->good_cement, 
+                'good_cement' => $sjp->product_quantity, 
                 // 'bad_cement' => 0, 
                 'transaction_id' => 1,
                 'note' => $request->note, 
@@ -182,7 +182,7 @@ public function index()
                 // 'tbr_pallet' => $request->tbr_pallet, 
                 // 'ber_pallet' => $request->ber_pallet, 
                 // 'missing_pallet' => $request->missing_pallet, 
-                'good_cement' => $request->good_cement,
+                'good_cement' => $sjp->product_quantity,
                 // 'bad_cement' => $request->bad_cement,
                 'note' => $request->note
             ]);
@@ -578,8 +578,7 @@ public function index()
                 $ber_palletrcv = $request->ber_pallet;
                 $missing_palletrcv = $request->missing_pallet;
                 if($tbr_palletrcv>($total-$goodpalletrcv)){
-                    $data = array("error" => "qty yang diinput melebihi yang dikirim");
-                    return response()->json(['status' => 'error', 'data' => $data->error], 200);
+                    return response()->json(['error' => 'Qty Receive melebihi data yang di send'], 404);
                 }
                 else{
                     $receive = Auth::user()->id;
@@ -669,7 +668,8 @@ public function index()
                             'status' => 0,
                             'note' => 'TERDAPAT PALLET YANG BER/HILANG SAAT RECEIVE OLEH CHECKER',  
                         ]);
-                        // $reporter = Auth::user()->name;
+                        
+                        // $reporter = Auth::user()->name;/
                         // $sjps_number    = $update->sjps_number;
                         // $palletbermissingpool = PoolPallet::find($departure_id);
                         // $palletbermissingtrans = Transporter::find($transporter_id);

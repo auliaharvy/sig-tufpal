@@ -29,36 +29,47 @@
                 <option v-for='data in pools.data' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
             </select>
         </div> -->
-        <div class="form-group">
-            <label>Destination Pool Pallet</label>
-            <select class='form-control' v-model='sjp.destination_pool_pallet_id'>
-                <option value='0' >Select Destination</option>
-                <option v-for='data in pools.data' v-bind:key='data.pool_pallet_id' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Vehicle Number</label>
-            <select class='form-control' v-model='sjp.vehicle_id'>
-                <option value='0' >Select Vehicle</option>
-                <option v-for='data in vehicles.data' v-bind:key='data.vehicle_id' :value='data.vehicle_id'>{{ data.vehicle_number }}</option>
-            </select>
-        </div>
+        <v-layout row wrap class="px-5">
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group">
+                    <label>Destination Pool Pallet</label>
+                    <select class='form-control' v-model='sjp.destination_pool_pallet_id'>
+                        <option value='0' >Select Destination</option>
+                        <option v-for='data in pools.data' v-bind:key='data.pool_pallet_id' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
+                    </select>
+                </div>
+            </v-flex>
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group">
+                    <label>Vehicle Number</label>
+                    <select class='form-control' v-model='sjp.vehicle_id'>
+                        <option value='0' >Select Vehicle</option>
+                        <option v-for='data in vehicles.data' v-bind:key='data.vehicle_id' :value='data.vehicle_id'>{{ data.vehicle_number }}</option>
+                    </select>
+                </div>
+            </v-flex>
+        </v-layout>
        
-        <div class="form-group">
-            <label>Driver Name</label>
-            <select class='form-control' v-model='sjp.driver_id'>
-                <option value='0' >Select Driver</option>
-                <option v-for='data in drivers.data' v-bind:key='data.driver_id' :value='data.driver_id'>{{ data.driver_name }}</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Transporter Name</label>
-            <select class='form-control' v-model='sjp.transporter_id'>
-                <option value='0' >Select Transporter</option>
-                <option v-for='data in transporters.data' v-bind:key='data.transporter_id'  :value='data.transporter_id'>{{ data.transporter_name }}</option>
-            </select>
-        </div>               
+       <v-layout row wrap class="px-5">
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group">
+                    <label>Driver Name</label>
+                    <select class='form-control' v-model='sjp.driver_id'>
+                        <option value='0' >Select Driver</option>
+                        <option v-for='data in drivers.data' v-bind:key='data.driver_id' :value='data.driver_id'>{{ data.driver_name }}</option>
+                    </select>
+                </div>
+            </v-flex>
+                <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group">
+                    <label>Transporter Name</label>
+                    <select class='form-control' v-model='sjp.transporter_id'>
+                        <option value='0' >Select Transporter</option>
+                        <option v-for='data in transporters.data' v-bind:key='data.transporter_id'  :value='data.transporter_id'>{{ data.transporter_name }}</option>
+                    </select>
+                </div>  
+            </v-flex>
+       </v-layout>            
         <!-- <div class="form-group" :class="{ 'has-error': errors.transporter_id }">
             <label for="">Transporter</label>
             <input type="text" class="form-control" v-model="sjp.transporter_id">
@@ -69,45 +80,71 @@
             <input type="text" class="form-control" v-model="sjp.sjp_number">
             <p class="text-danger" v-if="errors.sjp_number">{{ errors.sjp_number[0] }}</p>
         </div> -->
-        <div class="form-group" :class="{ 'has-error': errors.no_do }">
-            <label for="">DO Number</label>
-            <input type="text" class="form-control" v-model="sjp.no_do">
-            <p class="text-danger" v-if="errors.no_do">{{ errors.no_do[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.product_name }">
-            <label for="">Product Name</label>
-            <input type="text" class="form-control" v-model="sjp.product_name">
-            <p class="text-danger" v-if="errors.product_name">{{ errors.product_name[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.packaging }">
-            <label for="">Packaging (KG/Pack)</label>
-            <input type="text" class="form-control" v-model="sjp.packaging">
-            <p class="text-danger" v-if="errors.packaging">{{ errors.packaging[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.product_quantity }">
-            <label for="">Product Quantity (/pack)</label>
-            <input type="text" class="form-control" v-model="sjp.product_quantity">
-            <p class="text-danger" v-if="errors.product_quantity">{{ errors.product_quantity[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.departure_time }">
-            <label for="">Departure Time</label>
-            <input type="date" class="form-control" v-model="sjp.departure_time">
-            <p class="text-danger" v-if="errors.departure_time">{{ errors.departure_time[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.eta }">
-            <label for="">Estimated Time Arrival</label>
-            <input type="date" class="form-control" v-model="sjp.eta">
-            <p class="text-danger" v-if="errors.eta">{{ errors.eta[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.pallet_quantity }">
-            <label for="">Pallet Quantity</label>
-            <input type="text" class="form-control" v-model="sjp.pallet_quantity">
-            <p class="text-danger" v-if="errors.pallet_quantity">{{ errors.pallet_quantity[0] }}</p>
-        </div>
-        <div class="form-group" :class="{ 'has-error': errors.created_by }">
-            <label for="">Created By</label>
-            <p>{{ authenticated.name }}</p>
-        </div>
+        <v-layout row wrap class="px-5">
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group" :class="{ 'has-error': errors.no_do }">
+                    <label for="">DO Number</label>
+                    <input type="text" class="form-control" v-model="sjp.no_do">
+                    <p class="text-danger" v-if="errors.no_do">{{ errors.no_do[0] }}</p>
+                </div>
+            </v-flex>
+                <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group" :class="{ 'has-error': errors.product_name }">
+                    <label for="">Product Name</label>
+                    <input type="text" class="form-control" v-model="sjp.product_name">
+                    <p class="text-danger" v-if="errors.product_name">{{ errors.product_name[0] }}</p>
+                </div>
+            </v-flex>
+        </v-layout>
+
+        <v-layout row wrap class="px-5">
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group" :class="{ 'has-error': errors.packaging }">
+                    <label for="">Packaging (KG/Pack)</label>
+                    <input type="text" class="form-control" v-model="sjp.packaging">
+                    <p class="text-danger" v-if="errors.packaging">{{ errors.packaging[0] }}</p>
+                </div>
+            </v-flex>
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group" :class="{ 'has-error': errors.product_quantity }">
+                    <label for="">Product Quantity (/pack)</label>
+                    <input type="text" class="form-control" v-model="sjp.product_quantity">
+                    <p class="text-danger" v-if="errors.product_quantity">{{ errors.product_quantity[0] }}</p>
+                </div>
+            </v-flex>
+        </v-layout>
+
+        <v-layout row wrap class="px-5">
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group" :class="{ 'has-error': errors.departure_time }">
+                    <label for="">Departure Time</label>
+                    <input type="date" class="form-control" v-model="sjp.departure_time">
+                    <p class="text-danger" v-if="errors.departure_time">{{ errors.departure_time[0] }}</p>
+                </div>
+            </v-flex>
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group" :class="{ 'has-error': errors.eta }">
+                    <label for="">Estimated Time Arrival</label>
+                    <input type="date" class="form-control" v-model="sjp.eta">
+                    <p class="text-danger" v-if="errors.eta">{{ errors.eta[0] }}</p>
+                </div>
+            </v-flex>
+        </v-layout>
+        <v-layout row wrap class="px-5">
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group" :class="{ 'has-error': errors.pallet_quantity }">
+                    <label for="">Pallet Quantity</label>
+                    <input type="text" class="form-control" v-model="sjp.pallet_quantity">
+                    <p class="text-danger" v-if="errors.pallet_quantity">{{ errors.pallet_quantity[0] }}</p>
+                </div>
+            </v-flex>
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group" :class="{ 'has-error': errors.created_by }">
+                    <label for="">Created By</label>
+                    <p>{{ authenticated.name }}</p>
+                </div>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 

@@ -9,12 +9,9 @@
             <div class="panel-body">
               	<!-- LOAD VIEW DARI FORM.VUE -->
                 <pallettransfer-form></pallettransfer-form>
-                <div class="form-group">
-                    <v-btn :loading="loading" class="success" @click.prevent="submit()">
-                        {{ loading ? 'Loading...':'Add' }}
-                    </v-btn>
-                    <v-btn class="error px-5" @click.prevent="resetLoading()">
-                        Reset
+                <div class="form-group px-7">
+                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
+                        {{ loading ? 'Loading...':'Send' }}
                     </v-btn>
                 </div>
             </div>
@@ -26,25 +23,21 @@
     import FormPalletTransfer from './Form.vue'
     export default {
         name: 'AddPalletTransfer',
-        data() {
-            return {
-               loading: false, 
-            }
-        },
         methods: {
             ...mapActions('pallettransfer', ['submitPalletTransfer']),
             //KETIKA TOMBOL DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
             submit() {
-                this.loading = true
                 //MELAKUKAN REQUEST KE SERVER UNTUK MENAMBAHKAN DATA
                 this.submitPalletTransfer().then(() => {
                     //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
                     this.$router.push({ name: 'pallettransfers.data' })
                 })
             },
-            resetLoading() {
-                this.loading = false
-            }
+        },
+        computed: {
+        ...mapState('pallettransfer', {
+            loading: state => state.loading //LOAD DATA CUSTOMER DARI STATE CUSTOMER
+        }),
         },
         components: {
             'pallettransfer-form': FormPalletTransfer //MEMBUAT CUSTOM TAG UNTUK ME-LOAD FILE FORM.VUE

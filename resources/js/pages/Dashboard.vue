@@ -230,7 +230,7 @@ export default {
                 { value: 'totalpalletmove', text: 'Total Pallet' },
                 { value: 'departure_time', text: 'Departure Time' },
                 { value: 'eta', text: 'ETA' },
-                { value: 'latetime', text: 'Late Time' },
+                { value: 'parseDate', text: 'Late Time' },
                 // { value: 'send', text: 'Send Pallet' },
                 // { value: 'adjusment', text: 'Adjusment SJP' },
             ],
@@ -354,6 +354,9 @@ export default {
         ...mapActions('pallettransferreceive', ['getTransferPalletReceive']),
         ...mapActions('sjppalletreceive', ['getSjpPalletReceive']),
         ...mapActions('transporter', ['getTransporters', 'removeTransporters']), 
+        parseDate (departure_time, eta) {
+        return moment(this.departure_time, 'YYYY.MM.DD').diff(moment(this.eta, 'YYYY.MM.DD'), "days")
+    }
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         
     }

@@ -1,6 +1,7 @@
 import $axios from '../api.js'
 
 const state = () => ({
+    loading: false,
     sjpstatuss: [], //STATE UNTUK MENAMPUNG DATA CUSTOMERS
     
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
@@ -24,6 +25,12 @@ const state = () => ({
 })
 
 const mutations = {
+    isLoading (state) {
+        state.loading = true
+      },
+      doneLoading (state) {
+        state.loading = false
+      },
     //MUTATIONS UNTUK ASSIGN DATA CUSTOMER KE DALAM STATE CUSTOMER
     ASSIGN_DATA(state, payload) {
         state.sjpstatuss = payload
@@ -69,6 +76,7 @@ const actions = {
         })
     },
     submitSjpStatus({ dispatch, commit, state }) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {  
             //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
             $axios.post(`/sjpstatus`, state.sjpstatus)
@@ -79,14 +87,21 @@ const actions = {
                 })
             })
             .catch((error) => {
+                alert("Input Error!")
                 //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
                 if (error.response.status == 422) {
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
                 }
+                else{
+                    alert('Error')
+                }
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
       },
       submitSjpStatussendback({ dispatch, commit, state }) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
             $axios.post(`/sjpstatus/sendback`, state.sjpstatus)
@@ -99,12 +114,19 @@ const actions = {
             .catch((error) => {
                 //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
                 if (error.response.status == 422) {
+                    alert("Input Error!")
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
                 }
+                else{
+                    alert('Error')
+                }
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
       },
       submitSjpStatusMaster({ dispatch, commit, state }) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
             $axios.post(`/sjpstatus`, state.sjpstatus)
@@ -117,8 +139,11 @@ const actions = {
             .catch((error) => {
                 //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
                 if (error.response.status == 422) {
+                    alert("Input Error!")
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
                 }
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
       },
@@ -141,6 +166,7 @@ const actions = {
         })
     },
     updateSjpStatus({ state, commit }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.post(`/sjpstatus/receive`, state.sjpstatus) //KIRIM PERMINTAAN KE SERVER UNTUK MENGUPDATE DATA BERDASARKAN PAYLOAD (ID) DAN DATA YANG AKAN DI UPDATE DI AMBIL DARI STATE CUSTOMER
             .then((response) => {
@@ -150,12 +176,19 @@ const actions = {
             .catch((error) => {
                 //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
                 if (error.response.status == 422) {
+                    alert("Input Error!")
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
                 }
+                else{
+                    alert('Error')
+                }
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
     updateSjpStatussendback({ state, commit }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.post(`/sjpstatus/receivesendback`, state.sjpstatus) //KIRIM PERMINTAAN KE SERVER UNTUK MENGUPDATE DATA BERDASARKAN PAYLOAD (ID) DAN DATA YANG AKAN DI UPDATE DI AMBIL DARI STATE CUSTOMER
             .then((response) => {
@@ -166,7 +199,12 @@ const actions = {
                 //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
                 if (error.response.status == 422) {
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
+                    alert("Input Error!")
+                }else{
+                    alert("Input Error! Total Quantity Of Received Pallet  Over Than Total Quantity Of Pallet Send")
                 }
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },

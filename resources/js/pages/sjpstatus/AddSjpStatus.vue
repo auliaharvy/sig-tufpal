@@ -11,7 +11,7 @@
                 <sjpstatus-form></sjpstatus-form>
                 <div class="form-group">
                     <v-btn :loading="loading" class="success" @click.prevent="submit()">
-                        {{ loading ? 'Loading...':'Add' }}
+                        {{ loading ? 'Loading...':'Send' }}
                     </v-btn>
                     <v-btn class="error px-5" @click.prevent="resetLoading()">
                         Reset

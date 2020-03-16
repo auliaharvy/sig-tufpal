@@ -8,13 +8,10 @@
             </v-toolbar>
             <div class="panel-body">
               	<!-- LOAD VIEW DARI FORM.VUE -->
-                <bermissing-form></bermissing-form>
-                <div class="form-group">
-                    <v-btn :loading="loading" class="success" @click.prevent="submit()">
+                <bermissing-form ref="FormBermissing"></bermissing-form>
+                <div class="form-group px-7">
+                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
                         {{ loading ? 'Loading...':'Add' }}
-                    </v-btn>
-                    <v-btn class="error px-5" @click.prevent="resetLoading()">
-                        Reset
                     </v-btn>
                 </div>
             </div>
@@ -26,25 +23,22 @@
     import FormBermissing from './Form.vue'
     export default {
         name: 'AddBermissing',
-        data() {
-            return {
-                loading: false,
-            }
-        },
         methods: {
             ...mapActions('bermissing', ['submitBermissing']),
             //KETIKA TOMBOL DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
             submit() {
-                this.loading = true
+                this.$refs.FormBermissing.submit()
                 //MELAKUKAN REQUEST KE SERVER UNTUK MENAMBAHKAN DATA
-                this.submitBermissing().then(() => {
-                    //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
-                    this.$router.push({ name: 'bermissings.data' })
-                })
+                // this.submitBermissing().then(() => {
+                //     //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
+                //     this.$router.push({ name: 'bermissings.data' })
+                // })
             },
-            resetLoading() {
-                this.loading = false
-            }
+        },
+        computed: {
+        ...mapState('bermissing', {
+            loading: state => state.loading //LOAD DATA CUSTOMER DARI STATE CUSTOMER
+        }),
         },
         components: {
             'bermissing-form': FormBermissing //MEMBUAT CUSTOM TAG UNTUK ME-LOAD FILE FORM.VUE

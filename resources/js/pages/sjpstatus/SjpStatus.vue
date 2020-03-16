@@ -30,7 +30,7 @@
                         <template v-slot:item.status="{ item }">
                             <!-- <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
                             <v-chip class="label label-success" v-else-if="item.status == 1">Received</v-chip> -->
-                            <p v-if="item.status == 0">Sending</p>
+                            <p class="text-green" v-if="item.status == 0">Sending</p>
                             <p class="text-blue" v-else-if="item.status == 1">Received</p>
                         </template>
 
@@ -76,21 +76,21 @@ export default {
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
             headers: [
                 // { value: 'dept_pool', text: 'Departure' },
-                { value: 'checker_sender', text: 'Checker Sender' },
+                // { value: 'checker_sender', text: 'Checker Sender' },
                 // { value: 'dest_pool', text: 'Destination' },
-                { value: 'checker_receiver', text: 'Checker Receive' },
+                // { value: 'checker_receiver', text: 'Checker Receive' },
                 { value: 'sjp_number', text: 'SJP' },
-                { value: 'transporter_name', text: 'Transporter' },
+                // { value: 'transporter_name', text: 'Transporter' },
                 { value: 'vehicle_number', text: 'Vehicle' },
                 // { value: 'sjps_number', text: 'SJP Status' },
                 { value: 'transaction', text: 'SJP Status' },
                 { value: 'status', text: 'Status' },
-                { value: 'good_pallet', text: 'Good Pallet' },
-                { value: 'tbr_pallet', text: 'TBR Pallet' },
-                { value: 'ber_pallet', text: 'BER Pallet' },
-                { value: 'missing_pallet', text: 'Missing Pallet' },
-                { value: 'good_cement', text: 'Good Cement' },
-                { value: 'bad_cement', text: 'Bad Cement' },
+                // { value: 'good_pallet', text: 'Good Pallet' },
+                // { value: 'tbr_pallet', text: 'TBR Pallet' },
+                // { value: 'ber_pallet', text: 'BER Pallet' },
+                // { value: 'missing_pallet', text: 'Missing Pallet' },
+                // { value: 'good_cement', text: 'Good Cement' },
+                // { value: 'bad_cement', text: 'Bad Cement' },
                 { value: 'note', text: 'Note' },
                 // { value: 'qrcode', text: 'QR Code' },
                 // { value: 'created_at', text: 'Send at' },
