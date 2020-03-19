@@ -10,7 +10,7 @@
               	<!-- LOAD VIEW DARI FORM.VUE -->
                 <newpallet-form></newpallet-form>
                 <div class="form-group">
-                    <v-btn :loading="loading" class="success" @click="submit()">
+                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
                         {{ loading ? 'Loading...':'Add' }}
                     </v-btn>
                 </div>
@@ -23,22 +23,21 @@
     import FormNewpallet from './Form.vue'
     export default {
         name: 'AddNewpallet',
-        data() {
-            return {
-                loading: false,
-            }
-        },
         methods: {
             ...mapActions('newpallet', ['submitNewpallet']),
             //KETIKA TOMBOL DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
             submit() {
                 //MELAKUKAN REQUEST KE SERVER UNTUK MENAMBAHKAN DATA
-                this.loading = true
                 this.submitNewpallet().then(() => {
                     //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
                     this.$router.push({ name: 'newpallets.data' })
                 })
             },
+        },
+        computed: {
+        ...mapState('newpallet', {
+            loading: state => state.loading //LOAD DATA CUSTOMER DARI STATE CUSTOMER
+        }),
         },
         components: {
             'newpallet-form': FormNewpallet //MEMBUAT CUSTOM TAG UNTUK ME-LOAD FILE FORM.VUE

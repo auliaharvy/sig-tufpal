@@ -10,8 +10,8 @@
               	<!-- LOAD VIEW DARI FORM.VUE -->
                 <repairedpallet-form></repairedpallet-form>
                 <div class="form-group">
-                    <v-btn :loading="loading" class="success" @click="submit()">
-                        {{ loading ? 'Loading...':'Add' }}
+                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
+                        {{ loading ? 'Loading...':'add' }}
                     </v-btn>
                 </div>
             </div>
@@ -23,22 +23,21 @@
     import FormRepairedpallet from './Form.vue'
     export default {
         name: 'AddRepairedpallet',
-        data() {
-            return {
-                loading: false,
-            }
-        },
         methods: {
             ...mapActions('repairedpallet', ['submitRepairedpallet']),
             //KETIKA TOMBOL DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
             submit() {
                 //MELAKUKAN REQUEST KE SERVER UNTUK MENAMBAHKAN DATA
-                this.loading = true
                 this.submitRepairedpallet().then(() => {
                     //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
                     this.$router.push({ name: 'repairedpallets.data' })
                 })
             },
+        },
+        computed: {
+        ...mapState('repairedpallet', {
+            loading: state => state.loading //LOAD DATA CUSTOMER DARI STATE CUSTOMER
+        }),
         },
         components: {
             'repairedpallet-form': FormRepairedpallet //MEMBUAT CUSTOM TAG UNTUK ME-LOAD FILE FORM.VUE

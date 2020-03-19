@@ -12,6 +12,9 @@ import DataPalletMovement from './pages/report/PalletMovement.vue'
 import IndexSjpadjusment from './pages/report/sjpadjusment/index.vue'
 import DataSjpadjusment from './pages/report/sjpadjusment/Sjpadjusment.vue'
 
+import IndexAlltransaction from './pages/report/alltransaction/index.vue'
+import DataAlltransaction from './pages/report/alltransaction/Alltransaction.vue'
+
 import IndexSjpchangedest from './pages/report/sjpchangedest/index.vue'
 import DataSjpchangedest from './pages/report/sjpchangedest/Sjpchangedest.vue'
 
@@ -371,6 +374,20 @@ const router = new Router({
         },
 
 
+
+        {
+            path: '/alltransaction',
+            component: IndexAlltransaction,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'alltransaction.data',
+                    component: DataAlltransaction,
+                    meta: { title: 'All Transaction' }
+                },
+            ]
+        },
 
         {
             path: '/sjpadjusment',

@@ -83,7 +83,7 @@
         <v-layout row wrap class="px-5">
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.no_do }">
-                    <label for="">DO Number</label>
+                    <label for="">No Dispatch </label>
                     <input type="text" class="form-control" v-model="sjp.no_do">
                     <p class="text-danger" v-if="errors.no_do">{{ errors.no_do[0] }}</p>
                 </div>

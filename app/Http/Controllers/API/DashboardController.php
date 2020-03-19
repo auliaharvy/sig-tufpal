@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Transaction;
+use App\Sjppalletsend;
 use DB;
 use Excel;
 use App\Exports\TransactionExport;
@@ -17,7 +18,7 @@ class DashboardController extends Controller
         $filter = request()->year . '-' . request()->month;
         $parse = Carbon::parse($filter);
         $array_date = range($parse->startOfMonth()->format('d'), $parse->endOfMonth()->format('d'));
-        $transaction = Transaction::select(DB::raw('date(created_at) as date,sum(amount) as total'))
+        $sjppalletsend = Sjppalletsend::select(DB::raw('date(created_at) as date,sum(good_pallet) as total'))
             ->where('created_at', 'LIKE', '%' . $filter . '%')
             ->groupBy(DB::raw('date(created_at)'))->get();
         
@@ -25,7 +26,7 @@ class DashboardController extends Controller
         foreach ($array_date as $row) {
             $f_date = strlen($row) == 1 ? 0 . $row:$row;
             $date = $filter . '-' . $f_date;
-            $total = $transaction->firstWhere('date', $date);
+            $total = $sjppalletsend->firstWhere('date', $date);
 
             $data[] = [
                 'date' =>$date,

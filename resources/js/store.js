@@ -31,6 +31,7 @@ import newpallet from './stores/Newpallet.js'
 import damagedpallet from './stores/Damagedpallet.js'
 import repairedpallet from './stores/Repairedpallet.js'
 import palletmovement from './stores/palletmovement.js'
+import alltransaction from './stores/alltransaction.js'
 import sjpadjusment from './stores/sjpadjusment.js'
 import sjpchangedestination from './stores/sjpchangedestination.js'
 Vue.use(Vuex)
@@ -68,7 +69,8 @@ const store = new Vuex.Store({
         newpallet,
         palletmovement,
         damagedpallet,
-        repairedpallet
+        repairedpallet,
+        alltransaction,
     },
     state: {
         token: localStorage.getItem('token'),

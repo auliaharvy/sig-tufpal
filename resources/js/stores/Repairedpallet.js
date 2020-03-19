@@ -1,6 +1,7 @@
 import $axios from '../api.js'
 
 const state = () => ({
+    loading: false,
     repairedpallets: [], //STATE UNTUK MENAMPUNG DATA CUSTOMERS
     
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
@@ -16,6 +17,12 @@ const state = () => ({
 })
 
 const mutations = {
+    isLoading (state) {
+        state.loading = true
+      },
+      doneLoading (state) {
+        state.loading = false
+      },
     //MUTATIONS UNTUK ASSIGN DATA CUSTOMER KE DALAM STATE CUSTOMER
     ASSIGN_DATA(state, payload) {
         state.repairedpallets = payload
@@ -53,6 +60,7 @@ const actions = {
         })
     },
     submitRepairedpallet({ dispatch, commit, state }) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
             $axios.post(`/repairedpallet`, state.repairedpallet)
@@ -63,10 +71,13 @@ const actions = {
                 })
             })
             .catch((error) => {
+                alert("Input Error!")
                 //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
                 if (error.response.status == 422) {
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
                 }
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
       },
