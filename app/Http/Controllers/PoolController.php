@@ -63,6 +63,19 @@ class PoolController extends Controller
 
     public function store(Request $request)
     {
+
+        $this->validate($request, [
+            'code' => 'required|unique"pool_pallet,code',
+            'type' => 'required',
+            'pool_name' => 'required|string',
+            'pool_address' => 'required|string',
+            'pool_city' => 'required|integer',
+            'phone_number' => 'required|string',
+            'pool_email' => 'required|integer',
+            'pallet_quota' => 'required|integer',
+        ]);
+
+        $created_by = Auth::user()->name;
         $pool = PoolPallet::create([
             'organization_id' => $request->organization_id, 
             'code' => $request->code, 
@@ -73,10 +86,11 @@ class PoolController extends Controller
             'phone_number' => $request->phone_number, 
             'pool_email' => $request->pool_email, 
             'pallet_quota' => $request->pallet_quota,
-            'good_pallet' => $request->good_pallet, 
-            'tbr_pallet' => $request->tbr_pallet, 
-            'ber_pallet' => $request->ber_pallet, 
-            'missing_pallet' => $request->missing_pallet, 
+            // 'good_pallet' => $request->good_pallet, 
+            // 'tbr_pallet' => $request->tbr_pallet, 
+            // 'ber_pallet' => $request->ber_pallet, 
+            // 'missing_pallet' => $request->missing_pallet, 
+            'created_by' => $created_by
         ]);
 
         $data = [

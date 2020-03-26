@@ -106,6 +106,22 @@
           </v-card>
         </v-flex>
         <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/alltransaction" class="text-center ma-3" v-if="$can('read alltransaction')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-tag-multiple</v-icon>
+              <span right> All Transaction </span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/map" class="text-center ma-3" v-if="$can('read location')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-google-maps</v-icon>
+              <span right> Pallet Geolocation </span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <!-- <v-flex xs12 md3 lg3 link >
           <v-card link router to="/sjpadjusment" class="text-center ma-3" v-if="$can('read sjpadjusment')">
             <v-card-title class="text-center" color="black">
               <v-icon color="black" left>mdi-truck</v-icon>
@@ -152,7 +168,7 @@
               <span right> Pallet Transfer Receive </span>
             </v-card-title>
           </v-card>
-        </v-flex>
+        </v-flex> -->
         
         <!-- <v-flex xs12 md3 lg3 link >
           <v-card link router to="/palletdeposit" class="text-center ma-3" v-if="$can('read palletdeposit')">
@@ -162,14 +178,7 @@
             </v-card-title>
           </v-card>
         </v-flex> -->
-        <v-flex xs12 md3 lg3 link >
-          <v-card link router to="/map" class="text-center ma-3" v-if="$can('read location')">
-            <v-card-title class="text-center" color="black">
-              <v-icon color="black" left>mdi-google-maps</v-icon>
-              <span right> Pallet Geolocation </span>
-            </v-card-title>
-          </v-card>
-        </v-flex>
+        
       </v-layout>
 
       <h1 class="display-1 black--text">

@@ -32,28 +32,30 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string|max:150',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|unique:users,email',
             'password' => 'required|min:6|string',
-            'outlet_id' => 'required|exists:outlets,id',
-            'photo' => 'required|image'
+            'role' => 'required',
+            // 'outlet_id' => 'required|exists:outlets,id',
+            // 'photo' => 'required|image'
         ]);
 
         DB::beginTransaction();
         try {
-            $name = NULL;
-            if ($request->hasFile('photo')) {
-                $file = $request->file('photo');
-                $name = $request->email . '-' . time() . '.' . $file->getClientOriginalExtension();
-                $file->storeAs('public/couriers', $name);
-            }
+            // $name = NULL;
+            // if ($request->hasFile('photo')) {
+            //     $file = $request->file('photo');
+            //     $name = $request->email . '-' . time() . '.' . $file->getClientOriginalExtension();
+            //     $file->storeAs('public/couriers', $name);
+            // }
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => $request->password,
+                'role' => $request->role,
                 // 'role' => $request->role,
-                'photo' => $name,
+                // 'photo' => $name,
                 // 'outlet_id' => $request->outlet_id,
-                'role' => 3
+                // 'role' => 3
             ]);
            
             DB::commit();

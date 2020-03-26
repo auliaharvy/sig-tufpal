@@ -132,7 +132,23 @@
                         <v-list-item-title color="black">Pallet Movement</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item link router to="/sjpadjusment" v-if="$can('read sjpadjusment')">
+                <v-list-item link router to="/alltransaction" v-if="$can('read alltransaction')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-tag-multiple</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">All Transaction</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link router to="/map" v-if="$can('read location')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-google-maps</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Pallet Geolocation</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <!-- <v-list-item link router to="/sjpadjusment" v-if="$can('read sjpadjusment')">
                     <v-list-item-icon>
                         <v-icon color="black">mdi-truck</v-icon>
                     </v-list-item-icon>
@@ -179,7 +195,7 @@
                     <v-list-item-content>
                         <v-list-item-title color="black"> Pallet Transfer Receive</v-list-item-title>
                     </v-list-item-content>
-                </v-list-item>
+                </v-list-item> -->
                 <!-- <v-list-item link router to="/palletdeposit" v-if="$can('read palletdeposit')">
                     <v-list-item-icon>
                         <v-icon color="black">mdi-clipboard-flow</v-icon>
@@ -188,14 +204,7 @@
                         <v-list-item-title color="black">Pallet Deposit</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item> -->
-                <v-list-item link router to="/map" v-if="$can('read location')">
-                    <v-list-item-icon>
-                        <v-icon color="black">mdi-google-maps</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                        <v-list-item-title color="black">Pallet Geolocation</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
+                
 
                 <!-- { title: 'Report Dashboard', icon: 'mdi-monitor-dashboard' },
                 { title: 'Pallet Quantity', icon: 'mdi-numeric', route:'/poolpallet' },

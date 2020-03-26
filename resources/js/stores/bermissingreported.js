@@ -6,13 +6,14 @@ const state = () => ({
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
     bermissingpalletreported: {
         bmp_number: '',
+        status: '',
         reporter: '',
         pool_pallet: '',
         transporter: "",
         reference_sjp_status: "",
         ber_pallet: "", 
         missing_pallet: "",
-        prove: "",
+        reporter_prove: "",
         note: "",
         created_at: "",
         updated_at: "",
@@ -37,13 +38,14 @@ const mutations = {
     CLEAR_FORM(state) {
         state.bermissingpalletreported = {
             bmp_number: '',
+            status: '',
             reporter: '',
             pool_pallet: '',
             transporter: "",
             reference_sjp_status: "",
             ber_pallet: "", 
             missing_pallet: "",
-            prove: "",
+            reporter_prove: "",
             note: "",
             created_at: "",
             updated_at: "",

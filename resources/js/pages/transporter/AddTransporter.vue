@@ -1,15 +1,17 @@
 <template>
     <div class="col-md-12">
         <div class="panel">
-            <div class="panel-heading">
-                <h3 class="panel-title">Add Transporter</h3>
-            </div>
+            <v-toolbar dark>
+                <h1>
+                    ADD TRANSPORTER
+                </h1>
+            </v-toolbar>
             <div class="panel-body">
               	<!-- LOAD VIEW DARI FORM.VUE -->
                 <transporter-form></transporter-form>
                 <div class="form-group">
-                    <v-btn class="success" @click.prevent="submit">
-                        Add New
+                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
+                        {{ loading ? 'Loading...':'Add' }}
                     </v-btn>
                 </div>
             </div>
@@ -36,6 +38,11 @@
                     this.$router.push({ name: 'transporters.data' })
                 })
             }
+        },
+        computed: {
+        ...mapState('transporter', {
+            loading: state => state.loading //LOAD DATA CUSTOMER DARI STATE CUSTOMER
+        }),
         },
         components: {
             'transporter-form': FormTransporter //MEMBUAT CUSTOM TAG UNTUK ME-LOAD FILE FORM.VUE

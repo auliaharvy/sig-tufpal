@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-heading">
-                <h3 class="panel-title">Add New Courier</h3>
+                <h3 class="panel-title">Add New Users</h3>
             </div>
             <div class="panel-body">
                 <courier-form ref="formCourier"></courier-form>

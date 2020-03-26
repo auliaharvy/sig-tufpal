@@ -12,7 +12,7 @@
                         <v-form>
                             <div class="form-group has-feedback" :class="{'has-error': errors.email}">
                             <v-text-field
-                            label="Email"
+                            label="Username"
                             v-model="data.email"
                             prepend-icon="mdi-account"
                             type="text"

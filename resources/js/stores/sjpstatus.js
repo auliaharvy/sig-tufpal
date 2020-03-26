@@ -180,7 +180,7 @@ const actions = {
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
                 }
                 else{
-                    alert('Error')
+                    alert("Input Error! Total Quantity Of Received Pallet  Over Than Total Quantity Of Pallet Send")
                 }
             }).finally(() => {
                 commit('doneLoading')

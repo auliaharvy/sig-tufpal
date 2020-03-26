@@ -27,6 +27,7 @@ import pallettransferreceive from './stores/pallettransferreceive.js'
 import bermissing from './stores/Bermissing.js'
 import bermissingreported from './stores/bermissingreported.js'
 import bermissingapproved from './stores/bermissingapproved.js'
+import bermissingdisapproved from './stores/bermissingdisapproved.js'
 import newpallet from './stores/Newpallet.js'
 import damagedpallet from './stores/Damagedpallet.js'
 import repairedpallet from './stores/Repairedpallet.js'
@@ -66,6 +67,7 @@ const store = new Vuex.Store({
         bermissing,
         bermissingreported,
         bermissingapproved,
+        bermissingdisapproved,
         newpallet,
         palletmovement,
         damagedpallet,

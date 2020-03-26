@@ -97,14 +97,14 @@
             <v-flex class="px-5" xs6 md3 lg3>
                 <div class="form-group" :class="{ 'has-error': errors.good_pallet }">
                     <label for="">Good Pallet</label>
-                    <input type="text" class="form-control" v-model="sjpstatus.good_pallet" :readonly="true">
+                    <input type="text" class="form-control" v-model="sjpstatus.good_pallet" >
                     <p class="text-danger" v-if="errors.good_pallet">{{ errors.good_pallet[0] }}</p>
                 </div>
             </v-flex>
             <v-flex class="px-5" xs6 md3 lg3>
                 <div class="form-group" :class="{ 'has-error': errors.tbr_pallet }">
                     <label for="">TBR Pallet</label>
-                    <input type="text" class="form-control" v-model="sjpstatus.tbr_pallet" :readonly="true">
+                    <input type="text" class="form-control" v-model="sjpstatus.tbr_pallet" >
                     <p class="text-danger" v-if="errors.tbr_pallet">{{ errors.tbr_pallet[0] }}</p>
                 </div>
             </v-flex>

@@ -366,6 +366,8 @@ public function index()
         $vehicle_id = $sjp->vehicle_id;
         $pallet_qty = $sjp->pallet_quantity;
         $good_cement = $sjp->product_quantity;
+        $update = SjpStatus::find($sjp_status_id);
+        $good_pallet = $update->good_pallet;
        
         $this->validate($request, [
             'good_pallet' => 'required|integer|gt:-1|lte:'.$pallet_qty,
@@ -403,6 +405,11 @@ public function index()
             //     return response()->json(['error' => 'Qty Receive melebihi data yang di send'], 404);
             // }
             // else{
+                $goodpalletrcv = $request->good_pallet;
+                $tbr_palletrcv = $request->tbr_pallet;
+            if($tbr_palletrcv>($good_pallet-$goodpalletrcv)){
+                return response()->json(['error' => 'Qty Receive melebihi data yang di send'], 404);
+            }else {
                 $update = SjpStatus::find($sjp_status_id);
                 DB::beginTransaction();
                 try{
@@ -416,7 +423,7 @@ public function index()
                 $update->checker_receive_user_id = $receive;
                 // $update->sjp_id = $request->sjp_id;
                 $update->good_pallet = $request->good_pallet;
-                // $update->tbr_pallet = $request->tbr_pallet;
+                $update->tbr_pallet = $request->tbr_pallet;
                 // $update->ber_pallet = $request->ber_pallet;
                 // $update->missing_pallet = $request->missing_pallet;
                 $update->good_cement = $request->good_cement;
@@ -428,13 +435,13 @@ public function index()
 
                 $InventoryDest = PoolPallet::find($destination_id);
                 $InventoryDest->good_pallet = (($InventoryDest->good_pallet)+($request->good_pallet)); //hanya receive good pallet
-                // $InventoryDest->tbr_pallet = (($InventoryDest->tbr_pallet)+($request->tbr_pallet)); // ber & missing dicatat di transporter
+                $InventoryDest->tbr_pallet = (($InventoryDest->tbr_pallet)+($request->tbr_pallet)); // ber & missing dicatat di transporter
                 // $InventoryDest->ber_pallet = (($InventoryDest->ber_pallet)+($request->ber_pallet));
                 // $InventoryDest->missing_pallet = (($InventoryDest->missing_pallet)+($request->missing_pallet));
                 $InventoryDest->save();
 
                 $InventoryTrans = Transporter::find($transporter_id);
-                $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
+                $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($request->good_pallet+$request->tbr_pallet));
                 // $InventoryTrans->tbr_pallet = (($InventoryTrans->good_pallet)-($request->tbr_pallet)); //??
                 // $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet)); //setiap ada ber / missing masuk ke transporter
                 // $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet));
@@ -509,6 +516,7 @@ public function index()
                     DB::rollback();
                     return response()->json(['status' => 'error', 'data' => $e->getMessage()], 200);
                 }
+            }
             // }
             
         }    
@@ -702,21 +710,21 @@ public function index()
                             'note' => 'TERDAPAT PALLET YANG BER/HILANG SAAT RECEIVE OLEH CHECKER',  
                         ]);
                         
-                        // $reporter = Auth::user()->name;/
-                        // $sjps_number    = $update->sjps_number;
-                        // $palletbermissingpool = PoolPallet::find($departure_id);
-                        // $palletbermissingtrans = Transporter::find($transporter_id);
-                        // $transporterbermissing = $palletbermissingtrans->transporter_name;
-                        // $Bermissingreported = Bermissingreported::create([
-                        //     'reporter' => $reporter, 
-                        //     'pool_pallet' => 5, 
-                        //     'transporter_id' => $palletbermissingtrans->transporter_name,
-                        //     'reference_sjp_status_id' => $sjps_number,
-                        //     'ber_pallet' => $request->ber_pallet, 
-                        //     'missing_pallet' => $request->missing_pallet,
-                        //     'status' => 0,
-                        //     'note' => 'TERDAPAT PALLET YANG BER/HILANG SAAT RECEIVE OLEH CHECKER',  
-                        // ]);
+                        $reporter = Auth::user()->name;
+                        $sjps_number    = $update->sjps_number;
+                        $palletbermissingpool = PoolPallet::find($departure_id);
+                        $palletbermissingtrans = Transporter::find($transporter_id);
+                        $transporterbermissing = $palletbermissingtrans->transporter_name;
+                        $Bermissingreported = Bermissingreported::create([
+                            'reporter' => $reporter, 
+                            'pool_pallet' => 5, 
+                            'transporter_id' => $palletbermissingtrans->transporter_name,
+                            'reference_sjp_status_id' => $sjps_number,
+                            'ber_pallet' => $request->ber_pallet, 
+                            'missing_pallet' => $request->missing_pallet,
+                            'status' => 0,
+                            'note' => 'TERDAPAT PALLET YANG BER/HILANG SAAT RECEIVE OLEH CHECKER',  
+                        ]);
                     }
                     // if(($request->tbr_pallet)>0){
                     //     $Damage = Damagedpallet::create([

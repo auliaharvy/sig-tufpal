@@ -1,15 +1,17 @@
 <template>
     <div class="col-md-12">
         <div class="panel">
-            <div class="panel-heading">
-                <h3 class="panel-title">Add Pool Pallet</h3>
-            </div>
+            <v-toolbar dark>
+                <h1>
+                    ADD POOL PALLET
+                </h1>
+            </v-toolbar>
             <div class="panel-body">
               	<!-- LOAD VIEW DARI FORM.VUE -->
                 <pool-form></pool-form>
                 <div class="form-group">
-                    <v-btn class="success" @click.prevent="submit">
-                        Add New
+                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
+                        {{ loading ? 'Loading...':'Add' }}
                     </v-btn>
                 </div>
             </div>
@@ -36,6 +38,11 @@
                     this.$router.push({ name: 'pools.data' })
                 })
             }
+        },
+        computed: {
+        ...mapState('transporter', {
+            loading: state => state.loading //LOAD DATA CUSTOMER DARI STATE CUSTOMER
+        }),
         },
         components: {
             'pool-form': FormPool //MEMBUAT CUSTOM TAG UNTUK ME-LOAD FILE FORM.VUE

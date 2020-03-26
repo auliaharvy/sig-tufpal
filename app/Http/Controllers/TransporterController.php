@@ -42,6 +42,15 @@ class TransporterController extends Controller
 
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'transporter_name' => 'required|string',
+            'transporter_address' => 'required|string',
+            'transporter_email' => 'required|string',
+            'phone_number' => 'required|string',
+            'pallet_quota' => 'required|integer',
+        ]);
+        
+        $created_by = Auth::user()->name;
         $transporter = Transporter::create([
             'organization_id' => $request->organization_id,  
             'transporter_name' => $request->transporter_name, 
@@ -49,10 +58,11 @@ class TransporterController extends Controller
             'phone_number' => $request->phone_number, 
             'transporter_email' => $request->transporter_email, 
             'pallet_quota' => $request->pallet_quota,
-            'good_pallet' => $request->good_pallet, 
-            'tbr_pallet' => $request->tbr_pallet, 
-            'ber_pallet' => $request->ber_pallet, 
-            'missing_pallet' => $request->missing_pallet, 
+            // 'good_pallet' => $request->good_pallet, 
+            // 'tbr_pallet' => $request->tbr_pallet, 
+            // 'ber_pallet' => $request->ber_pallet, 
+            // 'missing_pallet' => $request->missing_pallet, 
+            'created_by' => $created_by
         ]);
 
         $data = [
