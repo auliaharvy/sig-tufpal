@@ -117,7 +117,7 @@
             </v-flex>
             <v-flex class="px-5" xs6 md3 lg3>
                 <div class="form-group" :class="{ 'has-error': errors.missing_pallet }">
-                    <label for="">missing Pallet Pallet</label>
+                    <label for="">Missing Pallet</label>
                     <input type="text" class="form-control" v-model="sjpstatus.missing_pallet" :readonly="true">
                     <p class="text-danger" v-if="errors.missing_pallet">{{ errors.missing_pallet[0] }}</p>
                 </div>

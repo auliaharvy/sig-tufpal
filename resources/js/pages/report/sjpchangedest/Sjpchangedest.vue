@@ -67,6 +67,8 @@ export default {
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
              headers: [
                 { value: 'sjp_number', text: 'SJP Number' },
+                { value: 'no_do', text: 'Old Dispatch No' },
+                { value: 'new_no_do', text: 'New Dispatch No' },
                 { value: 'destination', text: 'Old Destination' },
                 { value: 'new_destination', text: 'New Destination' },
                 { value: 'adjust_by', text: 'Change By' },

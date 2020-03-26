@@ -66,7 +66,14 @@ class SjpController extends Controller
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
         $pallet = PoolPallet::find($pool_pallet); //jgn lupa add model poolpallet
         $qty_pool = $pallet->good_pallet;
-        $pallet_qty = $request->pallet_quantity;
+        $pallet_qty = $request->tonnage/2;
+
+        if($pool_pallet==1){ //jika saat send tidak terdapat tbr pallet
+            $distribution = 0;
+        }
+        else if($pool_pallet!=1){ //jika saat send tidak terdapat tbr pallet
+            $distribution = 1;
+        }
 
         $this->validate($request, [
             'destination_pool_pallet_id' => 'required',
@@ -75,10 +82,15 @@ class SjpController extends Controller
             'transporter_id' => 'required',
             'no_do' => 'required|string|unique:surat_jalan_pallet,no_do',
             'product_name' => 'required|string',
-            'pallet_quantity' => 'required|integer|gt:-1|lte:'.$qty_pool,
-            'packaging' => 'required|integer|gt:-1',
+            // 'pallet_quantity' => 'required|integer|gt:-1|lte:'.$qty_pool,
+            'tonnage' => 'required|integer|gt:-1',
             'product_quantity' => 'required|integer|gt:-1',
         ]);
+        if($qty_pool<$pallet_qty)
+        {
+            return response()->json(['error' => '
+            the number of pallets to be sent exceeds the number of pallets in the pool'], 422);
+        }
             $sjp = Sjp::create([
             'destination_pool_pallet_id' => $request->destination_pool_pallet_id, 
             'departure_pool_pallet_id' => $pool_pallet, 
@@ -88,17 +100,18 @@ class SjpController extends Controller
             //'sjp_number' => $request->sjp_number, 
             'no_do' => $request->no_do, 
             'product_name' => $request->product_name, 
-            'packaging' => $request->packaging, 
+            'tonnage' => $request->tonnage, 
             'product_quantity' => $request->product_quantity, 
             'status' => 'OPEN',
             'state' => 0,
             'created_by' => auth()->user()->name,
             'is_sendback' => 0,
+            'distribution' => $distribution,
             // 'created_at' => $now,
             // 'updated_at' => null,
             'departure_time' => $request->departure_time, 
             'eta' => $request->eta, 
-            'pallet_quantity' => $request->pallet_quantity, 
+            'pallet_quantity' => $request->tonnage/2, 
         ]);
 
         $data = [
@@ -244,12 +257,15 @@ class SjpController extends Controller
             // $update->driver_id = $request->driver_id;
             // $update->driver_id = $request->driver_id;
             // $update->vehicle_id = $request->vehicle_id;
+            $update->no_do = $request->no_do;
             $update->destination_pool_pallet_id = $request->destination_pool_pallet_id;
             $update->adjust_by = auth()->user()->name;
             $update->save();
         }
 
             $sjp_number = $sjp->sjp_number;
+            $no_do = $sjp->no_do;
+            $new_no_do = $request->no_do;
             $transporter_id = $sjp->transporter_id;
             $transporter = Transporter::find($transporter_id);
             $vehicle_id = $sjp->vehicle_id;
@@ -269,6 +285,8 @@ class SjpController extends Controller
                 'sjp_number' => $sjp_number,
                 // 'transporter' => $transporter->transporter_name,
                 // 'vehicle' => $vehicle->vehicle_number,
+                'no_do' => $no_do,
+                'new_no_do' => $new_no_do,
                 'destination' => $destination->pool_name,
                 'new_destination' => $new_destination->pool_name,
                 'adjust_by' => $checker, 

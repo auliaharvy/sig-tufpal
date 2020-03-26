@@ -35,6 +35,14 @@
                             <p v-if="item.status == 'OPEN'">Open</p>
                             <p class="text-blue" v-else-if="item.status == 'CLOSED'">Closed</p>
                         </template>
+
+                        <template v-slot:item.distribution="{ item }">
+                            <!-- <v-chip class="label label-default" v-if="item.status == 'OPEN'">Open</v-chip>
+                            <v-chip class="label label-success" v-else-if="item.status == 'CLOSED'">Closed</v-chip> -->
+                            <p v-if="item.distribution == 0">Main Distribution</p>
+                            <p v-else-if="item.distribution == 1">Secondary Distribution</p>
+                        </template>
+
                         <template v-slot:item.state="{ item }">
                             <!-- <v-chip class="label label-default" v-if="item.state == 0">Draft</v-chip>
                             <v-chip class="label label-success" v-else-if="item.state == 1">Send</v-chip>
@@ -128,6 +136,7 @@ export default {
                 // { value: 'product_quantity', text: 'Product QTY' },
                 // { value: 'status', text: 'Status' },
                 { value: 'state', text: 'State' },
+                // { value: 'distribution', text: 'Distribution' },
                 // { value: 'created_by', text: 'Created By' },
                 // { value: 'adjust_by', text: 'Adjust By' },
                 // { value: 'departure_time', text: 'Departure Time' },

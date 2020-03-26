@@ -40,7 +40,8 @@ public function index()
             ->select('a.*', 'b.name as checker_sender', 'c.name as checker_receiver',
                     'd.sjp_number','e.transaction', 'd.is_sendback', 'd.destination_pool_pallet_id'
                     , 'd.departure_pool_pallet_id', 'd.transporter_id', 'f.vehicle_number'
-                    , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool' )
+                    , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool'
+                    , 'd.distribution' )
             ->where('d.status',$status)            
             ->paginate(1000000)
             ->toArray();
@@ -61,7 +62,8 @@ public function index()
             ->select('a.*', 'b.name as checker_sender', 'c.name as checker_receiver',
                     'd.sjp_number','e.transaction', 'd.is_sendback', 'd.destination_pool_pallet_id'
                     , 'd.departure_pool_pallet_id', 'd.transporter_id', 'f.vehicle_number'
-                    , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool' )       
+                    , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool'
+                    , 'd.distribution' )       
             ->where('d.departure_pool_pallet_id',$pool_pallet)
             ->orWhere('d.destination_pool_pallet_id', $pool_pallet)
             ->orWhere('d.transporter_id', $transporter)
@@ -93,6 +95,9 @@ public function index()
         $sjp_id = $request->sjp_id;
         $sjp_status_id = $request->sjp_status_id;
         $sjp = DB::table('surat_jalan_pallet')->where('sjp_id',$sjp_id)->first();
+        $pool_pallet = Auth::user()->reference_pool_pallet_id;
+        $pallet = PoolPallet::find($pool_pallet); //jgn lupa add model poolpallet
+        $qty_pool = $pallet->good_pallet;
         $departure_id = $sjp->departure_pool_pallet_id;
         $transporter_id = $sjp->transporter_id;
         $driver_id = $sjp->driver_id;
@@ -223,6 +228,7 @@ public function index()
         $sjp_id = $request->sjp_id;
         $sjp_status_id = $request->sjp_status_id;
         $sjp = DB::table('surat_jalan_pallet')->where('sjp_id',$sjp_id)->first();
+        $distribution = $sjp->distribution;
         $departure_id = $sjp->destination_pool_pallet_id;
         $destination_id = $sjp->departure_pool_pallet_id;
         $transporter_id = $sjp->transporter_id;
@@ -259,6 +265,11 @@ public function index()
             //     $departure_id = $sjp->destination_pool_pallet_id;
             // }
             
+            if ($distribution == 1){
+                $departure_id = $sjp->destination_pool_pallet_id;
+                $destination_id = $sjp->departure_pool_pallet_id;
+            }
+
             $checker = Auth::user()->id;
             DB::beginTransaction();
             try{
@@ -575,9 +586,11 @@ public function index()
                 // $update->checker_send_user_id = $request->checker_send_user_id;
                 $goodpalletrcv = $request->good_pallet;
                 $tbr_palletrcv = $request->tbr_pallet;
+                $good_tbr = $goodpalletrcv+$tbr_palletrcv;
                 $ber_palletrcv = $request->ber_pallet;
                 $missing_palletrcv = $request->missing_pallet;
-                if($tbr_palletrcv>($total-$goodpalletrcv)){
+                $missing_ber = $ber_palletrcv+$missing_palletrcv;
+                if($tbr_palletrcv>($total-$goodpalletrcv) ||$missing_ber>($total-$good_tbr) ){
                     return response()->json(['error' => 'Qty Receive melebihi data yang di send'], 404);
                 }
                 else{
@@ -605,27 +618,47 @@ public function index()
                     $InventoryDest->save();
 
                     $InventoryTrans = Transporter::find($transporter_id);
-                    if($tbr_pallet_awal==0){ //jika saat send tidak terdapat tbr pallet
-                        $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
+                    if($tbr_pallet_awal==0){ //jika saat send tidak terdapat tbr pallet   
+                        if($missing_ber>0){
+                            $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($missing_ber+$request->good_pallet));
+                            $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet)); 
+                            $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet));
+                        }
+                        else{
+                            $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));    
+                        }
+                        
                        
                     }
-                    else if(($request->tbr_pallet)>$tbr_pallet_awal){ //jika rcv tbr pallet lebih besar dari yang di send
-                        $selisihtbr = ($request->tbr_pallet)-$tbr_pallet_awal;
-                        $selisihgood = $good_pallet_awal-($request->good_pallet);
-                        if($selisihgood==$selisihtbr){
-                            $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($tbr_pallet_awal));
-                            $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
+                    else if(($request->tbr_pallet)>$tbr_pallet_awal || ($request->tbr_pallet)!=$tbr_pallet_awal ){ //jika rcv tbr pallet lebih besar dari yang di send
+                        if($missing_ber>0){
+                            $selisihtbr = ($request->tbr_pallet)-$tbr_pallet_awal;
+                            $selisihgood = $good_pallet_awal-($request->good_pallet);
+                            if($selisihgood==$selisihtbr){
+                                $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($selisihtbr+$missing_ber));
+                                $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($selisihgood+$missing_ber));
+                                $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet)); 
+                                $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet));
+                            }
+                        }
+                        else{
+                            $selisihtbr = ($request->tbr_pallet)-$tbr_pallet_awal;
+                            $selisihgood = $good_pallet_awal-($request->good_pallet);
+                            if($selisihgood==$selisihtbr){
+                                $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($tbr_pallet_awal));
+                                $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
+                            } 
                         }
                         
                     }
                     else{
                         $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($request->good_pallet));
                         $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($request->tbr_pallet));
+                        $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet)); 
+                        $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet));
                     }
                     // $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
                     // $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($request->tbr_pallet)); 
-                    $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet)); 
-                    $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet));
                     $InventoryTrans->save();
 
                     // Membuat log transaksi Receive

@@ -137,9 +137,9 @@ const actions = {
                 })
             })
             .catch((error) => {
+                alert("Input Error!")
                 //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
                 if (error.response.status == 422) {
-                    alert("Input Error!")
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
                 }
             }).finally(() => {

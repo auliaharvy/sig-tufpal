@@ -14,12 +14,12 @@ const state = () => ({
         sjp_number: '',
         no_do: '',
         product_name: 'Portland Composite Cement',
-        packaging: 40,
-        product_quantity: 640,
+        tonnage: '',
+        product_quantity: '',
         status: '',
         departure_time: '', 
         eta: '',
-        pallet_quantity: 16,    
+        pallet_quantity: '',    
     },
     page: 1
 })
@@ -57,7 +57,7 @@ const mutations = {
             sjp_number: '',
             no_do: '',
             product_name: '',
-            packaging: '',
+            tonnage: '',
             product_quantity: '',
             status: '',
             departure_time: '',
@@ -91,7 +91,7 @@ const actions = {
                 })
             })
             .catch((error) => {
-                alert("Input Error!")
+                alert(error.message)
                 //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
                 if (error.response.status == 422) {
                     commit('SET_ERRORS', error.response.data.errors, { root: true })

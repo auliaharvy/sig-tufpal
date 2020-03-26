@@ -39,22 +39,9 @@
                         >   
                             <template v-slot:item.reporter_prove="{ item }">
                                 <img :src="'../storage/bermissing/reporter_prove/' + item.reporter_prove" :width="70" :height="100" :alt="item.bmp_number"> </img>
-                                <v-btn dark color="success" text small @click.stop="dialog = true">
+                                <v-btn dark color="success" text small :href="'../storage/bermissing/reporter_prove/' + item.reporter_prove" target="_blank">
                                     show
                                 </v-btn>
-                                <v-dialog  v-model="dialog" max-width="500">
-                                    <v-card>
-                                        <v-card-title class="headline">Berita Acara</v-card-title>
-                                        <v-card-text>
-                                        <img :src="'../storage/bermissing/reporter_prove/' + item.reporter_prove"  :alt="item.bmp_number"> </img>
-                                        </v-card-text>
-                                        <v-card-actions>
-                                        <router-link :to="{ name: 'bermissings.edit', params: {id: item.ber_missing_pallet_id} }" v-if="item.status == 0 && $can('update bermissingpallets')" >
-                                            <v-btn color="success" small>Approval</v-btn>
-                                        </router-link> 
-                                        </v-card-actions>
-                                    </v-card>
-                                    </v-dialog>
                             </template>
                             <template v-slot:item.status="{ item }">
                                 <!-- <v-chip class="label label-default" v-if="item.status == 0">DRAFT REPORTED</v-chip>
@@ -75,6 +62,19 @@
                         </v-data-table>
                     </v-card>
                 </template>
+                <!-- <v-dialog  v-model="dialog" max-width="500">
+                    <v-card>
+                        <v-card-title class="headline">Berita Acara : {{bermissing.ber_missing_pallet_id}}</v-card-title>
+                        <v-card-text>
+                            <img :src="'/storage/app/public/bermissing/reporter_prove/' + bermissing.reporter_prove"  :alt="bermissing.bmp_number"> </img>
+                        </v-card-text>
+                        <v-card-actions>
+                            <router-link :to="{ name: 'bermissings.edit', params: {id: bermissing.ber_missing_pallet_id} }" v-if="bermissing.status == 0 && $can('update bermissingpallets')" >
+                                <v-btn color="success" small>Approval</v-btn>
+                            </router-link> 
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog> -->
               	<!-- TABLE UNTUK MENAMPILKAN LIST CUSTOMER -->
 
                
@@ -133,6 +133,9 @@ export default {
         ...mapState('bermissing', {
             bermissings: state => state.bermissings //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
+        ...mapState('bermissing', {
+            bermissing: state => state.bermissing //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+        }),
         //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {
             get() {
@@ -153,6 +156,9 @@ export default {
     },
     methods: {
         ...mapActions('bermissing', ['getBermissing', 'removeBermissing']), 
+        showimage(id) {
+            this.dialog=true
+        },
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         deleteBermissings(id) {
             this.$swal({

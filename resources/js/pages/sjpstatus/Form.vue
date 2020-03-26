@@ -83,6 +83,24 @@
             <p class="text-danger" v-if="errors.checker_receive_user_id">{{ errors.checker_receive_user_id[0] }}</p>
         </div>  -->
         <v-layout row wrap class="px-5">
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group">
+                    <label>Pallet Quantity</label>
+                    <select class='form-control' v-model='sjpstatus.sjp_id' :readonly="true">
+                        <option disabled v-for='data in sjps.data' v-bind:key='data.sjp_id' :value='data.sjp_id'>{{ data.pallet_quantity }}</option>
+                    </select>
+                </div>
+            </v-flex>
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group">
+                    <label>Good Cement</label>
+                    <select class='form-control' v-model='sjpstatus.sjp_id' :readonly="true">
+                        <option disabled v-for='data in sjps.data' v-bind:key='data.sjp_id' :value='data.sjp_id'>{{ data.product_quantity }}</option>
+                    </select>
+                </div>
+            </v-flex>
+        </v-layout>
+        <v-layout row wrap class="px-5">
             <v-flex class="px-5" xs12 md3 lg3>
                 <div class="form-group" :class="{ 'has-error': errors.good_pallet }">
                     <label for="">Good Pallet</label>

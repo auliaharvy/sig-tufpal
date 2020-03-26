@@ -73,9 +73,9 @@
         </v-layout>
 
         <v-layout row wrap class="px-5">
-            <v-flex class="px-5" xs12 md12 lg12>
-                <img :src="'../storage/bermissing/reporter_prove/' + bermissing.reporter_prove"  :alt="bermissing.bmp_number"> </img>
-            </v-flex>
+            <!-- <v-flex class="px-5" xs12 md12 lg12>
+                <img :src="'/storage/app/public/bermissing/reporter_prove/' + bermissing.reporter_prove"  :alt="bermissing.bmp_number"> </img>
+            </v-flex> -->
             <v-flex class="px-5" xs12 md12 lg12>
                 <div class="form-group" :class="{ 'has-error': errors.note }">
                     <label for="">Note</label>

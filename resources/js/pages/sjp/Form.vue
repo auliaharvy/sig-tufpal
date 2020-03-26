@@ -99,15 +99,15 @@
 
         <v-layout row wrap class="px-5">
             <v-flex class="px-5" xs12 md6 lg6>
-                <div class="form-group" :class="{ 'has-error': errors.packaging }">
-                    <label for="">Packaging (KG/Pack)</label>
-                    <input type="text" class="form-control" v-model="sjp.packaging">
-                    <p class="text-danger" v-if="errors.packaging">{{ errors.packaging[0] }}</p>
+                <div class="form-group" :class="{ 'has-error': errors.tonnage }">
+                    <label for="">Tonnage</label>
+                    <input type="text" class="form-control" v-model="sjp.tonnage">
+                    <p class="text-danger" v-if="errors.tonnage">{{ errors.tonnage[0] }}</p>
                 </div>
             </v-flex>
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.product_quantity }">
-                    <label for="">Product Quantity (/pack)</label>
+                    <label for="">Product Quantity</label>
                     <input type="text" class="form-control" v-model="sjp.product_quantity">
                     <p class="text-danger" v-if="errors.product_quantity">{{ errors.product_quantity[0] }}</p>
                 </div>
@@ -130,7 +130,7 @@
                 </div>
             </v-flex>
         </v-layout>
-        <v-layout row wrap class="px-5">
+        <!-- <v-layout row wrap class="px-5">
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.pallet_quantity }">
                     <label for="">Pallet Quantity</label>
@@ -144,7 +144,7 @@
                     <p>{{ authenticated.name }}</p>
                 </div>
             </v-flex>
-        </v-layout>
+        </v-layout> -->
     </div>
 </template>
 

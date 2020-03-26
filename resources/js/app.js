@@ -14,6 +14,7 @@ import 'leaflet/dist/leaflet.css';
 import QrcodeVue from 'qrcode.vue'
 import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
+import pdf  from 'vue-pdf'
 
 Vue.use(Vuetify);
 Vue.use(VueSweetalert2)
@@ -28,6 +29,7 @@ Vue.component('QrcodeVue', QrcodeVue)
 Vue.component('l-map', LMap);
 Vue.component('l-tile-layer', LTileLayer);
 Vue.component('l-marker', LMarker);
+Vue.component('pdf', pdf);
 
 delete Icon.Default.prototype._getIconUrl;
 

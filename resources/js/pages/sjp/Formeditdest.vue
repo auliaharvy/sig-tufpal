@@ -47,7 +47,14 @@
             </v-flex>
         </v-layout>
         <v-layout row wrap class="px-5">
-            <v-flex class="px-5" xs12 md12 lg12>
+            <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group" :class="{ 'has-error': errors.no_do }">
+                    <label for="">No Dispatch </label>
+                    <input type="text" class="form-control" v-model="sjp.no_do">
+                    <p class="text-danger" v-if="errors.no_do">{{ errors.no_do[0] }}</p>
+                </div>
+            </v-flex>
+            <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group">
                         <label>Destination Pool Pallet</label>
                         <select class='form-control' v-model='sjp.destination_pool_pallet_id'>
