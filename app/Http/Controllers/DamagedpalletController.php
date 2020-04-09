@@ -7,6 +7,7 @@ use App\Http\Resources\SjpStatusCollection;
 use Illuminate\Support\Facades\Auth;
 use App\Damagedpallet;
 use App\PoolPallet;
+use App\Alltransaction;
 use DB;
 
 class DamagedpalletController extends Controller
@@ -79,36 +80,72 @@ class DamagedpalletController extends Controller
             return response()->json(['error' => 'Pallet Melebihi Quantity yang ada'], 404);
         }
         else {
-            $damagedpallet = Damagedpallet::create([
-                'reporter_user_id' => auth()->user()->id,
-                'pool_pallet_id' => auth()->user()->reference_pool_pallet_id, 
-                'transporter_id' => auth()->user()->reference_transporter_id, 
-                'tbr_pallet' => $request->tbr_pallet, 
-                'note' => $request->note, 
-            ]);
-            if($pool_pallet_id!=null){
-                $InventoryPool = PoolPallet::find($pool_pallet_id);
-                $InventoryPool->good_pallet = (($InventoryPool->good_pallet)-($request->tbr_pallet));
-                $InventoryPool->tbr_pallet = (($InventoryPool->tbr_pallet)+($request->tbr_pallet));
-                $InventoryPool->save();
-            }
+            DB::beginTransaction();
+            try{
+                $damagedpallet = Damagedpallet::create([
+                    'reporter_user_id' => auth()->user()->id,
+                    'pool_pallet_id' => auth()->user()->reference_pool_pallet_id, 
+                    'transporter_id' => auth()->user()->reference_transporter_id, 
+                    'tbr_pallet' => $request->tbr_pallet, 
+                    'note' => $request->note, 
+                ]);
+                    if($pool_pallet_id!=null){
+                        $InventoryPool = PoolPallet::find($pool_pallet_id);
+                        $InventoryPool->good_pallet = (($InventoryPool->good_pallet)-($request->tbr_pallet));
+                        $InventoryPool->tbr_pallet = (($InventoryPool->tbr_pallet)+($request->tbr_pallet));
+                        $InventoryPool->save();
+                    }
+                    if($transporter_id!=null){
+                        $InventoryTrans = Transporter::find($transporter_id);
+                        $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($request->tbr_pallet));
+                        $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)+($request->tbr_pallet));
+                        $InventoryTrans->save();
+                    }
 
-            if($transporter_id!=null){
-                $InventoryTrans = Transporter::find($transporter_id);
-                $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($request->tbr_pallet));
-                $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)+($request->tbr_pallet));
-                $InventoryTrans->save();
-            }
-    
-            $data = [
-                'data' => $damagedpallet,
-                'status' => (bool) $damagedpallet,
-                'message' => $damagedpallet ? 'Damaged Pallet Record Created!' : 'Error Damaged Pallet Record' 
-            ];
-    
-            return response()->json($data);
+                    // Membuat log All Transaction
+                    if($pool_pallet_id!=null){
+                        $reporter = Auth::user()->name;
+                        $pool_pallet_id = Auth::user()->reference_pool_pallet_id;
+                        $transporter_id = Auth::user()->reference_transporter_id;
+                        $damagedreportpool = PoolPallet::find($pool_pallet_id);
+                        // $bermissingreporttrans = Transporter::find($transporter_id);
+                        $alltransaction = Alltransaction::create([
+                            'reference_damaged_pallet_id' => $damagedpallet->damaged_pallet_id,
+                            'transaction' => 'Damaged Pallet Report',
+                            'sender/reporter' => $reporter,
+                            'status' => 'REPORTED',
+                            'pool_pallet' => $damagedreportpool->pool_name,
+                            // 'transporter' => $bermissingreporttrans->transporter_name,
+                            'tbr_pallet' => $damagedpallet->tbr_pallet,
+                            'note' => $request->note,
+                        ]);
+                    }
+                    if($transporter_id!=null){
+                        $reporter = Auth::user()->name;
+                        $pool_pallet_id = Auth::user()->reference_pool_pallet_id;
+                        $transporter_id = Auth::user()->reference_transporter_id;
+                        // $bermissingreportpool = PoolPallet::find($pool_pallet_id);
+                        $damagedreporttrans = Transporter::find($transporter_id);
+                        $alltransaction = Alltransaction::create([
+                            'reference_damaged_pallet_id' => $damagedpallet->damaged_pallet_id,
+                            'sender/reporter' => $reporter,
+                            'status' => 'REPORTED',
+                            // 'pool_pallet' => $bermissingreportpool->pool_name,
+                            'transporter' => $damagedreporttrans->transporter_name,
+                            'tbr_pallet' => $damagedpallet->tbr_pallet,
+                            'note' => $request->note,
+                        ]);
+                    }
+                DB::commit();
+                return response()->json(['status' => 'success'], 200);
+            }catch (\Exception $e) {
+                DB::rollback();
+                return response()->json([
+                    'status' => 'error', 
+                    'data' => $e->getMessage(),
+                    'message' => 'Error Damaged Pallet Pallet Record'], 422);
+                }
         }
-        
     }
 
     public function destroy($id)

@@ -87,7 +87,7 @@ const actions = {
                 })
             })
             .catch((error) => {
-                alert("Input Error!")
+                alert(error.response.data.message)
                 //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
                 if (error.response.status == 422) {
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
@@ -114,7 +114,7 @@ const actions = {
             .catch((error) => {
                 //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
                 if (error.response.status == 422) {
-                    alert("Input Error!")
+                    alert(error.response.data.message)
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
                 }
                 else{
@@ -137,7 +137,7 @@ const actions = {
                 })
             })
             .catch((error) => {
-                alert("Input Error!")
+                alert(error.response.data.message)
                 //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
                 if (error.response.status == 422) {
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
@@ -176,7 +176,7 @@ const actions = {
             .catch((error) => {
                 //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
                 if (error.response.status == 422) {
-                    alert("Input Error!")
+                    alert(error.response.data.message)
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
                 }
                 else{
@@ -199,7 +199,7 @@ const actions = {
                 //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
                 if (error.response.status == 422) {
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
-                    alert("Input Error!")
+                    alert(error.response.data.message)
                 }else{
                     alert("Input Error! Total Quantity Of Received Pallet  Over Than Total Quantity Of Pallet Send")
                 }

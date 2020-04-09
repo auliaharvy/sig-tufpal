@@ -5,17 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Resources\SjpStatusCollection;
 use Illuminate\Support\Facades\Auth;
-use App\Sjppalletsend;
-use App\Sjppalletreceive;
-use App\Sjpadjusment;
-use App\Sjpchangedestination;
-use App\pallettransfersend;
-use App\pallettransferreceive;
-use App\Bermissingreported;
-use App\Bermissingapproved;
-use App\Bermissingdisapproved;
-use App\Damagedpallet;
-use App\Repairedpallet;
+use App\Alltransaction;
 use DB;
 
 class AlltransactionController extends Controller
@@ -26,59 +16,33 @@ class AlltransactionController extends Controller
         $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
         if($pool_pallet==1 && $role<7){
-        $alltransaction = DB::table('sjp_pallet_send as a')
-                ->join('sjp_pallet_receive as b', '=', 'b.sjp_number')
-                ->join('sjp_adjusment as c', '=', 'c.sa_number')
-                ->join('sjp_change_destination as d', '=', 'd.scd_number')
-                ->join('pallet_transfer_send_pallet as e','=', 'e.tp_number')
-                ->join('pallet_transfer_receive_pallet as f','=', 'f.tp_number')
-                ->join('ber_missing_pallet_reported as g','=', 'g.bmp_number')
-                ->join('ber_missing_pallet_approved as h','=', 'h.bmp_number')
-                ->join('ber_missing_pallet_disapproved as i','=', 'h.bmp_number')
-                ->join('damaged_pallet as j','=', 'j.dp_number')
-                ->join('repaired_pallet as k','=', 'k.rp_number')
-                ->select('a.sjp_number as transaction_code',
-                         'b.sjp_number as transaction_code',
-                         'c.sa_number as transaction_code',
-                         'd.scd_number as transaction_code',
-                         'e.tp_number as transaction_code',
-                         'f.tp_number as transaction_code',
-                         'g.bmp_number as transaction_code',
-                         'h.bmp_number as transaction_code',
-                         'i.bmp_number as transaction_code',
-                         'j.dp_number as transaction_code',
-                         'k.rp_number as transaction_code')
-                ->paginate(1000000)
-                ->toArray();
+            $alltransaction = DB::table('all_transaction as a')
+            ->leftJoin('surat_jalan_pallet as b', 'a.reference_sjp_id', '=', 'b.sjp_id')
+            ->leftJoin('sjp_status as c', 'a.reference_sjp_status_id', '=', 'c.sjp_status_id')
+            ->leftJoin('pallet_transfer as d', 'a.reference_pallet_transfer_id', '=', 'd.pallet_transfer_id')
+            ->leftJoin('ber_missing_pallet as e', 'a.reference_ber_missing_id', '=', 'e.ber_missing_pallet_id')
+            ->leftJoin('new_pallet as f', 'a.reference_new_pallet_id', '=', 'f.new_pallet_id')
+            ->leftJoin('damaged_pallet as g', 'a.reference_damaged_pallet_id', '=', 'g.damaged_pallet_id')
+            ->leftJoin('repaired_pallet as h', 'a.reference_repaired_pallet_id', '=', 'h.repaired_pallet_id')
+            ->select('a.*', 'b.sjp_number', 'c.sjps_number', 'd.tp_number',
+                    'e.bmp_number', 'f.np_number', 'g.dp_number', 'h.rp_number')
+            ->paginate(10000000)
+            ->toArray();
         }
         else{
-            $alltransaction = DB::table('sjp_pallet_send as a')
-                ->join('sjp_pallet_receive as b', '=', 'b.sjp_number')
-                ->join('sjp_adjusment as c', '=', 'c.sa_number')
-                ->join('sjp_change_destination as d', '=', 'd.scd_number')
-                ->join('pallet_transfer_send_pallet as e','=', 'e.tp_number')
-                ->join('pallet_transfer_receive_pallet as f','=', 'f.tp_number')
-                ->join('ber_missing_pallet_reported as g','=', 'g.bmp_number')
-                ->join('ber_missing_pallet_approved as h','=', 'h.bmp_number')
-                ->join('ber_missing_pallet_disapproved as i','=', 'h.bmp_number')
-                ->join('damaged_pallet as j','=', 'j.dp_number')
-                ->join('repaired_pallet as k','=', 'k.rp_number')
-                ->select('a.sjp_number as transaction_code',
-                        'b.sjp_number as transaction_code',
-                        'c.sa_number as transaction_code',
-                        'd.scd_number as transaction_code',
-                        'e.tp_number as transaction_code',
-                        'f.tp_number as transaction_code',
-                        'g.bmp_number as transaction_code',
-                        'h.bmp_number as transaction_code',
-                        'i.bmp_number as transaction_code',
-                        'j.dp_number as transaction_code',
-                        'k.rp_number as transaction_code')
-                ->paginate(1000000)
-                ->toArray();
+            $alltransaction = DB::table('all_transaction as a')
+            ->leftJoin('surat_jalan_pallet as b', 'a.reference_sjp_id', '=', 'b.sjp_id')
+            ->leftJoin('sjp_status as c', 'a.reference_sjp_status_id', '=', 'c.sjp_status_id')
+            ->leftJoin('pallet_transfer as d', 'a.reference_pallet_transfer_id', '=', 'd.pallet_transfer_id')
+            ->leftJoin('ber_missing_pallet as e', 'a.reference_ber_missing_id', '=', 'e.ber_missing_pallet_id')
+            ->leftJoin('new_pallet as f', 'a.reference_new_pallet_id', '=', 'f.new_pallet_id')
+            ->leftJoin('damaged_pallet as g', 'a.reference_damaged_pallet_id', '=', 'g.damaged_pallet_id')
+            ->leftJoin('repaired_pallet as h', 'a.reference_repaired_pallet_id', '=', 'h.repaired_pallet_id')
+            ->select('a.*', 'b.sjp_number', 'c.sjps_number', 'd.tp_number',
+                    'e.bmp_number', 'f.np_number', 'g.dp_number', 'h.rp_number')
+            ->paginate(10000000)
+            ->toArray();
         }
-       
-        // // $sjp = new SjpCollection($sjp1);
         return $alltransaction;
         // $sjpstatus = new SjpStatusCollection(SjpStatus::paginate(10));
 		//  return $sjpstatus;

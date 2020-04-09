@@ -52,6 +52,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('organization', 'OrganizationController');
     Route::post('/pallettransfer/receive', 'PalletTransferController@receive');
     Route::post('/bermissing/approve', 'BermissingpalletController@approve');
+    Route::resource('alltransaction', 'AlltransactionController');
 
 
     Route::get('chart', 'API\DashboardController@chart');

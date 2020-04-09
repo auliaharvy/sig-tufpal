@@ -91,7 +91,7 @@ const actions = {
                 })
             })
             .catch((error) => {
-                alert(error.message)
+                alert(error.response.data.message)
                 //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
                 if (error.response.status == 422) {
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
@@ -119,7 +119,7 @@ const actions = {
                 resolve(response.data)
             })
             .catch((error) => {
-                alert("Input Error!")
+                alert(error.response.data.message)
                 //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
                 if (error.response.status == 422) {
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
@@ -138,7 +138,7 @@ const actions = {
                 resolve(response.data)
             })
             .catch((error) => {
-                alert("Input Error!")
+                alert(error.response.data.message)
                 //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
                 if (error.response.status == 422) {
                     commit('SET_ERRORS', error.response.data.errors, { root: true })

@@ -35,6 +35,12 @@
             <input type="text" class="form-control" v-model="newpallet.good_pallet">
             <p class="text-danger" v-if="errors.good_pallet">{{ errors.good_pallet[0] }}</p>
         </div>
+        <div class="form-group">
+            <label>Pallet Vendor</label>
+            <select class='form-control' v-model='newpallet.vendor'>
+                <option value="Pallet Vendor">Pallet Vendor</option>
+            </select>
+        </div>
         <div class="form-group" :class="{ 'has-error': errors.driver }">
             <label for="">Driver</label>
             <input type="text" class="form-control" v-model="newpallet.driver">

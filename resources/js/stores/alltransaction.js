@@ -4,8 +4,15 @@ const state = () => ({
     alltransactions: [], //STATE UNTUK MENAMPUNG DATA CUSTOMERS
     
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
-    alltransactions: {
-        transaction_code: '',
+    alltransaction: {
+        tid_number: '',
+        reference_sjp_id: '',
+        reference_sjp_status_id: '',
+        reference_pallet_transfer_id: '',
+        reference_ber_missing_id: '',
+        reference_new_pallet_id: '',
+        reference_damaged_pallet_id: '',
+        reference_repaired_pallet_id: '',
     },
     page: 1
 })
@@ -26,8 +33,15 @@ const mutations = {
     //RESET STATE CUSTOMER
     CLEAR_FORM(state) {
         state.alltransaction = {
-            transaction_code: '',
-        }
+            tid_number: '',
+        reference_sjp_id: '',
+        reference_sjp_status_id: '',
+        reference_pallet_transfer_id: '',
+        reference_ber_missing_id: '',
+        reference_new_pallet_id: '',
+        reference_damaged_pallet_id: '',
+        reference_repaired_pallet_id: '',
+    }
     }
 }
 

@@ -5,7 +5,7 @@ const state = () => ({
     
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
     bermissingpalletreported: {
-        bmp_number: '',
+        ber_missing_id: '',
         status: '',
         reporter: '',
         pool_pallet: '',
@@ -37,7 +37,7 @@ const mutations = {
     //RESET STATE CUSTOMER
     CLEAR_FORM(state) {
         state.bermissingpalletreported = {
-            bmp_number: '',
+            ber_missing_id: '',
             status: '',
             reporter: '',
             pool_pallet: '',

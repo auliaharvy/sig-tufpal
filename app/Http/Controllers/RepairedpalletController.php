@@ -7,6 +7,7 @@ use App\Http\Resources\SjpStatusCollection;
 use Illuminate\Support\Facades\Auth;
 use App\Repairedpallet;
 use App\PoolPallet;
+use App\Alltransaction;
 use DB;
 
 class RepairedpalletController extends Controller
@@ -38,34 +39,54 @@ class RepairedpalletController extends Controller
         $repaired_pallet_id = $request->repaired_pallet_id;
         $pool_pallet_id = 2;
         $pallet = PoolPallet::find($pool_pallet_id); //jgn lupa add model poolpallet
+        $poolname = $pallet->pool_name;
         $qty_pool = $pallet->tbr_pallet;
         $pallet_qty = $request->good_pallet;
 
         if($pallet_qty>$qty_pool)
         {
-            return response()->json(['error' => 'Pallet Melebihi Quantity yang ada'], 404);
+            return response()->json([
+                'status' => 'error', 
+                'message' => 'the number of pallets exceeds the existing pallets in '. $poolname], 422);
         }
         else {
-            $repairedpallet = Repairedpallet::create([
-                'reporter_user_id' => auth()->user()->id,
-                'pool_pallet_id' => $pool_pallet_id, 
-                'good_pallet' => $request->good_pallet, 
-                'note' => $request->note, 
-            ]);
-            
-            $InventoryPool = PoolPallet::find($pool_pallet_id);
-            $InventoryPool->tbr_pallet = (($InventoryPool->tbr_pallet)-($request->good_pallet));
-            $InventoryPool->good_pallet = (($InventoryPool->good_pallet)+($request->good_pallet));
-            $InventoryPool->save();
+            DB::beginTransaction();
+            try{
+                $repairedpallet = Repairedpallet::create([
+                    'reporter_user_id' => auth()->user()->id,
+                    'pool_pallet_id' => $pool_pallet_id, 
+                    'good_pallet' => $request->good_pallet, 
+                    'note' => $request->note, 
+                ]);
+                
+                $InventoryPool = PoolPallet::find($pool_pallet_id);
+                $InventoryPool->tbr_pallet = (($InventoryPool->tbr_pallet)-($request->good_pallet));
+                $InventoryPool->good_pallet = (($InventoryPool->good_pallet)+($request->good_pallet));
+                $InventoryPool->save();
            
+                // Membuat log All Transaction
+                $reporter = Auth::user()->name;
+                $poolpallet = PoolPallet::find($pool_pallet_id);
+                $alltransaction = Alltransaction::create([
+                    'reference_repaired_pallet_id' => $repairedpallet->repaired_pallet_id,
+                    'transaction' => 'Repaired Pallet Report',
+                    'sender/reporter' => $reporter,
+                    'status' => 'REPORTED',
+                    'pool_pallet' => $poolpallet->pool_name,
+                    'good_pallet' => $repairedpallet->good_pallet,
+                    'note' => $request->note,
+                ]);
+
+                DB::commit();
+                return response()->json(['status' => 'success'], 200);
     
-            $data = [
-                'data' => $repairedpallet,
-                'status' => (bool) $repairedpallet,
-                'message' => $repairedpallet ? 'Damaged Pallet Record Created!' : 'Error Damaged Pallet Record' 
-            ];
-    
-            return response()->json($data);
+            }catch (\Exception $e) {
+                DB::rollback();
+                return response()->json([
+                    'status' => 'error', 
+                    'data' => $e->getMessage(),
+                    'message' => 'Error Repair Pallet Record'], 422);
+            }
         }
         
     }
