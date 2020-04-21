@@ -1,74 +1,26 @@
+
 import $axios from '../api.js'
 
 const state = () => ({
-    dashboards: [], //STATE UNTUK MENAMPUNG DATA CUSTOMERS
-    
-    //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
-    dashboard: {
-        organization_id: '',
-        code: '',
-        type: '',
-        pool_name: '',
-        pool_address: '',
-        pool_city: "",
-        phone_number: "",
-        pool_email: "", 
-        pallet_quota: "",
-        good_pallet: "",
-        tbr_pallet: "",
-        ber_pallet: "",
-        missing_pallet: "",
-    },
-    page: 1
+    transactions: [],
 })
 
 const mutations = {
-    //MUTATIONS UNTUK ASSIGN DATA CUSTOMER KE DALAM STATE CUSTOMER
-    ASSIGN_DATA(state, payload) {
-        state.dashboards = payload
-    },
-    //MENGUBAH STATE PAGE
-    // SET_PAGE(state, payload) {
-    //     state.page = payload
-    // },
-    //MENGUBAH STATE CUSTOMER
-    ASSIGN_FORM(state, payload) {
-        state.dashboard = payload
-    },
-    //RESET STATE CUSTOMER
-    CLEAR_FORM(state) {
-        state.dashboard = {
-            organization_id: '',
-            code: '',
-            type: '',
-            pool_name: '',
-            pool_address: '',
-            pool_city: "",
-            phone_number: "",
-            pool_email: "", 
-            pallet_quota: "",
-            good_pallet: "",
-            tbr_pallet: "",
-            ber_pallet: "",
-            missing_pallet: "",
-        }
+    ASSIGN_DATA_TRANSACTION(state, payload) {
+        state.transactions = payload
     }
 }
 
 const actions = {
-    getPoolsDashboard({ commit, state }, payload) {
-        let search = typeof payload != 'undefined' ? payload:''
+    getChartData({ commit }, payload) {
         return new Promise((resolve, reject) => {
-            //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
-            $axios.get(`/pool`)
+            $axios.get(`/chart?month=${payload.month}&year=${payload.year}`)
             .then((response) => {
-                commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
+                commit('ASSIGN_DATA_TRANSACTION', response.data)
                 resolve(response.data)
             })
         })
     },
-   
-  
 }
 
 export default {

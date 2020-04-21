@@ -89,8 +89,9 @@ class SjpController extends Controller
         ]);
         if($qty_pool<$pallet_qty)
         {
-            return response()->json(['error' => '
-            the number of pallets to be sent exceeds the number of pallets in the pool'], 422);
+            return response()->json([
+                'status' => 'error', 
+                'message' => 'the number of pallets to be sent exceeds the number of pallets in the pool'], 422);
         }
         else{
             DB::beginTransaction();
