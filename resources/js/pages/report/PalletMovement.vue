@@ -84,8 +84,8 @@ export default {
                 { value: 'ber_pallet', text: 'BER Pallet' },
                 { value: 'missing_pallet', text: 'Missing Pallet' },
                 // { value: 'product_name', text: 'Product' },
-                // { value: 'departure_time', text: 'Departure Time' },
-                // { value: 'eta', text: 'ETA' },
+                { value: 'departure_time', text: 'Departure Time' },
+                { value: 'eta', text: 'ETA' },
                 // { value: 'send', text: 'Send Pallet' },
                 // { value: 'adjusment', text: 'Adjusment SJP' },
               

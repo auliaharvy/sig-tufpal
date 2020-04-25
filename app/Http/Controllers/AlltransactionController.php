@@ -17,6 +17,7 @@ class AlltransactionController extends Controller
         $role = Auth::user()->role;
         if($pool_pallet==1 && $role<7){
             $alltransaction = DB::table('all_transaction as a')
+            ->orderBy('created_at', 'DESC')
             ->leftJoin('surat_jalan_pallet as b', 'a.reference_sjp_id', '=', 'b.sjp_id')
             ->leftJoin('sjp_status as c', 'a.reference_sjp_status_id', '=', 'c.sjp_status_id')
             ->leftJoin('pallet_transfer as d', 'a.reference_pallet_transfer_id', '=', 'd.pallet_transfer_id')
@@ -31,6 +32,7 @@ class AlltransactionController extends Controller
         }
         else{
             $alltransaction = DB::table('all_transaction as a')
+            ->orderBy('created_at', 'DESC')
             ->leftJoin('surat_jalan_pallet as b', 'a.reference_sjp_id', '=', 'b.sjp_id')
             ->leftJoin('sjp_status as c', 'a.reference_sjp_status_id', '=', 'c.sjp_status_id')
             ->leftJoin('pallet_transfer as d', 'a.reference_pallet_transfer_id', '=', 'd.pallet_transfer_id')
