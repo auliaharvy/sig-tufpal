@@ -71,23 +71,33 @@ public function index()
             ->paginate(10000000)
             ->toArray();
         }
-        // // $sjp = new SjpCollection($sjp1);
         return $sjpstatus;
-        // $sjpstatus = new SjpStatusCollection(SjpStatus::paginate(10));
-		//  return $sjpstatus;
-        // return response()->json(Sjp::all()->toArray());
     }
 
     public function show($sjp_status_id)
     {
-        $sjpstatus = SjpStatus::find($sjp_status_id); //MELAKUKAN QUERY UNTUK MENGAMBIL DATA BERDASARKAN ID
+        $sjpstatus = SjpStatus::find($sjp_status_id); 
         return response()->json(['status' => 'success', 'data' => $sjpstatus]);
     }
 
     public function sjpstatusbymaster($sjp_id)
     {
-        $sjp = Sjp::find($sjp_id); //MELAKUKAN QUERY UNTUK MENGAMBIL DATA BERDASARKAN ID
+        $sjp = Sjp::find($sjp_id);
         return response()->json(['status' => 'success', 'data' => $sjp]);   
+    }
+
+    public function view($sjp_status_id)
+    {
+        
+        $sjpstatus = SjpStatus::find($sjp_status_id);
+        $sjp_id = $sjpstatus->sjp_id;
+        $sjp = Sjp::find($sjp_id);
+        $sjp_number = $sjp->sjp_number;
+
+        $data[] = [
+            'sjp_number' =>$sjp_number,
+        ];
+        return response()->json(['status' => 'success', 'data' => $data]);   
     }
 
     
@@ -97,7 +107,8 @@ public function index()
         $sjp_status_id = $request->sjp_status_id;
         $sjp = DB::table('surat_jalan_pallet')->where('sjp_id',$sjp_id)->first();
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
-        $pallet = PoolPallet::find($pool_pallet); //jgn lupa add model poolpallet
+        $pallet = PoolPallet::find($pool_pallet);
+        $sjp_number = $sjp->sjp_number;
         $qty_pool = $pallet->good_pallet;
         $departure_id = $sjp->departure_pool_pallet_id;
         $transporter_id = $sjp->transporter_id;
@@ -114,6 +125,7 @@ public function index()
 
         $this->validate($request, [
             'good_pallet' => 'required|integer|gt:-1|in:'.$pallet_qty,
+            'driver_approval' => 'required',
             // 'tbr_pallet' => 'required|integer|gt:-1',
             // 'ber_pallet' => 'required|integer|gt:-1',
             // 'missing_pallet' => 'required|integer|gt:-1',
@@ -138,6 +150,12 @@ public function index()
             $checker = Auth::user()->id;
             DB::beginTransaction();
             try{
+                $name = NULL;
+                if ($request->hasFile('driver_approval')) {
+                    $file = $request->file('driver_approval');
+                    $name = 'driver_approval'. '-' . $sjp_number . '-' . time() . '.' . $file->getClientOriginalExtension();
+                    $file->storeAs('public/driver_approval', $name);
+                }
                 $sjpStatus = SjpStatus::create([
                     'checker_send_user_id' => $checker, 
                     'checker_receive_user_id' => 5, 
@@ -148,6 +166,7 @@ public function index()
                     'missing_pallet' => 0, 
                     'good_cement' => $sjp->product_quantity, 
                     'bad_cement' => 0, 
+                    'driver_approval' => $name,
                     'transaction_id' => 1,
                     'note' => $request->note, 
                     'status' => 0,
@@ -193,6 +212,7 @@ public function index()
                     'missing_pallet' => 0, 
                     'good_cement' => $sjp->product_quantity,
                     'bad_cement' => 0,
+                    'driver_approval' => $name,
                     'note' => $request->note
                 ]);
 
@@ -222,6 +242,7 @@ public function index()
                     'missing_pallet' => 0, 
                     'good_cement' => $sjp->product_quantity,
                     'bad_cement' => 0,
+                    'driver_approval' => $name,
                     'note' => $request->note
                 ]);
                 

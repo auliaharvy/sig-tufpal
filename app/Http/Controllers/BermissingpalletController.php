@@ -13,6 +13,7 @@ use App\Alltransaction;
 use App\Bermissingreported;
 use App\Bermissingapproved;
 use App\Bermissingdisapproved;
+use App\User;
 use DB;
 
 class BermissingpalletController extends Controller
@@ -58,8 +59,51 @@ class BermissingpalletController extends Controller
 
     public function show($ber_missing_pallet_id)
     {
-        $bermissing = Bermissing::find($ber_missing_pallet_id); //MELAKUKAN QUERY UNTUK MENGAMBIL DATA BERDASARKAN ID
+        $bermissing = Bermissing::find($ber_missing_pallet_id);
         return response()->json(['status' => 'success', 'data' => $bermissing]);
+    }
+
+    public function edit($id)
+    {
+        $bermissing = Bermissing::find($id); //MELAKUKAN QUERY UNTUK MENGAMBIL DATA BERDASARKAN ID
+        return response()->json(['status' => 'success', 'data' => $bermissing]);
+    }
+
+    public function view($ber_missing_pallet_id)
+    {
+        
+        $bermissing = Bermissing::find($ber_missing_pallet_id);
+        $reporter_user_id = $bermissing->reporter_user_id;
+        $approver_user_id = $bermissing->approver_user_id;
+        $pool_pallet_id = $bermissing->pool_pallet_id;
+        $transporter_id = $bermissing->transporter_id;
+        $reference_sjp_status_id = $bermissing->reference_sjp_status_id;
+        $user_reporter = User::find($reporter_user_id);
+        $pool_pallet = PoolPallet::find($pool_pallet_id);
+        $transporter = Transporter::find($transporter_id);
+        $sjp_status = SjpStatus::find($reference_sjp_status_id);
+        if($reference_sjp_status_id & $transporter_id != null){
+            $sjps_number = $sjp_status->sjps_number;
+            $transporter_name = $transporter->transporter_name;
+            $pool_name = $pool_pallet->pool_name;
+        }else{
+            $sjps_number = null;
+            $transporter_name = null;
+            $pool_name = $pool_pallet->pool_name;
+        }
+        $data = [
+            // 'sjps_number' =>$sjps_number,
+            'bmp_number' => $bermissing->bmp_number,
+            'ber_pallet' => $bermissing->ber_pallet,
+            'missing_pallet' => $bermissing->missing_pallet,
+            'reporter_prove' => $bermissing->reporter_prove,
+            'note' => $bermissing->note,
+            'status' => $bermissing->status,
+            'pool_name' => $pool_name,
+            'transporter_name' => $transporter_name,
+            'sjps_number' => $sjps_number
+        ];
+        return response()->json(['status' => 'success', 'data' => $data]);   
     }
 
     public function store(Request $request)
@@ -234,12 +278,6 @@ class BermissingpalletController extends Controller
                 'data' => $e->getMessage(),
                 'message' => 'Error Created BER/Missing Pallet Record'], 422);
         }
-    }
-
-    public function edit($id)
-    {
-        $bermissing = Bermissing::find($id); //MELAKUKAN QUERY UNTUK MENGAMBIL DATA BERDASARKAN ID
-        return response()->json(['status' => 'success', 'data' => $bermissing]);
     }
 
     public function approve(Request $request)

@@ -1,6 +1,7 @@
 import $axios from '../api.js'
 
 const state = () => ({
+    loading: false,
     alltransactions: [], //STATE UNTUK MENAMPUNG DATA CUSTOMERS
     
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
@@ -18,6 +19,12 @@ const state = () => ({
 })
 
 const mutations = {
+    isLoading (state) {
+        state.loading = true
+      },
+      doneLoading (state) {
+        state.loading = false
+      },
     //MUTATIONS UNTUK ASSIGN DATA CUSTOMER KE DALAM STATE CUSTOMER
     ASSIGN_DATA(state, payload) {
         state.alltransactions = payload
@@ -33,7 +40,7 @@ const mutations = {
     //RESET STATE CUSTOMER
     CLEAR_FORM(state) {
         state.alltransaction = {
-            tid_number: '',
+        tid_number: '',
         reference_sjp_id: '',
         reference_sjp_status_id: '',
         reference_pallet_transfer_id: '',
@@ -47,6 +54,7 @@ const mutations = {
 
 const actions = {
     getAlltransaction({ commit, state }, payload) {
+        commit('isLoading')
         let search = typeof payload != 'undefined' ? payload:''
         return new Promise((resolve, reject) => {
             //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
@@ -54,6 +62,8 @@ const actions = {
             .then((response) => {
                 commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },

@@ -1,16 +1,24 @@
 import $axios from '../api.js'
 
 const state = () => ({
+    loading: false,
 
 })
 
 const mutations = {
+    isLoading (state) {
+        state.loading = true
+      },
+      doneLoading (state) {
+        state.loading = false
+      },
     
 }
 
 const actions = {
     submit({ commit }, payload) {
         localStorage.setItem('token', null)
+        commit('isLoading')
         commit('SET_TOKEN', null, { root: true })
         return new Promise((resolve, reject) => {
             $axios.post('/login', payload)
@@ -27,6 +35,9 @@ const actions = {
                 if (error.response.status == 422) {
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
                 }
+            })
+            .finally(() => {
+                commit('doneLoading')
             })
         })
     }

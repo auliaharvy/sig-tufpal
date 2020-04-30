@@ -20,6 +20,7 @@
                         </v-card-title>
                         <v-data-table
                         :headers="headers"
+                        :loading="loading"
                         :items="alltransactions.data"
                         :search="search"
                         >       
@@ -106,6 +107,9 @@ export default {
     computed: {
         ...mapState('alltransaction', {
             alltransactions: state => state.alltransactions //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+        }),
+        ...mapState('alltransaction', {
+            loading: state => state.loading //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
         //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {

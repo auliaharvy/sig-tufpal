@@ -61,6 +61,7 @@ const mutations = {
 
 const actions = {
     getBermissing({ commit, state }, payload) {
+        commit('isLoading')
         let search = typeof payload != 'undefined' ? payload:''
         return new Promise((resolve, reject) => {
             //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
@@ -68,6 +69,8 @@ const actions = {
             .then((response) => {
                 commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
@@ -98,11 +101,28 @@ const actions = {
         })
       },
       editBermissing({ commit }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.get(`/bermissing/${payload}/edit`) //KIRIM PERMINTAAN KE SERVER UNTUK MENGAMBIL SINGLE DATA CUSTOMER BERDASARKAN PAYLOAD (ID)
             .then((response) => {
                 commit('ASSIGN_FORM', response.data.data) //ASSIGN DATA TERSEBUT KE DALAM STATE CUSTOMER
                 resolve(response.data)
+            })
+            .finally(() => {
+                commit('doneLoading')
+            })
+        })
+    },
+    viewBermissing({ commit }, payload) {
+        commit('isLoading')
+        return new Promise((resolve, reject) => {
+            $axios.get(`/bermissing/${payload}/view`) //KIRIM PERMINTAAN KE SERVER UNTUK MENGAMBIL SINGLE DATA CUSTOMER BERDASARKAN PAYLOAD (ID)
+            .then((response) => {
+                commit('ASSIGN_FORM', response.data.data) //ASSIGN DATA TERSEBUT KE DALAM STATE CUSTOMER
+                resolve(response.data)
+            })
+            .finally(() => {
+                commit('doneLoading')
             })
         })
     },

@@ -1,6 +1,9 @@
 <template>
 <v-app>
-    <v-parallax height="850" :src="require('../assets/pallet.jpg')">
+    <loading :active.sync="loading" 
+        :can-cancel="false" 
+        :is-full-page="fullPage"></loading>
+    <!-- <v-parallax height="850" :src="require('../assets/pallet.jpg')"> -->
     <v-container class="fill-height" fluid >
         <v-row align="center" justify="center">
             <v-col cols="12" sm="8" md="4">
@@ -54,13 +57,13 @@
                     <v-card-actions>
                         <v-checkbox v-model="data.remember_me" label="Remember Me"></v-checkbox>
                         <v-spacer />
-                        <v-btn type="submit" color="primary" @click="postLogin">Login</v-btn>
+                        <v-btn :disabled="loading" :loading="loading" type="submit" color="primary" @click="postLogin">Login</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
         </v-row>
     </v-container>
-    </v-parallax>
+    <!-- </v-parallax> -->
 </v-app>
     <!-- <div class="container">
         <div class="login-box">
@@ -102,6 +105,9 @@
 
 <script>
 import { mapActions, mapMutations, mapGetters, mapState } from 'vuex';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+
 export default {
     data() {
         return {
@@ -112,6 +118,9 @@ export default {
             }
         }
     },
+    components: {
+            Loading
+        },
     created() {
         if (this.isAuth) {
             this.$router.push({ name: 'home' })
@@ -119,7 +128,10 @@ export default {
     },
     computed: {
         ...mapGetters(['isAuth']),
-        ...mapState(['errors'])
+        ...mapState(['errors']),
+        ...mapState('auth', {
+            loading: state => state.loading //LOAD DATA CUSTOMER DARI STATE CUSTOMER
+        }),
     },
     methods: {
         ...mapActions('auth', ['submit']),

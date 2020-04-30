@@ -22,6 +22,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/sjp/adjust', 'SjpController@adjust');
     Route::post('/sjp/changedestination', 'SjpController@changedestination');
     Route::get('/sjpstatusbymaster/{id}', 'SjpStatusController@sjpstatusbymaster'); //get data untuk add sjp status
+    Route::get('/view/{id}', 'SjpStatusController@view');
     Route::resource('sjpstatus', 'SjpStatusController');
     Route::post('/sjpstatus/sendback', 'SjpStatusController@sendback');
     Route::post('/sjpstatus/receive', 'SjpStatusController@receive');
@@ -30,6 +31,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('pallettransfersend', 'PallettransfersendController');
     Route::resource('pallettransferreceive', 'PallettransferreceiveController');  
     Route::resource('bermissing', 'BermissingpalletController');
+    Route::get('bermissing/view/{id}', 'BermissingpalletController@view');
     Route::post('/bermissing/disapprove', 'BermissingpalletController@disapprove');
     Route::resource('bermissingreported', 'BermissingpalletreportedController');
     Route::resource('bermissingapproved', 'BermissingpalletapprovedController');
@@ -56,6 +58,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 
     Route::get('chart', 'API\DashboardController@chart');
+    Route::get('receive', 'API\DashboardController@receive');
     Route::get('export', 'API\DashboardController@exportData');
     Route::resource('/outlets', 'API\OutletController')->except(['show']);
     

@@ -78,7 +78,9 @@ import { mapActions, mapState, mapMutations } from 'vuex'
 export default {
     name: 'FormBermissing',
     created() {
-      this.getPools(),this.getTransporters(), this.getUserLogin() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
+      this.getPools(),
+      this.getTransporters(), 
+      this.getUserLogin() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
     },
     data() {
         return {

@@ -9,6 +9,7 @@ const state = () => ({
         
         checker_send_user_id: '',
         checker_receive_user_id: '',
+        sjps_number: '',
         sjp_id: '',
         transaction_id: '',
         sjp_number: '',
@@ -19,6 +20,7 @@ const state = () => ({
         missing_pallet: 0,
         good_cement: 0,
         bad_cement: 0,
+        driver_approval: '',
         note: '', 
     },
     page: 1
@@ -48,6 +50,7 @@ const mutations = {
         state.sjpstatus = {
             checker_send_user_id: '',
             checker_receive_user_id: '',
+            sjps_number: '',
             sjp_id: '',
             transaction_id: '',
             sjp_number: '',
@@ -58,6 +61,7 @@ const mutations = {
             missing_pallet: '',
             good_cement: '',
             bad_cement: '',
+            driver_approval: '',
             note: '',
         }
     }
@@ -65,6 +69,7 @@ const mutations = {
 
 const actions = {
     getSjpStatuss({ commit, state }, payload) {
+        commit('isLoading')
         let search = typeof payload != 'undefined' ? payload:''
         return new Promise((resolve, reject) => {
             //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
@@ -72,6 +77,8 @@ const actions = {
             .then((response) => {
                 commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
@@ -148,11 +155,14 @@ const actions = {
         })
       },
       editSjpStatus({ commit }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.get(`/sjpstatus/${payload}`) //KIRIM PERMINTAAN KE SERVER UNTUK MENGAMBIL SINGLE DATA CUSTOMER BERDASARKAN PAYLOAD (ID)
             .then((response) => {
                 commit('ASSIGN_FORM', response.data.data) //ASSIGN DATA TERSEBUT KE DALAM STATE CUSTOMER
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },

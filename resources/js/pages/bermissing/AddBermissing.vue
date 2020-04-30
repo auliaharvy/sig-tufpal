@@ -1,5 +1,8 @@
 <template>
     <div class="col-md-12">
+        <loading :active.sync="loading" 
+        :can-cancel="false" 
+        :is-full-page="fullPage"></loading>
         <div class="panel">
             <v-toolbar dark>
                 <h1>
@@ -21,6 +24,9 @@
 <script>
     import { mapActions, mapState, mapMutations } from 'vuex'
     import FormBermissing from './Form.vue'
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
+
     export default {
         name: 'AddBermissing',
         methods: {
@@ -41,7 +47,8 @@
         }),
         },
         components: {
-            'bermissing-form': FormBermissing //MEMBUAT CUSTOM TAG UNTUK ME-LOAD FILE FORM.VUE
+            'bermissing-form': FormBermissing,
+            Loading //MEMBUAT CUSTOM TAG UNTUK ME-LOAD FILE FORM.VUE
         }
     }
 </script>

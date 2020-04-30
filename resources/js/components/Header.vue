@@ -7,7 +7,7 @@
                         <img src="../assets/logo.png">
                     </v-list-item-avatar>
                     <v-list-item-content>
-                        <v-list-item-title>Wallet System</v-list-item-title>
+                        <v-list-item-title>Tufpal System</v-list-item-title>
                         <v-list-item-subtitle>{{ authenticated.name }}</v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>

@@ -51,13 +51,23 @@
                             </div>
                         </div>
                          <v-layout row wrap class="px-5 py-5">
-                            <v-flex class="px-5" xs12 md12 lg12>
+                            <v-flex class="px-5" xs12 md6 lg6>
                               <v-card>  
                                 <v-toolbar>
                                   <v-toolbar-title> Good Pallet Send</v-toolbar-title>
                                 </v-toolbar>
                                 <div class="panel-body">
                                     <line-chart v-if="transactions.length > 0" :data="transaction_data" :options="chartOptions" :labels="labels"/>
+                                </div>
+                              </v-card>
+                            </v-flex>
+                            <v-flex class="px-5" xs12 md6 lg6>
+                              <v-card>  
+                                <v-toolbar>
+                                  <v-toolbar-title> Good Pallet Receive</v-toolbar-title>
+                                </v-toolbar>
+                                <div class="panel-body">
+                                    <line-chart :data="transaction_receive_data" :options="chartOptions" :labels="labels"/>
                                 </div>
                               </v-card>
                             </v-flex>
@@ -72,13 +82,19 @@
     import moment from 'moment'
     import _ from 'lodash'
     import LineChart from '../components/LineChart.vue'
+    import PieChart from '../components/PieChart.vue'
     import { mapActions, mapState } from 'vuex'
     export default {
         created() {
             this.getChartData({
                 month: this.month,
                 year: this.year
-            })
+            }),
+            this.getChartDataReceive({
+                month: this.month,
+                year: this.year
+            }),
+            this.getPools()
         },
         data() {
             return {
@@ -102,12 +118,44 @@
                     month: this.month,
                     year: this.year
                 })
+            },
+            month_receive() {
+                this.getChartDataReceive({
+                    month: this.month,
+                    year: this.year
+                })
+            },
+            year_receive() {
+                this.getChartDataReceive({
+                    month: this.month,
+                    year: this.year
+                })
             }
         },
         computed: {
             ...mapState('dashboard', {
-                transactions: state => state.transactions
+                transactions: state => state.transactions,
+                transactions_receive: state => state.transactions_receive
             }),
+            ...mapState('pool', {
+                pools: state => state.pool_name,
+                pools: state => state.good_pallet
+            }),
+            datasetsfull () {
+                return {
+                labels: [ 'Pool DLI', 'BCTD', 'Sukabumi'],
+                datasets: [
+                {
+                    label: 'pool_name',
+                    backgroundColor: ['#41B883',
+                                    '#E46651',
+                                    '#00D8FF',
+                                    '#DD1B16'],
+                    data: [ 557,0,0]
+                }
+                    ]
+                    }
+            },
             ...mapState(['token']),
             years() {
                 return _.range(2010, moment().add(1, 'years').format('Y'))
@@ -117,18 +165,32 @@
                     return moment(o.date).format('DD')
                 });
             },
+            labels_receive() {
+                return _.map(this.transactions_receive, function(o) {
+                    return moment(o.date).format('DD')
+                });
+            },
             transaction_data() {
                 return _.map(this.transactions, function(o) {
+                    return o.total
+                });
+            },
+            transaction_receive_data() {
+                return _.map(this.transactions_receive, function(o) {
                     return o.total
                 });
             }
         },
         methods: {
-            ...mapActions('dashboard', ['getChartData']),
+            ...mapActions('dashboard', ['getChartData', 'getChartDataReceive']),
+            ...mapActions('pool', ['getPools', 'removePools']),
             exportData() {
                 window.open(`/api/export?api_token=${this.token}&month=${this.month}&year=${this.year}`)
             }
         },
-        components: { 'line-chart': LineChart },
+        components: { 
+            'line-chart': LineChart,
+            'pie-chart' : PieChart,
+        },
     }
 </script>

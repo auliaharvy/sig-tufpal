@@ -34,6 +34,7 @@
                         </v-card-title>
                         <v-data-table
                         :headers="headers"
+                        :loading="loading"
                         :items="bermissings.data"
                         :search="search"
                         >   
@@ -56,6 +57,12 @@
                                     <v-btn color="success" small>Approval</v-btn>
                                 </router-link>                        
                             </template>
+                            <template v-slot:item.view="{ item }">
+                                <router-link :to="{ name: 'bermissings.view', params: {id: item.ber_missing_pallet_id} }" >
+                                    <v-btn color="success" small>View</v-btn>
+                                </router-link>                        
+                            </template>
+
                             <template v-slot:item.delete="{ item }">
                                 <v-btn v-if="$can('delete bermissingpallets')" color="error" small @click="deleteBermissings(item.ber_missing_pallet_id)">Delete</v-btn>                         
                             </template>
@@ -124,6 +131,7 @@ export default {
                 { value: 'status', text: 'Status' },
                 { value: 'note', text: 'Note' },
                 { value: 'approve', text: 'Approve'},
+                { value: 'view', text: 'View'},
                 { value: 'delete', text: 'Delete'},
             ],
             search: '',
@@ -135,6 +143,9 @@ export default {
         }),
         ...mapState('bermissing', {
             bermissing: state => state.bermissing //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+        }),
+        ...mapState('bermissing', {
+            loading: state => state.loading //LOAD DATA CUSTOMER DARI STATE CUSTOMER
         }),
         //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {

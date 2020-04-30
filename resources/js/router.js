@@ -13,7 +13,7 @@ import IndexSjpadjusment from './pages/report/sjpadjusment/index.vue'
 import DataSjpadjusment from './pages/report/sjpadjusment/Sjpadjusment.vue'
 
 import IndexAlltransaction from './pages/report/alltransaction/index.vue'
-import DataAlltransaction from './pages/report/alltransaction/Alltransaction.vue'
+import DataAlltransaction from './pages/report/alltransaction/AllTransaction.vue'
 
 import IndexSjpchangedest from './pages/report/sjpchangedest/index.vue'
 import DataSjpchangedest from './pages/report/sjpchangedest/Sjpchangedest.vue'
@@ -60,6 +60,27 @@ import DataPalletTransfer from './pages/pallettransfer/PalletTransfer.vue'
 import AddPalletTransfer from './pages/pallettransfer/AddPalletTransfer.vue'
 import EditPalletTransfer from './pages/pallettransfer/EditPalletTransfer.vue'
 
+import IndexBermissing from './pages/bermissing/Index.vue'
+import DataBermissing from './pages/bermissing/Bermissing.vue'
+import AddBermissing from './pages/bermissing/AddBermissing.vue'
+import EditBermissing from './pages/bermissing/EditBermissing.vue'
+import ViewBermissing from './pages/bermissing/View.vue'
+
+import IndexNewpallet from './pages/newpallet/Index.vue'
+import DataNewpallet from './pages/newpallet/Newpallet.vue'
+import AddNewpallet from './pages/newpallet/AddNewpallet.vue'
+import EditNewpallet from './pages/newpallet/EditNewpallet.vue'
+
+import IndexDamagedpallet from './pages/damagedpallet/Index.vue'
+import DataDamagedpallet from './pages/damagedpallet/Damagedpallet.vue'
+import AddDamagedpallet from './pages/damagedpallet/AddDamagedpallet.vue'
+import EditDamagedallet from './pages/damagedpallet/EditDamagedpallet.vue'
+
+import IndexRepairedpallet from './pages/repairedpallet/Index.vue'
+import DataRepairedpallet from './pages/repairedpallet/Repairedpallet.vue'
+import AddRepairedpallet from './pages/repairedpallet/AddRepairedpallet.vue'
+import EditRepairedpallet from './pages/repairedpallet/EditRepairedpallet.vue'
+
 import IndexOutlet from './pages/outlets/Index.vue'
 import DataOutlet from './pages/outlets/Outlet.vue'
 import AddOutlet from './pages/outlets/Add.vue'
@@ -94,25 +115,7 @@ import AddTransaction from './pages/transaction/Add.vue'
 import ViewTransaction from './pages/transaction/View.vue'
 import ListTransaction from './pages/transaction/List.vue'
 
-import IndexBermissing from './pages/bermissing/Index.vue'
-import DataBermissing from './pages/bermissing/Bermissing.vue'
-import AddBermissing from './pages/bermissing/AddBermissing.vue'
-import EditBermissing from './pages/bermissing/EditBermissing.vue'
 
-import IndexNewpallet from './pages/newpallet/Index.vue'
-import DataNewpallet from './pages/newpallet/Newpallet.vue'
-import AddNewpallet from './pages/newpallet/AddNewpallet.vue'
-import EditNewpallet from './pages/newpallet/EditNewpallet.vue'
-
-import IndexDamagedpallet from './pages/damagedpallet/Index.vue'
-import DataDamagedpallet from './pages/damagedpallet/Damagedpallet.vue'
-import AddDamagedpallet from './pages/damagedpallet/AddDamagedpallet.vue'
-import EditDamagedallet from './pages/damagedpallet/EditDamagedpallet.vue'
-
-import IndexRepairedpallet from './pages/repairedpallet/Index.vue'
-import DataRepairedpallet from './pages/repairedpallet/Repairedpallet.vue'
-import AddRepairedpallet from './pages/repairedpallet/AddRepairedpallet.vue'
-import EditRepairedpallet from './pages/repairedpallet/EditRepairedpallet.vue'
 
 Vue.use(Router)
 
@@ -195,6 +198,7 @@ const router = new Router({
                 },
             ]
         },
+
         {
             path: '/bermissing',
             component: IndexBermissing,
@@ -213,6 +217,12 @@ const router = new Router({
                     meta: { title: 'Add BER/Missing Pallet' }
                 },
                 {
+                    path: 'view/:id',
+                    name: 'bermissings.view',
+                    component: ViewBermissing,
+                    meta: { title: 'View BER/Missing Pallet' }
+                },
+                {
                     path: 'edit/:id',
                     name: 'bermissings.edit',
                     component: EditBermissing,
@@ -220,6 +230,7 @@ const router = new Router({
                 },
             ]
         },
+
         {
             path: '/newpallet',
             component: IndexNewpallet,
@@ -245,6 +256,7 @@ const router = new Router({
                 },
             ]
         },
+
         {
             path: '/damagedpallet',
             component: IndexDamagedpallet,
@@ -270,6 +282,7 @@ const router = new Router({
                 },
             ]
         },
+
         {
             path: '/repairedpallet',
             component: IndexRepairedpallet,
@@ -295,6 +308,7 @@ const router = new Router({
                 },
             ]
         },
+        
         {
             path: '/poolpallet',
             component: IndexPool,
@@ -372,8 +386,6 @@ const router = new Router({
                 },
             ]
         },
-
-
 
         {
             path: '/alltransaction',
@@ -457,6 +469,7 @@ const router = new Router({
                 },
             ]
         },
+
         {
             path: '/pallettransferreceive',
             component: IndexPallettransferreceive,
@@ -491,17 +504,20 @@ const router = new Router({
             component: Home,
             meta: { requiresAuth: true }
         },
+
         {
             path: '/map',
             name: 'map',
             component: Map,
             meta: { requiresAuth: true }
         },
+
         {
             path: '/login',
             name: 'login',
             component: Login
         },
+
         {
             path: '/dashboard',
             name: 'dashboard',

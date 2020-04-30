@@ -15,6 +15,8 @@ import QrcodeVue from 'qrcode.vue'
 import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 import pdf  from 'vue-pdf'
+import VueHtml2Canvas from 'vue-html2canvas';
+import VueHtmlToPaper from 'vue-html-to-paper';
 
 Vue.use(Vuetify);
 Vue.use(VueSweetalert2)
@@ -30,6 +32,9 @@ Vue.component('l-map', LMap);
 Vue.component('l-tile-layer', LTileLayer);
 Vue.component('l-marker', LMarker);
 Vue.component('pdf', pdf);
+Vue.use(VueHtml2Canvas);
+Vue.use(VueHtmlToPaper);
+
 
 delete Icon.Default.prototype._getIconUrl;
 
