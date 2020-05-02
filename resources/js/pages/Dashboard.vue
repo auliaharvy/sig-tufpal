@@ -1,82 +1,70 @@
 <template>
-    <div class="container">
-        <section class="content-header">
-            <h1>
-                Dashboard
-            </h1>
-            <ol class="breadcrumb">
-                <li><router-link :to="'/'"><i class="fa fa-dashboard"></i> Home</router-link></li>
-                <li><a href="#">Dashboard</a></li>
-            </ol>
-        </section>
-
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel">
                         <div class="panel-heading">
-                            <div class="row">
-                                  <v-layout row wrap class="px-5 py-5">
-                                    <v-flex class="px-5" xs12 md6 lg6>
-                                      <div class="form-group">
-                                          <label for="">Bulan</label>
-                                          <select v-model="month" class="form-control">
-                                              <option value="01">Januari</option>
-                                              <option value="02">Februari</option>
-                                              <option value="03">Maret</option>
-                                              <option value="04">April</option>
-                                              <option value="05">Mei</option>
-                                              <option value="06">Juni</option>
-                                              <option value="07">Juli</option>
-                                              <option value="08">Agustus</option>
-                                              <option value="09">September</option>
-                                              <option value="10">Oktober</option>
-                                              <option value="11">November</option>
-                                              <option value="12">Desember</option>
-                                          </select>
-                                      </div>
-                                    </v-flex>
-                                    <v-flex class="px-5" xs12 md6 lg6>
-                                    <div class="form-group">
+                            <v-layout>
+                                <v-flex xs12 md6 lg6>
+                                    <div class="form-group px-5 pt-3">
+                                        <label for="">Bulan</label>
+                                        <select v-model="month" class="form-control">
+                                            <option value="01">Januari</option>
+                                            <option value="02">Februari</option>
+                                            <option value="03">Maret</option>
+                                            <option value="04">April</option>
+                                            <option value="05">Mei</option>
+                                            <option value="06">Juni</option>
+                                            <option value="07">Juli</option>
+                                            <option value="08">Agustus</option>
+                                            <option value="09">September</option>
+                                            <option value="10">Oktober</option>
+                                            <option value="11">November</option>
+                                            <option value="12">Desember</option>
+                                        </select>
+                                    </div>
+                                </v-flex>
+                                <v-flex xs12 md6 lg6>
+                                    <div class="form-group px-5 pt-3">
                                         <label for="">Tahun</label>
                                         <select v-model="year" class="form-control">
                                             <option v-for="(y, i) in years" :key="i" :value="y">{{ y }}</option>
                                         </select>
                                     </div>
+                                </v-flex>
+                            </v-layout>
+                            <div class="row">
+                                <v-layout row wrap class="px-5">
+                                    <v-flex class="pa-5" xs12 md6 lg6>
+                                        <v-card>  
+                                            <v-toolbar>
+                                                <v-toolbar-title>Pallet Send</v-toolbar-title>
+                                            </v-toolbar>    
+                                            
+                                            <div class="panel-body">
+                                                <line-chart v-if="transactions.length > 0" :data="transaction_data" :options="chartOptions" :labels="labels"/>
+                                            </div>
+                                        </v-card>
                                     </v-flex>
-                                  </v-layout>
-                                <!-- <div class="col-md-2">
-                                    <button class="btn btn-primary btn-sm pull-right" @click="exportData">Export</button>
-                                </div> -->
+                                    <v-flex class="pa-5" xs12 md6 lg6>
+                                        <v-card>  
+                                            <v-toolbar>
+                                                <v-toolbar-title>Pallet Receive</v-toolbar-title>
+                                            </v-toolbar>    
+                                            <div class="panel-body">
+                                                <line-chart v-if="transactions.length > 0" :data="transaction_receive_data" :options="chartOptions" :labels="labels"/>
+                                            </div>
+                                        </v-card>
+                                    </v-flex>
+                                </v-layout>
                             </div>
                         </div>
-                         <v-layout row wrap class="px-5 py-5">
-                            <v-flex class="px-5" xs12 md6 lg6>
-                              <v-card>  
-                                <v-toolbar>
-                                  <v-toolbar-title> Good Pallet Send</v-toolbar-title>
-                                </v-toolbar>
-                                <div class="panel-body">
-                                    <line-chart v-if="transactions.length > 0" :data="transaction_data" :options="chartOptions" :labels="labels"/>
-                                </div>
-                              </v-card>
-                            </v-flex>
-                            <v-flex class="px-5" xs12 md6 lg6>
-                              <v-card>  
-                                <v-toolbar>
-                                  <v-toolbar-title> Good Pallet Receive</v-toolbar-title>
-                                </v-toolbar>
-                                <div class="panel-body">
-                                    <line-chart :data="transaction_receive_data" :options="chartOptions" :labels="labels"/>
-                                </div>
-                              </v-card>
-                            </v-flex>
-                         </v-layout>
+                            
+                         
                     </div>
                 </div>
             </div>
         </section>
-    </div>
 </template>
 <script>
     import moment from 'moment'
@@ -86,14 +74,15 @@
     import { mapActions, mapState } from 'vuex'
     export default {
         created() {
+            this.getChartDataReceive({
+                month: this.monthReceive,
+                year: this.yearReceive
+            }),
             this.getChartData({
                 month: this.month,
                 year: this.year
             }),
-            this.getChartDataReceive({
-                month: this.month,
-                year: this.year
-            }),
+            
             this.getPools()
         },
         data() {
@@ -103,7 +92,9 @@
                     maintainAspectRatio: false
                 },
                 month: moment().format('MM'),
-                year: moment().format('Y')
+                year: moment().format('Y'),
+                monthReceive: moment().format('MM'),
+                yearReceive: moment().format('Y'),
             }
         },
         watch: {
@@ -121,21 +112,23 @@
             },
             month_receive() {
                 this.getChartDataReceive({
-                    month: this.month,
-                    year: this.year
+                    month: this.monthReceive,
+                    year: this.yearReceive
                 })
             },
             year_receive() {
                 this.getChartDataReceive({
-                    month: this.month,
-                    year: this.year
+                    month: this.monthReceive,
+                    year: this.yearReceive
                 })
             }
         },
         computed: {
             ...mapState('dashboard', {
                 transactions: state => state.transactions,
-                transactions_receive: state => state.transactions_receive
+            }),
+            ...mapState('dashboard', {
+                transactions_receive: state => state.transactions_receive,
             }),
             ...mapState('pool', {
                 pools: state => state.pool_name,
@@ -165,19 +158,14 @@
                     return moment(o.date).format('DD')
                 });
             },
-            labels_receive() {
-                return _.map(this.transactions_receive, function(o) {
-                    return moment(o.date).format('DD')
-                });
-            },
             transaction_data() {
                 return _.map(this.transactions, function(o) {
                     return o.total
                 });
             },
             transaction_receive_data() {
-                return _.map(this.transactions_receive, function(o) {
-                    return o.total
+                return _.map(this.transactions, function(o) {
+                    return o.totalreceive
                 });
             }
         },

@@ -126,7 +126,7 @@ export default {
                 { value: 'sjps_number', text: 'Reference SJP Number' },
                 { value: 'ber_pallet', text: 'BER Pallet' },
                 { value: 'missing_pallet', text: 'Missing Pallet' },
-                { value: 'reporter_prove', text: 'Berita Acara' },
+                { value: 'reporter_prove', text: 'Prove' },
                 // { value: 'berita_acara', text: 'Berita Acara' },
                 { value: 'status', text: 'Status' },
                 { value: 'note', text: 'Note' },

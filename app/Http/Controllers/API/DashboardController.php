@@ -21,19 +21,24 @@ class DashboardController extends Controller
         $filter = request()->year . '-' . request()->month;
         $parse = Carbon::parse($filter);
         $array_date = range($parse->startOfMonth()->format('d'), $parse->endOfMonth()->format('d'));
-        $transaction = Sjppalletsend::select(DB::raw('date(created_at) as date,sum(good_pallet) as total'))
+        $transaction = Sjppalletsend::select(DB::raw('date(created_at) as date,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->where('created_at', 'LIKE', '%' . $filter . '%')
             ->groupBy(DB::raw('date(created_at)'))->get();
-        
+        $transactionreceive = Sjppalletreceive::select(DB::raw('date(created_at) as date,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            ->where('created_at', 'LIKE', '%' . $filter . '%')
+            ->groupBy(DB::raw('date(created_at)'))->get();
+
         $data = [];
         foreach ($array_date as $row) {
             $f_date = strlen($row) == 1 ? 0 . $row:$row;
             $date = $filter . '-' . $f_date;
             $total = $transaction->firstWhere('date', $date);
+            $totalreceive = $transactionreceive->firstWhere('date', $date);
 
             $data[] = [
                 'date' =>$date,
-                'total' => $total ? $total->total:0
+                'total' => $total ? $total->total:0,
+                'totalreceive' => $totalreceive ? $totalreceive->total:0
             ];
         }
         return $data;
@@ -44,7 +49,30 @@ class DashboardController extends Controller
         $filter = request()->year . '-' . request()->month;
         $parse = Carbon::parse($filter);
         $array_date = range($parse->startOfMonth()->format('d'), $parse->endOfMonth()->format('d'));
-        $transactionreceive = Sjppalletreceive::select(DB::raw('date(created_at) as date,sum(good_pallet) as total'))
+        $transactionreceive = Sjppalletreceive::select(DB::raw('date(created_at) as date,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            ->where('created_at', 'LIKE', '%' . $filter . '%')
+            ->groupBy(DB::raw('date(created_at)'))->get();
+        
+        $data = [];
+        foreach ($array_date as $row) {
+            $f_date = strlen($row) == 1 ? 0 . $row:$row;
+            $date = $filter . '-' . $f_date;
+            $total = $transactionreceive->firstWhere('date', $date);
+
+            $data[] = [
+                'date' =>$date,
+                'total' => $total ? $total->total:0
+            ];
+        }
+        return $data;
+    }
+
+    public function totalpallet()
+    {
+        $filter = request()->year . '-' . request()->month;
+        $parse = Carbon::parse($filter);
+        $array_date = range($parse->startOfMonth()->format('d'), $parse->endOfMonth()->format('d'));
+        $transactionreceive = Sjppalletreceive::select(DB::raw('date(created_at) as date,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->where('created_at', 'LIKE', '%' . $filter . '%')
             ->groupBy(DB::raw('date(created_at)'))->get();
         

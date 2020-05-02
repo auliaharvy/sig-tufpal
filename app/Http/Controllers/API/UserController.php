@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserCollection;
 use Spatie\Permission\Models\Permission;
+use Maatwebsite\Excel\Facades\Excel;
 use App\User;
 use DB;
 use File;
@@ -20,6 +21,13 @@ class UserController extends Controller
         }
         $users = $users->paginate(10000);
         return new UserCollection($users);
+    }
+
+    public function import() 
+    {
+        Excel::import(new UsersImport, 'users.xlsx');
+        
+        return redirect('/')->with('success', 'All good!');
     }
 
     public function userLists()

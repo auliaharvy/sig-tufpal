@@ -39,6 +39,7 @@ import EditSjpdest from './pages/sjp/Editdest.vue'
 import IndexSjpStatus from './pages/sjpstatus/Index.vue'
 import DataSjpStatus from './pages/sjpstatus/SjpStatus.vue'
 import AddSjpStatus from './pages/sjpstatus/AddSjpStatus.vue'
+import SendApprovalSjpStatus from './pages/sjpstatus/SendDriverApproval.vue'
 // import SendbackSjpStatus from './pages/sjpstatus/SendbackSjpStatus.vue'
 import EditSjpStatus from './pages/sjpstatus/EditSjpStatus.vue'
 import EditSjpStatussendback from './pages/sjpstatus/EditSjpStatussendback.vue'
@@ -171,6 +172,11 @@ const router = new Router({
                     name: 'sjpstatuss.add',
                     component: AddSjpStatus,
                     meta: { title: 'Add Sjp Status' }
+                },{
+                    path: 'sendapproval/:id',
+                    name: 'sjpstatussend.approval',
+                    component: SendApprovalSjpStatus,
+                    meta: { title: 'Send Approval SJP Status' }
                 },
                 {
                     path: 'sendback/:id',

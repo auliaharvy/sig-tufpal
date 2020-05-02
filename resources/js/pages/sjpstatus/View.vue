@@ -2,19 +2,26 @@
     <div ref="printMe" id="print" class="col-md-12">
         <div class="panel">
             <div class="panel-heading">
-                <h3 class="panel-title">BER/Missing Pallet Print</h3>
+                <h3 class="panel-title">SJP Status Print</h3>
             </div>
             <div class="panel-body">
                 <template>
                     <v-divider />
                     <v-layout align="center" justify="center">
                         <v-flex class="px-5" xs12 md6 lg6>
-                            <dt>{{ bmp_number }}</dt>
+                            <dt>{{ sjp_number }}</dt>
                             <dd>
                                 <div id="qrcode">
-                                    <VueQrcode :value="bmp_number" />
+                                    <VueQrcode :value="sjp_number" />
                                 </div>
                             </dd>
+                            <br>
+                            <dt>Good Pallet</dt>
+                            <dd>{{ good_pallet }} Pallet</dd>
+                            <br>
+                            <dt>TBR Pallet</dt>
+                            <dd>{{ tbr_pallet }} Pallet</dd>
+                            <br>
                             <br>
                             <dt>BER Pallet</dt>
                             <dd>{{ ber_pallet }} Pallet</dd>
@@ -28,7 +35,7 @@
                         <v-divider />
                         <v-flex class="px-5" xs12 md6 lg6>
                             <dt>Pool Pallet</dt>
-                            <dd>{{ pool_pallet_id }} <option v-for='data in pools.data' v-bind:key='data.pool_pallet_id'>{{ data.pool_name }}</option> </dd>
+                            <dd>{{ pool_pallet_id }} </dd>
                             <br>
                             <dt>Transporter</dt>
                             <dd>{{ transporter_id }} </dd>
@@ -58,18 +65,21 @@ import jsPDF from 'jspdf'
             VueQrcode,
         },
         created() {
-            this.editBermissing(this.$route.params.id).then((res) => {
+            this.editSjpStatus(this.$route.params.id).then((res) => {
                 let row = res.data
-                this.bmp_number =  row.bmp_number
-                this.reporter_user_id =  row.reporter_user_id
-                this.pool_pallet_id =  row.pool_pallet_id
-                this.reporter_name =  row.reporter
-                this.transporter_id =  row.transporter_id
-                this.reference_sjp_status_id =  row.reference_sjp_status_id
-                this.ber_pallet = row.ber_pallet
-                this.missing_pallet =  row.missing_pallet
-                this.reporter_prove = row.reporter_prove
+                this.sjp_number =  row.sjp_number
+                this.checker_send_user_id =  row.checker_send_user_id
+                this.checker_receive_user_id =  row.checker_receive_user_id
+                this.sjp_id =  row.sjp_id
+                this.transaction_id =  row.transaction_id
                 this.status =  row.status
+                this.good_pallet =  row.good_pallet
+                this.ber_pallet = row.ber_pallet
+                this.tbr_pallet = row.tbr_pallet
+                this.missing_pallet =  row.missing_pallet
+                this.good_cement = row.good_cement
+                this.bad_cement =  row.bad_cement
+                this.driver_approval = row.driver_approval
                 this.note = row.note
             }),
             this.editPools(this.pool_pallet_id).then((res) => {
@@ -80,16 +90,19 @@ import jsPDF from 'jspdf'
         data() {
             return {
                 output: null,
-                bmp_number: '',
-                reporter_user_id: '',
-                approver_user_id: '',
-                pool_pallet_id: '',
-                transporter_id: '',
-                reference_sjp_status_id: '',
+                checker_send_user_id: '',
+                checker_receive_user_id: '',
+                sjp_id: '',
+                transaction_id: '',
+                sjp_number: '',
+                status: '',
+                good_pallet: '',
+                tbr_pallet: '',
                 ber_pallet: '',
                 missing_pallet: '',
-                reporter_prove: '',
-                status: '',
+                good_cement: '',
+                bad_cement: '',
+                driver_approval: '',
                 note: '',
                 
                 pool_name: '',
@@ -109,7 +122,7 @@ import jsPDF from 'jspdf'
         }),
         },
         methods: {
-            ...mapActions('bermissing', ['editBermissing']),
+            ...mapActions('sjpstatus', ['editSjpStatus']),
             ...mapActions('pool', ['getPools', 'editPools']),
            async print() {
                 const el = this.$refs.printMe;

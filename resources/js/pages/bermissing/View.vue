@@ -1,13 +1,13 @@
 <template>
-    <div id="print" class="col-md-12">
-        <div class="panel">
+    <div  class=" col-md-12  ">
+        <div class=" panel">
             <div class="panel-heading">
                 <h3 class="panel-title">BER/Missing Pallet Print</h3>
             </div>
-            <div class="panel-body">
+            <div id="print" ref="printMe" class="panel-body text-center" >
                 <template>
                     <v-layout align="center" justify="center">
-                        <v-flex class="px-5" xs12 md6 lg6>
+                        <v-flex class="px-5" xs12 md12 lg12>
                             <dt>{{ bmp_number }}</dt>
                             <dd>
                                     <qrcode-vue 
@@ -24,10 +24,11 @@
                             <br>
                             <dt>Note</dt>
                             <dd>{{ note }} </dd>
-                        </v-flex>
-                        <v-flex class="px-5" xs12 md6 lg6>
+                            <br>
                             <dt>Pool Pallet</dt>
-                            <dd>{{ pool_pallet_id }}</dd>
+                            <dd>
+                                <option v-for='data in pools.data' v-bind:key='data.sjp_id' :value='pool_pallet_id'>{{ data.pool_name }}</option>
+                                </dd>
                             <br>
                             <dt>Transporter</dt>
                             <dd>{{ transporter_id }} </dd>
@@ -35,19 +36,18 @@
                         </v-flex>
                     </v-layout>
                 </template>
-            </div>
-                    <v-layout align="center" justify="center">
-                        <v-flex class="px-5 py-5" xs12 md6 lg6>
-                            <v-btn @click="print">Print</v-btn>
-                        </v-flex>
-                    </v-layout>            
-        </div>
+            </div> 
+            <div class="pa-5">
+                <v-btn @click="print">Print</v-btn>     
+            </div>             
+        </div>  
     </div>
 </template>
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex';
 import VueQrcode from 'qrcode.vue'
 import jsPDF from 'jspdf'
+// import html2canvas from 'html2canvas'
 
     export default {
         name: 'ViewBermissing',
@@ -94,6 +94,7 @@ import jsPDF from 'jspdf'
             }
         },
         
+        
         computed: {
             ...mapState('pool', {
             pools: state => state.pools 
@@ -105,10 +106,36 @@ import jsPDF from 'jspdf'
         methods: {
             ...mapActions('bermissing', ['editBermissing']),
             ...mapActions('pool', ['getPools', 'editPools']),
-            print () {
-                // Pass the element id here
-                this.$htmlToPaper('print');
-            },
+            
+
+
+    //         print () {
+    //             const filename  = this.bmp_number + '.pdf';
+
+	// 	html2canvas(document.querySelector('#nodeToRenderAsPDF')).then(canvas => {
+	// 		let pdf = new jsPDF('p', 'mm', 'a4');
+	// 		pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
+	// 		pdf.save(filename);
+	// 	});
+	// },
+
+// Variant
+// This one lets you improve the PDF sharpness by scaling up the HTML node tree to render as an image before getting pasted on the PDF.
+       async print() {
+            const filename  = this.bmp_number + '.pdf';
+            const el = this.$refs.printMe;
+            // add option type to get the image version
+            // if not provided the promise will return 
+            // the canvas.
+            const options = {
+                type: 'dataURL'
+            }
+            this.output = await this.$html2canvas(el, options);
+
+            let pdf = new jsPDF('p', 'mm', 'a4');
+			pdf.addImage(this.output, 'PNG', 0, 0, 0, 0);
+			pdf.save(filename);
+    },
             
             accept() {
                 this.$swal({

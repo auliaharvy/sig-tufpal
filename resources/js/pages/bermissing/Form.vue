@@ -56,7 +56,7 @@
         <v-layout row wrap class="px-5">
             <v-flex class="px-5" xs12 md12 lg12>
                 <div class="form-group" :class="{ 'has-error': errors.reporter_prove }">
-                    <label for="">Berita Acara</label>
+                    <label for="">Prove</label>
                     <input type="file" class="form-control" accept="image/*" @change="uploadImage($event)" id="file-input">
                     <p class="text-black">Leave blank if you don't want to change photo</p>
                     <p class="text-danger" v-if="errors.photo">{{ errors.reporter_prove[0] }}</p>

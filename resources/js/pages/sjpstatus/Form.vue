@@ -156,15 +156,15 @@
             <p class="text-danger" v-if="errors.bad_cement">{{ errors.bad_cement[0] }}</p>
         </div> -->
         <v-layout row wrap class="px-5">
-            <v-flex class="px-5" xs12 md6 lg6>
+            <!-- <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.driver_approval }">
                     <label for="">Driver Approval</label>
                     <input type="file" class="form-control" accept="image/*" @change="uploadImage($event)" id="file-input">
                     <p class="text-black">Photo Driver With Note To Approval</p>
                     <p class="text-danger" v-if="errors.driver_approval">{{ errors.driver_approval[0] }}</p>
                 </div>
-            </v-flex>
-            <v-flex class="px-5" xs12 md6 lg6>
+            </v-flex> -->
+            <v-flex class="px-5" xs12 md12 lg12>
                 <div class="form-group" :class="{ 'has-error': errors.note }">
                     <label for="">Note</label>
                     <input type="text" class="form-control" v-model="sjpstatus.note">
@@ -180,7 +180,10 @@ import { mapActions, mapState, mapMutations } from 'vuex'
 export default {
     name: 'FormSjpStatus',
     created() {
-        this.getSjp(), 
+        this.getSjp().then((res) => {
+                let row = res.data
+                this.$store.state.sjpstatus.good_pallet  =  row.pallet_quantity
+            }), 
         this.getMstTransaction(), 
         this.getUserLogin() //LOAD DATA
     },

@@ -2,19 +2,19 @@
 
 namespace App\Exports;
 
-use App\Alltransaction;
+use App\Transaction;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
 class TransactionExport implements FromView, ShouldAutoSize
 {
-    protected $alltransaction;
+    protected $transaction;
     protected $month;
     protected $year;
     public function __construct($transaction, $month, $year)
     {
-        $this->alltransaction = $alltransaction;
+        $this->transaction = $transaction;
         $this->month = $month;
         $this->year = $year;
     }
@@ -22,7 +22,7 @@ class TransactionExport implements FromView, ShouldAutoSize
     public function view(): View
     {
         return view('exports.transaction', [
-            'transaction' => $this->alltransaction,
+            'transaction' => $this->transaction,
             'month' => $this->month,
             'year' => $this->year
         ]);

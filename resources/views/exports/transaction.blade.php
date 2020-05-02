@@ -1,21 +1,21 @@
 <table>
     <thead>
         <tr>
-            <th colspan="2"><strong>Laporan Transaksi {{ $month }} - {{ $year }}</strong></th>
+            <th colspan="2"><strong>SJP Pallet {{ $month }} - {{ $year }}</strong></th>
         </tr>
         <tr>
             <th colspan="2"></th>
         </tr>
         <tr>
-            <th>Tanggal</th>
-            <th>Pemasukan</th>
+            <th>Month</th>
+            <th>Total Pallet</th>
         </tr>
     </thead>
     <tbody>
         @foreach($transaction as $row)
             <tr>
                 <td>{{ $row['date'] }}</td>
-                <td>Rp {{ number_format($row['total']) }}</td>
+                <td>{{ number_format($row['total']) }} Pallet</td>
             </tr>
         @endforeach
     </tbody>

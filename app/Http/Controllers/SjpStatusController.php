@@ -125,7 +125,7 @@ public function index()
 
         $this->validate($request, [
             'good_pallet' => 'required|integer|gt:-1|in:'.$pallet_qty,
-            'driver_approval' => 'required',
+            // 'driver_approval' => 'required',
             // 'tbr_pallet' => 'required|integer|gt:-1',
             // 'ber_pallet' => 'required|integer|gt:-1',
             // 'missing_pallet' => 'required|integer|gt:-1',
@@ -497,9 +497,9 @@ public function index()
             if($tbr_palletrcv>($good_pallet-$goodpalletrcv)){
                 return response()->json(['error' => 'Input Error! Total Quantity Of Received Pallet  Over Than Total Quantity Of Pallet Send'], 404);
             }else {
-                $update = SjpStatus::find($sjp_status_id);
                 DB::beginTransaction();
                 try{
+                $update = SjpStatus::find($sjp_status_id);
                 $good_pallet_awal = $update->good_pallet; //ambil qty pallet awal
                 $good_cement_awal = $update->good_cement; //ambil qty cement awal
                 // $ber_pallet_awal = $update->ber_pallet; //ambil qty pallet awal
@@ -705,9 +705,9 @@ public function index()
             //     return response()->json(['error' => 'Qty Receive melebihi data yang di send'], 404);
             // }
             // else{
-                $update = SjpStatus::find($sjp_status_id);
                 DB::beginTransaction();
                 try{
+                $update = SjpStatus::find($sjp_status_id);
                 $good_pallet_awal = $update->good_pallet; //ambil qty pallet awal
                 // $good_cement_awal = $update->good_cement; //ambil qty cement awal
                 $tbr_pallet_awal = $update->tbr_pallet;
@@ -923,7 +923,124 @@ public function index()
             
         }    
     }
-   
+    
+    public function sendingdriverapproval(Request $request)
+    {
+        $sjp_id = $request->sjp_id;
+        $sjp_status_id = $request->sjp_status_id;
+        $sjp = DB::table('surat_jalan_pallet')->where('sjp_id',$sjp_id)->first();
+        $departure_id = $sjp->destination_pool_pallet_id;
+        $destination_id = $sjp->departure_pool_pallet_id;
+        $transporter_id = $sjp->transporter_id;
+        $driver_id = $sjp->driver_id;
+        $driver = Driver::find($driver_id);
+        $drivername = $driver->driver_name;
+        $sjpnumber = $sjp->sjp_number;
+        $vehicle_id = $sjp->vehicle_id;
+        $status = 'CLOSED';
+        $update = SjpStatus::find($sjp_status_id);
+        // $good_pallet = $update->good_pallet;
+        // $tbr_pallet = $update->tbr_pallet;
+        // $ber_pallet = $update->ber_pallet;
+        // $missing_pallet = $update->missing_pallet;
+        // $total = $good_pallet+$tbr_pallet+$ber_pallet+$missing_pallet;
+        // $InventoryTrans = Transporter::find($transporter_id); //cek qty pallet di transporter
+        // $good_pallet = $InventoryTrans->good_pallet;
+        // $tbr_pallet = $InventoryTrans->tbr_pallet;
+        // $ber_pallet = $InventoryTrans->ber_pallet;
+        // $missing_pallet = $InventoryTrans->missing_pallet;
+        // $total = $good_pallet+$tbr_pallet+$ber_pallet+$missing_pallet;
+       
+        // $this->validate($request, [
+        //     'good_pallet' => 'required|integer|gt:-1|lte:'.$total,
+        //     'tbr_pallet' => 'required|integer|gt:-1|lte:'.$total,
+        //     'ber_pallet' => 'required|integer|gt:-1|lte:'.$total,
+        //     'missing_pallet' => 'required|integer|gt:-1|lte:'.$total,
+        //     // 'good_cement' => 'required|integer|gt:-1|',
+        //     // 'bad_cement' => 'required|integer|gt:-1'
+        // ]);
+        DB::beginTransaction();
+        try{
+            $name = NULL;
+                if ($request->hasFile('sending_driver_approval')) {
+                    $file = $request->file('sending_driver_approval');
+                    $name = $sjpnumber . '-' . $drivername . '-' . 'sending' . '-' . 'approval' . '-' . time() . '.' . $file->getClientOriginalExtension();
+                    $file->storeAs('public/driverapproval', $name);
+                }
+            $update->driver_approve = 1;
+            $update->sending_driver_approval = $name;
+            $update->save();
+
+            DB::commit();
+            return response()->json(['status' => 'success'], 200);
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => 'error', 
+                'data' => $e->getMessage(),
+                'message' => 'Error Sending Approve SJP Record Record'], 422);
+        }
+    }
+
+    public function receivedriverapproval(Request $request)
+    {
+        $sjp_id = $request->sjp_id;
+        $sjp_status_id = $request->sjp_status_id;
+        $sjp = DB::table('surat_jalan_pallet')->where('sjp_id',$sjp_id)->first();
+        $departure_id = $sjp->destination_pool_pallet_id;
+        $destination_id = $sjp->departure_pool_pallet_id;
+        $transporter_id = $sjp->transporter_id;
+        $driver_id = $sjp->driver_id;
+        $driver = Driver::find($driver_id);
+        $drivername = $driver->driver_name;
+        $sjpnumber = $sjp->sjp_number;
+        $vehicle_id = $sjp->vehicle_id;
+        $status = 'CLOSED';
+        $update = SjpStatus::find($sjp_status_id);
+        // $good_pallet = $update->good_pallet;
+        // $tbr_pallet = $update->tbr_pallet;
+        // $ber_pallet = $update->ber_pallet;
+        // $missing_pallet = $update->missing_pallet;
+        // $total = $good_pallet+$tbr_pallet+$ber_pallet+$missing_pallet;
+        // $InventoryTrans = Transporter::find($transporter_id); //cek qty pallet di transporter
+        // $good_pallet = $InventoryTrans->good_pallet;
+        // $tbr_pallet = $InventoryTrans->tbr_pallet;
+        // $ber_pallet = $InventoryTrans->ber_pallet;
+        // $missing_pallet = $InventoryTrans->missing_pallet;
+        // $total = $good_pallet+$tbr_pallet+$ber_pallet+$missing_pallet;
+       
+        // $this->validate($request, [
+        //     'good_pallet' => 'required|integer|gt:-1|lte:'.$total,
+        //     'tbr_pallet' => 'required|integer|gt:-1|lte:'.$total,
+        //     'ber_pallet' => 'required|integer|gt:-1|lte:'.$total,
+        //     'missing_pallet' => 'required|integer|gt:-1|lte:'.$total,
+        //     // 'good_cement' => 'required|integer|gt:-1|',
+        //     // 'bad_cement' => 'required|integer|gt:-1'
+        // ]);
+        DB::beginTransaction();
+        try{
+            $name = NULL;
+                if ($request->hasFile('receiving_driver_approval')) {
+                    $file = $request->file('receiving_driver_approval');
+                    $name = $sjpnumber . '-' . $drivername . '-' . 'receiving' . '-' . 'approval' . '-' . time() . '.' . $file->getClientOriginalExtension();
+                    $file->storeAs('public/driverapproval', $name);
+                }
+            $update->driver_approve = 2;
+            $update->receiving_driver_approval = $name;
+            $update->save();
+
+            DB::commit();
+            return response()->json(['status' => 'success'], 200);
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => 'error', 
+                'data' => $e->getMessage(),
+                'message' => 'Error Sending Approve SJP Record Record'], 422);
+        }
+    }
 
     public function destroy($id)
     {
