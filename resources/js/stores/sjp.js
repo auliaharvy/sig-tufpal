@@ -17,7 +17,7 @@ const state = () => ({
         tonnage: '',
         product_quantity: '',
         status: '',
-        departure_time: '', 
+        departure_time: new Date().toISOString().slice(0,10), 
         eta: '',
         pallet_quantity: '',    
     },

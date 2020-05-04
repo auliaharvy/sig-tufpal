@@ -80,7 +80,7 @@ export default {
     created() {
       this.getPools(),
       this.getTransporters(), 
-      this.getUserLogin() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
+      this.getUserLogin()
     },
     data() {
         return {
@@ -94,15 +94,12 @@ export default {
     },
    
     computed: {
-        ...mapState(['errors']), //LOAD STATE ERROR UNTUK DITAMPILKAN KETIKA TERJADI ERROR VALIDASI
-        // ...mapState('bermissing', {
-        //     bermissing: state => state.bermissing //LOAD DATA CUSTOMER DARI STATE CUSTOMER
-        // }),
+        ...mapState(['errors']), 
         ...mapState('pool', {
-            pools: state => state.pools //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+            pools: state => state.pool
         }),
          ...mapState('transporter', {
-            transporters: state => state.transporters //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+            transporters: state => state.transporters
         }),
         ...mapState('user', {
             authenticated: state => state.authenticated

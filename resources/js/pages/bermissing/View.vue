@@ -26,12 +26,13 @@
                             <dd>{{ note }} </dd>
                             <br>
                             <dt>Pool Pallet</dt>
-                            <dd>
-                                <option v-for='data in pools.data' v-bind:key='data.sjp_id' :value='pool_pallet_id'>{{ data.pool_name }}</option>
-                                </dd>
+                            <dd>{{ pool_pallet_id }} </dd>
                             <br>
                             <dt>Transporter</dt>
                             <dd>{{ transporter_id }} </dd>
+                            <br>
+                            <dt>Print At</dt>
+                            <dd>{{ print_at }} </dd>
                             <br>
                         </v-flex>
                     </v-layout>
@@ -85,6 +86,7 @@ import jsPDF from 'jspdf'
                 reporter_prove: '',
                 status: '',
                 note: '',
+                print_at: new Date().toLocaleString(),
                 
                 pool_name: '',
                 transporter_name: '',
@@ -103,9 +105,11 @@ import jsPDF from 'jspdf'
             pool: state => state.pool 
         }),
         },
+
         methods: {
             ...mapActions('bermissing', ['editBermissing']),
             ...mapActions('pool', ['getPools', 'editPools']),
+            
             
 
 
@@ -122,6 +126,7 @@ import jsPDF from 'jspdf'
 // Variant
 // This one lets you improve the PDF sharpness by scaling up the HTML node tree to render as an image before getting pasted on the PDF.
        async print() {
+           this.output = null;
             const filename  = this.bmp_number + '.pdf';
             const el = this.$refs.printMe;
             // add option type to get the image version

@@ -44,12 +44,13 @@
             ...mapActions('sjp', ['editSjp', 'updateSjp']),
             //KETIKA TOMBOL DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
             submit() {
-                this.loading = true
-                //MELAKUKAN REQUEST KE SERVER UNTUK MENAMBAHKAN DATA
-                this.submitSjpStatus().then(() => {
-                    //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
-                    this.$router.push({ name: 'sjpstatuss.data' })
-                })
+                this.$refs.FormSjpStatus.submit()
+                // this.loading = true
+                // //MELAKUKAN REQUEST KE SERVER UNTUK MENAMBAHKAN DATA
+                // this.submitSjpStatus().then(() => {
+                //     //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
+                //     this.$router.push({ name: 'sjpstatuss.data' })
+                // })
             },
             resetLoading() {
                 this.loading = false

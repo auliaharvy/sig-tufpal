@@ -39,8 +39,8 @@
                         :search="search"
                         >   
                             <template v-slot:item.reporter_prove="{ item }">
-                                <img :src="'../storage/bermissing/reporter_prove/' + item.reporter_prove" :width="70" :height="100" :alt="item.bmp_number"> </img>
-                                <v-btn dark color="success" text small :href="'../storage/bermissing/reporter_prove/' + item.reporter_prove" target="_blank">
+                                <img :src="'storage/bermissing/reporter_prove/' + item.reporter_prove" :width="70" :height="100" :alt="item.bmp_number"> </img>
+                                <v-btn dark color="success" text small :href="'storage/bermissing/reporter_prove/' + item.reporter_prove" target="_blank">
                                     show
                                 </v-btn>
                             </template>
@@ -69,37 +69,6 @@
                         </v-data-table>
                     </v-card>
                 </template>
-                <!-- <v-dialog  v-model="dialog" max-width="500">
-                    <v-card>
-                        <v-card-title class="headline">Berita Acara : {{bermissing.ber_missing_pallet_id}}</v-card-title>
-                        <v-card-text>
-                            <img :src="'/storage/app/public/bermissing/reporter_prove/' + bermissing.reporter_prove"  :alt="bermissing.bmp_number"> </img>
-                        </v-card-text>
-                        <v-card-actions>
-                            <router-link :to="{ name: 'bermissings.edit', params: {id: bermissing.ber_missing_pallet_id} }" v-if="bermissing.status == 0 && $can('update bermissingpallets')" >
-                                <v-btn color="success" small>Approval</v-btn>
-                            </router-link> 
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog> -->
-              	<!-- TABLE UNTUK MENAMPILKAN LIST CUSTOMER -->
-
-               
-                    <!-- <div class="col-md-6">
-                        <p v-if="sjpstatuss.data"><i class="fa fa-bars"></i> {{ sjpstatuss.data.length }} item dari {{ sjpstatuss.meta.total }} total data</p>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="pull-right">
-                            <b-pagination
-                                v-model="page"
-                                :total-rows="sjpstatuss.meta.total"
-                                :per-page="sjpstatuss.meta.per_page"
-                                aria-controls="sjpstatuss"
-                                v-if="sjpstatuss.data && sjpstatuss.data.length > 0"
-                                ></b-pagination>
-                        </div>
-                    </div> -->
-                
             </div>
         </div>
     </div>

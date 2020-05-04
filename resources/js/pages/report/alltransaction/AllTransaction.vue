@@ -10,6 +10,14 @@
                         <v-card-title>
                         ALL TRANSACTION
                         <v-spacer></v-spacer>
+                        <v-btn>
+                            <download-excel 
+                            :data= "alltransactions.data"
+                            type="csv"
+                            name="alltransaction.csv">
+                                Download Data
+                            </download-excel>
+                        </v-btn>
                         <v-text-field
                             v-model="search"
                             prepend-icon="mdi-search"
@@ -66,6 +74,7 @@ export default {
     data() {
         return {
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
+            exportName: '',
              headers: [
                 { value: 'tid_number', text: 'TID Number' },
                 { value: 'sjp_number', text: 'SJP Number' },

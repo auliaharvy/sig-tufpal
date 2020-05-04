@@ -24,6 +24,7 @@
                         </v-card-title>
                         <v-data-table
                         :headers="headers"
+                        :loading="loading"
                         :items="sjpstatuss.data"
                         :search="search"
                         >       
@@ -60,6 +61,16 @@
                                 <v-btn color="success" small>Send Back</v-btn>
                             </router-link>                     
                         </template>
+
+                        <template v-if="$can('update sjpstatuss') " v-slot:item.approval="{ item }">
+                            <router-link v-if="item.driver_approve == 0 && authenticated.reference_pool_pallet_id == item.departure_pool_pallet_id" :to="{ name: 'sjpstatussend.approval', params: {id: item.sjp_status_id} }">
+                                <v-btn color="success" small>Sending Approval</v-btn>
+                            </router-link>   
+
+                            <router-link v-if="item.driver_approve == 1 && authenticated.reference_pool_pallet_id == item.destination_pool_pallet_id" :to="{ name: 'sjpstatuss.sendback', params: {id: item.sjp_status_id} }">
+                                <v-btn color="success" small>Receiving Approval</v-btn>
+                            </router-link>                     
+                        </template>
                         
                         <template v-if="$can('delete sjps')" v-slot:item.delete="{ item }">
                                 <v-btn color="error" @click="deleteSjpStatus(item.sjp_status_id)" small>Delete</v-btn>                     
@@ -81,7 +92,7 @@ import { mapActions, mapState } from 'vuex'
 export default {
     name: 'DataSjpStatus',
     created() {
-        this.getSjpStatuss() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
+        this.getSjpStatuss()
     },
     data() {
         return {
@@ -104,9 +115,11 @@ export default {
                 // { value: 'good_cement', text: 'Good Cement' },
                 // { value: 'bad_cement', text: 'Bad Cement' },
                 { value: 'note', text: 'Note' },
+                // { value: 'driver_approve', text: 'Note' },
                 // { value: 'qrcode', text: 'QR Code' },
                 // { value: 'created_at', text: 'Send at' },
                 // { value: 'updated_at', text: 'Received at' },
+                // { value: 'approval', text: 'Approval'},
                 { value: 'receive', text: 'Receive'},
                 { value: 'send_back', text: 'Send Back'},
                 { value: 'delete', text: 'Delete'}
@@ -116,12 +129,17 @@ export default {
     },
     computed: {
         ...mapState('sjpstatus', {
-            sjpstatuss: state => state.sjpstatuss //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+            sjpstatuss: state => state.sjpstatuss
+        }),
+        ...mapState('sjpstatus', {
+            sjpstatus: state => state.sjpstatus
+        }),
+        ...mapState('sjpstatus', {
+            loading: state => state.loading
         }),
         ...mapState('user', {
             authenticated: state => state.authenticated
         }),
-        //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {
             get() {
                 return this.$store.state.sjpstatus.page

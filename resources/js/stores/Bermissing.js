@@ -17,6 +17,7 @@ const state = () => ({
         reporter_prove: '',
         status: '',
         note: '',
+        created_at: '',
       
     },
     page: 1
@@ -55,6 +56,7 @@ const mutations = {
             reporter_prove: '',
             status: '',
             note: '',
+            created_at: '',
         }
     }
 }
