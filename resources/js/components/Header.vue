@@ -137,7 +137,7 @@
                         <v-icon color="black">mdi-tag-multiple</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
-                        <v-list-item-title color="black">All Transaction</v-list-item-title>
+                        <v-list-item-title color="black">Transaction Data</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item link router to="/map" v-if="$can('read location')">

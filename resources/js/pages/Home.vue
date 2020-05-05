@@ -110,7 +110,7 @@
           <v-card link router to="/alltransaction" class="text-center ma-3" v-if="$can('read alltransaction')">
             <v-card-title class="text-center" color="black">
               <v-icon color="black" left>mdi-tag-multiple</v-icon>
-              <span right> All Transaction </span>
+              <span right> Transaction Data </span>
             </v-card-title>
           </v-card>
         </v-flex>

@@ -15,7 +15,7 @@ class AlltransactionController extends Controller
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
         $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
-        if($pool_pallet==1 && $role<7){
+        if($pool_pallet==1){
             $alltransaction = DB::table('all_transaction as a')
             ->orderBy('created_at', 'DESC')
             ->leftJoin('surat_jalan_pallet as b', 'a.reference_sjp_id', '=', 'b.sjp_id')
