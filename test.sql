@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mariadb:3306
--- Generation Time: Apr 09, 2020 at 12:24 AM
+-- Generation Time: May 04, 2020 at 07:21 PM
 -- Server version: 10.3.22-MariaDB
 -- PHP Version: 7.3.15
 
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `all_transaction` (
   `all_transaction_id` int(11) NOT NULL,
-  `tid_number` varchar(100) NOT NULL,
+  `tid_number` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `reference_sjp_id` int(11) DEFAULT NULL,
   `reference_sjp_status_id` int(11) DEFAULT NULL,
   `reference_pallet_transfer_id` int(11) DEFAULT NULL,
@@ -38,30 +38,32 @@ CREATE TABLE `all_transaction` (
   `reference_new_pallet_id` int(11) DEFAULT NULL,
   `reference_damaged_pallet_id` int(11) DEFAULT NULL,
   `reference_repaired_pallet_id` int(11) DEFAULT NULL,
-  `transaction` varchar(50) DEFAULT NULL,
-  `no_do` varchar(50) DEFAULT NULL,
-  `new_no_do` varchar(50) DEFAULT NULL,
-  `status` varchar(50) DEFAULT NULL,
-  `sender/reporter` varchar(100) DEFAULT NULL,
-  `receiver/approver` varchar(100) DEFAULT NULL,
-  `departure_pool` varchar(100) DEFAULT NULL,
-  `destination_pool` varchar(100) DEFAULT NULL,
-  `new_destination` varchar(100) DEFAULT NULL,
-  `pool_pallet` varchar(100) DEFAULT NULL,
-  `transporter` varchar(100) DEFAULT NULL,
-  `vehicle` varchar(100) DEFAULT NULL,
-  `new_vehicle` varchar(100) DEFAULT NULL,
-  `driver` varchar(100) DEFAULT NULL,
-  `new_driver` varchar(100) DEFAULT NULL,
+  `transaction` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `no_do` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `new_no_do` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(50) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `sender/reporter` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `receiver/approver` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `departure_pool` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `destination_pool` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `new_destination` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pool_pallet` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `transporter` varchar(100) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `vehicle` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `new_vehicle` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `driver` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `new_driver` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `good_pallet` int(11) DEFAULT 0,
   `tbr_pallet` int(11) DEFAULT 0,
   `ber_pallet` int(11) DEFAULT 0,
   `missing_pallet` int(11) DEFAULT 0,
   `good_cement` int(11) DEFAULT 0,
   `bad_cement` int(11) DEFAULT 0,
-  `reporter_prove` varchar(100) DEFAULT NULL,
-  `reason` varchar(100) DEFAULT NULL,
-  `note` varchar(150) DEFAULT NULL,
+  `sending_driver_approval` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Send Driver Digital Signature',
+  `receiving_driver_approval` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Send Driver Digital Signature',
+  `reporter_prove` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reason` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `note` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -70,14 +72,77 @@ CREATE TABLE `all_transaction` (
 -- Dumping data for table `all_transaction`
 --
 
-INSERT INTO `all_transaction` (`all_transaction_id`, `tid_number`, `reference_sjp_id`, `reference_sjp_status_id`, `reference_pallet_transfer_id`, `reference_ber_missing_id`, `reference_new_pallet_id`, `reference_damaged_pallet_id`, `reference_repaired_pallet_id`, `transaction`, `no_do`, `new_no_do`, `status`, `sender/reporter`, `receiver/approver`, `departure_pool`, `destination_pool`, `new_destination`, `pool_pallet`, `transporter`, `vehicle`, `new_vehicle`, `driver`, `new_driver`, `good_pallet`, `tbr_pallet`, `ber_pallet`, `missing_pallet`, `good_cement`, `bad_cement`, `reporter_prove`, `reason`, `note`, `created_at`, `updated_at`) VALUES
-(22, 'TID-202004-00001', NULL, NULL, NULL, NULL, 122, NULL, NULL, 'New Pallet Report', NULL, NULL, 'REPORTED', 'Aulia Harvy', NULL, NULL, NULL, NULL, 'Pool Pallet DLI', NULL, 'B 1189 JJS', NULL, 'Subyo', NULL, 500, 0, 0, 0, 0, 0, NULL, NULL, 'Pallet Belum Di QC', '2020-04-08 14:17:52', '2020-04-08 14:17:52'),
-(25, 'TID-202004-00002', 141, 277, NULL, NULL, NULL, NULL, NULL, 'SJP Status Send', '1', NULL, 'SEND', 'Aulia Harvy', NULL, 'Pool Pallet DLI', 'BCTD', NULL, NULL, 'DLI Transporter', 'B 1111 DLI', NULL, 'Agus', NULL, 16, 0, 0, 0, 640, 0, NULL, NULL, NULL, '2020-04-08 14:20:00', '2020-04-08 14:20:00'),
-(26, 'TID-202004-00003', 141, NULL, NULL, NULL, NULL, NULL, NULL, 'Surat Jalan Pallet Adjusment', NULL, NULL, 'ADJUST', 'Aulia Harvy', NULL, NULL, NULL, NULL, NULL, 'DLI Transporter', 'B 1111 DLI', 'B 1112 DLI', 'Agus', 'Budi', 0, 0, 0, 0, 0, 0, NULL, NULL, NULL, '2020-04-08 14:21:34', '2020-04-08 14:21:34'),
-(27, 'TID-202004-00004', 141, NULL, NULL, NULL, NULL, NULL, NULL, 'Surat Jalan Pallet Change Destination', '1', '2', 'ADJUST', 'Aulia Harvy', NULL, NULL, 'BCTD', 'Sukabumi', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, NULL, NULL, NULL, '2020-04-08 14:21:42', '2020-04-08 14:21:42'),
-(28, 'TID-202004-00005', 141, 277, NULL, NULL, NULL, NULL, NULL, 'SJP Status Receive', '2', NULL, 'RECEIVE', NULL, 'Checker Gudang Sukabumi', 'Pool Pallet DLI', 'Sukabumi', NULL, NULL, 'DLI Transporter', 'B 1112 DLI', NULL, 'Budi', NULL, 16, 0, 0, 0, 640, 0, NULL, NULL, NULL, '2020-04-08 14:22:38', '2020-04-08 14:22:38'),
-(31, 'TID-202004-00006', 141, 280, NULL, NULL, NULL, NULL, NULL, 'SJP Status Sendback', '2', NULL, 'SENDBACK', 'Checker Gudang Sukabumi', NULL, 'Sukabumi', 'Pool Pallet DLI', NULL, NULL, 'DLI Transporter', 'B 1112 DLI', NULL, 'Budi', NULL, 16, 0, 0, 0, 0, 0, NULL, NULL, NULL, '2020-04-08 14:26:18', '2020-04-08 14:26:18'),
-(32, 'TID-202004-00007', 141, 280, NULL, NULL, NULL, NULL, NULL, 'SJP Status Receive Sendback', '2', NULL, 'RECEIVE SENDBACK', NULL, 'Aulia Harvy', 'Sukabumi', 'Pool Pallet DLI', NULL, NULL, 'DLI Transporter', 'B 1112 DLI', NULL, 'Budi', NULL, 16, 0, 0, 0, 0, 0, NULL, NULL, NULL, '2020-04-08 14:26:47', '2020-04-08 14:26:47');
+INSERT INTO `all_transaction` (`all_transaction_id`, `tid_number`, `reference_sjp_id`, `reference_sjp_status_id`, `reference_pallet_transfer_id`, `reference_ber_missing_id`, `reference_new_pallet_id`, `reference_damaged_pallet_id`, `reference_repaired_pallet_id`, `transaction`, `no_do`, `new_no_do`, `status`, `sender/reporter`, `receiver/approver`, `departure_pool`, `destination_pool`, `new_destination`, `pool_pallet`, `transporter`, `vehicle`, `new_vehicle`, `driver`, `new_driver`, `good_pallet`, `tbr_pallet`, `ber_pallet`, `missing_pallet`, `good_cement`, `bad_cement`, `sending_driver_approval`, `receiving_driver_approval`, `reporter_prove`, `reason`, `note`, `created_at`, `updated_at`) VALUES
+(22, 'TID-202004-00001', NULL, NULL, NULL, NULL, 122, NULL, NULL, 'New Pallet Report', NULL, NULL, 'REPORTED', 'Aulia Harvy', NULL, NULL, NULL, NULL, 'Pool Pallet DLI', NULL, 'B 1189 JJS', NULL, 'Subyo', NULL, 500, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, 'Pallet Belum Di QC', '2020-04-08 14:17:52', '2020-04-08 14:17:52'),
+(25, 'TID-202004-00002', 141, 277, NULL, NULL, NULL, NULL, NULL, 'SJP Status Send', '1', NULL, 'SEND', 'Aulia Harvy', NULL, 'Pool Pallet DLI', 'BCTD', NULL, NULL, 'DLI Transporter', 'B 1111 DLI', NULL, 'Agus', NULL, 16, 0, 0, 0, 640, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-08 14:20:00', '2020-04-08 14:20:00'),
+(26, 'TID-202004-00003', 141, NULL, NULL, NULL, NULL, NULL, NULL, 'Surat Jalan Pallet Adjusment', NULL, NULL, 'ADJUST', 'Aulia Harvy', NULL, NULL, NULL, NULL, NULL, 'DLI Transporter', 'B 1111 DLI', 'B 1112 DLI', 'Agus', 'Budi', 0, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-08 14:21:34', '2020-04-08 14:21:34'),
+(27, 'TID-202004-00004', 141, NULL, NULL, NULL, NULL, NULL, NULL, 'Surat Jalan Pallet Change Destination', '1', '2', 'ADJUST', 'Aulia Harvy', NULL, NULL, 'BCTD', 'Sukabumi', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-08 14:21:42', '2020-04-08 14:21:42'),
+(28, 'TID-202004-00005', 141, 277, NULL, NULL, NULL, NULL, NULL, 'SJP Status Receive', '2', NULL, 'RECEIVE', NULL, 'Checker Gudang Sukabumi', 'Pool Pallet DLI', 'Sukabumi', NULL, NULL, 'DLI Transporter', 'B 1112 DLI', NULL, 'Budi', NULL, 16, 0, 0, 0, 640, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-08 14:22:38', '2020-04-08 14:22:38'),
+(31, 'TID-202004-00006', 141, 280, NULL, NULL, NULL, NULL, NULL, 'SJP Status Sendback', '2', NULL, 'SENDBACK', 'Checker Gudang Sukabumi', NULL, 'Sukabumi', 'Pool Pallet DLI', NULL, NULL, 'DLI Transporter', 'B 1112 DLI', NULL, 'Budi', NULL, 16, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-08 14:26:18', '2020-04-08 14:26:18'),
+(32, 'TID-202004-00007', 141, 280, NULL, NULL, NULL, NULL, NULL, 'SJP Status Receive Sendback', '2', NULL, 'RECEIVE SENDBACK', NULL, 'Aulia Harvy', 'Sukabumi', 'Pool Pallet DLI', NULL, NULL, 'DLI Transporter', 'B 1112 DLI', NULL, 'Budi', NULL, 16, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-08 14:26:47', '2020-04-08 14:26:47'),
+(33, 'TID-202004-00008', 142, 281, NULL, NULL, NULL, NULL, NULL, 'SJP Status Send', '12345', NULL, 'SEND', 'Aulia Harvy', NULL, 'Pool Pallet DLI', 'BCTD', NULL, NULL, 'DLI Transporter', 'B 1114 DLI', NULL, 'Budi', NULL, 16, 0, 0, 0, 640, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-17 04:12:22', '2020-04-17 04:12:22'),
+(34, 'TID-202004-00009', NULL, NULL, NULL, NULL, 123, NULL, NULL, 'New Pallet Report', NULL, NULL, 'REPORTED', 'Aulia Harvy', NULL, NULL, NULL, NULL, 'Pool Pallet DLI', NULL, 'B 1109 PPL', NULL, 'Agus', NULL, 100, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, 'Pallet Belum di QC', '2020-04-24 05:02:12', '2020-04-24 05:02:12'),
+(35, 'TID-202004-00010', 142, NULL, NULL, NULL, NULL, NULL, NULL, 'Surat Jalan Pallet Change Destination', '12345', '12345', 'ADJUST', 'Aulia Harvy', NULL, NULL, 'BCTD', 'Sukabumi', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-25 07:44:01', '2020-04-25 07:44:01'),
+(36, 'TID-202004-00011', 143, 282, NULL, NULL, NULL, NULL, NULL, 'SJP Status Send', '12345678', NULL, 'SEND', 'Aulia Harvy', NULL, 'Pool Pallet DLI', 'BCTD', NULL, NULL, 'DLI Transporter', 'B 1112 DLI', NULL, 'Adi', NULL, 16, 0, 0, 0, 640, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-28 12:24:42', '2020-04-28 12:24:42'),
+(37, 'TID-202004-00012', NULL, NULL, NULL, 121, NULL, NULL, NULL, 'BER/Missing Pallet Report', NULL, NULL, 'REPORTED', 'Aulia Harvy', NULL, NULL, NULL, NULL, 'Pool Pallet DLI', NULL, NULL, NULL, NULL, NULL, 0, 0, 5, 5, 0, 0, NULL, NULL, 'reporter_prove-1588078958.jpg', NULL, NULL, '2020-04-28 13:02:39', '2020-04-28 13:02:39'),
+(38, 'TID-202004-00013', NULL, NULL, NULL, 121, NULL, NULL, NULL, 'BER/Missing Pallet Disapprove', NULL, NULL, 'DISAPPROVED', NULL, 'Aulia Harvy', NULL, NULL, NULL, 'Pool Pallet DLI', NULL, NULL, NULL, NULL, NULL, 0, 0, 5, 5, 0, 0, NULL, NULL, 'reporter_prove-1588078958.jpg', NULL, NULL, '2020-04-28 13:08:49', '2020-04-28 13:08:49'),
+(39, 'TID-202004-00014', NULL, NULL, NULL, 122, NULL, NULL, NULL, 'BER/Missing Pallet Report', NULL, NULL, 'REPORTED', 'Aulia Harvy', NULL, NULL, NULL, NULL, 'Pool Pallet DLI', NULL, NULL, NULL, NULL, NULL, 0, 0, 5, 5, 0, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-28 13:09:25', '2020-04-28 13:09:25'),
+(40, 'TID-202004-00015', NULL, NULL, NULL, 122, NULL, NULL, NULL, 'BER/Missing Pallet Disapprove', NULL, NULL, 'DISAPPROVED', NULL, 'Aulia Harvy', NULL, NULL, NULL, 'Pool Pallet DLI', NULL, NULL, NULL, NULL, NULL, 0, 0, 5, 5, 0, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-28 13:09:33', '2020-04-28 13:09:33'),
+(41, 'TID-202004-00016', NULL, NULL, NULL, 123, NULL, NULL, NULL, 'BER/Missing Pallet Report', NULL, NULL, 'REPORTED', 'Aulia Harvy', NULL, NULL, NULL, NULL, 'Pool Pallet DLI', NULL, NULL, NULL, NULL, NULL, 0, 0, 5, 5, 0, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-28 13:10:17', '2020-04-28 13:10:17'),
+(42, 'TID-202004-00017', NULL, NULL, NULL, 123, NULL, NULL, NULL, 'BER/Missing Pallet Disapprove', NULL, NULL, 'DISAPPROVED', NULL, 'Aulia Harvy', NULL, NULL, NULL, 'Pool Pallet DLI', NULL, NULL, NULL, NULL, NULL, 0, 0, 5, 5, 0, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-28 13:10:21', '2020-04-28 13:10:21'),
+(43, 'TID-202004-00018', NULL, NULL, NULL, 124, NULL, NULL, NULL, 'BER/Missing Pallet Report', NULL, NULL, 'REPORTED', 'Aulia Harvy', NULL, NULL, NULL, NULL, 'Pool Pallet DLI', NULL, NULL, NULL, NULL, NULL, 0, 0, 1, 1, 0, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-28 13:10:57', '2020-04-28 13:10:57'),
+(44, 'TID-202004-00019', NULL, NULL, NULL, 124, NULL, NULL, NULL, 'BER/Missing Pallet Approve', NULL, NULL, 'APPROVED', NULL, 'Aulia Harvy', NULL, NULL, NULL, 'Pool Pallet DLI', NULL, NULL, NULL, NULL, NULL, 0, 0, 1, 1, 0, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-28 13:11:02', '2020-04-28 13:11:02'),
+(45, 'TID-202004-00020', NULL, NULL, NULL, 125, NULL, NULL, NULL, 'BER/Missing Pallet Report', NULL, NULL, 'REPORTED', 'Aulia Harvy', NULL, NULL, NULL, NULL, 'Pool Pallet DLI', NULL, NULL, NULL, NULL, NULL, 0, 0, 1, 1, 0, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-28 13:12:42', '2020-04-28 13:12:42'),
+(46, 'TID-202004-00021', NULL, NULL, NULL, 125, NULL, NULL, NULL, 'BER/Missing Pallet Disapprove', NULL, NULL, 'DISAPPROVED', NULL, 'Aulia Harvy', NULL, NULL, NULL, 'Pool Pallet DLI', NULL, NULL, NULL, NULL, NULL, 0, 0, 1, 1, 0, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-28 13:12:46', '2020-04-28 13:12:46'),
+(47, 'TID-202004-00022', NULL, NULL, NULL, 126, NULL, NULL, NULL, 'BER/Missing Pallet Report', NULL, NULL, 'REPORTED', 'Aulia Harvy', NULL, NULL, NULL, NULL, 'Pool Pallet DLI', NULL, NULL, NULL, NULL, NULL, 0, 0, 1, 1, 0, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-28 13:18:02', '2020-04-28 13:18:02'),
+(48, 'TID-202004-00023', 144, 283, NULL, NULL, NULL, NULL, NULL, 'SJP Status Send', '1234567654', NULL, 'SEND', 'Aulia Harvy', NULL, 'Pool Pallet DLI', 'BCTD', NULL, NULL, 'DLI Transporter', 'B 1113 DLI', NULL, 'Soni', NULL, 16, 0, 0, 0, 640, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-29 14:59:50', '2020-04-29 14:59:50'),
+(49, 'TID-202004-00024', 143, 282, NULL, NULL, NULL, NULL, NULL, 'SJP Status Receive', '12345678', NULL, 'RECEIVE', NULL, 'Checker Gudang BCTD', 'Pool Pallet DLI', 'BCTD', NULL, NULL, 'DLI Transporter', 'B 1112 DLI', NULL, 'Adi', NULL, 16, 0, 0, 0, 640, 0, NULL, NULL, NULL, NULL, NULL, '2020-04-30 06:35:01', '2020-04-30 06:35:01'),
+(50, 'TID-202005-00001', 145, 286, NULL, NULL, NULL, NULL, NULL, 'SJP Status Send', '12456787654321', NULL, 'SEND', 'Aulia Harvy', NULL, 'Pool Pallet DLI', 'BCTD', NULL, NULL, 'Mitra Transporter', 'B 1114 DLI', NULL, 'Budi', NULL, 16, 0, 0, 0, 640, 0, NULL, NULL, NULL, NULL, NULL, '2020-05-04 04:29:46', '2020-05-04 04:29:46'),
+(51, 'TID-202005-00002', 146, 287, NULL, NULL, NULL, NULL, NULL, 'SJP Status Send', '32145', NULL, 'SEND', 'Aulia Harvy', NULL, 'Pool Pallet DLI', 'BCTD', NULL, NULL, 'DLI Transporter', 'B 1113 DLI', NULL, 'Agus', NULL, 16, 0, 0, 0, 640, 0, NULL, NULL, NULL, NULL, 'Test Approval', '2020-05-04 05:22:18', '2020-05-04 05:22:18'),
+(52, 'TID-202005-00003', 147, 288, NULL, NULL, NULL, NULL, NULL, 'SJP Status Send', '1234567', NULL, 'SEND', 'Aulia Harvy', NULL, 'Pool Pallet DLI', 'Workshop DLI', NULL, NULL, 'DLI Transporter', 'B 1111 DLI', NULL, 'Agus', NULL, 17, 0, 0, 0, 604, 0, NULL, NULL, NULL, NULL, 'Tes pengiriman pallet', '2020-05-04 06:11:51', '2020-05-04 06:11:51'),
+(53, 'TID-202005-00004', 148, 289, NULL, NULL, NULL, NULL, NULL, 'SJP Status Send', '123456789', NULL, 'SEND', 'Aulia Harvy', NULL, 'Pool Pallet DLI', 'Workshop DLI', NULL, NULL, 'DLI Transporter', 'B 1111 DLI', NULL, 'Agus', NULL, 17, 0, 0, 0, 604, 0, NULL, NULL, NULL, NULL, NULL, '2020-05-04 06:31:23', '2020-05-04 06:31:23'),
+(54, 'TID-202005-00005', 148, 290, NULL, NULL, NULL, NULL, NULL, 'SJP Status Send', '123456789', NULL, 'SEND', 'Aulia Harvy', NULL, 'Pool Pallet DLI', 'Workshop DLI', NULL, NULL, 'DLI Transporter', 'B 1111 DLI', NULL, 'Agus', NULL, 17, 0, 0, 0, 604, 0, NULL, NULL, NULL, NULL, NULL, '2020-05-04 06:32:06', '2020-05-04 06:32:06'),
+(55, 'TID-202005-00006', 149, 291, NULL, NULL, NULL, NULL, NULL, 'SJP Status Send', '1234567898', NULL, 'SEND', 'Aulia Harvy', NULL, 'Pool Pallet DLI', 'BCTD', NULL, NULL, 'DLI Transporter', 'B 1111 DLI', NULL, 'Agus', NULL, 17, 0, 0, 0, 604, 0, NULL, NULL, NULL, NULL, 'yes pengiriman pallet', '2020-05-04 06:42:23', '2020-05-04 06:42:23'),
+(56, 'TID-202005-00007', 150, 301, NULL, NULL, NULL, NULL, NULL, 'SJP Status Send', '1234567890', NULL, 'SEND', 'DLI', NULL, 'Pool Pallet DLI', 'BCTD', NULL, NULL, 'DLI Transporter', 'B 1111 DLI', NULL, 'Agus', NULL, 17, 0, 0, 0, 604, 0, 'SJP-202005-00005sending_driver_approval-1588577620.jpg', NULL, NULL, NULL, NULL, '2020-05-04 07:33:40', '2020-05-04 07:33:40'),
+(57, 'TID-202005-00008', 151, 302, NULL, NULL, NULL, NULL, NULL, 'SJP Status Send', '123456765432', NULL, 'SEND', 'Aulia Harvy', NULL, 'Pool Pallet DLI', 'BCTD', NULL, NULL, 'DLI Transporter', 'B 1111 DLI', NULL, 'Agus', NULL, 17, 0, 0, 0, 604, 0, 'SJP-202005-00006-send_driver_approval-1588614121.jpg', NULL, NULL, NULL, 'Test 120928', '2020-05-04 17:42:02', '2020-05-04 17:42:02'),
+(58, 'TID-202005-00009', 144, 283, NULL, NULL, NULL, NULL, NULL, 'SJP Status Receive', '1234567654', NULL, 'RECEIVE', NULL, 'Checker Gudang BCTD', 'Pool Pallet DLI', 'BCTD', NULL, NULL, 'DLI Transporter', 'B 1113 DLI', NULL, 'Soni', NULL, 16, 0, 0, 0, 640, 0, NULL, NULL, NULL, NULL, 'null', '2020-05-04 18:10:31', '2020-05-04 18:10:31'),
+(59, 'TID-202005-00010', 146, 287, NULL, NULL, NULL, NULL, NULL, 'SJP Status Receive', '32145', NULL, 'RECEIVE', NULL, 'Checker Gudang BCTD', 'Pool Pallet DLI', 'BCTD', NULL, NULL, 'DLI Transporter', 'B 1113 DLI', NULL, 'Agus', NULL, 16, 0, 0, 0, 640, 0, NULL, NULL, NULL, NULL, 'Test Approval', '2020-05-04 18:13:35', '2020-05-04 18:13:35'),
+(60, 'TID-202005-00011', 143, 303, NULL, NULL, NULL, NULL, NULL, 'SJP Status Sendback', '12345678', NULL, 'SENDBACK', 'Checker Gudang BCTD', NULL, 'BCTD', 'Pool Pallet DLI', NULL, NULL, 'DLI Transporter', 'B 1112 DLI', NULL, 'Adi', NULL, 16, 0, 0, 0, 0, 0, 'SJP-202004-00003-send_back_driver_approval-1588617406.jpg', NULL, NULL, NULL, NULL, '2020-05-04 18:36:46', '2020-05-04 18:36:46'),
+(61, 'TID-202005-00012', 143, 303, NULL, NULL, NULL, NULL, NULL, 'SJP Status Receive Sendback', '12345678', NULL, 'RECEIVE SENDBACK', NULL, 'Aulia Harvy', 'BCTD', 'Pool Pallet DLI', NULL, NULL, 'DLI Transporter', 'B 1112 DLI', NULL, 'Adi', NULL, 16, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, 'null', '2020-05-04 19:03:53', '2020-05-04 19:03:53'),
+(62, 'TID-202005-00013', 149, 291, NULL, NULL, NULL, NULL, NULL, 'SJP Status Receive', '1234567898', NULL, 'RECEIVE', NULL, 'Checker Gudang BCTD', 'Pool Pallet DLI', 'BCTD', NULL, NULL, 'DLI Transporter', 'B 1111 DLI', NULL, 'Agus', NULL, 17, 0, 0, 0, 604, 0, NULL, NULL, NULL, NULL, 'yes pengiriman pallet', '2020-05-04 19:04:38', '2020-05-04 19:04:38'),
+(63, 'TID-202005-00014', NULL, NULL, NULL, 127, NULL, NULL, NULL, 'BER/Missing Pallet Report', NULL, NULL, 'REPORTED', 'Aulia Harvy', NULL, NULL, NULL, NULL, 'Pool Pallet DLI', NULL, NULL, NULL, NULL, NULL, 0, 0, 1, 1, 0, 0, NULL, NULL, 'reporter_prove-1588619235.jpg', NULL, NULL, '2020-05-04 19:07:15', '2020-05-04 19:07:15');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `approval_log`
+--
+
+CREATE TABLE `approval_log` (
+  `approval_log_id` int(11) NOT NULL,
+  `transaction_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `transaction_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `approval` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_by` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `approval_log`
+--
+
+INSERT INTO `approval_log` (`approval_log_id`, `transaction_id`, `transaction_name`, `approval`, `created_by`, `created_at`, `updated_at`) VALUES
+(1, 'SJP-202005-00001', 'SJP Sending Driver Approval', 'SJP-202005-00001sending_driver_approval-1588570404.jpg', 'Aulia Harvy', '2020-05-04 05:33:24', '2020-05-04 05:33:24'),
+(2, 'SJP-202005-00004', 'SJP Sending Driver Approval', NULL, 'Aulia Harvy', '2020-05-04 06:57:15', '2020-05-04 06:57:15'),
+(3, 'SJP-202005-00003', 'SJP Sending Driver Approval', NULL, 'Aulia Harvy', '2020-05-04 06:58:08', '2020-05-04 06:58:08'),
+(4, 'SJP-202005-00005', 'SJP Sending Driver Approval', 'SJP-202005-00005sending_driver_approval-1588577620.jpg', 'DLI', '2020-05-04 07:33:40', '2020-05-04 07:33:40'),
+(5, 'SJP-202005-00006', 'SJP Sending Driver Approval', 'SJP-202005-00006-send_driver_approval-1588614121.jpg', 'Aulia Harvy', '2020-05-04 17:42:02', '2020-05-04 17:42:02'),
+(6, 'SJP-202004-00004', 'SJP Receive Driver Approval', NULL, 'Checker Gudang BCTD', '2020-05-04 18:10:31', '2020-05-04 18:10:31'),
+(7, 'SJP-202005-00001', 'SJP Receive Driver Approval', NULL, 'Checker Gudang BCTD', '2020-05-04 18:13:35', '2020-05-04 18:13:35'),
+(8, 'SJP-202004-00003', 'SJP Sending Back Driver Approval', 'SJP-202004-00003-send_back_driver_approval-1588617406.jpg', 'Checker Gudang BCTD', '2020-05-04 18:36:46', '2020-05-04 18:36:46'),
+(9, 'SJP-202004-00003', 'SJP Receive Back Driver Approval', 'SJP-202004-00003-send_back_driver_approval-1588617406.jpg', 'Aulia Harvy', '2020-05-04 19:03:53', '2020-05-04 19:03:53'),
+(10, 'SJP-202005-00004', 'SJP Receive Driver Approval', NULL, 'Checker Gudang BCTD', '2020-05-04 19:04:38', '2020-05-04 19:04:38');
 
 -- --------------------------------------------------------
 
@@ -116,14 +181,19 @@ INSERT INTO `auto_numbers` (`id`, `name`, `number`, `created_at`, `updated_at`) 
 (17, '7ee90e5de4448d5e8a1fd36fa652bf28', 0, '2020-03-16 16:25:28', '2020-03-17 08:33:06'),
 (27, '1b85462cf87ea7fabcd8983de4493ab5', 0, '2020-03-30 23:20:33', '2020-03-31 04:40:45'),
 (28, '04b9c42d9b6ad17a8550696a7374396e', 0, '2020-04-06 14:48:56', '2020-04-06 14:58:30'),
-(29, '618112b12bfb2d59259848522c6cfa03', 7, '2020-04-06 14:56:14', '2020-04-08 14:26:47'),
-(32, 'a134bf983db14952d03ccf07a1ac1464', 1, '2020-04-07 00:36:58', '2020-04-08 14:17:52'),
+(29, '618112b12bfb2d59259848522c6cfa03', 24, '2020-04-06 14:56:14', '2020-04-30 06:35:01'),
+(32, 'a134bf983db14952d03ccf07a1ac1464', 2, '2020-04-07 00:36:58', '2020-04-24 05:02:11'),
 (47, '2ffd4c7ad062fae1673552eec490f65a', 0, '2020-04-07 01:39:08', '2020-04-07 01:39:08'),
 (57, 'b492842cafe74aa9c4dc2bfd77b4ba1d', 0, '2020-04-07 03:00:22', '2020-04-07 03:00:22'),
-(58, 'cc917315567be8600606809039a00079', 1, '2020-04-08 01:51:10', '2020-04-08 14:18:48'),
+(58, 'cc917315567be8600606809039a00079', 5, '2020-04-08 01:51:10', '2020-04-29 15:04:34'),
 (59, '4a18d41f000aa0c8d8a7431ea547e2e4', 1, '2020-04-08 01:53:47', '2020-04-08 14:21:34'),
-(60, '1e0410f10609c7deae384eab8c420108', 1, '2020-04-08 02:03:52', '2020-04-08 14:21:42'),
-(61, '157e1e7d7560a4976fe901d0ef10bf1d', 2, '2020-04-08 11:04:11', '2020-04-08 14:26:18');
+(60, '1e0410f10609c7deae384eab8c420108', 2, '2020-04-08 02:03:52', '2020-04-25 07:44:01'),
+(61, '157e1e7d7560a4976fe901d0ef10bf1d', 5, '2020-04-08 11:04:11', '2020-04-29 14:59:49'),
+(62, '01888e72bca62c0a79f40e6508a79c98', 6, '2020-04-28 13:02:39', '2020-04-28 13:18:01'),
+(68, '7d158064733c85ad2d1b70c08d7a1046', 9, '2020-05-04 04:29:46', '2020-05-04 18:36:46'),
+(69, '04620f1027ab127b7eeaf4e8ddb3cba7', 14, '2020-05-04 04:29:46', '2020-05-04 19:07:15'),
+(70, 'f0de683623cec9dc8fa5ccf78ed26cb7', 6, '2020-05-04 05:22:07', '2020-05-04 06:55:59'),
+(71, 'ba540c3a1b637cecc7b94ba4f15e1a45', 1, '2020-05-04 19:07:15', '2020-05-04 19:07:15');
 
 -- --------------------------------------------------------
 
@@ -141,13 +211,26 @@ CREATE TABLE `ber_missing_pallet` (
   `bmp_number` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ber_pallet` int(11) DEFAULT NULL,
   `missing_pallet` int(11) DEFAULT NULL,
-  `reporter_prove` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reporter_prove` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` int(11) NOT NULL COMMENT '0: reported, 1: approved, 2: disapproved',
   `berita_acara` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `note` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `note` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `ber_missing_pallet`
+--
+
+INSERT INTO `ber_missing_pallet` (`ber_missing_pallet_id`, `reporter_user_id`, `approver_user_id`, `pool_pallet_id`, `transporter_id`, `reference_sjp_status_id`, `bmp_number`, `ber_pallet`, `missing_pallet`, `reporter_prove`, `status`, `berita_acara`, `note`, `created_at`, `updated_at`) VALUES
+(121, 3, 3, 1, NULL, NULL, 'BMP-202004-00001', 5, 5, 'reporter_prove-1588078958.jpg', 2, NULL, NULL, '2020-04-28 13:02:39', '2020-04-28 13:08:49'),
+(122, 3, 3, 1, NULL, NULL, 'BMP-202004-00002', 5, 5, NULL, 2, NULL, NULL, '2020-04-28 13:09:25', '2020-04-28 13:09:33'),
+(123, 3, 3, 1, NULL, NULL, 'BMP-202004-00003', 5, 5, NULL, 2, NULL, NULL, '2020-04-28 13:10:17', '2020-04-28 13:10:21'),
+(124, 3, 3, 1, NULL, NULL, 'BMP-202004-00004', 1, 1, NULL, 1, NULL, NULL, '2020-04-28 13:10:57', '2020-04-28 13:11:02'),
+(125, 3, 3, 1, NULL, NULL, 'BMP-202004-00005', 1, 1, NULL, 2, NULL, NULL, '2020-04-28 13:12:42', '2020-04-28 13:12:46'),
+(126, 3, 5, 1, NULL, NULL, 'BMP-202004-00006', 1, 1, NULL, 0, NULL, NULL, '2020-04-28 13:18:01', '2020-04-28 13:18:01'),
+(127, 3, 5, 1, NULL, NULL, 'BMP-202005-00001', 1, 1, 'reporter_prove-1588619235.jpg', 0, NULL, NULL, '2020-05-04 19:07:15', '2020-05-04 19:07:15');
 
 -- --------------------------------------------------------
 
@@ -158,19 +241,26 @@ CREATE TABLE `ber_missing_pallet` (
 CREATE TABLE `ber_missing_pallet_approved` (
   `ber_missing_pallet_approved_id` int(11) NOT NULL,
   `ber_missing_id` int(11) DEFAULT NULL,
-  `status` varchar(100) DEFAULT NULL,
-  `approver` varchar(100) NOT NULL,
-  `pool_pallet` varchar(100) DEFAULT NULL,
-  `transporter` varchar(100) DEFAULT NULL,
-  `reference_sjp_status` varchar(100) DEFAULT NULL,
+  `status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `approver` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pool_pallet` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `transporter` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reference_sjp_status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ber_pallet` int(11) NOT NULL DEFAULT 0,
   `missing_pallet` int(11) NOT NULL DEFAULT 0,
-  `reporter_prove` varchar(100) DEFAULT NULL,
-  `berita_acara` varchar(100) DEFAULT NULL,
-  `note` varchar(150) DEFAULT NULL,
+  `reporter_prove` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `berita_acara` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `note` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `ber_missing_pallet_approved`
+--
+
+INSERT INTO `ber_missing_pallet_approved` (`ber_missing_pallet_approved_id`, `ber_missing_id`, `status`, `approver`, `pool_pallet`, `transporter`, `reference_sjp_status`, `ber_pallet`, `missing_pallet`, `reporter_prove`, `berita_acara`, `note`, `created_at`, `updated_at`) VALUES
+(10, 124, 'APPROVED', 'Aulia Harvy', 'Pool Pallet DLI', NULL, NULL, 1, 1, NULL, NULL, NULL, '2020-04-28 13:11:02', '2020-04-28 13:11:02');
 
 -- --------------------------------------------------------
 
@@ -181,19 +271,29 @@ CREATE TABLE `ber_missing_pallet_approved` (
 CREATE TABLE `ber_missing_pallet_disapproved` (
   `ber_missing_pallet_disapproved_id` int(11) NOT NULL,
   `ber_missing_id` int(11) DEFAULT NULL,
-  `status` varchar(100) DEFAULT NULL,
-  `disapprover` varchar(100) NOT NULL,
-  `pool_pallet` varchar(100) DEFAULT NULL,
-  `transporter` varchar(100) DEFAULT NULL,
-  `reference_sjp_status` varchar(100) DEFAULT NULL,
+  `status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `disapprover` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pool_pallet` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `transporter` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reference_sjp_status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ber_pallet` int(11) NOT NULL DEFAULT 0,
   `missing_pallet` int(11) NOT NULL DEFAULT 0,
-  `reporter_prove` varchar(100) DEFAULT NULL,
-  `berita_acara` varchar(100) DEFAULT NULL,
-  `note` varchar(150) DEFAULT NULL,
+  `reporter_prove` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `berita_acara` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `note` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `ber_missing_pallet_disapproved`
+--
+
+INSERT INTO `ber_missing_pallet_disapproved` (`ber_missing_pallet_disapproved_id`, `ber_missing_id`, `status`, `disapprover`, `pool_pallet`, `transporter`, `reference_sjp_status`, `ber_pallet`, `missing_pallet`, `reporter_prove`, `berita_acara`, `note`, `created_at`, `updated_at`) VALUES
+(21, 121, 'DISAPPROVED', 'Aulia Harvy', 'Pool Pallet DLI', NULL, NULL, 5, 5, 'reporter_prove-1588078958.jpg', NULL, NULL, '2020-04-28 13:08:49', '2020-04-28 13:08:49'),
+(22, 122, 'DISAPPROVED', 'Aulia Harvy', 'Pool Pallet DLI', NULL, NULL, 5, 5, NULL, NULL, NULL, '2020-04-28 13:09:33', '2020-04-28 13:09:33'),
+(23, 123, 'DISAPPROVED', 'Aulia Harvy', 'Pool Pallet DLI', NULL, NULL, 5, 5, NULL, NULL, NULL, '2020-04-28 13:10:21', '2020-04-28 13:10:21'),
+(24, 125, 'DISAPPROVED', 'Aulia Harvy', 'Pool Pallet DLI', NULL, NULL, 1, 1, NULL, NULL, NULL, '2020-04-28 13:12:46', '2020-04-28 13:12:46');
 
 -- --------------------------------------------------------
 
@@ -204,19 +304,32 @@ CREATE TABLE `ber_missing_pallet_disapproved` (
 CREATE TABLE `ber_missing_pallet_reported` (
   `ber_missing_pallet_reported_id` int(11) NOT NULL,
   `ber_missing_id` int(11) DEFAULT NULL,
-  `status` varchar(100) DEFAULT NULL,
-  `reporter` varchar(100) NOT NULL,
-  `pool_pallet` varchar(100) DEFAULT NULL,
-  `transporter` varchar(100) DEFAULT NULL,
-  `reference_sjp_status` varchar(100) DEFAULT NULL,
+  `status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reporter` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pool_pallet` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `transporter` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reference_sjp_status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ber_pallet` int(11) NOT NULL DEFAULT 0,
   `missing_pallet` int(11) NOT NULL DEFAULT 0,
-  `reporter_prove` varchar(100) DEFAULT NULL,
-  `berita_acara` varchar(100) DEFAULT NULL,
-  `note` varchar(150) DEFAULT NULL,
+  `reporter_prove` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `berita_acara` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `note` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `ber_missing_pallet_reported`
+--
+
+INSERT INTO `ber_missing_pallet_reported` (`ber_missing_pallet_reported_id`, `ber_missing_id`, `status`, `reporter`, `pool_pallet`, `transporter`, `reference_sjp_status`, `ber_pallet`, `missing_pallet`, `reporter_prove`, `berita_acara`, `note`, `created_at`, `updated_at`) VALUES
+(35, 121, 'REPORTED', 'Aulia Harvy', 'Pool Pallet DLI', NULL, NULL, 5, 5, 'reporter_prove-1588078958.jpg', NULL, NULL, '2020-04-28 13:02:39', '2020-04-28 13:02:39'),
+(36, 122, 'REPORTED', 'Aulia Harvy', 'Pool Pallet DLI', NULL, NULL, 5, 5, NULL, NULL, NULL, '2020-04-28 13:09:25', '2020-04-28 13:09:25'),
+(37, 123, 'REPORTED', 'Aulia Harvy', 'Pool Pallet DLI', NULL, NULL, 5, 5, NULL, NULL, NULL, '2020-04-28 13:10:17', '2020-04-28 13:10:17'),
+(38, 124, 'REPORTED', 'Aulia Harvy', 'Pool Pallet DLI', NULL, NULL, 1, 1, NULL, NULL, NULL, '2020-04-28 13:10:57', '2020-04-28 13:10:57'),
+(39, 125, 'REPORTED', 'Aulia Harvy', 'Pool Pallet DLI', NULL, NULL, 1, 1, NULL, NULL, NULL, '2020-04-28 13:12:42', '2020-04-28 13:12:42'),
+(40, 126, 'REPORTED', 'Aulia Harvy', 'Pool Pallet DLI', NULL, NULL, 1, 1, NULL, NULL, NULL, '2020-04-28 13:18:02', '2020-04-28 13:18:02'),
+(41, 127, 'REPORTED', 'Aulia Harvy', 'Pool Pallet DLI', NULL, NULL, 1, 1, 'reporter_prove-1588619235.jpg', NULL, NULL, '2020-05-04 19:07:15', '2020-05-04 19:07:15');
 
 -- --------------------------------------------------------
 
@@ -237,6 +350,13 @@ CREATE TABLE `customers` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `customers`
+--
+
+INSERT INTO `customers` (`id`, `nik`, `name`, `address`, `phone`, `courier_id`, `point`, `deposit`, `created_at`, `updated_at`) VALUES
+(5, '1231231', 'Aulia Harvy', 'jl.iisss', '0892132', NULL, 10, 100000, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -249,9 +369,9 @@ CREATE TABLE `damaged_pallet` (
   `pool_pallet_id` int(11) DEFAULT NULL,
   `transporter_id` int(11) DEFAULT NULL,
   `reference_sjp_status_id` int(11) DEFAULT NULL,
-  `dp_number` varchar(25) NOT NULL,
+  `dp_number` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `tbr_pallet` int(11) NOT NULL,
-  `note` varchar(100) DEFAULT NULL,
+  `note` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -508,12 +628,12 @@ CREATE TABLE `new_pallet` (
   `new_pallet_id` int(11) NOT NULL,
   `adder_user_id` bigint(20) DEFAULT NULL,
   `pool_pallet_id` int(11) NOT NULL,
-  `np_number` varchar(20) NOT NULL,
+  `np_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `good_pallet` int(11) NOT NULL,
-  `vendor` varchar(100) DEFAULT NULL,
-  `vehicle` varchar(100) DEFAULT NULL,
-  `driver` varchar(100) DEFAULT NULL,
-  `note` varchar(250) DEFAULT NULL,
+  `vendor` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `vehicle` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `driver` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `note` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -523,7 +643,8 @@ CREATE TABLE `new_pallet` (
 --
 
 INSERT INTO `new_pallet` (`new_pallet_id`, `adder_user_id`, `pool_pallet_id`, `np_number`, `good_pallet`, `vendor`, `vehicle`, `driver`, `note`, `created_at`, `updated_at`) VALUES
-(122, 3, 1, 'NP-202004-00001', 500, 'Pallet Vendor', 'B 1189 JJS', 'Subyo', 'Pallet Belum Di QC', '2020-04-08 14:17:52', '2020-04-08 14:17:52');
+(122, 3, 1, 'NP-202004-00001', 500, 'Pallet Vendor', 'B 1189 JJS', 'Subyo', 'Pallet Belum Di QC', '2020-04-08 14:17:52', '2020-04-08 14:17:52'),
+(123, 3, 1, 'NP-202004-00002', 100, 'Pallet Vendor', 'B 1109 PPL', 'Agus', 'Pallet Belum di QC', '2020-04-24 05:02:11', '2020-04-24 05:02:11');
 
 -- --------------------------------------------------------
 
@@ -741,7 +862,7 @@ CREATE TABLE `pallet_transfer` (
   `tbr_pallet` int(11) DEFAULT 0,
   `reason` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` int(11) NOT NULL COMMENT '0: SENDING, 1: RECEIVED',
-  `note` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `note` varchar(150) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -755,17 +876,17 @@ CREATE TABLE `pallet_transfer` (
 CREATE TABLE `pallet_transfer_receive_pallet` (
   `pallet_transfer_receive_pallet_id` int(11) NOT NULL,
   `pallet_transfer_id` int(11) NOT NULL DEFAULT 0,
-  `tp_number` varchar(100) DEFAULT NULL,
-  `pallet_transfer_status` varchar(100) NOT NULL,
-  `receiver` varchar(100) NOT NULL,
-  `departure_pool` varchar(100) NOT NULL,
-  `destination_pool` varchar(100) NOT NULL,
-  `transporter` varchar(100) NOT NULL,
-  `driver` varchar(100) NOT NULL,
-  `vehicle` varchar(100) NOT NULL,
+  `tp_number` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pallet_transfer_status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `receiver` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `departure_pool` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `destination_pool` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `transporter` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `driver` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `vehicle` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `good_pallet` int(11) NOT NULL DEFAULT 0,
   `tbr_pallet` int(11) NOT NULL DEFAULT 0,
-  `note` varchar(150) DEFAULT NULL,
+  `note` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -779,16 +900,16 @@ CREATE TABLE `pallet_transfer_receive_pallet` (
 CREATE TABLE `pallet_transfer_send_pallet` (
   `pallet_transfer_send_pallet_id` int(11) NOT NULL,
   `pallet_transfer_id` int(11) NOT NULL DEFAULT 0,
-  `pallet_transfer_status` varchar(100) NOT NULL,
-  `sender` varchar(100) NOT NULL,
-  `departure_pool` varchar(100) NOT NULL,
-  `destination_pool` varchar(100) NOT NULL,
-  `transporter` varchar(100) NOT NULL,
-  `driver` varchar(100) NOT NULL,
-  `vehicle` varchar(100) NOT NULL,
+  `pallet_transfer_status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sender` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `departure_pool` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `destination_pool` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `transporter` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `driver` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `vehicle` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `good_pallet` int(11) NOT NULL DEFAULT 0,
   `tbr_pallet` int(11) NOT NULL DEFAULT 0,
-  `note` varchar(150) DEFAULT NULL,
+  `note` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -920,9 +1041,9 @@ CREATE TABLE `pool_pallet` (
 --
 
 INSERT INTO `pool_pallet` (`pool_pallet_id`, `organization_id`, `code`, `type`, `pool_name`, `pool_address`, `pool_city`, `phone_number`, `pool_email`, `pallet_quota`, `good_pallet`, `tbr_pallet`, `ber_pallet`, `missing_pallet`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-(1, 1, 11111, 'POOL_PALLET_DLI', 'Pool Pallet DLI', 'Citereup', 'Bogor', '089652847221', 'contact@dinamikalogistindo.com', 1000, 500, 0, 0, 0, NULL, NULL, '2020-03-05 07:05:37', '2020-04-08 14:26:47'),
-(2, 1, 11112, 'WORKSHOP', 'Workshop DLI', 'Citereup', 'Bogor', '081280768088', 'contact@dinamikalogistindo.com', 1000, 0, 0, 0, 0, NULL, NULL, '2020-03-05 07:06:29', '2020-04-07 03:00:22'),
-(3, 1, 11113, 'WAREHOUSE', 'BCTD', 'Jl. Mayor Oking Jayaatmaja\r\nCiteueruep Bogor\r\n', 'Bogor', '0811-9690-7560', 'contact@dinamikalogistindo.com', 100, 0, 0, 0, 0, NULL, NULL, '2020-03-05 07:07:48', '2020-03-26 16:51:29'),
+(1, 1, 11111, 'POOL_PALLET_DLI', 'Pool Pallet DLI', 'Citereup', 'Bogor', '089652847221', 'contact@dinamikalogistindo.com', 1000, 528, 0, 2, 2, NULL, NULL, '2020-03-05 07:05:37', '2020-05-04 19:07:15'),
+(2, 1, 11112, 'WORKSHOP', 'Workshop DLI', 'Citereup', 'Bogor', '081280768088', 'contact@dinamikalogistindo.com', 1000, 0, 10, 0, 0, NULL, NULL, '2020-03-05 07:06:29', '2020-04-07 03:00:22'),
+(3, 1, 11113, 'WAREHOUSE', 'BCTD', 'Jl. Mayor Oking Jayaatmaja\r\nCiteueruep Bogor\r\n', 'Bogor', '0811-9690-7560', 'contact@dinamikalogistindo.com', 100, 49, 0, 0, 0, NULL, NULL, '2020-03-05 07:07:48', '2020-05-04 19:04:38'),
 (4, 1, 11114, 'WAREHOUSE', 'Sukabumi', 'Jl. Plabuhan II, Lembur Situ KM.7,5\r\nSukabumi, Jawa Barat 43169\r\n', 'Sukabumi', '0811-9690-7560', 'contact@dinamikalogistindo.com', 100, 0, 0, 0, 0, NULL, NULL, '2020-03-05 07:07:48', '2020-04-08 14:26:18'),
 (5, 1, 11115, 'SHOP', 'Toko Bangunan ', 'Citereup', 'Bogor', '02167854', 'toko@gmail.com', 0, 0, 0, 0, 0, 'Aulia Harvy', NULL, '2020-03-18 22:51:43', '2020-03-25 19:38:54');
 
@@ -936,9 +1057,9 @@ CREATE TABLE `repaired_pallet` (
   `repaired_pallet_id` int(11) NOT NULL,
   `reporter_user_id` bigint(20) NOT NULL,
   `pool_pallet_id` int(11) NOT NULL,
-  `rp_number` varchar(250) NOT NULL,
+  `rp_number` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `good_pallet` int(11) NOT NULL,
-  `note` varchar(100) DEFAULT NULL,
+  `note` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1192,14 +1313,14 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 CREATE TABLE `sjp_adjusment` (
   `sjp_adjusment_id` int(11) NOT NULL,
   `sjp_id` int(11) NOT NULL DEFAULT 0,
-  `sa_number` varchar(100) DEFAULT NULL,
-  `sjp_number` varchar(100) NOT NULL,
-  `transporter` varchar(100) DEFAULT NULL,
-  `vehicle` varchar(100) DEFAULT NULL,
-  `new_vehicle` varchar(100) DEFAULT NULL,
-  `driver` varchar(100) DEFAULT NULL,
-  `new_driver` varchar(100) DEFAULT NULL,
-  `adjust_by` varchar(50) NOT NULL,
+  `sa_number` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sjp_number` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `transporter` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `vehicle` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `new_vehicle` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `driver` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `new_driver` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `adjust_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1236,7 +1357,8 @@ CREATE TABLE `sjp_change_destination` (
 --
 
 INSERT INTO `sjp_change_destination` (`sjp_change_destination_id`, `sjp_id`, `scd_number`, `sjp_number`, `no_do`, `new_no_do`, `destination`, `new_destination`, `adjust_by`, `created_at`, `updated_at`) VALUES
-(11, 0, 'SCD-202004-00001', 'SJP-202004-00001', '1', '2', 'BCTD', 'Sukabumi', 'Aulia Harvy', '2020-04-08 14:21:42', '2020-04-08 14:21:42');
+(11, 0, 'SCD-202004-00001', 'SJP-202004-00001', '1', '2', 'BCTD', 'Sukabumi', 'Aulia Harvy', '2020-04-08 14:21:42', '2020-04-08 14:21:42'),
+(12, 0, 'SCD-202004-00002', 'SJP-202004-00002', '12345', '12345', 'BCTD', 'Sukabumi', 'Aulia Harvy', '2020-04-25 07:44:01', '2020-04-25 07:44:01');
 
 -- --------------------------------------------------------
 
@@ -1247,21 +1369,22 @@ INSERT INTO `sjp_change_destination` (`sjp_change_destination_id`, `sjp_id`, `sc
 CREATE TABLE `sjp_pallet_receive` (
   `sjp_pallet_receive_id` int(11) NOT NULL,
   `sjp_status_id` int(11) NOT NULL DEFAULT 0,
-  `sjp_number` varchar(100) NOT NULL,
-  `sjp_status` varchar(100) DEFAULT NULL,
-  `receiver` varchar(100) NOT NULL,
-  `departure_pool` varchar(100) DEFAULT NULL,
-  `destination_pool` varchar(100) DEFAULT NULL,
-  `transporter` varchar(100) DEFAULT NULL,
-  `driver` varchar(100) DEFAULT NULL,
-  `vehicle` varchar(100) DEFAULT NULL,
+  `sjp_number` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sjp_status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `receiver` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `departure_pool` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `destination_pool` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `transporter` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `driver` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `vehicle` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `good_pallet` int(11) DEFAULT 0,
   `tbr_pallet` int(11) DEFAULT 0,
   `ber_pallet` int(11) DEFAULT 0,
   `missing_pallet` int(11) DEFAULT 0,
   `good_cement` int(11) DEFAULT 0,
   `bad_cement` int(11) DEFAULT 0,
-  `note` varchar(150) DEFAULT NULL,
+  `receiving_driver_approval` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Send Driver Digital Signature',
+  `note` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1270,9 +1393,14 @@ CREATE TABLE `sjp_pallet_receive` (
 -- Dumping data for table `sjp_pallet_receive`
 --
 
-INSERT INTO `sjp_pallet_receive` (`sjp_pallet_receive_id`, `sjp_status_id`, `sjp_number`, `sjp_status`, `receiver`, `departure_pool`, `destination_pool`, `transporter`, `driver`, `vehicle`, `good_pallet`, `tbr_pallet`, `ber_pallet`, `missing_pallet`, `good_cement`, `bad_cement`, `note`, `created_at`, `updated_at`) VALUES
-(102, 277, 'SJP-202004-00001', 'RECEIVE', 'Checker Gudang Sukabumi', 'Pool Pallet DLI', 'Sukabumi', 'DLI Transporter', 'Budi', 'B 1112 DLI', 16, 0, 0, 0, 640, 0, NULL, '2020-04-08 14:22:38', '2020-04-08 14:22:38'),
-(103, 280, 'SJP-202004-00001', 'RECEIVE SENDBACK', 'Aulia Harvy', 'Sukabumi', 'Pool Pallet DLI', 'DLI Transporter', 'Budi', 'B 1112 DLI', 16, 0, 0, 0, 0, 0, NULL, '2020-04-08 14:26:47', '2020-04-08 14:26:47');
+INSERT INTO `sjp_pallet_receive` (`sjp_pallet_receive_id`, `sjp_status_id`, `sjp_number`, `sjp_status`, `receiver`, `departure_pool`, `destination_pool`, `transporter`, `driver`, `vehicle`, `good_pallet`, `tbr_pallet`, `ber_pallet`, `missing_pallet`, `good_cement`, `bad_cement`, `receiving_driver_approval`, `note`, `created_at`, `updated_at`) VALUES
+(102, 277, 'SJP-202004-00001', 'RECEIVE', 'Checker Gudang Sukabumi', 'Pool Pallet DLI', 'Sukabumi', 'DLI Transporter', 'Budi', 'B 1112 DLI', 16, 0, 0, 0, 640, 0, NULL, NULL, '2020-04-08 14:22:38', '2020-04-08 14:22:38'),
+(103, 280, 'SJP-202004-00001', 'RECEIVE SENDBACK', 'Aulia Harvy', 'Sukabumi', 'Pool Pallet DLI', 'DLI Transporter', 'Budi', 'B 1112 DLI', 16, 0, 0, 0, 0, 0, NULL, NULL, '2020-04-08 14:26:47', '2020-04-08 14:26:47'),
+(104, 282, 'SJP-202004-00003', 'RECEIVE', 'Checker Gudang BCTD', 'Pool Pallet DLI', 'BCTD', 'DLI Transporter', 'Adi', 'B 1112 DLI', 16, 0, 0, 0, 640, 0, NULL, NULL, '2020-04-30 06:35:01', '2020-04-30 06:35:01'),
+(105, 283, 'SJP-202004-00004', 'RECEIVE', 'Checker Gudang BCTD', 'Pool Pallet DLI', 'BCTD', 'DLI Transporter', 'Soni', 'B 1113 DLI', 16, 0, 0, 0, 640, 0, NULL, 'null', '2020-05-04 18:10:31', '2020-05-04 18:10:31'),
+(106, 287, 'SJP-202005-00001', 'RECEIVE', 'Checker Gudang BCTD', 'Pool Pallet DLI', 'BCTD', 'DLI Transporter', 'Agus', 'B 1113 DLI', 16, 0, 0, 0, 640, 0, NULL, 'Test Approval', '2020-05-04 18:13:35', '2020-05-04 18:13:35'),
+(107, 303, 'SJP-202004-00003', 'RECEIVE SENDBACK', 'Aulia Harvy', 'BCTD', 'Pool Pallet DLI', 'DLI Transporter', 'Adi', 'B 1112 DLI', 16, 0, 0, 0, 0, 0, NULL, 'null', '2020-05-04 19:03:53', '2020-05-04 19:03:53'),
+(108, 291, 'SJP-202005-00004', 'RECEIVE', 'Checker Gudang BCTD', 'Pool Pallet DLI', 'BCTD', 'DLI Transporter', 'Agus', 'B 1111 DLI', 17, 0, 0, 0, 604, 0, NULL, 'yes pengiriman pallet', '2020-05-04 19:04:38', '2020-05-04 19:04:38');
 
 -- --------------------------------------------------------
 
@@ -1283,21 +1411,22 @@ INSERT INTO `sjp_pallet_receive` (`sjp_pallet_receive_id`, `sjp_status_id`, `sjp
 CREATE TABLE `sjp_pallet_send` (
   `sjp_pallet_send_id` int(11) NOT NULL,
   `sjp_status_id` int(11) NOT NULL DEFAULT 0,
-  `sjp_number` varchar(100) NOT NULL,
-  `sjp_status` varchar(100) DEFAULT NULL,
-  `sender` varchar(100) DEFAULT NULL,
-  `departure_pool` varchar(100) DEFAULT NULL,
-  `destination_pool` varchar(100) DEFAULT NULL,
-  `transporter` varchar(100) DEFAULT NULL,
-  `driver` varchar(100) DEFAULT NULL,
-  `vehicle` varchar(100) DEFAULT NULL,
+  `sjp_number` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sjp_status` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sender` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `departure_pool` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `destination_pool` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `transporter` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `driver` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `vehicle` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `good_pallet` int(11) DEFAULT 0,
   `tbr_pallet` int(11) DEFAULT 0,
   `ber_pallet` int(11) DEFAULT 0,
   `missing_pallet` int(11) DEFAULT 0,
   `good_cement` int(11) DEFAULT 0,
   `bad_cement` int(11) DEFAULT 0,
-  `note` varchar(150) DEFAULT NULL,
+  `sending_driver_approval` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Send Driver Digital Signature',
+  `note` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1306,9 +1435,21 @@ CREATE TABLE `sjp_pallet_send` (
 -- Dumping data for table `sjp_pallet_send`
 --
 
-INSERT INTO `sjp_pallet_send` (`sjp_pallet_send_id`, `sjp_status_id`, `sjp_number`, `sjp_status`, `sender`, `departure_pool`, `destination_pool`, `transporter`, `driver`, `vehicle`, `good_pallet`, `tbr_pallet`, `ber_pallet`, `missing_pallet`, `good_cement`, `bad_cement`, `note`, `created_at`, `updated_at`) VALUES
-(138, 277, 'SJP-202004-00001', 'SEND', 'Aulia Harvy', 'Pool Pallet DLI', 'BCTD', 'DLI Transporter', 'Agus', 'B 1111 DLI', 16, 0, 0, 0, 640, 0, NULL, '2020-04-08 14:20:00', '2020-04-08 14:20:00'),
-(139, 280, 'SJP-202004-00001', 'SEND BACK', 'Checker Gudang Sukabumi', 'Sukabumi', 'Pool Pallet DLI', 'DLI Transporter', 'Budi', 'B 1112 DLI', 16, 0, 0, 0, 0, 0, NULL, '2020-04-08 14:26:18', '2020-04-08 14:26:18');
+INSERT INTO `sjp_pallet_send` (`sjp_pallet_send_id`, `sjp_status_id`, `sjp_number`, `sjp_status`, `sender`, `departure_pool`, `destination_pool`, `transporter`, `driver`, `vehicle`, `good_pallet`, `tbr_pallet`, `ber_pallet`, `missing_pallet`, `good_cement`, `bad_cement`, `sending_driver_approval`, `note`, `created_at`, `updated_at`) VALUES
+(138, 277, 'SJP-202004-00001', 'SEND', 'Aulia Harvy', 'Pool Pallet DLI', 'BCTD', 'DLI Transporter', 'Agus', 'B 1111 DLI', 16, 0, 0, 0, 640, 0, NULL, NULL, '2020-04-08 14:20:00', '2020-04-08 14:20:00'),
+(139, 280, 'SJP-202004-00001', 'SEND BACK', 'Checker Gudang Sukabumi', 'Sukabumi', 'Pool Pallet DLI', 'DLI Transporter', 'Budi', 'B 1112 DLI', 16, 0, 0, 0, 0, 0, NULL, NULL, '2020-04-08 14:26:18', '2020-04-08 14:26:18'),
+(140, 281, 'SJP-202004-00002', 'SEND', 'Aulia Harvy', 'Pool Pallet DLI', 'BCTD', 'DLI Transporter', 'Budi', 'B 1114 DLI', 16, 0, 0, 0, 640, 0, NULL, NULL, '2020-04-17 04:12:22', '2020-04-17 04:12:22'),
+(141, 282, 'SJP-202004-00003', 'SEND', 'Aulia Harvy', 'Pool Pallet DLI', 'BCTD', 'DLI Transporter', 'Adi', 'B 1112 DLI', 16, 0, 0, 0, 640, 0, NULL, NULL, '2020-04-28 12:24:42', '2020-04-28 12:24:42'),
+(142, 283, 'SJP-202004-00004', 'SEND', 'Aulia Harvy', 'Pool Pallet DLI', 'BCTD', 'DLI Transporter', 'Soni', 'B 1113 DLI', 16, 0, 0, 0, 640, 0, NULL, NULL, '2020-04-29 14:59:50', '2020-04-29 14:59:50'),
+(143, 286, 'SJP-202004-00005', 'SEND', 'Aulia Harvy', 'Pool Pallet DLI', 'BCTD', 'Mitra Transporter', 'Budi', 'B 1114 DLI', 16, 0, 0, 0, 640, 0, NULL, NULL, '2020-05-04 04:29:46', '2020-05-04 04:29:46'),
+(144, 287, 'SJP-202005-00001', 'SEND', 'Aulia Harvy', 'Pool Pallet DLI', 'BCTD', 'DLI Transporter', 'Agus', 'B 1113 DLI', 16, 0, 0, 0, 640, 0, NULL, 'Test Approval', '2020-05-04 05:22:18', '2020-05-04 05:22:18'),
+(145, 288, 'SJP-202005-00002', 'SEND', 'Aulia Harvy', 'Pool Pallet DLI', 'Workshop DLI', 'DLI Transporter', 'Agus', 'B 1111 DLI', 17, 0, 0, 0, 604, 0, NULL, 'Tes pengiriman pallet', '2020-05-04 06:11:51', '2020-05-04 06:11:51'),
+(146, 289, 'SJP-202005-00003', 'SEND', 'Aulia Harvy', 'Pool Pallet DLI', 'Workshop DLI', 'DLI Transporter', 'Agus', 'B 1111 DLI', 17, 0, 0, 0, 604, 0, NULL, NULL, '2020-05-04 06:31:23', '2020-05-04 06:31:23'),
+(147, 290, 'SJP-202005-00003', 'SEND', 'Aulia Harvy', 'Pool Pallet DLI', 'Workshop DLI', 'DLI Transporter', 'Agus', 'B 1111 DLI', 17, 0, 0, 0, 604, 0, NULL, NULL, '2020-05-04 06:32:06', '2020-05-04 06:32:06'),
+(148, 291, 'SJP-202005-00004', 'SEND', 'Aulia Harvy', 'Pool Pallet DLI', 'BCTD', 'DLI Transporter', 'Agus', 'B 1111 DLI', 17, 0, 0, 0, 604, 0, NULL, 'yes pengiriman pallet', '2020-05-04 06:42:23', '2020-05-04 06:42:23'),
+(149, 301, 'SJP-202005-00005', 'SEND', 'DLI', 'Pool Pallet DLI', 'BCTD', 'DLI Transporter', 'Agus', 'B 1111 DLI', 17, 0, 0, 0, 604, 0, 'SJP-202005-00005sending_driver_approval-1588577620.jpg', NULL, '2020-05-04 07:33:40', '2020-05-04 07:33:40'),
+(150, 302, 'SJP-202005-00006', 'SEND', 'Aulia Harvy', 'Pool Pallet DLI', 'BCTD', 'DLI Transporter', 'Agus', 'B 1111 DLI', 17, 0, 0, 0, 604, 0, 'SJP-202005-00006-send_driver_approval-1588614121.jpg', 'Test 120928', '2020-05-04 17:42:02', '2020-05-04 17:42:02'),
+(151, 303, 'SJP-202004-00003', 'SEND BACK', 'Checker Gudang BCTD', 'BCTD', 'Pool Pallet DLI', 'DLI Transporter', 'Adi', 'B 1112 DLI', 16, 0, 0, 0, 0, 0, 'SJP-202004-00003-send_back_driver_approval-1588617406.jpg', NULL, '2020-05-04 18:36:46', '2020-05-04 18:36:46');
 
 -- --------------------------------------------------------
 
@@ -1327,9 +1468,12 @@ CREATE TABLE `sjp_status` (
   `good_pallet` int(11) NOT NULL DEFAULT 0,
   `tbr_pallet` int(11) NOT NULL DEFAULT 0,
   `ber_pallet` int(11) NOT NULL DEFAULT 0,
-  `missing_pallet` int(11) DEFAULT 0,
+  `missing_pallet` int(11) NOT NULL DEFAULT 0,
   `good_cement` int(11) DEFAULT 0,
   `bad_cement` int(11) NOT NULL DEFAULT 0,
+  `driver_approve` int(11) NOT NULL DEFAULT 0 COMMENT '1: Send Approve, 2: Receive Approve',
+  `sending_driver_approval` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Send Driver Digital Signature',
+  `receiving_driver_approval` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Receive Driver Digital Signature',
   `note` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
@@ -1339,9 +1483,21 @@ CREATE TABLE `sjp_status` (
 -- Dumping data for table `sjp_status`
 --
 
-INSERT INTO `sjp_status` (`sjp_status_id`, `checker_send_user_id`, `checker_receive_user_id`, `sjp_id`, `transaction_id`, `sjps_number`, `status`, `good_pallet`, `tbr_pallet`, `ber_pallet`, `missing_pallet`, `good_cement`, `bad_cement`, `note`, `created_at`, `updated_at`) VALUES
-(277, 3, 13, 141, 1, 'SJPS-202004-00001', 1, 16, 0, 0, 0, 640, 0, NULL, '2020-04-08 14:20:00', '2020-04-08 14:22:38'),
-(280, 13, 3, 141, 2, 'SJPS-202004-00002', 1, 16, 0, 0, 0, 0, 0, NULL, '2020-04-08 14:26:18', '2020-04-08 14:26:47');
+INSERT INTO `sjp_status` (`sjp_status_id`, `checker_send_user_id`, `checker_receive_user_id`, `sjp_id`, `transaction_id`, `sjps_number`, `status`, `good_pallet`, `tbr_pallet`, `ber_pallet`, `missing_pallet`, `good_cement`, `bad_cement`, `driver_approve`, `sending_driver_approval`, `receiving_driver_approval`, `note`, `created_at`, `updated_at`) VALUES
+(277, 3, 13, 141, 1, 'SJPS-202004-00001', 1, 16, 0, 0, 0, 640, 0, 1, NULL, NULL, NULL, '2020-04-08 14:20:00', '2020-04-08 14:22:38'),
+(280, 13, 3, 141, 2, 'SJPS-202004-00002', 1, 16, 0, 0, 0, 0, 0, 1, NULL, NULL, NULL, '2020-04-08 14:26:18', '2020-04-08 14:26:47'),
+(281, 3, 5, 142, 1, 'SJPS-202004-00003', 0, 16, 0, 0, 0, 640, 0, 1, 'sending_driver_approval-1588564982.jpg', NULL, NULL, '2020-04-17 04:12:22', '2020-05-04 04:03:02'),
+(282, 3, 14, 143, 1, 'SJPS-202004-00004', 1, 16, 0, 0, 0, 640, 0, 1, NULL, NULL, NULL, '2020-04-28 12:24:42', '2020-04-30 06:35:01'),
+(283, 3, 14, 144, 1, 'SJPS-202004-00005', 1, 16, 0, 0, 0, 640, 0, 2, 'sending_driver_approval-1588563536.jpg', NULL, 'null', '2020-04-29 14:59:50', '2020-05-04 18:10:31'),
+(286, 3, 5, 145, 1, 'SJPS-202005-00001', 0, 16, 0, 0, 0, 640, 0, 1, 'sending_driver_approval-1588566939.jpg', NULL, NULL, '2020-05-04 04:29:46', '2020-05-04 04:35:39'),
+(287, 3, 14, 146, 1, 'SJPS-202005-00002', 1, 16, 0, 0, 0, 640, 0, 2, 'SJP-202005-00001sending_driver_approval-1588570404.jpg', NULL, 'Test Approval', '2020-05-04 05:22:18', '2020-05-04 18:13:35'),
+(288, 3, 5, 147, 1, 'SJPS-202005-00003', 0, 17, 0, 0, 0, 604, 0, 0, NULL, NULL, 'Tes pengiriman pallet', '2020-05-04 06:11:51', '2020-05-04 06:11:51'),
+(289, 3, 5, 148, 1, 'SJPS-202005-00004', 0, 17, 0, 0, 0, 604, 0, 0, NULL, NULL, NULL, '2020-05-04 06:31:23', '2020-05-04 06:31:23'),
+(290, 3, 5, 148, 1, 'SJPS-202005-00005', 0, 17, 0, 0, 0, 604, 0, 1, NULL, NULL, NULL, '2020-05-04 06:32:06', '2020-05-04 06:58:08'),
+(291, 3, 14, 149, 1, 'SJPS-202005-00006', 1, 17, 0, 0, 0, 604, 0, 2, NULL, NULL, 'yes pengiriman pallet', '2020-05-04 06:42:22', '2020-05-04 19:04:38'),
+(301, 1, 5, 150, 1, 'SJPS-202005-00007', 0, 17, 0, 0, 0, 604, 0, 1, 'SJP-202005-00005sending_driver_approval-1588577620.jpg', NULL, NULL, '2020-05-04 07:33:40', '2020-05-04 07:33:40'),
+(302, 3, 5, 151, 1, 'SJPS-202005-00008', 0, 17, 0, 0, 0, 604, 0, 1, 'SJP-202005-00006-send_driver_approval-1588614121.jpg', NULL, 'Test 120928', '2020-05-04 17:42:02', '2020-05-04 17:42:02'),
+(303, 14, 3, 143, 2, 'SJPS-202005-00009', 1, 16, 0, 0, 0, 0, 0, 2, 'SJP-202004-00003-send_back_driver_approval-1588617406.jpg', NULL, 'null', '2020-05-04 18:36:46', '2020-05-04 19:03:53');
 
 -- --------------------------------------------------------
 
@@ -1379,7 +1535,17 @@ CREATE TABLE `surat_jalan_pallet` (
 --
 
 INSERT INTO `surat_jalan_pallet` (`sjp_id`, `destination_pool_pallet_id`, `departure_pool_pallet_id`, `vehicle_id`, `driver_id`, `transporter_id`, `sjp_number`, `no_do`, `product_name`, `tonnage`, `product_quantity`, `status`, `departure_time`, `eta`, `pallet_quantity`, `state`, `created_by`, `adjust_by`, `is_sendback`, `distribution`, `created_at`, `updated_at`) VALUES
-(141, 4, 1, 2, 2, 1, 'SJP-202004-00001', '2', 'Portland Composite Cement', 32, 640, 'CLOSED', '2020-04-08', '2020-04-09', 16, 4, 'Aulia Harvy', 'Aulia Harvy', 1, 0, '2020-04-08 14:18:48', '2020-04-08 14:26:47');
+(141, 4, 1, 2, 2, 1, 'SJP-202004-00001', '2', 'Portland Composite Cement', 32, 640, 'CLOSED', '2020-04-08', '2020-04-09', 16, 4, 'Aulia Harvy', 'Aulia Harvy', 1, 0, '2020-04-08 14:18:48', '2020-04-08 14:26:47'),
+(142, 4, 1, 6, 2, 1, 'SJP-202004-00002', '12345', 'Portland Composite Cement', 32, 640, 'OPEN', '2020-04-17', '2020-04-18', 16, 1, 'Aulia Harvy', 'Aulia Harvy', 0, 0, '2020-04-17 03:33:26', '2020-04-25 07:44:01'),
+(143, 3, 1, 2, 5, 1, 'SJP-202004-00003', '12345678', 'Portland Composite Cement', 32, 640, 'CLOSED', '2020-04-28', '2020-04-29', 16, 4, 'Aulia Harvy', NULL, 1, 0, '2020-04-28 12:19:36', '2020-05-04 19:03:53'),
+(144, 3, 1, 5, 4, 1, 'SJP-202004-00004', '1234567654', 'Portland Composite Cement', 32, 640, 'OPEN', '2020-04-29', '2020-04-30', 16, 2, 'Aulia Harvy', NULL, 0, 0, '2020-04-29 14:41:20', '2020-05-04 18:10:31'),
+(145, 3, 1, 6, 2, 3, 'SJP-202004-00005', '12456787654321', 'Portland Composite Cement', 32, 640, 'OPEN', '2020-04-29', '2020-04-30', 16, 1, 'Aulia Harvy', NULL, 0, 0, '2020-04-29 15:04:34', '2020-05-04 04:29:46'),
+(146, 3, 1, 5, 1, 1, 'SJP-202005-00001', '32145', 'Portland Composite Cement', 32, 640, 'OPEN', '2020-05-04', '2020-05-05', 16, 2, 'Aulia Harvy', NULL, 0, 0, '2020-05-04 05:22:07', '2020-05-04 18:13:35'),
+(147, 2, 1, 1, 1, 1, 'SJP-202005-00002', '1234567', 'Portland Composite Cement', 34, 604, 'OPEN', '2020-05-04', '2020-05-05', 17, 1, 'Aulia Harvy', NULL, 0, 0, '2020-05-04 06:11:16', '2020-05-04 06:11:51'),
+(148, 2, 1, 1, 1, 1, 'SJP-202005-00003', '123456789', 'Portland Composite Cement', 34, 604, 'OPEN', '2020-05-04', '2020-05-05', 17, 1, 'Aulia Harvy', NULL, 0, 0, '2020-05-04 06:30:40', '2020-05-04 06:31:23'),
+(149, 3, 1, 1, 1, 1, 'SJP-202005-00004', '1234567898', 'porland composite cement', 34, 604, 'OPEN', '2020-05-04', '2020-05-05', 17, 2, 'Aulia Harvy', NULL, 0, 0, '2020-05-04 06:37:48', '2020-05-04 19:04:38'),
+(150, 3, 1, 1, 1, 1, 'SJP-202005-00005', '1234567890', 'portland composite cement', 34, 604, 'OPEN', '2020-05-04', '2020-05-05', 17, 1, 'Aulia Harvy', NULL, 0, 0, '2020-05-04 06:51:26', '2020-05-04 07:33:40'),
+(151, 3, 1, 1, 1, 1, 'SJP-202005-00006', '123456765432', 'Portland Composite Cement', 34, 604, 'OPEN', '2020-05-04', '2020-05-05', 17, 1, 'Aulia Harvy', NULL, 0, 0, '2020-05-04 06:55:59', '2020-05-04 17:42:02');
 
 -- --------------------------------------------------------
 
@@ -1398,6 +1564,13 @@ CREATE TABLE `transactions` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `transactions`
+--
+
+INSERT INTO `transactions` (`id`, `customer_id`, `user_id`, `amount`, `start_date`, `end_date`, `status`, `created_at`, `updated_at`) VALUES
+(2, 5, 23, 1000000, '2020-04-16 21:57:30', '2020-04-16 21:57:30', 0, '2020-04-16 21:58:19', '2020-04-16 21:58:19');
 
 -- --------------------------------------------------------
 
@@ -1428,7 +1601,7 @@ CREATE TABLE `transporter` (
 --
 
 INSERT INTO `transporter` (`transporter_id`, `organization_id`, `pallet_quota`, `good_pallet`, `tbr_pallet`, `ber_pallet`, `missing_pallet`, `transporter_name`, `transporter_address`, `phone_number`, `transporter_email`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-(1, 1, 200, 0, 0, 0, 0, 'DLI Transporter', 'Perkantoran Buncit Mas Blok B8\r\nJL. Mampang Prapatan Raya 108\r\nKel. Duren Tiga, Kec. Pancoran\r\nJakarta Selatan – 12760, Indonesia.', '+62 21 7989764, +62 21 79193612.', 'contact@dinamikalogistindo.com', NULL, NULL, '2020-02-24 16:36:46', '2020-04-08 14:26:47'),
+(1, 1, 200, 17, 0, 0, 0, 'DLI Transporter', 'Perkantoran Buncit Mas Blok B8\r\nJL. Mampang Prapatan Raya 108\r\nKel. Duren Tiga, Kec. Pancoran\r\nJakarta Selatan – 12760, Indonesia.', '+62 21 7989764, +62 21 79193612.', 'contact@dinamikalogistindo.com', NULL, NULL, '2020-02-24 16:36:46', '2020-05-04 19:04:38'),
 (3, 1, 200, 0, 0, 0, 0, 'Mitra Transporter', 'Perkantoran Buncit Mas Blok B8\r\nJL. Mampang Prapatan Raya 108\r\nKel. Duren Tiga, Kec. Pancoran\r\nJakarta Selatan – 12760, Indonesia.', '+62 21 7989764, +62 21 79193612.', 'contact@dinamikalogistindo.com', NULL, NULL, '2020-02-24 16:36:46', '2020-04-07 01:51:29');
 
 -- --------------------------------------------------------
@@ -1463,20 +1636,20 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `reference_pool_pallet_id`, `reference_driver_id`, `reference_transporter_id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `photo`, `api_token`, `role`, `latitude`, `longitude`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-(1, 1, NULL, NULL, 'DLI', 'superadmin', '2020-02-15 06:13:34', '$2y$10$ZHdl.FbRaRAcLHPddfrbReB4efcdWqPHxd5TXlQ0RlGP3t4zF89pO', '8CQz5Ay3BZ6GNESdM3ivD3iQfc9oH06dRam6G1a4QZpZA1oRJL7wiCXIrTux', NULL, 'bpmTLoLlxEzx2soqhPpwinAVy1VqYIl1KTnFlahN', '1', NULL, 0, NULL, NULL, '2020-02-15 06:13:34', '2020-03-05 09:58:54'),
-(3, 1, NULL, NULL, 'Aulia Harvy', 'auliaharvy', '2020-02-17 23:50:04', '$2y$10$ZHdl.FbRaRAcLHPddfrbReB4efcdWqPHxd5TXlQ0RlGP3t4zF89pO', 'HG1vHtQRbevHdSeRBO8aRiQrfqkKxkIaCszx0Wibpz1Hp5QJ3fisiwB8SLuk', NULL, 'KD2HaO1nKQQ1u0FCFvnFN91MorJRGCnO8atYuVji', '0', NULL, 0, NULL, NULL, '2020-02-17 23:49:45', '2020-04-08 14:26:23'),
-(4, 2, NULL, NULL, 'Harby Anwardi', 'harby', '2020-02-18 06:33:49', '$2y$10$nSyF/tsClxJz23dikU2V9eGjd0HCwcvVNoCrSkldNoWA9rL4wcm7K', NULL, NULL, 'pDuR3B1rDFGpAp7uHBoTyBLGSstKxX4avsC1MJvS', '1', NULL, 0, NULL, NULL, '2020-02-18 06:33:49', '2020-04-07 02:43:03'),
+(1, 1, NULL, NULL, 'DLI', 'superadmin', '2020-02-15 06:13:34', '$2y$10$ZHdl.FbRaRAcLHPddfrbReB4efcdWqPHxd5TXlQ0RlGP3t4zF89pO', '8CQz5Ay3BZ6GNESdM3ivD3iQfc9oH06dRam6G1a4QZpZA1oRJL7wiCXIrTux', NULL, 'ZHiXdMkPhLkJ21w4iB4NhBEG3VGYFs6GQlsBdNka', '1', NULL, 0, NULL, NULL, '2020-02-15 06:13:34', '2020-05-04 14:28:24'),
+(3, 1, NULL, NULL, 'Aulia Harvy', 'auliaharvy', '2020-02-17 23:50:04', '$2y$10$ZHdl.FbRaRAcLHPddfrbReB4efcdWqPHxd5TXlQ0RlGP3t4zF89pO', 'HG1vHtQRbevHdSeRBO8aRiQrfqkKxkIaCszx0Wibpz1Hp5QJ3fisiwB8SLuk', NULL, 'kojd262ipOw53DDWsY0X13Phv1zB29YVxkRGdbJf', '0', NULL, 0, NULL, NULL, '2020-02-17 23:49:45', '2020-05-04 19:04:50'),
+(4, 2, NULL, NULL, 'Harby Anwardi', 'harby', '2020-02-18 06:33:49', '$2y$10$nSyF/tsClxJz23dikU2V9eGjd0HCwcvVNoCrSkldNoWA9rL4wcm7K', NULL, NULL, 'FLgpo8IQ0V6LyFXjJcCfeg1SV5sj5TbPX6Uyefl8', '1', NULL, 0, NULL, NULL, '2020-02-18 06:33:49', '2020-05-01 15:28:08'),
 (5, NULL, NULL, NULL, NULL, '', NULL, '', NULL, NULL, NULL, '', NULL, 0, NULL, NULL, NULL, NULL),
-(6, 1, NULL, NULL, 'Checker Pool Pallet DLI', 'checkerpooldli', '2020-02-18 06:33:49', '$2y$10$nSyF/tsClxJz23dikU2V9eGjd0HCwcvVNoCrSkldNoWA9rL4wcm7K', NULL, NULL, 'hPTcL5ZxzMgEhLOJjYKxuzVJ982Cny4bhU7JnUdb', '9', NULL, 0, NULL, NULL, '2020-02-18 06:33:49', '2020-03-23 04:39:58'),
+(6, 1, NULL, NULL, 'Checker Pool Pallet DLI', 'checkerpooldli', '2020-02-18 06:33:49', '$2y$10$nSyF/tsClxJz23dikU2V9eGjd0HCwcvVNoCrSkldNoWA9rL4wcm7K', NULL, NULL, 'kyVkrDycLH3jY9oXS84Wbup58IMkSDqIvce5d05V', '9', NULL, 0, NULL, NULL, '2020-02-18 06:33:49', '2020-04-29 14:57:34'),
 (7, 1, NULL, NULL, 'Admin Input DLI', 'admininputdli', '2020-02-18 06:33:49', '$2y$10$nSyF/tsClxJz23dikU2V9eGjd0HCwcvVNoCrSkldNoWA9rL4wcm7K', 'bvXVBvbFxRhkONSOGDJwt3QP2FfhmIVOgycq0cySP6pfp6c1pXMy0nYjW0j1', NULL, 'LBynrJnxDZNUiyi2CVI4rAeD0cWSic4ZF1ul36ek', '0', NULL, 0, NULL, NULL, '2020-02-18 06:33:49', '2020-03-17 08:34:55'),
 (13, 4, NULL, NULL, 'Checker Gudang Sukabumi', 'checkerwhsukabumi', '2020-02-18 06:33:49', '$2y$10$nSyF/tsClxJz23dikU2V9eGjd0HCwcvVNoCrSkldNoWA9rL4wcm7K', 'RU85Y0DQb951wDo3GHiQivdiHwASeJfqWImD45X92g7XwNWlfSdZoUrB3mMS', NULL, 'fQEUMvoiYf8Pf46k4qz8pRANZ0g5rKMkw4TApESL', '0', NULL, 0, NULL, NULL, '2020-02-18 06:33:49', '2020-04-08 14:22:30'),
-(14, 3, NULL, NULL, 'Checker Gudang BCTD', 'checkerwhbctd', '2020-02-18 06:33:49', '$2y$10$nSyF/tsClxJz23dikU2V9eGjd0HCwcvVNoCrSkldNoWA9rL4wcm7K', 'dCoqn8YQ2idocT5GJxWUyuKZy750dxw4CrcMz6YfAgyFDWn1PDLHvYj5LNkR', NULL, 'iODk9IykvSmiPSQwzh0mmL03mjmBhTTBbD5Te7pb', '0', NULL, 0, NULL, NULL, '2020-02-18 06:33:49', '2020-03-26 16:47:29'),
+(14, 3, NULL, NULL, 'Checker Gudang BCTD', 'checkerwhbctd', '2020-02-18 06:33:49', '$2y$10$nSyF/tsClxJz23dikU2V9eGjd0HCwcvVNoCrSkldNoWA9rL4wcm7K', 'dCoqn8YQ2idocT5GJxWUyuKZy750dxw4CrcMz6YfAgyFDWn1PDLHvYj5LNkR', NULL, 'RCyF4vUN0R6pGHeOmG3J2bdY1h9piyjrHYHpU0uL', '0', NULL, 0, NULL, NULL, '2020-02-18 06:33:49', '2020-05-04 19:04:19'),
 (15, NULL, NULL, 1, 'Admin Transporter DLI', 'admintransporterdli', '2020-02-18 06:33:49', '$2y$10$nSyF/tsClxJz23dikU2V9eGjd0HCwcvVNoCrSkldNoWA9rL4wcm7K', '7xrIPaIRsqp1MmpMAWa9vOet0PG5W6Y26OTNwdcjBgzriWFiJavEBTv9vYi0', NULL, 'BHj9w3xdpkHdf2fShO3JchG9bgMEeGUkuFxm0EjF', '0', NULL, 0, NULL, NULL, '2020-02-18 06:33:49', '2020-03-17 08:24:45'),
 (16, NULL, NULL, 3, 'Admin Transporter Mitra', 'admintransportermitra', '2020-02-18 06:33:49', '$2y$10$nSyF/tsClxJz23dikU2V9eGjd0HCwcvVNoCrSkldNoWA9rL4wcm7K', NULL, NULL, 'yjd36RgOa8u1WuSOkiCkJmX1mYLlCKcn4vAZBtIP', '0', NULL, 0, NULL, NULL, '2020-02-18 06:33:49', '2020-03-16 18:21:01'),
 (18, 1, NULL, NULL, 'Supervisor Pool Pallet DLI', 'supervisorpooldli', '2020-02-18 06:33:49', '$2y$10$nSyF/tsClxJz23dikU2V9eGjd0HCwcvVNoCrSkldNoWA9rL4wcm7K', NULL, NULL, '8FvJY6zsiUuhYGXvpdzZU8UyJfSUO1Q5irUmuWFg', '0', NULL, 0, NULL, NULL, '2020-02-18 06:33:49', '2020-03-12 01:47:40'),
 (19, 2, NULL, NULL, 'Supervisor Gudang BCTD', 'supervisorwhbctd', '2020-02-18 06:33:49', '$2y$10$nSyF/tsClxJz23dikU2V9eGjd0HCwcvVNoCrSkldNoWA9rL4wcm7K', NULL, NULL, 'ZcpkLdvuzp7xgGQyBtVFHCBwusGpjPE1DXSyIKDN', '0', NULL, 0, NULL, NULL, '2020-02-18 06:33:49', '2020-03-06 08:52:21'),
 (20, 1, NULL, NULL, 'Pallet Controller DLI', 'palletcontrollerdli', '2020-02-18 06:33:49', '$2y$10$nSyF/tsClxJz23dikU2V9eGjd0HCwcvVNoCrSkldNoWA9rL4wcm7K', NULL, NULL, 'xNJckAa8CCL7IBfdlpkG1fKZ40CsyTC86o4UCY5p', '0', NULL, 0, NULL, NULL, '2020-02-18 06:33:49', '2020-03-17 07:47:32'),
-(23, 3, NULL, NULL, 'Admin Input BCTD', 'admininputbctd', '2020-02-18 06:33:49', '$2y$10$nSyF/tsClxJz23dikU2V9eGjd0HCwcvVNoCrSkldNoWA9rL4wcm7K', 'bvXVBvbFxRhkONSOGDJwt3QP2FfhmIVOgycq0cySP6pfp6c1pXMy0nYjW0j1', NULL, '1YhfEduxHHKZci2hinTGu7dLMzPWsYwrPtdzc80o', '0', NULL, 0, NULL, NULL, '2020-02-18 06:33:49', '2020-03-26 16:30:59'),
+(23, 3, NULL, NULL, 'Admin Input BCTD', 'admininputbctd', '2020-02-18 06:33:49', '$2y$10$nSyF/tsClxJz23dikU2V9eGjd0HCwcvVNoCrSkldNoWA9rL4wcm7K', 'bvXVBvbFxRhkONSOGDJwt3QP2FfhmIVOgycq0cySP6pfp6c1pXMy0nYjW0j1', NULL, 'lgLFAfgwpK44yRLS4bJPv1YKePa1mpOrsqfRZ3FL', '0', NULL, 0, NULL, NULL, '2020-02-18 06:33:49', '2020-04-17 02:19:16'),
 (24, 4, NULL, NULL, 'Admin Input Sukabumi', 'admininputsukabumi', '2020-02-18 06:33:49', '$2y$10$nSyF/tsClxJz23dikU2V9eGjd0HCwcvVNoCrSkldNoWA9rL4wcm7K', 'bvXVBvbFxRhkONSOGDJwt3QP2FfhmIVOgycq0cySP6pfp6c1pXMy0nYjW0j1', NULL, 'ZcKScEX6RWo1U4npEEZEjNc9l5qNuMe6ykZHaCD8', '0', NULL, 0, NULL, NULL, '2020-02-18 06:33:49', '2020-03-26 16:31:13');
 
 -- --------------------------------------------------------
@@ -1489,7 +1662,7 @@ CREATE TABLE `vehicle` (
   `vehicle_id` int(11) NOT NULL,
   `transporter_id` int(11) NOT NULL,
   `vehicle_number` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `vehicle_type` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `vehicle_type` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1517,6 +1690,12 @@ INSERT INTO `vehicle` (`vehicle_id`, `transporter_id`, `vehicle_number`, `vehicl
 --
 ALTER TABLE `all_transaction`
   ADD PRIMARY KEY (`all_transaction_id`);
+
+--
+-- Indexes for table `approval_log`
+--
+ALTER TABLE `approval_log`
+  ADD PRIMARY KEY (`approval_log_id`);
 
 --
 -- Indexes for table `auto_numbers`
@@ -1863,43 +2042,49 @@ ALTER TABLE `vehicle`
 -- AUTO_INCREMENT for table `all_transaction`
 --
 ALTER TABLE `all_transaction`
-  MODIFY `all_transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `all_transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+
+--
+-- AUTO_INCREMENT for table `approval_log`
+--
+ALTER TABLE `approval_log`
+  MODIFY `approval_log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `auto_numbers`
 --
 ALTER TABLE `auto_numbers`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `ber_missing_pallet`
 --
 ALTER TABLE `ber_missing_pallet`
-  MODIFY `ber_missing_pallet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+  MODIFY `ber_missing_pallet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=128;
 
 --
 -- AUTO_INCREMENT for table `ber_missing_pallet_approved`
 --
 ALTER TABLE `ber_missing_pallet_approved`
-  MODIFY `ber_missing_pallet_approved_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ber_missing_pallet_approved_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `ber_missing_pallet_disapproved`
 --
 ALTER TABLE `ber_missing_pallet_disapproved`
-  MODIFY `ber_missing_pallet_disapproved_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `ber_missing_pallet_disapproved_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `ber_missing_pallet_reported`
 --
 ALTER TABLE `ber_missing_pallet_reported`
-  MODIFY `ber_missing_pallet_reported_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `ber_missing_pallet_reported_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `damaged_pallet`
@@ -1959,7 +2144,7 @@ ALTER TABLE `mst_transaction`
 -- AUTO_INCREMENT for table `new_pallet`
 --
 ALTER TABLE `new_pallet`
-  MODIFY `new_pallet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
+  MODIFY `new_pallet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
 
 --
 -- AUTO_INCREMENT for table `oauth_clients`
@@ -2037,37 +2222,37 @@ ALTER TABLE `sjp_adjusment`
 -- AUTO_INCREMENT for table `sjp_change_destination`
 --
 ALTER TABLE `sjp_change_destination`
-  MODIFY `sjp_change_destination_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `sjp_change_destination_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `sjp_pallet_receive`
 --
 ALTER TABLE `sjp_pallet_receive`
-  MODIFY `sjp_pallet_receive_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+  MODIFY `sjp_pallet_receive_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
 
 --
 -- AUTO_INCREMENT for table `sjp_pallet_send`
 --
 ALTER TABLE `sjp_pallet_send`
-  MODIFY `sjp_pallet_send_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
+  MODIFY `sjp_pallet_send_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
 
 --
 -- AUTO_INCREMENT for table `sjp_status`
 --
 ALTER TABLE `sjp_status`
-  MODIFY `sjp_status_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=281;
+  MODIFY `sjp_status_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=304;
 
 --
 -- AUTO_INCREMENT for table `surat_jalan_pallet`
 --
 ALTER TABLE `surat_jalan_pallet`
-  MODIFY `sjp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
+  MODIFY `sjp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
 
 --
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `transporter`

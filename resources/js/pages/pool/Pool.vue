@@ -85,12 +85,13 @@ export default {
                 { value: 'code', text: 'Pool Code' },
                 // { value: 'type', text: 'Pool Type' },
                 { value: 'pool_address', text: 'Pool Address' },
-                { value: 'pallet_quota', text: 'Pallet Quota' },
+                
                 { value: 'good_pallet', text: 'Good Pallet' },
                 { value: 'tbr_pallet', text: 'TBR Pallet' },
                 { value: 'ber_pallet', text: 'BER Pallet' },
                 { value: 'missing_pallet', text: 'Missing Pallet' },
                 { value: 'total', text: 'Total Pallet' },
+                { value: 'pallet_quota', text: 'Pallet Quota' },
                 // { value: 'actions', text: 'Action'}
             ],
             total: null,

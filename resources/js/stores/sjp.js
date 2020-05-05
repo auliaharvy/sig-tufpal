@@ -1,4 +1,5 @@
 import $axios from '../api.js'
+import Axios from 'axios'
 
 const state = () => ({
     loading: false,
@@ -75,6 +76,15 @@ const actions = {
             $axios.get(`/sjp?page=${state.page}&q=${search}`)
             .then((response) => {
                 commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
+                resolve(response.data)
+            })
+        })
+    },
+    getDataDispatch({commit}, payload) {
+        return new Promise((resolve, reject) => {
+            Axios.get('b2b.indocement.co.id/WSTufpalBridge_TEST/TUFPAL.svc/json/GetDataDispatch/')
+            .then((response) => {
+                commit('ASSIGN_DATA', response.data)
                 resolve(response.data)
             })
         })

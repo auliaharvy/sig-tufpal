@@ -29,6 +29,7 @@
                 <option v-for='data in pools.data' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
             </select>
         </div> -->
+
         <v-layout row wrap class="px-5">
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group">

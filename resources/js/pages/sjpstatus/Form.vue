@@ -50,12 +50,11 @@
         
         <v-layout row wrap class="px-5">
             <v-flex class="px-5" xs12 md6 lg6>
-                <div class="form-group">
-                    <label>Pallet Quantity / Good Pallet</label>
-                    <select class='form-control' v-model='sjpstatus.sjp_id' :readonly="true">
-                        <option disabled v-for='data in sjps.data' v-bind:key='data.sjp_id' :value='data.sjp_id'>{{ data.pallet_quantity }}</option>
-                    </select>
-                </div>
+                <div class="form-group" :class="{ 'has-error': errors.good_pallet }">
+                    <label for="">Good Pallet</label>
+                    <input type="text" class="form-control" v-model="sjpstatus.good_pallet">
+                    <p class="text-danger" v-if="errors.good_pallet">{{ errors.nogood_pallette[0] }}</p>
+                </div>    
             </v-flex>
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group">
@@ -95,8 +94,12 @@ export default {
         this.addSjpStatusbyMaster(this.$route.params.id).then((res) => {
                 let row = res.data    
                 this.sjpstatus.sjp_id =  row.sjp_id
+
+                this.getSjp(this.sjp_id).then((res) => {
+                    let row = res.data
+                    this.good_pallet = row.pallet_quantity
+                })
             }),
-        this.getSjp(), 
         this.getMstTransaction(), 
         this.getUserLogin() //LOAD DATA
     },
