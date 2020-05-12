@@ -35,6 +35,8 @@ import palletmovement from './stores/palletmovement.js'
 import alltransaction from './stores/alltransaction.js'
 import sjpadjusment from './stores/sjpadjusment.js'
 import sjpchangedestination from './stores/sjpchangedestination.js'
+import dispatchdata from './stores/dispatchdata.js'
+
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -43,7 +45,7 @@ const store = new Vuex.Store({
         outlet,
         courier,
         product,
-        user,   
+        user,
         expenses,
         notification,
         customer,
@@ -73,6 +75,7 @@ const store = new Vuex.Store({
         damagedpallet,
         repairedpallet,
         alltransaction,
+        dispatchdata,
     },
     state: {
         token: localStorage.getItem('token'),

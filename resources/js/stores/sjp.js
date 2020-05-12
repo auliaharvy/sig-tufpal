@@ -4,9 +4,12 @@ import Axios from 'axios'
 const state = () => ({
     loading: false,
     sjps: [], //STATE UNTUK MENAMPUNG DATA CUSTOMERS
-    
+
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
     sjp: {
+        dest_pool: '',
+        destination_pool_pallet_id: '',
+        transporter_name: '',
         destination_pool: '',
         departure_pool: '',
         vehicle: '',
@@ -18,9 +21,9 @@ const state = () => ({
         tonnage: '',
         product_quantity: '',
         status: '',
-        departure_time: new Date().toISOString().slice(0,10), 
+        departure_time: new Date().toISOString().slice(0,10),
         eta: '',
-        pallet_quantity: '',    
+        pallet_quantity: '',
     },
     page: 1
 })
@@ -70,6 +73,7 @@ const mutations = {
 
 const actions = {
     getSjp({ commit, state }, payload) {
+        commit('isLoading')
         let search = typeof payload != 'undefined' ? payload:''
         return new Promise((resolve, reject) => {
             //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
@@ -78,22 +82,18 @@ const actions = {
                 commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
                 resolve(response.data)
             })
+        }).finally(() => {
+            commit('doneLoading')
         })
     },
-    getDataDispatch({commit}, payload) {
-        return new Promise((resolve, reject) => {
-            Axios.get('b2b.indocement.co.id/WSTufpalBridge_TEST/TUFPAL.svc/json/GetDataDispatch/')
-            .then((response) => {
-                commit('ASSIGN_DATA', response.data)
-                resolve(response.data)
-            })
-        })
-    },
-    submitSjp({ dispatch, commit, state }) {
+    submitSjp({ dispatch, commit }, payload) {
         commit('isLoading')
         return new Promise((resolve, reject) => {
-            //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
-            $axios.post(`/sjp`, state.sjp)
+            $axios.post(`/sjp`, payload, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
             .then((response) => {
                 //APABILA BERHASIL MAKA LOAD DATA CUSTOMER UNTUK MENGAMBIL DATA TERBARU
                 dispatch('getSjp').then(() => {
@@ -117,7 +117,7 @@ const actions = {
             .then((response) => {
                 commit('ASSIGN_FORM', response.data.data) //ASSIGN DATA TERSEBUT KE DALAM STATE CUSTOMER
                 resolve(response.data)
-            })  
+            })
         })
     },
     updateSjp({ state, commit }, payload) {

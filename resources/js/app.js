@@ -37,6 +37,7 @@ Vue.component('pdf', pdf);
 Vue.use(VueHtml2Canvas);
 Vue.use(VueHtmlToPaper);
 Vue.use(VueSignaturePad);
+Vue.use(require('vue-moment'));
 
 
 delete Icon.Default.prototype._getIconUrl;

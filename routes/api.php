@@ -31,7 +31,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/sjpstatus/receivesendback', 'SjpStatusController@receivesendback');
     Route::resource('pallettransfer', 'PalletTransferController');
     Route::resource('pallettransfersend', 'PallettransfersendController');
-    Route::resource('pallettransferreceive', 'PallettransferreceiveController');  
+    Route::resource('pallettransferreceive', 'PallettransferreceiveController');
     Route::resource('bermissing', 'BermissingpalletController');
     Route::get('bermissing/view/{id}', 'BermissingpalletController@view');
     Route::post('/bermissing/disapprove', 'BermissingpalletController@disapprove');
@@ -47,6 +47,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('sjpchangedestination', 'SjpchangedestinationController');
     Route::resource('pool', 'PoolController');
     Route::get('poolform', 'PoolController@getpoolpallet');
+    Route::get('poolautocomplete', 'PoolController@poolautocomplete');
     Route::resource('driver', 'DriverController');
     Route::get('driverform', 'DriverController@getdriverform');
     Route::resource('vehicle', 'VehicleController');
@@ -59,6 +60,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('alltransaction', 'AlltransactionController');
 
     Route::post('/user/import', 'API\UserController@import');
+    Route::post('getdispatch', 'DispatchDataController@dispatchData');
 
 
     Route::get('chart', 'API\DashboardController@chart');
@@ -66,7 +68,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('totalpallet', 'API\DashboardController@totalpallet');
     Route::get('export', 'API\DashboardController@exportData');
     Route::resource('/outlets', 'API\OutletController')->except(['show']);
-    
+
     Route::resource('/couriers', 'API\UserController')->except(['create', 'show', 'update']);
     Route::post('/couriers/{id}', 'API\UserController@update')->name('couriers.update');
 

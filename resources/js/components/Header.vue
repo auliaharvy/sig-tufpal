@@ -1,5 +1,5 @@
 <template>
-     <div>  
+     <div>
         <v-navigation-drawer v-model="drawer" app>
             <template v-slot:prepend>
                 <v-list-item two-line>
@@ -13,7 +13,7 @@
                 </v-list-item>
             </template>
             <v-divider></v-divider>
-            
+
             <v-list nav dense>
                 <!--  Home -->
                 <h3> Menu </h3>
@@ -204,7 +204,7 @@
                         <v-list-item-title color="black">Pallet Deposit</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item> -->
-                
+
 
                 <!-- { title: 'Report Dashboard', icon: 'mdi-monitor-dashboard' },
                 { title: 'Pallet Quantity', icon: 'mdi-numeric', route:'/poolpallet' },
@@ -221,7 +221,7 @@
                     </v-list-item-content>
                 </v-list-item> -->
 
-                
+
                 <v-divider></v-divider>
                 <h3> Setting </h3>
                 <v-list-item link router to="/setting/role-permission" v-if="$can('read permission')">
@@ -232,10 +232,18 @@
                         <v-list-item-title color="black">Role & Permission</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item link router to="/user" v-if="$can('read permission')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-account-multiple</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">User Management</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
             </v-list>
         </v-navigation-drawer>
 
-        <v-app-bar app color="primary"> 
+        <v-app-bar app color="primary">
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
             <router-link to="/">
             <v-toolbar-title link router to="/map" app class="text-uppercase font-weight-light">
@@ -245,11 +253,11 @@
             </v-toolbar-title>
             </router-link>
             <v-spacer></v-spacer>
-            <v-btn @click="logout"> 
+            <v-btn @click="logout">
                 <span left>Logout</span>
                 <v-icon right color="black">mdi-exit-to-app</v-icon>
             </v-btn>
-        </v-app-bar>    
+        </v-app-bar>
 
      </div>
 </template>

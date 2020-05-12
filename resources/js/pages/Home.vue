@@ -19,7 +19,7 @@
             </v-card-title>
           </v-card>
         </v-flex>
-        <v-flex xs12 md3 lg3 link >        
+        <v-flex xs12 md3 lg3 link >
           <v-card link router to="/sjpstatus" class="text-center ma-3" v-if="$can('read sjpstatuss')">
             <v-card-title class="text-center" color="black">
               <v-icon color="black" left>mdi-file-document</v-icon>
@@ -68,8 +68,8 @@
           </v-card>
         </v-flex>
       </v-layout>
-      
-      
+
+
       <h1 class="display-1 black--text">
         Report
       </h1>
@@ -82,7 +82,7 @@
             </v-card-title>
           </v-card>
         </v-flex>
-        <v-flex xs12 md3 lg3 link >        
+        <v-flex xs12 md3 lg3 link >
           <v-card link router to="/poolpallet" class="text-center ma-3" v-if="$can('read poolpallets')">
             <v-card-title class="text-center" color="black">
               <v-icon color="black" left>mdi-numeric</v-icon>
@@ -170,7 +170,7 @@
             </v-card-title>
           </v-card>
         </v-flex> -->
-        
+
         <!-- <v-flex xs12 md3 lg3 link >
           <v-card link router to="/palletdeposit" class="text-center ma-3" v-if="$can('read palletdeposit')">
             <v-card-title class="text-center" color="black">
@@ -179,7 +179,7 @@
             </v-card-title>
           </v-card>
         </v-flex> -->
-        
+
       </v-layout>
 
       <h1 class="display-1 black--text">
@@ -194,11 +194,19 @@
             </v-card-title>
           </v-card>
         </v-flex>
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/user" class="text-center ma-3" v-if="$can('read permission')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-account-multiple</v-icon>
+              <span right> User Management </span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
       </v-layout>
       </v-card>
     </v-container>
   </div>
-  
+
 </template>
 <script>
 export default {
@@ -222,7 +230,7 @@ export default {
             ],
             settings: [
                 { title: 'Setting', icon: 'mdi-monitor-dashboard', route:'/setting' },
-               
+
             ],
             right: null,
         }

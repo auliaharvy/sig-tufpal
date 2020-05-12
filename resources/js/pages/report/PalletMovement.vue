@@ -1,9 +1,9 @@
 <template>
     <div class="col-md-12">
         <div class="panel">
-            
+
             <div class="panel-body">
-              
+
               	<!-- TABLE UNTUK MENAMPILKAN LIST SJP -->
                 <template>
   <v-card>
@@ -22,20 +22,23 @@
       :headers="headers"
       :items="palletmovements.data"
       :search="search"
-    >       
+    >
         <template v-slot:item.status="{ item }">
             <!-- <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
             <v-chip class="label label-success" v-else-if="item.status == 1">Received</v-chip> -->
             <p v-if="item.status == 0">Sending</p>
             <p class="text-blue" v-else-if="item.status == 1">Received</p>
         </template>
-       
+        <template v-slot:item.late="{ item }">
+            <span>{{ item.eta | moment("from", true) }}</span>
+        </template>
+
     </v-data-table>
   </v-card>
 </template>
               	<!-- TABLE UNTUK MENAMPILKAN LIST CUSTOMER -->
 
-               
+
                     <!-- <div class="col-md-6">
                         <p v-if="sjpstatuss.data"><i class="fa fa-bars"></i> {{ sjpstatuss.data.length }} item dari {{ sjpstatuss.meta.total }} total data</p>
                     </div>
@@ -50,7 +53,7 @@
                                 ></b-pagination>
                         </div>
                     </div> -->
-                
+
             </div>
         </div>
     </div>
@@ -86,9 +89,10 @@ export default {
                 // { value: 'product_name', text: 'Product' },
                 { value: 'departure_time', text: 'Departure Time' },
                 { value: 'eta', text: 'ETA' },
+                { value: 'late', text: 'Late Time'}
                 // { value: 'send', text: 'Send Pallet' },
                 // { value: 'adjusment', text: 'Adjusment SJP' },
-              
+
 
             ],
             search: ''
@@ -117,9 +121,9 @@ export default {
         }
     },
     methods: {
-        ...mapActions('palletmovement', ['getPalletMovements']), 
+        ...mapActions('palletmovement', ['getPalletMovements']),
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
-        
+
     }
 }
 </script>

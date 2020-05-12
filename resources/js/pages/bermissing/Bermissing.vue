@@ -3,12 +3,12 @@
         <div class="panel">
             <div class="panel-heading">
                 <router-link v-if="$can('create bermissingpallets')" :to="{ name: 'bermissings.add' }"><v-btn>Add BER/Missing Pallet</v-btn></router-link>
-                
+
             </div>
             <v-spacer />
-                
+
             <div class="panel-body">
-              
+
                 <!-- TABLE UNTUK MENAMPILKAN LIST SJP -->
                 <template>
                     <v-card>
@@ -16,7 +16,7 @@
                             BER/Missing Pallet
                             <v-spacer></v-spacer>
                             <!-- <v-btn>
-                            <download-excel 
+                            <download-excel
                             :data= "bermissings.data"
                             type="csv"
                             name="PalletTransfers.csv">
@@ -37,10 +37,10 @@
                         :loading="loading"
                         :items="bermissings.data"
                         :search="search"
-                        >   
+                        >
                             <template v-slot:item.reporter_prove="{ item }">
-                                <img :src="'storage/bermissing/reporter_prove/' + item.reporter_prove" :width="70" :height="100" :alt="item.bmp_number"> </img>
-                                <v-btn dark color="success" text small :href="'storage/bermissing/reporter_prove/' + item.reporter_prove" target="_blank">
+                                <img :src="'/storage/app/public/bermissing/reporter_prove/' + item.reporter_prove" :width="70" :height="100" :alt="item.bmp_number"> </img>
+                                <v-btn dark color="success" text small :href="'/storage/app/public/bermissing/reporter_prove/' + item.reporter_prove" target="_blank">
                                     show
                                 </v-btn>
                             </template>
@@ -55,16 +55,16 @@
                             <template v-slot:item.approve="{ item }">
                                 <router-link :to="{ name: 'bermissings.edit', params: {id: item.ber_missing_pallet_id} }" v-if="item.status == 0 && $can('update bermissingpallets')" >
                                     <v-btn color="success" small>Approval</v-btn>
-                                </router-link>                        
+                                </router-link>
                             </template>
                             <template v-slot:item.view="{ item }">
                                 <router-link :to="{ name: 'bermissings.view', params: {id: item.ber_missing_pallet_id} }" >
                                     <v-btn color="success" small>View</v-btn>
-                                </router-link>                        
+                                </router-link>
                             </template>
 
                             <template v-slot:item.delete="{ item }">
-                                <v-btn v-if="$can('delete bermissingpallets')" color="error" small @click="deleteBermissings(item.ber_missing_pallet_id)">Delete</v-btn>                         
+                                <v-btn v-if="$can('delete bermissingpallets')" color="error" small @click="deleteBermissings(item.ber_missing_pallet_id)">Delete</v-btn>
                             </template>
                         </v-data-table>
                     </v-card>
@@ -135,7 +135,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions('bermissing', ['getBermissing', 'removeBermissing']), 
+        ...mapActions('bermissing', ['getBermissing', 'removeBermissing']),
         showimage(id) {
             this.dialog=true
         },

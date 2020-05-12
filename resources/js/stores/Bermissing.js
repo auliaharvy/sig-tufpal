@@ -3,7 +3,7 @@ import $axios from '../api.js'
 const state = () => ({
     loading: false,
     bermissings: [], //STATE UNTUK MENAMPUNG DATA CUSTOMERS
-    
+
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
     bermissing: {
         bmp_number: '',
@@ -18,7 +18,7 @@ const state = () => ({
         status: '',
         note: '',
         created_at: '',
-      
+
     },
     page: 1
 })
@@ -79,11 +79,10 @@ const actions = {
     submitBermissing({ dispatch, commit}, payload ) {
         commit('isLoading')
         return new Promise((resolve, reject) => {
-            //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
             $axios.post(`/bermissing`, payload,{
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             })
             .then((response) => {
                 //APABILA BERHASIL MAKA LOAD DATA CUSTOMER UNTUK MENGAMBIL DATA TERBARU
@@ -174,7 +173,7 @@ const actions = {
             })
         })
     }
-  
+
 }
 
 export default {

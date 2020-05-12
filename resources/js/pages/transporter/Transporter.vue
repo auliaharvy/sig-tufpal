@@ -5,7 +5,7 @@
                 <router-link v-if="$can('create transporters')" :to="{ name: 'transporters.add' }"><v-btn>Add Transporters</v-btn></router-link>
             </div>
             <div class="panel-body">
-              
+
               	<!-- TABLE UNTUK MENAMPILKAN LIST SJP -->
                 <template>
   <v-card>
@@ -24,11 +24,11 @@
       :headers="headers"
       :items="transporters.data"
       :search="search"
-    >       
+    >
     <template v-slot:item.total="{ item }">
         <v-chip class="label"  color="red"  v-if="item.good_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet > item.pallet_quota">
             {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
-        </v-chip> 
+        </v-chip>
         <v-chip class="label label-success"  v-if="item.good_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet < item.pallet_quota">
             {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
         </v-chip>
@@ -37,20 +37,20 @@
         </v-chip>
     </template>
     <!-- <template v-slot:item.total="{ item }">
-       {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }} 
+       {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
     </template> -->
         <!-- <template v-slot:item.actions="{ item }">
             <router-link :to="{ name: 'transporters.edit', params: {id: item.transporter_id} }">
                 <v-btn color="success" small>Update</v-btn>
             </router-link>
-            <v-btn color="error" small @click="deleteTransporter(item.transporter_id)">Delete</v-btn>                         
+            <v-btn color="error" small @click="deleteTransporter(item.transporter_id)">Delete</v-btn>
         </template> -->
     </v-data-table>
   </v-card>
 </template>
               	<!-- TABLE UNTUK MENAMPILKAN LIST CUSTOMER -->
 
-               
+
                     <!-- <div class="col-md-6">
                         <p v-if="sjpstatuss.data"><i class="fa fa-bars"></i> {{ sjpstatuss.data.length }} item dari {{ sjpstatuss.meta.total }} total data</p>
                     </div>
@@ -65,7 +65,7 @@
                                 ></b-pagination>
                         </div>
                     </div> -->
-                
+
             </div>
         </div>
     </div>
@@ -85,12 +85,13 @@ export default {
             headers: [
                 { value: 'transporter_name', text: 'Transporter Name' },
                 { value: 'transporter_address', text: 'Transporter Address' },
-                { value: 'pallet_quota', text: 'Pallet Quota' },
+
                 { value: 'good_pallet', text: 'Good Pallet' },
                 { value: 'tbr_pallet', text: 'TBR Pallet' },
                 { value: 'ber_pallet', text: 'BER Pallet' },
                 { value: 'missing_pallet', text: 'Missing Pallet' },
                 { value: 'total', text: 'Total Pallet' },
+                { value: 'pallet_quota', text: 'Pallet Quota' },
                 // { value: 'actions', text: 'Action'}
             ],
             search: ''
@@ -119,7 +120,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions('transporter', ['getTransporters', 'removeTransporters']), 
+        ...mapActions('transporter', ['getTransporters', 'removeTransporters']),
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         deleteTransporters(id) {
             this.$swal({

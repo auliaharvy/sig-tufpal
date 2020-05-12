@@ -87,10 +87,10 @@ import DataOutlet from './pages/outlets/Outlet.vue'
 import AddOutlet from './pages/outlets/Add.vue'
 import EditOutlet from './pages/outlets/Edit.vue'
 
-import IndexCourier from './pages/couriers/Index.vue'
-import DataCouriers from './pages/couriers/Courier.vue'
-import AddCouriers from './pages/couriers/Add.vue'
-import EditCouriers from './pages/couriers/Edit.vue'
+import IndexUser from './pages/user/Index.vue'
+import DataUser from './pages/user/User.vue'
+import AddUser from './pages/user/Add.vue'
+import EditUser from './pages/user/Edit.vue'
 
 import IndexProduct from './pages/products/Index.vue'
 import DataProduct from './pages/products/Product.vue'
@@ -152,10 +152,10 @@ const router = new Router({
                     component: EditSjpdest,
                     meta: { title: 'Edit Sjp Destination' }
                 },
-                
+
             ]
         },
-       
+
         {
             path: '/sjpstatus',
             component: IndexSjpStatus,
@@ -314,7 +314,7 @@ const router = new Router({
                 },
             ]
         },
-        
+
         {
             path: '/poolpallet',
             component: IndexPool,
@@ -505,6 +505,32 @@ const router = new Router({
         },
 
         {
+            path: '/user',
+            component: IndexUser,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'user.data',
+                    component: DataUser,
+                    meta: { title: 'Manage User' }
+                },
+                {
+                    path: 'add',
+                    name: 'user.add',
+                    component: AddUser,
+                    meta: { title: 'Add New User' }
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'user.edit',
+                    component: EditUser,
+                    meta: { title: 'Edit User' }
+                },
+            ]
+        },
+
+        {
             path: '/',
             name: 'home',
             component: Home,
@@ -555,32 +581,8 @@ const router = new Router({
                     meta: { title: 'Edit Outlet' }
                 }
             ]
-        }, 
-        {
-            path: '/couriers',
-            component: IndexCourier,
-            meta: { requiresAuth: true },
-            children: [
-                {
-                    path: '',
-                    name: 'couriers.data',
-                    component: DataCouriers,
-                    meta: { title: 'Manage Couriers' }
-                },
-                {
-                    path: 'add',
-                    name: 'couriers.add',
-                    component: AddCouriers,
-                    meta: { title: 'Add New Couriers' }
-                },
-                {
-                    path: 'edit/:id',
-                    name: 'couriers.edit',
-                    component: EditCouriers,
-                    meta: { title: 'Edit Courier' }
-                },
-            ]
         },
+
         {
             path: '/product',
             component: IndexProduct,

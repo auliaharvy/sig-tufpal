@@ -15,24 +15,27 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with(['outlet'])->orderBy('created_at', 'DESC')->courier();
-        if (request()->q != '') {
-            $users = $users->where('name', 'LIKE', '%' . request()->q . '%');
-        }
-        $users = $users->paginate(10000);
-        return new UserCollection($users);
+        $users = DB::table('users as a')
+            ->orderBy('id', 'ASC')
+            ->where('a.name','!=',null)
+            ->leftJoin('pool_pallet as b', 'a.reference_pool_pallet_id', '=', 'b.pool_pallet_id')
+            ->leftJoin('transporter as c', 'a.reference_transporter_id', '=', 'c.transporter_id')
+            ->select('a.*', 'b.pool_name', 'c.transporter_name')
+            ->paginate(10000000)
+            ->toArray();
+        return $users;
     }
 
-    public function import() 
+    public function import()
     {
         Excel::import(new UsersImport, 'users.xlsx');
-        
+
         return redirect('/')->with('success', 'All good!');
     }
 
     public function userLists()
     {
-        $user = User::where('role', '!=', 3)->get();
+        $user = User::where('name', '!=', null)->get();
         return new UserCollection($user);
     }
 
@@ -65,7 +68,7 @@ class UserController extends Controller
                 // 'outlet_id' => $request->outlet_id,
                 // 'role' => 3
             ]);
-           
+
             DB::commit();
             return response()->json(['status' => 'success'], 200);
         } catch (\Exception $e) {
