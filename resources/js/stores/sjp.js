@@ -112,11 +112,14 @@ const actions = {
         })
       },
       editSjp({ commit }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.get(`/sjp/${payload}/edit`) //KIRIM PERMINTAAN KE SERVER UNTUK MENGAMBIL SINGLE DATA CUSTOMER BERDASARKAN PAYLOAD (ID)
             .then((response) => {
                 commit('ASSIGN_FORM', response.data.data) //ASSIGN DATA TERSEBUT KE DALAM STATE CUSTOMER
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
@@ -159,10 +162,13 @@ const actions = {
         })
     },
     removeSjp({ dispatch }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.delete(`/sjp/${payload}`) //KIRIM REQUEST KE SERVER BERDASARKAN PAYLOAD (ID)
             .then((response) => {
                 dispatch('getSjp').then(() => resolve()) //AMBIL DATA CUSTOMER TERBARU
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     }

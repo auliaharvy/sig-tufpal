@@ -162,6 +162,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Alfa6661\AutoNumber\AutoNumberServiceProvider::class,
+        App\Providers\OptimusServiceProvider::class,
 
         /*
          * Package Service Providers...

@@ -47,7 +47,7 @@
                 </div>
             </v-flex>
         </v-layout>
-        
+
         <v-layout row wrap class="px-5">
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group">
@@ -81,7 +81,7 @@
                     <label for="">Note</label>
                     <input type="text" class="form-control" v-model="sjpstatus.note">
                     <p class="text-danger" v-if="errors.note">{{ errors.note[0] }}</p>
-                </div>    
+                </div>
             </v-flex>
         </v-layout>
     </div>
@@ -93,11 +93,11 @@ export default {
     name: 'FormSjpStatus',
     created() {
         this.addSjpStatusbyMaster(this.$route.params.id).then((res) => {
-                let row = res.data    
+                let row = res.data
                 this.sjpstatus.sjp_id =  row.sjp_id
             }),
-        this.getSjp(), 
-        this.getMstTransaction(), 
+        this.getSjp(),
+        this.getMstTransaction(),
         this.getUserLogin() //LOAD DATA
     },
    data() {
@@ -128,7 +128,7 @@ export default {
         }),
     },
     methods: {
-        ...mapMutations('sjpstatus', ['CLEAR_FORM']), 
+        ...mapMutations('sjpstatus', ['CLEAR_FORM']),
         ...mapActions('sjpstatus', ['addSjpStatusbyMaster','submitSjpStatus']),
         ...mapActions('sjp', ['getSjp']),
         ...mapActions('msttransaction', ['getMstTransaction']),
@@ -153,7 +153,7 @@ export default {
                 })
         },
     },
-    
+
     destroyed() {
         this.CLEAR_FORM() //KETIKA COMPONENT DITINGGALKAN, BERSIHKAN DATA
     }

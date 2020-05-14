@@ -1,9 +1,12 @@
 <template>
     <div class="col-md-12">
+        <loading :active.sync="loading"
+        :can-cancel="false"
+       ></loading>
         <div class="panel">
             <v-toolbar dark>
                 <h1>
-                    ADD DAMAGED PALLET 
+                    ADD DAMAGED PALLET
                 </h1>
             </v-toolbar>
             <div class="panel-body">
@@ -21,6 +24,9 @@
 <script>
     import { mapActions, mapState, mapMutations } from 'vuex'
     import FormDamagedpallet from './Form.vue'
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
+
     export default {
         name: 'AddDamagedPallet',
         methods: {
@@ -30,7 +36,7 @@
                 //MELAKUKAN REQUEST KE SERVER UNTUK MENAMBAHKAN DATA
                 this.submitDamagedpallet().then(() => {
                     //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
-                    this.$router.push({ name: 'damagedpallet.data' })
+                    this.$router.push({ name: 'damagedpallets.data' })
                 })
             },
         },
@@ -40,7 +46,8 @@
         }),
         },
         components: {
-            'damagedpallet-form': FormDamagedpallet //MEMBUAT CUSTOM TAG UNTUK ME-LOAD FILE FORM.VUE
+            'damagedpallet-form': FormDamagedpallet,
+            Loading
         }
     }
 </script>

@@ -19,9 +19,11 @@
       ></v-text-field>
     </v-card-title>
     <v-data-table
+    :loading="loading"
       :headers="headers"
       :items="palletmovements.data"
       :search="search"
+      dense
     >
         <template v-slot:item.status="{ item }">
             <!-- <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
@@ -101,6 +103,9 @@ export default {
     computed: {
         ...mapState('palletmovement', {
             palletmovements: state => state.palletmovements //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+        }),
+        ...mapState('palletmovement', {
+            loading: state => state.loading //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
         //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {

@@ -1,5 +1,8 @@
 <template>
     <div class="col-md-12">
+        <loading :active.sync="loading"
+        :can-cancel="false"
+       ></loading>
         <div class="panel">
             <v-toolbar dark>
                 <h1>
@@ -25,12 +28,15 @@
     import { mapActions, mapState, mapMutations } from 'vuex'
     import VueButtonSpinner from 'vue-button-spinner';
     import FormSjpStatus from './Form.vue'
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
+
     export default {
         name: 'AddSjpStatus',
         // created() {
         //     this.editSjpStatus(this.$route.params.id) //LOAD SINGLE DATA CUSTOMER BERDASARKAN ID
         // },
-        
+
         // created() {
         //     this.editSjpStatus(this.$route.params.id), this.editSjp(this.$route.params.id) //LOAD SINGLE DATA CUSTOMER BERDASARKAN ID
         // },
@@ -58,7 +64,8 @@
         },
         components: {
             'sjpstatus-form': FormSjpStatus,
-            VueButtonSpinner 
+            VueButtonSpinner ,
+            Loading
         }
     }
 </script>

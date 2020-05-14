@@ -21,7 +21,6 @@ class NewpalletController extends Controller
             ->paginate(10000000)
             ->toArray();
 		 return $newpallet;
-        // return response()->json(Sjp::all()->toArray());
     }
 
     public function show($new_pallet_id)
@@ -43,14 +42,14 @@ class NewpalletController extends Controller
             try{
                 $newpallet = Newpallet::create([
                     'adder_user_id' => auth()->user()->id,
-                    'pool_pallet_id' => auth()->user()->reference_pool_pallet_id, 
+                    'pool_pallet_id' => auth()->user()->reference_pool_pallet_id,
                     'good_pallet' => $request->good_pallet,
                     'vehicle' => $request->vehicle,
-                    'driver' => $request->driver, 
-                    'vendor' => $request->vendor, 
-                    'note' => $request->note, 
+                    'driver' => $request->driver,
+                    'vendor' => $request->vendor,
+                    'note' => $request->note,
                 ]);
-                
+
                 // Membuat log All Transaction
                     $reporter = Auth::user()->name;
                     $pool_pallet_id = Auth::user()->reference_pool_pallet_id;
@@ -78,7 +77,7 @@ class NewpalletController extends Controller
             }catch (\Exception $e) {
                 DB::rollback();
                 return response()->json([
-                    'status' => 'error', 
+                    'status' => 'error',
                     'data' => $e->getMessage(),
                     'message' => 'Error New Pallet Pallet Record'], 422);
                 }

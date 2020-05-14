@@ -23,21 +23,25 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/sjp/changedestination', 'SjpController@changedestination');
     Route::get('/sjpstatusbymaster/{id}', 'SjpStatusController@sjpstatusbymaster'); //get data untuk add sjp status
     Route::get('/view/{id}', 'SjpStatusController@view');
+
     Route::resource('sjpstatus', 'SjpStatusController');
     Route::post('/sjpstatus/sendingapproval', 'SjpStatusController@sendingdriverapproval');
     Route::post('/sjpstatus/sendback', 'SjpStatusController@sendback');
     Route::post('/sjpstatus/receive', 'SjpStatusController@receive');
     Route::post('/sjpstatus/receiveapproval', 'SjpStatusController@sendingdriverapproval');
     Route::post('/sjpstatus/receivesendback', 'SjpStatusController@receivesendback');
+
     Route::resource('pallettransfer', 'PalletTransferController');
     Route::resource('pallettransfersend', 'PallettransfersendController');
     Route::resource('pallettransferreceive', 'PallettransferreceiveController');
+
     Route::resource('bermissing', 'BermissingpalletController');
-    Route::get('bermissing/view/{id}', 'BermissingpalletController@view');
+    Route::get('bermissing/view/{bmp_number}', 'BermissingpalletController@view');
     Route::post('/bermissing/disapprove', 'BermissingpalletController@disapprove');
     Route::resource('bermissingreported', 'BermissingpalletreportedController');
     Route::resource('bermissingapproved', 'BermissingpalletapprovedController');
     Route::resource('bermissingdisapproved', 'BermissingpalletdisapprovedController');
+
     Route::resource('newpallet', 'NewpalletController');
     Route::resource('damagedpallet', 'DamagedpalletController');
     Route::resource('repairedpallet', 'RepairedpalletController');
@@ -65,7 +69,12 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::get('chart', 'API\DashboardController@chart');
     Route::get('receive', 'API\DashboardController@receive');
-    Route::get('totalpallet', 'API\DashboardController@totalpallet');
+    Route::get('globalpallet', 'API\DashboardController@globalpallet');
+    Route::get('pallet', 'API\DashboardController@pallet');
+    Route::get('pallettransporter', 'API\DashboardController@palletTransporter');
+    Route::get('poolpalletdetail', 'API\DashboardController@poolPalletDetail');
+    Route::get('transporterdetail', 'API\DashboardController@transporterDetail');
+
     Route::get('export', 'API\DashboardController@exportData');
     Route::resource('/outlets', 'API\OutletController')->except(['show']);
 

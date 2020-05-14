@@ -1,5 +1,8 @@
 <template>
     <div class="col-md-12">
+        <loading :active.sync="loading"
+        :can-cancel="false"
+       ></loading>
         <div class="panel">
             <div class="panel-heading">
                 <h3 class="panel-title">Edit Transporter</h3>
@@ -18,6 +21,9 @@
 <script>
     import { mapActions, mapState } from 'vuex'
     import FormTransporter from './Form.vue'
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
+
     export default {
         name: 'EditTransporter',
         created() {
@@ -33,7 +39,8 @@
             }
         },
         components: {
-            'transporter-form': FormTransporter
+            'transporter-form': FormTransporter,
+            Loading
         },
     }
 </script>

@@ -1,8 +1,9 @@
 import $axios from '../api.js'
 
 const state = () => ({
+    loading: false,
     bermissingpalletapproveds: [], //STATE UNTUK MENAMPUNG DATA CUSTOMERS
-    
+
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
     bermissingpalletapproved: {
         bmp_number: '',
@@ -11,7 +12,7 @@ const state = () => ({
         pool_pallet: '',
         transporter: "",
         reference_sjp_status: "",
-        ber_pallet: "", 
+        ber_pallet: "",
         missing_pallet: "",
         reporter_prove: "",
         note: "",
@@ -22,6 +23,12 @@ const state = () => ({
 })
 
 const mutations = {
+    isLoading (state) {
+        state.loading = true
+      },
+      doneLoading (state) {
+        state.loading = false
+      },
     //MUTATIONS UNTUK ASSIGN DATA CUSTOMER KE DALAM STATE CUSTOMER
     ASSIGN_DATA(state, payload) {
         state.bermissingpalletapproveds = payload
@@ -43,7 +50,7 @@ const mutations = {
             pool_pallet: '',
             transporter: "",
             reference_sjp_status: "",
-            ber_pallet: "", 
+            ber_pallet: "",
             missing_pallet: "",
             reporter_prove: "",
             note: "",
@@ -55,6 +62,7 @@ const mutations = {
 
 const actions = {
     getBerMissingPalletApproved({ commit, state }, payload) {
+        commit('isLoading')
         let search = typeof payload != 'undefined' ? payload:''
         return new Promise((resolve, reject) => {
             //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
@@ -62,11 +70,13 @@ const actions = {
             .then((response) => {
                 commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
-    
-  
+
+
 }
 
 export default {

@@ -3,7 +3,7 @@ import $axios from '../api.js'
 const state = () => ({
     loading: false,
     pools: [], //STATE UNTUK MENAMPUNG DATA CUSTOMERS
-    
+
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
     pool: {
         organization_id: '',
@@ -13,7 +13,7 @@ const state = () => ({
         pool_address: '',
         pool_city: "",
         phone_number: "",
-        pool_email: "", 
+        pool_email: "",
         pallet_quota: "",
         good_pallet: "",
         tbr_pallet: "",
@@ -52,7 +52,7 @@ const mutations = {
             pool_address: '',
             pool_city: "",
             phone_number: "",
-            pool_email: "", 
+            pool_email: "",
             pallet_quota: "",
             good_pallet: "",
             tbr_pallet: "",
@@ -64,6 +64,7 @@ const mutations = {
 
 const actions = {
     getPools({ commit, state }, payload) {
+        commit('isLoading')
         let search = typeof payload != 'undefined' ? payload:''
         return new Promise((resolve, reject) => {
             //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
@@ -71,6 +72,8 @@ const actions = {
             .then((response) => {
                 commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
@@ -108,32 +111,41 @@ const actions = {
         })
       },
       editPools({ commit }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.get(`/pool/${payload}/edit`) //KIRIM PERMINTAAN KE SERVER UNTUK MENGAMBIL SINGLE DATA CUSTOMER BERDASARKAN PAYLOAD (ID)
             .then((response) => {
                 commit('ASSIGN_FORM', response.data.data) //ASSIGN DATA TERSEBUT KE DALAM STATE CUSTOMER
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
     updatePools({ state, commit }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.put(`/pool/${payload}`, state.pool) //KIRIM PERMINTAAN KE SERVER UNTUK MENGUPDATE DATA BERDASARKAN PAYLOAD (ID) DAN DATA YANG AKAN DI UPDATE DI AMBIL DARI STATE CUSTOMER
             .then((response) => {
                 commit('CLEAR_FORM') //BERSIHKAN FORM
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
     removePools({ dispatch }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.delete(`/pool/${payload}`) //KIRIM REQUEST KE SERVER BERDASARKAN PAYLOAD (ID)
             .then((response) => {
                 dispatch('getPools').then(() => resolve()) //AMBIL DATA CUSTOMER TERBARU
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     }
-  
+
 }
 
 export default {

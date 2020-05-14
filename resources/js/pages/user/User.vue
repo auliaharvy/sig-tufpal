@@ -18,9 +18,11 @@
                     ></v-text-field>
                     </v-card-title>
                     <v-data-table
+                    :loading="loading"
                     :headers="headers"
                     :items="couriers.data"
                     :search="search"
+                    dense
                     >
                     </v-data-table>
                 </v-card>
@@ -52,6 +54,9 @@ export default {
     computed: {
         ...mapState('courier', {
             couriers: state => state.couriers
+        }),
+        ...mapState('courier', {
+            loading: state => state.loading
         }),
         page: {
             get() {

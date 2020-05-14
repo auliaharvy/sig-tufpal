@@ -3,10 +3,10 @@ import $axios from '../api.js'
 const state = () => ({
     loading: false,
     sjpstatuss: [], //STATE UNTUK MENAMPUNG DATA CUSTOMERS
-    
+
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
     sjpstatus: {
-        
+
         checker_send_user_id: '',
         checker_receive_user_id: '',
         sjps_number: '',
@@ -23,7 +23,7 @@ const state = () => ({
         driver_approve: '',
         sending_driver_approval: '',
         receiving_driver_approval: '',
-        note: '', 
+        note: '',
     },
     page: 1
 })
@@ -90,7 +90,7 @@ const actions = {
 
     submitSjpStatus({ dispatch, commit}, payload) {
         commit('isLoading')
-        return new Promise((resolve, reject) => {  
+        return new Promise((resolve, reject) => {
             //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
             $axios.post(`/sjpstatus`, payload,{
                 headers: {
@@ -117,7 +117,7 @@ const actions = {
 
       submitSjpStatussendback({ dispatch, commit}, payload) {
         commit('isLoading')
-        return new Promise((resolve, reject) => {  
+        return new Promise((resolve, reject) => {
             //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
             $axios.post(`/sjpstatus/sendback`, payload,{
                 headers: {
@@ -144,7 +144,7 @@ const actions = {
 
       updateSjpStatus({ state, commit}, payload) {
         commit('isLoading')
-        return new Promise((resolve, reject) => {  
+        return new Promise((resolve, reject) => {
             //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
             $axios.post(`/sjpstatus/receive`, payload,{
                 headers: {
@@ -168,7 +168,7 @@ const actions = {
     },
     updateSjpStatussendback({ state, commit}, payload) {
         commit('isLoading')
-        return new Promise((resolve, reject) => {  
+        return new Promise((resolve, reject) => {
             //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
             $axios.post(`/sjpstatus/receivesendback`, payload,{
                 headers: {
@@ -238,7 +238,7 @@ const actions = {
             })
         })
     },
-    
+
     removeSjpStatus({ dispatch }, payload) {
         commit('isLoading')
         return new Promise((resolve, reject) => {

@@ -4,7 +4,7 @@
             <div class="panel-heading">
                 <router-link :to="{ name: 'sjps.add' }" class="v-btn btn-primary text-black" v-if="$can('create sjps')"><v-btn>Add SJP</v-btn></router-link>
                 <!-- <v-btn>
-                    <download-excel 
+                    <download-excel
                     :data= "sjps.data"
                     :before-generate = "startDownload"
                     :before-finish = "finishDownload"
@@ -15,11 +15,11 @@
                 </v-btn> -->
             </div>
             <div class="panel-body">
-              
+
                 <v-card>
                     <v-card-title>
                         Surat Jalan Pallet
-                        <v-spacer></v-spacer>  
+                        <v-spacer></v-spacer>
                         <v-text-field
                         v-model="search"
                         prepend-icon="mdi-search"
@@ -28,7 +28,7 @@
                         hide-details
                         ></v-text-field>
                     </v-card-title>
-                    <v-data-table :items="sjps.data" :headers="fields" :search="search" dense>
+                    <v-data-table :loading="loading" :items="sjps.data" :headers="fields" :search="search" dense>
                         <template v-slot:item.status="{ item }">
                             <!-- <v-chip class="label label-default" v-if="item.status == 'OPEN'">Open</v-chip>
                             <v-chip class="label label-success" v-else-if="item.status == 'CLOSED'">Closed</v-chip> -->
@@ -57,31 +57,31 @@
                         <!-- <template  class="pa-5" v-slot:item.send="{ item }">
                             <router-link :to="{ name: 'sjpstatuss.add', params: {id: item.sjp_number} }" v-if="sjps.state == 0">
                                 <v-btn color="success" small >Send</v-btn>
-                            </router-link>                        
+                            </router-link>
                         </template> -->
                         <template v-if="$can('create sjpstatuss') "  v-slot:item.send="{ item }">
                             <router-link :to="{ name: 'sjpstatuss.addsjp', params: {id: item.sjp_id} }" v-if="item.state == 0 && authenticated.reference_pool_pallet_id == item.departure_pool_pallet_id">
                                 <v-btn color="primary" small>Send</v-btn>
-                            </router-link>                        
+                            </router-link>
                         </template>
 
                         <template v-if="$can('update sjps')" class="pa-5" v-slot:item.adjusment="{ item }">
-                            <router-link :to="{ name: 'sjps.edit', params: {id: item.sjp_id} }" v-if="item.status == 'OPEN'"><v-btn color="success" small>Adjust</v-btn></router-link>                        
+                            <router-link :to="{ name: 'sjps.edit', params: {id: item.sjp_id} }" v-if="item.status == 'OPEN'"><v-btn color="success" small>Adjust</v-btn></router-link>
                         </template>
 
                         <template v-if="$can('update sjpsdest')" class="pa-5" v-slot:item.changedest="{ item }">
-                            <router-link :to="{ name: 'sjps.editdestination', params: {id: item.sjp_id} }" v-if="item.status == 'OPEN' && item.state <= 2"><v-btn color="success" small>Change Dest</v-btn></router-link>                        
+                            <router-link :to="{ name: 'sjps.editdestination', params: {id: item.sjp_id} }" v-if="item.status == 'OPEN' && item.state <= 2"><v-btn color="success" small>Change Dest</v-btn></router-link>
                         </template>
 
                         <template v-if="$can('delete sjps')" class="pa-5" v-slot:item.delete="{ item }">
-                            <v-btn color="error" @click="deleteSjp(item.sjp_id)" small>Delete</v-btn>                        
+                            <v-btn color="error" @click="deleteSjp(item.sjp_id)" small>Delete</v-btn>
                         </template>
                     </v-data-table>
                      </v-card>
               	<!-- TABLE UNTUK MENAMPILKAN LIST SJP -->
                 <!-- <b-table striped hover bordered :items="sjps.data" :fields="fields" show-empty>
-                    
-                    
+
+
                     <template slot="actions" slot-scope="row">
                         <router-link :to="{ name: 'sjps.addsjpstat', params: {id: row.item.sjp_id} }" class="btn btn-warning btn-sm">Add SJP Status<i class="fa fa-pencil"></i></router-link>
                         <router-link :to="{ name: 'sjps.edit', params: {id: row.item.sjp_id} }" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i></router-link>
@@ -90,7 +90,7 @@
                 </b-table>  -->
               	<!-- TABLE UNTUK MENAMPILKAN LIST CUSTOMER -->
 
-                <!-- <div class="row"> 
+                <!-- <div class="row">
                     <div class="col-md-6">
                         <p v-if="sjps.data"><i class="fa fa-bars"></i> {{ sjps.data.length }} item dari {{ sjps.meta.total }} total data</p>
                     </div> -->
@@ -154,6 +154,9 @@ export default {
         ...mapState('sjp', {
             sjps: state => state.sjps //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
+        ...mapState('sjp', {
+            loading: state => state.loading //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+        }),
         ...mapState('user', {
             authenticated: state => state.authenticated
         }),
@@ -176,7 +179,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions('sjp', ['getSjp', 'removeSjp']), 
+        ...mapActions('sjp', ['getSjp', 'removeSjp']),
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         deleteSjp(id) {
             this.$swal({

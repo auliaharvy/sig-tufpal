@@ -5,7 +5,7 @@
                 <router-link v-if="$can('create poolpallets')" :to="{ name: 'pools.add' }"><v-btn>Add Pool Pallet</v-btn></router-link>
             </div>
             <div class="panel-body">
-              
+
               	<!-- TABLE UNTUK MENAMPILKAN LIST SJP -->
                 <template>
   <v-card>
@@ -21,14 +21,16 @@
       ></v-text-field>
     </v-card-title>
     <v-data-table
+    :loading="loading"
       :headers="headers"
       :items="pools.data"
       :search="search"
-    >       
+      dense
+    >
     <template v-slot:item.total="{ item }">
         <v-chip class="label"  color="red"  v-if="item.good_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet > item.pallet_quota">
             {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
-        </v-chip> 
+        </v-chip>
         <v-chip class="label label-success"  v-if="item.good_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet < item.pallet_quota">
             {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
         </v-chip>
@@ -40,14 +42,14 @@
             <router-link :to="{ name: 'pools.edit', params: {id: item.pool_pallet_id} }">
                 <v-btn color="success" small>Update</v-btn>
             </router-link>
-            <v-btn color="error" small @click="deletePools(item.pool_pallet_id)">Delete</v-btn>                         
+            <v-btn color="error" small @click="deletePools(item.pool_pallet_id)">Delete</v-btn>
         </template> -->
     </v-data-table>
   </v-card>
 </template>
               	<!-- TABLE UNTUK MENAMPILKAN LIST CUSTOMER -->
 
-               
+
                     <!-- <div class="col-md-6">
                         <p v-if="sjpstatuss.data"><i class="fa fa-bars"></i> {{ sjpstatuss.data.length }} item dari {{ sjpstatuss.meta.total }} total data</p>
                     </div>
@@ -62,7 +64,7 @@
                                 ></b-pagination>
                         </div>
                     </div> -->
-                
+
             </div>
         </div>
     </div>
@@ -85,7 +87,7 @@ export default {
                 { value: 'code', text: 'Pool Code' },
                 // { value: 'type', text: 'Pool Type' },
                 { value: 'pool_address', text: 'Pool Address' },
-                
+
                 { value: 'good_pallet', text: 'Good Pallet' },
                 { value: 'tbr_pallet', text: 'TBR Pallet' },
                 { value: 'ber_pallet', text: 'BER Pallet' },
@@ -102,7 +104,10 @@ export default {
         ...mapState('pool', {
             pools: state => state.pools //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
-        
+        ...mapState('pool', {
+            loading: state => state.loading //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+        }),
+
         //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {
             get() {
@@ -122,7 +127,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions('pool', ['getPools', 'removePools']), 
+        ...mapActions('pool', ['getPools', 'removePools']),
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         deletePools(id) {
             this.$swal({

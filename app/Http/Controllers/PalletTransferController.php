@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Resources\PalletTransferCollection;
 use Illuminate\Support\Facades\Auth;
+use App\DeletedItem;
 use App\PalletTransfer;
 use App\Pallettransfersend;
 use App\Pallettransferreceive;
@@ -43,7 +44,7 @@ class PalletTransferController extends Controller
            ->join('pool_pallet as b', 'a.departure_pool_pallet_id', '=', 'b.pool_pallet_id')
             ->join('pool_pallet as c', 'a.destination_pool_pallet_id', '=', 'c.pool_pallet_id')
             ->join('users as d', 'a.sender_user_id', '=', 'd.id')
-            ->join('users as e', 'a.receiver_user_id', '=', 'e.id')    
+            ->join('users as e', 'a.receiver_user_id', '=', 'e.id')
             ->join('transporter as f', 'a.transporter_id', '=', 'f.transporter_id')
             ->join('vehicle as g', 'a.vehicle_id', '=', 'g.vehicle_id')
             ->join('driver as h', 'a.driver_id', '=', 'h.driver_id')
@@ -68,7 +69,7 @@ class PalletTransferController extends Controller
         $pallettransfer = PalletTransfer::find($pallet_transfer_id); //MELAKUKAN QUERY UNTUK MENGAMBIL DATA BERDASARKAN ID
         return response()->json(['status' => 'success', 'data' => $pallettransfer]);
     }
-    
+
 
     public function store(Request $request)
     {
@@ -95,15 +96,15 @@ class PalletTransferController extends Controller
             $palletTransfer = PalletTransfer::create([
                 'departure_pool_pallet_id' => Auth::user()->reference_pool_pallet_id,
                 'destination_pool_pallet_id' => $request->destination_pool_pallet_id,
-                'sender_user_id' => $checker, 
+                'sender_user_id' => $checker,
                 'receiver_user_id' => 5,
-                'vehicle_id' => $request->vehicle_id, 
-                'driver_id' => $request->driver_id, 
-                'transporter_id' => $request->transporter_id, 
-                'good_pallet' => $request->good_pallet, 
-                'tbr_pallet' => $request->tbr_pallet, 
-                'reason' => $request->reason, 
-                'note' => $request->note, 
+                'vehicle_id' => $request->vehicle_id,
+                'driver_id' => $request->driver_id,
+                'transporter_id' => $request->transporter_id,
+                'good_pallet' => $request->good_pallet,
+                'tbr_pallet' => $request->tbr_pallet,
+                'reason' => $request->reason,
+                'note' => $request->note,
                 'status' => 0,
             ]);
 
@@ -118,13 +119,13 @@ class PalletTransferController extends Controller
                 'pallet_transfer_id' => $palletTransfer->pallet_transfer_id,
                 'sender' => $sender,
                 'pallet_transfer_status' => 'SEND',
-                'departure_pool' => $palletsenddept->pool_name, 
+                'departure_pool' => $palletsenddept->pool_name,
                 'destination_pool' => $palletsenddest->pool_name,
                 'transporter' => $palletsendtrans->transporter_name,
                 'driver' => $palletsenddriver->driver_name,
                 'vehicle' => $palletsendvehicle->vehicle_number,
                 'good_pallet' => $request->good_pallet,
-                'tbr_pallet' => $request->tbr_pallet, 
+                'tbr_pallet' => $request->tbr_pallet,
                 'note' => $request->note,
             ]);
 
@@ -166,7 +167,7 @@ class PalletTransferController extends Controller
         }catch (\Exception $e) {
             DB::rollback();
             return response()->json([
-                'status' => 'error', 
+                'status' => 'error',
                 'data' => $e->getMessage(),
                 'message' => 'Error Transfer Pallet Record'], 422);
             }
@@ -201,10 +202,10 @@ class PalletTransferController extends Controller
             // $tbr_pallet  = $InventoryTrans->tbr_pallet;
             // if($good_pallet<$request->good_pallet || $tbr_pallet<$request->tbr_pallet){
             //     return response()->json(['error' => 'Qty Pallet melebihi pallet yang ada'], 404);
-            // }    
+            // }
             $good_pallet_awal = $update->good_pallet; //ambil qty good pallet awal
             $tbr_pallet_awal = $update->tbr_pallet; //ambil qty tbr pallet awal
-            $good_palletrcv = $request->good_pallet; 
+            $good_palletrcv = $request->good_pallet;
             $tbr_palletrcv = $request->tbr_pallet;
 
             if($tbr_palletrcv>($total-$good_palletrcv)){
@@ -218,21 +219,21 @@ class PalletTransferController extends Controller
                     // $update->departure_pool_pallet_id = $request->departure_pool_pallet_id;
                     // $update->destination_pool_pallet_id = $request->destination_pool_pallet_id;
                     // $update->sender_user_id = $request->sender_user_id;
-                    
+
                     $update->receiver_user_id = $checker;
                     // $update->vehicle_id = $request->vehicle_id;
                     // $update->driver_id = $request->driver_id;
-                    // $update->transporter_id = $request->transporter_id; 
+                    // $update->transporter_id = $request->transporter_id;
                     $update->good_pallet = $good_palletrcv;
                     $update->tbr_pallet = $tbr_palletrcv;
                     // $update->reason = $request->reason;
                     $update->note = $request->note;
                     $update->status = 1;
                     $update->save();
-        
+
                     $InventoryDest = PoolPallet::find($destination_id);
                     $InventoryDest->good_pallet = (($InventoryDest->good_pallet)+($good_palletrcv)); //hanya receive good pallet
-                    $InventoryDest->tbr_pallet = (($InventoryDest->tbr_pallet)+($tbr_palletrcv)); 
+                    $InventoryDest->tbr_pallet = (($InventoryDest->tbr_pallet)+($tbr_palletrcv));
                     // $InventoryDest->ber_pallet = (($InventoryDest->ber_pallet)+($request->ber_pallet)); // ber & missing dicatat di transporter
                     // $InventoryDest->missing_pallet = (($InventoryDest->missing_pallet)+($request->missing_pallet)); // ber & missing dicatat di transporter
                     $InventoryDest->save();
@@ -240,7 +241,7 @@ class PalletTransferController extends Controller
                     $InventoryTrans = Transporter::find($transporter_id);
                         if($tbr_pallet_awal==0){ //jika saat send tidak terdapat tbr pallet
                             $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
-                        
+
                         }
                         else if(($request->tbr_pallet)>$tbr_pallet_awal){ //jika rcv tbr pallet lebih besar dari yang di send
                             $selisihtbr = ($request->tbr_pallet)-$tbr_pallet_awal;
@@ -249,7 +250,7 @@ class PalletTransferController extends Controller
                                 $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($tbr_pallet_awal));
                                 $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
                             }
-                            
+
                         }
                         else{
                             $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($request->good_pallet));
@@ -266,7 +267,7 @@ class PalletTransferController extends Controller
                     $transporter_id = $update->transporter_id;
                     $driver_id = $update->driver_id;
                     $vehicle_id = $update->vehicle_id;
-                    
+
                     // Membuat log transaksi receive pallet transfer
                     $receiver = Auth::user()->name;
                     $palletsenddept = PoolPallet::find($departure_id);
@@ -277,14 +278,14 @@ class PalletTransferController extends Controller
                     $Pallettransferreceive = Pallettransferreceive::create([
                         'receiver' => $receiver,
                         'tp_number' => $tp_number,
-                        'pallet_transfer_status' => 'RECEIVE', 
-                        'departure_pool' => $palletsenddept->pool_name, 
+                        'pallet_transfer_status' => 'RECEIVE',
+                        'departure_pool' => $palletsenddept->pool_name,
                         'destination_pool' => $palletsenddest->pool_name,
                         'transporter' => $palletsendtrans->transporter_name,
                         'driver' => $palletsenddriver->driver_name,
                         'vehicle' => $palletsendvehicle->vehicle_number,
                         'good_pallet' => $request->good_pallet,
-                        'tbr_pallet' => $request->tbr_pallet, 
+                        'tbr_pallet' => $request->tbr_pallet,
                         'note' => $request->note,
                     ]);
 
@@ -310,13 +311,13 @@ class PalletTransferController extends Controller
                         'reason' => $palletTransfer->reason,
                         'note' => $request->note,
                     ]);
-        
+
                     DB::commit();
                     return response()->json(['status' => 'success'], 200);
                 }catch (\Exception $e) {
                     DB::rollback();
                     return response()->json([
-                        'status' => 'error', 
+                        'status' => 'error',
                         'data' => $e->getMessage(),
                         'message' => 'Error Transfer Pallet Record'], 422);
                 }
@@ -326,9 +327,45 @@ class PalletTransferController extends Controller
 
     public function destroy($id)
     {
-        $pallettransfer = PalletTransfer::find($id); //QUERY DATA BERDASARKAN ID
-        $pallettransfer->delete(); //KEMUDIAN HAPUS DATA TERSEBUT
-        return response()->json(['status' => 'success']);
+        $pallettransfer = PalletTransfer::find($id);
+        $sender_user= User::find($pallettransfer->sender_user_id);
+        $receiver_user = User::find($pallettransfer->receiver_user_id);
+        $departure_pool_pallet = PoolPallet::find($pallettransfer->departure_pool_pallet_id);
+        $destination_pool_pallet = PoolPallet::find($pallettransfer->destination_pool_pallet_id);
+        $transporter = Transporter::find($pallettransfer->transporter_id);
+        $driver = Driver::find($pallettransfer->driver_id);
+        $vehicle = Vehicle::find($pallettransfer->vehicle_id);
+        DB::beginTransaction();
+        try{
+                $deleted_item = DeletedItem::create([
+                    'tp_number' => $pallettransfer->tp_number,
+                    // 'sjps_number' => $sjp_status->sjps_number,
+                    'pool_pallet' => $pool_pallet->pool_name,
+                    // 'transporter' => $transporter->transporter_name,
+                    'reporter/sender' => $sender_user->name,
+                    // 'receiver/approver' => $receiver_user->name,
+                    'departure_pool' => $departure_pool_pallet->pool_name,
+                    'destination_pool' => $destination_pool_pallet->pool_name,
+                    'transporter' => $transporter->transporter_name,
+                    'driver' => $driver->driver_name,
+                    'vehicle' => $vehicle->vehicle_number,
+                    'good_pallet' => $pallettransfer->good_pallet,
+                    'tbr_pallet' => $pallettransfer->tbr_pallet,
+                    'created_by' => auth()->user()->name,
+                    'note' => $pallettransfer->note,
+                ]);
+            $pallettransfer->delete(); //KEMUDIAN HAPUS DATA TERSEBUT
+
+        DB::commit();
+        return response()->json(['status' => 'success'], 200);
+
+        }catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => 'error',
+                'data' => $e->getMessage(),
+                'message' => 'Error Delete Transfer Pallet Record'], 422);
+        }
     }
 
 }

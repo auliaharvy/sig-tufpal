@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use App\Http\Resources\BermissingpalletCollection;
 use Illuminate\Support\Facades\Auth;
+use Hashids\Hashids;
 use App\Bermissing;
 use App\SjpStatus;
 use App\Transporter;
@@ -14,6 +16,7 @@ use App\Bermissingreported;
 use App\Bermissingapproved;
 use App\Bermissingdisapproved;
 use App\User;
+use App\DeletedItem;
 use DB;
 
 class BermissingpalletController extends Controller
@@ -61,12 +64,16 @@ class BermissingpalletController extends Controller
 
     public function edit($id)
     {
+        $encryptid = Crypt::encrypt($id);
+        // $hashids->encode($id);
         $bermissing = Bermissing::find($id);
         return response()->json(['status' => 'success', 'data' => $bermissing]);
     }
 
     public function view($ber_missing_pallet_id)
     {
+        $hashids = new Hashids();
+        $hashids->encode($ber_missing_pallet_id);
 
         $bermissing = Bermissing::find($ber_missing_pallet_id);
         $reporter_user_id = $bermissing->reporter_user_id;
@@ -105,41 +112,23 @@ class BermissingpalletController extends Controller
     public function store(Request $request)
     {
         $ber_missing_pallet_id = $request->ber_missingPallet_id;
-        $pool_pallet_id = Auth::user()->reference_pool_pallet_id;
-        $transporter_id = Auth::user()->reference_transporter_id;
-        // $InventoryPool = PoolPallet::find($pool_pallet_id);
-        // $InventoryTrans = Transporter::find($transporter_id);
-        // if($pool_pallet_id!=null){
-        //     $InventoryPool = PoolPallet::find($pool_pallet_id);
-        //     $palletpool = $InventoryPool->good_pallet;
-        // }
-        // if($transporter_id!=null){
-        //     $InventoryTrans = Transporter::find($transporter_id);
-        //     $pallettrans = $InventoryTrans->good_pallet;
-        // }
-        if($pool_pallet_id!=null){
+        $pool_pallet_id = $request->pool_pallet_id;
+        $transporter_id = $request->transporter_id;
+        if($pool_pallet_id != null){
             $InventoryPool = PoolPallet::find($pool_pallet_id);
             $palletpool = $InventoryPool->good_pallet;
             $this->validate($request, [
-                // 'good_pallet' => 'required|integer|gt:-1|lte:'.$pallet_qty,
-                // 'tbr_pallet' => 'required|integer|gt:-1',
                 'ber_pallet' => 'required|integer|gt:-1|lte:'.$palletpool,
                 'missing_pallet' => 'required|integer|gt:-1|lte:'.$palletpool,
-                // 'good_cement' => 'required|integer|gt:-1|lte:'.$cement_qty,
-                // 'bad_cement' => 'required|integer|gt:-1'
                 ]);
-        }
-        if($transporter_id!=null){
+        }elseif($transporter_id != null){
             $InventoryTrans = Transporter::find($transporter_id);
             $pallettrans = $InventoryTrans->good_pallet;
             $this->validate($request, [
-                // 'good_pallet' => 'required|integer|gt:-1|lte:'.$pallet_qty,
-                // 'tbr_pallet' => 'required|integer|gt:-1',
                 'ber_pallet' => 'required|integer|gt:-1|lte:'.$pallettrans,
                 'missing_pallet' => 'required|integer|gt:-1|lte:'.$pallettrans,
                 'reporter_prove' => 'required|image'
-                // 'good_cement' => 'required|integer|gt:-1|lte:'.$cement_qty,
-                // 'bad_cement' => 'required|integer|gt:-1'
+
                 ]);
         }
         DB::beginTransaction();
@@ -153,13 +142,13 @@ class BermissingpalletController extends Controller
             $bermissing = Bermissing::create([
                 'reporter_user_id' => auth()->user()->id,
                 'approver_user_id' => 5,
-                'pool_pallet_id' => auth()->user()->reference_pool_pallet_id,
-                'transporter_id' => auth()->user()->reference_transporter_id,
+                'pool_pallet_id' => $pool_pallet_id,
+                'transporter_id' => $transporter_id,
                 // 'reference_sjp_status' => null,
                 'ber_pallet' => $request->ber_pallet,
                 'missing_pallet' => $request->missing_pallet,
                 'reporter_prove' => $name,
-                'berita_acara' => $request->berita_acara,
+                // 'berita_acara' => $request->berita_acara,
                 'status' => 0,
                 'note' => $request->note,
             ]);
@@ -167,8 +156,8 @@ class BermissingpalletController extends Controller
             // Membuat log All Transaction
             if($pool_pallet_id!=null){
                 $reporter = Auth::user()->name;
-                $pool_pallet_id = Auth::user()->reference_pool_pallet_id;
-                $transporter_id = Auth::user()->reference_transporter_id;
+                $pool_pallet_id = $pool_pallet_id;
+                $transporter_id = $transporter_id;
                 $bermissingreportpool = PoolPallet::find($pool_pallet_id);
                 // $bermissingreporttrans = Transporter::find($transporter_id);
                 $alltransaction = Alltransaction::create([
@@ -184,10 +173,10 @@ class BermissingpalletController extends Controller
                     'note' => $request->note,
                 ]);
             }
-            if($transporter_id!=null){
+            elseif($transporter_id!=null){
                 $reporter = Auth::user()->name;
-                $pool_pallet_id = Auth::user()->reference_pool_pallet_id;
-                $transporter_id = Auth::user()->reference_transporter_id;
+                $pool_pallet_id = $pool_pallet_id;
+                $transporter_id = $transporter_id;
                 // $bermissingreportpool = PoolPallet::find($pool_pallet_id);
                 $bermissingreporttrans = Transporter::find($transporter_id);
                 $alltransaction = Alltransaction::create([
@@ -206,8 +195,8 @@ class BermissingpalletController extends Controller
             // Membuat log transaksi report ber missing
             if($pool_pallet_id!=null){
                 $reporter = Auth::user()->name;
-                $pool_pallet_id = Auth::user()->reference_pool_pallet_id;
-                $transporter_id = Auth::user()->reference_transporter_id;
+                $pool_pallet_id = $pool_pallet_id;
+                $transporter_id = $transporter_id;
                 $bermissingreportpool = PoolPallet::find($pool_pallet_id);
                 // $bermissingreporttrans = Transporter::find($transporter_id);
                 $bermissingreported = Bermissingreported::create([
@@ -223,10 +212,10 @@ class BermissingpalletController extends Controller
                     'note' => $request->note,
                 ]);
             }
-            if($transporter_id!=null){
+            elseif($transporter_id!=null){
                 $reporter = Auth::user()->name;
-                $pool_pallet_id = Auth::user()->reference_pool_pallet_id;
-                $transporter_id = Auth::user()->reference_transporter_id;
+                $pool_pallet_id = $pool_pallet_id;
+                $transporter_id = $transporter_id;
                 // $bermissingreportpool = PoolPallet::find($pool_pallet_id);
                 $bermissingreporttrans = Transporter::find($transporter_id);
                 $bermissingreported = Bermissingreported::create([
@@ -251,7 +240,7 @@ class BermissingpalletController extends Controller
                 $InventoryPool->missing_pallet = (($InventoryPool->missing_pallet)+($request->missing_pallet));
                 $InventoryPool->save();
             }
-            if($transporter_id!=null){
+            elseif($transporter_id!=null){
                 $InventoryTrans = Transporter::find($transporter_id);
                 $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-(($request->ber_pallet)+($request->missing_pallet)));
                 $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet));
@@ -261,12 +250,6 @@ class BermissingpalletController extends Controller
 
             DB::commit();
             return response()->json(['status' => 'success'], 200);
-            // $data = [
-            //     'data' => $bermissing,
-            //     'status' => (bool) $bermissing,
-            //     'message' => $bermissing ? 'BER/Missing Pallet Record Created!' : 'Error BER/Missing Pallet Record'
-            // ];
-            // return response()->json($data);
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json([
@@ -282,13 +265,6 @@ class BermissingpalletController extends Controller
         $update = Bermissing::find($ber_missing_pallet_id);
         $pool_pallet_id = $update->pool_pallet_id;
         $transporter_id = $update->transporter_id;
-        // $InventoryPool = PoolPallet::find($pool_pallet_id);
-        // $InventoryTrans = Transporter::find($transporter_id);
-        // $InventoryPool = PoolPallet::find($pool_pallet_id);
-        // $InventoryTrans = Transporter::find($transporter_id);
-        // $palletpool = $InventoryPool->good_pallet;
-        // $pallettrans = $InventoryTrans->good_pallet;
-
 
         if($pool_pallet_id!=null){
             $update = Bermissing::find($ber_missing_pallet_id);
@@ -296,32 +272,20 @@ class BermissingpalletController extends Controller
             $updatemissingpallet = $update->missing_pallet;
 
             $this->validate($request, [
-                // 'good_pallet' => 'required|integer|gt:-1|lte:'.$pallet_qty,
-                // 'tbr_pallet' => 'required|integer|gt:-1',
                 'ber_pallet' => 'required|integer|gt:-1|lte:'.$updateberpallet,
                 'missing_pallet' => 'required|integer|gt:-1|lte:'.$updatemissingpallet,
-                // 'good_cement' => 'required|integer|gt:-1|lte:'.$cement_qty,
-                // 'bad_cement' => 'required|integer|gt:-1'
                 ]);
         }
-        if($transporter_id!=null){
+        elseif($transporter_id!=null){
             $update = Bermissing::find($ber_missing_pallet_id);
             $updateberpallet = $update->ber_pallet;
             $updatemissingpallet = $update->missing_pallet;
+
             $this->validate($request, [
-                // 'good_pallet' => 'required|integer|gt:-1|lte:'.$pallet_qty,
-                // 'tbr_pallet' => 'required|integer|gt:-1',
                 'ber_pallet' => 'required|integer|gt:-1|lte:'.$updateberpallet,
                 'missing_pallet' => 'required|integer|gt:-1|lte:'.$updatemissingpallet,
-                // 'good_cement' => 'required|integer|gt:-1|lte:'.$cement_qty,
-                // 'bad_cement' => 'required|integer|gt:-1'
                 ]);
         }
-        // $bermissing = Bermissing::where('ber_missing_pallet_id',$ber_missing_pallet_id)->first();
-        // if (empty($bermissing)){
-        //     return response()->json(['error' => 'Data not found'], 404);
-        // }
-        // else{
         DB::beginTransaction();
             try{
                 $name = NULL;
@@ -363,7 +327,7 @@ class BermissingpalletController extends Controller
                         'note' => $request->note,
                     ]);
                 }
-                if($transporter_id!=null){
+                elseif($transporter_id!=null){
                     $approver = Auth::user()->name;
                     // $bermissingapprovpool = PoolPallet::find($pool_pallet_id);
                     $bermissingapprovtrans = Transporter::find($transporter_id);
@@ -400,7 +364,7 @@ class BermissingpalletController extends Controller
                         'note' => $request->note,
                     ]);
                 }
-                if($transporter_id!=null){
+                elseif($transporter_id!=null){
                     $approver = Auth::user()->name;
                     // $bermissingapprovpool = PoolPallet::find($pool_pallet_id);
                     $bermissingapprovtrans = Transporter::find($transporter_id);
@@ -427,7 +391,7 @@ class BermissingpalletController extends Controller
                     $InventoryPool->missing_pallet = (($InventoryPool->missing_pallet)-($request->missing_pallet)+($selisihmissing));
                     $InventoryPool->save();
                 }
-                if($transporter_id!=null){
+                elseif($transporter_id!=null){
                     $selisihber = ($request->ber_pallet)-($update->ber_pallet);
                     $selisihmissing = ($request->missing_pallet)-($update->missing_pallet);
                     $InventoryTrans = Transporter::find($transporter_id);
@@ -439,13 +403,6 @@ class BermissingpalletController extends Controller
                 DB::commit();
                 return response()->json(['status' => 'success'], 200);
 
-                // $data = [
-                //     'data' => $update,
-                //     'status' => (bool) $update,
-                //     'message' => $update ? 'Pallet Transfer Record Updated!' : 'Error Updating Pallet Transfer Record'
-                // ];
-
-                // return response()->json($data);
             }catch (\Exception $e) {
                 DB::rollback();
                 return response()->json([
@@ -461,12 +418,6 @@ class BermissingpalletController extends Controller
         $update = Bermissing::find($ber_missing_pallet_id);
         $pool_pallet_id = $update->pool_pallet_id;
         $transporter_id = $update->transporter_id;
-        // $InventoryPool = PoolPallet::find($pool_pallet_id);
-        // $InventoryTrans = Transporter::find($transporter_id);
-        // $InventoryPool = PoolPallet::find($pool_pallet_id);
-        // $InventoryTrans = Transporter::find($transporter_id);
-        // $palletpool = $InventoryPool->good_pallet;
-        // $pallettrans = $InventoryTrans->good_pallet;
 
 
         if($pool_pallet_id!=null){
@@ -475,33 +426,20 @@ class BermissingpalletController extends Controller
             $updatemissingpallet = $update->missing_pallet;
 
             $this->validate($request, [
-                // 'good_pallet' => 'required|integer|gt:-1|lte:'.$pallet_qty,
-                // 'tbr_pallet' => 'required|integer|gt:-1',
                 'ber_pallet' => 'required|integer|gt:-1|lte:'.$updateberpallet,
                 'missing_pallet' => 'required|integer|gt:-1|lte:'.$updatemissingpallet,
-                // 'good_cement' => 'required|integer|gt:-1|lte:'.$cement_qty,
-                // 'bad_cement' => 'required|integer|gt:-1'
                 ]);
         }
-        if($transporter_id!=null){
+        elseif($transporter_id!=null){
             $update = Bermissing::find($ber_missing_pallet_id);
             $updateberpallet = $update->ber_pallet;
             $updatemissingpallet = $update->missing_pallet;
             $this->validate($request, [
-                // 'good_pallet' => 'required|integer|gt:-1|lte:'.$pallet_qty,
-                // 'tbr_pallet' => 'required|integer|gt:-1',
                 'ber_pallet' => 'required|integer|gt:-1|lte:'.$updateberpallet,
                 'missing_pallet' => 'required|integer|gt:-1|lte:'.$updatemissingpallet,
-                // 'good_cement' => 'required|integer|gt:-1|lte:'.$cement_qty,
-                // 'bad_cement' => 'required|integer|gt:-1'
                 ]);
         }
 
-        // $bermissing = Bermissing::where('ber_missing_pallet_id',$ber_missing_pallet_id)->first();
-        // if (empty($bermissing)){
-        //     return response()->json(['error' => 'Data not found'], 404);
-        // }
-        // else{
         DB::beginTransaction();
         try{
             $update = Bermissing::find($ber_missing_pallet_id);
@@ -536,7 +474,7 @@ class BermissingpalletController extends Controller
                     'note' => $request->note,
                 ]);
             }
-            if($transporter_id!=null){
+            elseif($transporter_id!=null){
                 $approver = Auth::user()->name;
                 // $bermissingapprovpool = PoolPallet::find($pool_pallet_id);
                 $bermissingapprovtrans = Transporter::find($transporter_id);
@@ -575,7 +513,7 @@ class BermissingpalletController extends Controller
                 ]);
             }
 
-            if($transporter_id!=null){
+            elseif($transporter_id!=null){
                 $approver = Auth::user()->name;
                 // $bermissingapprovpool = PoolPallet::find($pool_pallet_id);
                 $bermissingapprovtrans = Transporter::find($transporter_id);
@@ -603,7 +541,7 @@ class BermissingpalletController extends Controller
                 $InventoryPool->save();
             }
 
-            if($transporter_id!=null){
+            elseif($transporter_id!=null){
                 $InventoryTrans = Transporter::find($transporter_id);
                 $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)-($request->ber_pallet));
                 $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)-($request->missing_pallet));
@@ -612,18 +550,9 @@ class BermissingpalletController extends Controller
                 $InventoryTrans->save();
             }
 
-        // }
-
         DB::commit();
         return response()->json(['status' => 'success'], 200);
 
-            // $data = [
-            //     'data' => $update,
-            //     'status' => (bool) $update,
-            //     'message' => $update ? 'Pallet Transfer Record Updated!' : 'Error Updating Pallet Transfer Record'
-            // ];
-
-            // return response()->json($data);
         }catch (\Exception $e) {
             DB::rollback();
             return response()->json([
@@ -635,8 +564,53 @@ class BermissingpalletController extends Controller
 
     public function destroy($id)
     {
-        $bermissing = Bermissing::find($id); //QUERY DATA BERDASARKAN ID
-        $bermissing->delete(); //KEMUDIAN HAPUS DATA TERSEBUT
-        return response()->json(['status' => 'success']);
+        $bermissing = Bermissing::find($id);
+        $sjp_status = SjpStatus::find($bermissing->reference_sjp_status_id);
+        $reporter_user = User::find($bermissing->reporter_user_id);
+        $approver_user = User::find($bermissing->approver_user_id);
+        $pool_pallet = PoolPallet::find($bermissing->pool_pallet_id);
+        $transporter = Transporter::find($bermissing->transporter_id);
+        DB::beginTransaction();
+        try{
+
+            if($sjp_status == null && $transporter == null){
+                $deleted_item = DeletedItem::create([
+                    'bmp_number' => $bermissing->bmp_number,
+                    // 'sjps_number' => $sjp_status->sjps_number,
+                    'pool_pallet' => $pool_pallet->pool_name,
+                    // 'transporter' => $transporter->transporter_name,
+                    'reporter/sender' => $reporter_user->name,
+                    // 'receiver/approver' => $approver_user->name,
+                    'ber_pallet' => $bermissing->ber_pallet,
+                    'missing_pallet' => $bermissing->missing_pallet,
+                    'created_by' => auth()->user()->name,
+                    'note' => $bermissing->note,
+                ]);
+            }else{
+                $deleted_item = DeletedItem::create([
+                    'bmp_number' => $bermissing->bmp_number,
+                    'sjps_number' => $sjp_status->sjps_number,
+                    // 'pool_pallet' => $pool_pallet->pool_name,
+                    'transporter' => $transporter->transporter_name,
+                    'reporter/sender' => $reporter_user->name,
+                    // 'receiver/approver' => $approver_user->name,
+                    'ber_pallet' => $bermissing->ber_pallet,
+                    'missing_pallet' => $bermissing->missing_pallet,
+                    'created_by' => auth()->user()->name,
+                    'note' => $bermissing->note,
+                ]);
+            }
+            $bermissing->delete(); //KEMUDIAN HAPUS DATA TERSEBUT
+
+        DB::commit();
+        return response()->json(['status' => 'success'], 200);
+
+        }catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => 'error',
+                'data' => $e->getMessage(),
+                'message' => 'Error Delete BER/Missing Pallet Record'], 422);
+        }
     }
 }

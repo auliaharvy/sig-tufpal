@@ -1,20 +1,27 @@
 import $axios from '../api.js'
 
 const state = () => ({
+    loading: false,
     drivers: [], //STATE UNTUK MENAMPUNG DATA CUSTOMERS
-    
+
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
     driver: {
         driver_name: '',
         driver_address: '',
         mobile_number:'',
         email:'',
-        
+
     },
     page: 1
 })
 
 const mutations = {
+    isLoading (state) {
+        state.loading = true
+      },
+      doneLoading (state) {
+        state.loading = false
+      },
     //MUTATIONS UNTUK ASSIGN DATA CUSTOMER KE DALAM STATE CUSTOMER
     ASSIGN_DATA(state, payload) {
         state.drivers = payload
@@ -32,13 +39,14 @@ const mutations = {
         state.driver = {
             driver_name: '',
             driver_address: '',
-            
+
         }
     }
 }
 
 const actions = {
     getDrivers({ commit, state }, payload) {
+        commit('isLoading')
         let search = typeof payload != 'undefined' ? payload:''
         return new Promise((resolve, reject) => {
             //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
@@ -46,6 +54,8 @@ const actions = {
             .then((response) => {
                 commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
@@ -60,7 +70,7 @@ const actions = {
             })
         })
     },
-  
+
 }
 
 export default {

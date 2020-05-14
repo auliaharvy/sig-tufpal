@@ -8,6 +8,7 @@ use File;
 use Illuminate\Http\Request;
 use App\Http\Resources\SjpStatusCollection;
 use Illuminate\Support\Facades\Auth;
+use App\DeletedItem;
 use App\SjpStatus;
 use App\Sjp;
 use App\PoolPallet;
@@ -25,7 +26,7 @@ use DB;
 
 class SjpStatusController extends Controller
 {
-    
+
 public function index()
     {
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
@@ -47,7 +48,7 @@ public function index()
                     , 'd.departure_pool_pallet_id', 'd.transporter_id', 'f.vehicle_number'
                     , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool'
                     , 'd.distribution' )
-            ->where('d.status',$status)            
+            ->where('d.status',$status)
             ->paginate(1000000)
             ->toArray();
         }
@@ -68,7 +69,7 @@ public function index()
                     'd.sjp_number','e.transaction', 'd.is_sendback', 'd.destination_pool_pallet_id'
                     , 'd.departure_pool_pallet_id', 'd.transporter_id', 'f.vehicle_number'
                     , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool'
-                    , 'd.distribution' )       
+                    , 'd.distribution' )
             ->where('d.departure_pool_pallet_id',$pool_pallet)
             ->orWhere('d.destination_pool_pallet_id', $pool_pallet)
             ->orWhere('d.transporter_id', $transporter)
@@ -80,19 +81,19 @@ public function index()
 
     public function show($sjp_status_id)
     {
-        $sjpstatus = SjpStatus::find($sjp_status_id); 
+        $sjpstatus = SjpStatus::find($sjp_status_id);
         return response()->json(['status' => 'success', 'data' => $sjpstatus]);
     }
 
     public function sjpstatusbymaster($sjp_id)
     {
         $sjp = Sjp::find($sjp_id);
-        return response()->json(['status' => 'success', 'data' => $sjp]);   
+        return response()->json(['status' => 'success', 'data' => $sjp]);
     }
 
     public function view($sjp_status_id)
     {
-        
+
         $sjpstatus = SjpStatus::find($sjp_status_id);
         $sjp_id = $sjpstatus->sjp_id;
         $sjp = Sjp::find($sjp_id);
@@ -101,10 +102,10 @@ public function index()
         $data[] = [
             'sjp_number' =>$sjp_number,
         ];
-        return response()->json(['status' => 'success', 'data' => $data]);   
+        return response()->json(['status' => 'success', 'data' => $data]);
     }
 
-    
+
     public function store(Request $request)
     {
         $sjp_id = $request->sjp_id;
@@ -142,19 +143,19 @@ public function index()
             }
 
             $sjpStatus = SjpStatus::create([
-                'checker_send_user_id' => $checker, 
-                'checker_receive_user_id' => 5, 
+                'checker_send_user_id' => $checker,
+                'checker_receive_user_id' => 5,
                 'sjp_id' => $request->sjp_id,
-                'good_pallet' => $pallet_qty, 
-                'tbr_pallet' => 0, 
-                'ber_pallet' => 0, 
-                'missing_pallet' => 0, 
-                'good_cement' => $sjp->product_quantity, 
-                'bad_cement' => 0, 
+                'good_pallet' => $pallet_qty,
+                'tbr_pallet' => 0,
+                'ber_pallet' => 0,
+                'missing_pallet' => 0,
+                'good_cement' => $sjp->product_quantity,
+                'bad_cement' => 0,
                 'driver_approve' => 1,
                 'sending_driver_approval' => $name,
                 'transaction_id' => 1,
-                'note' => $request->note, 
+                'note' => $request->note,
                 'status' => 0,
             ]);
 
@@ -174,7 +175,7 @@ public function index()
                 $state = Sjp::find($sjp_id);
                 $state->state=1;
                 $state->save();
-                
+
                 $departure_id = $sjp->departure_pool_pallet_id;
                 $destination_id = $sjp->destination_pool_pallet_id;
 
@@ -194,16 +195,16 @@ public function index()
                     'status' => 'SEND',
                     'no_do' => $sjp->no_do,
                     'sender/reporter' => $sender,
-                    'departure_pool' => $palletsenddept->pool_name, 
+                    'departure_pool' => $palletsenddept->pool_name,
                     'destination_pool' => $palletsenddest->pool_name,
                     'transporter' => $palletsendtrans->transporter_name,
                     'driver' => $palletsenddriver->driver_name,
                     'vehicle' => $palletsendvehicle->vehicle_number,
-                    'good_pallet' => $pallet_qty, 
+                    'good_pallet' => $pallet_qty,
                     'note' => $request->note,
-                    'tbr_pallet' => 0, 
-                    'ber_pallet' => 0, 
-                    'missing_pallet' => 0, 
+                    'tbr_pallet' => 0,
+                    'ber_pallet' => 0,
+                    'missing_pallet' => 0,
                     'good_cement' => $sjp->product_quantity,
                     'bad_cement' => 0,
                     'sending_driver_approval' => $name,
@@ -224,22 +225,22 @@ public function index()
                     'sjp_number' => $sjp_number,
                     'sjp_status' => $sjps_number,
                     'sender' => $sender,
-                    'departure_pool' => $palletsenddept->pool_name, 
+                    'departure_pool' => $palletsenddept->pool_name,
                     'destination_pool' => $palletsenddest->pool_name,
                     'transporter' => $palletsendtrans->transporter_name,
                     'driver' => $palletsenddriver->driver_name,
                     'vehicle' => $palletsendvehicle->vehicle_number,
-                    'good_pallet' => $pallet_qty, 
+                    'good_pallet' => $pallet_qty,
                     'note' => $request->note,
-                    'tbr_pallet' => 0, 
-                    'ber_pallet' => 0, 
-                    'missing_pallet' => 0, 
+                    'tbr_pallet' => 0,
+                    'ber_pallet' => 0,
+                    'missing_pallet' => 0,
                     'good_cement' => $sjp->product_quantity,
                     'bad_cement' => 0,
                     'sending_driver_approval' => $name,
                     'note' => $request->note
                 ]);
-                
+
                 $departure_id = $sjp->departure_pool_pallet_id;
                 $InventoryDept = PoolPallet::find($departure_id);
                 $InventoryDept->good_pallet = (($InventoryDept->good_pallet)-($pallet_qty));
@@ -255,17 +256,17 @@ public function index()
                 $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet)); //anggeplah 0
                 $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet)); //anggeplah 0
                 $InventoryTrans->save();
-                
+
                 DB::commit();
                 return response()->json(['status' => 'success'], 200);
 
         }catch (\Exception $e) {
                 DB::rollback();
                 return response()->json([
-                    'status' => 'error', 
+                    'status' => 'error',
                     'data' => $e->getMessage(),
                     'message' => 'Error Surat Jalan Pallet Status Record'], 422);
-        }             
+        }
     }
 
     public function sendback(Request $request)
@@ -287,7 +288,7 @@ public function index()
         $ber_pallet = $departure->ber_pallet;
         $missing_pallet = $departure->missing_pallet;
         $total = $good_pallet+$tbr_pallet+$ber_pallet+$missing_pallet;
-        
+
         $this->validate($request, [
             'good_pallet' => 'required|integer|gt:-1|lte:'.$good_pallet,
             'tbr_pallet' => 'required|integer|gt:-1|lte:'.$tbr_pallet,
@@ -295,7 +296,7 @@ public function index()
             'missing_pallet' => 'required|integer|gt:-1|lte:'.$missing_pallet,
             'sending_driver_approval' => 'required | image',
         ]);
-            
+
             if ($distribution == 1){
                 $departure_id = $sjp->destination_pool_pallet_id;
                 $destination_id = $sjp->departure_pool_pallet_id;
@@ -311,17 +312,17 @@ public function index()
                     $file->storeAs('public/driverapproval', $name);
                 }
                 $sjpStatus = SjpStatus::create([
-                    'checker_send_user_id' => $checker, 
-                    'checker_receive_user_id' => 5, 
+                    'checker_send_user_id' => $checker,
+                    'checker_receive_user_id' => 5,
                     'sjp_id' => $request->sjp_id,
-                    'good_pallet' => $request->good_pallet, 
-                    'tbr_pallet' => $request->tbr_pallet, 
+                    'good_pallet' => $request->good_pallet,
+                    'tbr_pallet' => $request->tbr_pallet,
                     'ber_pallet' => $request->ber_pallet,
-                    'missing_pallet' => $request->missing_pallet, 
+                    'missing_pallet' => $request->missing_pallet,
                     'driver_approve' => 1,
                     'sending_driver_approval' => $name,
                     'transaction_id' => 2,
-                    'note' => $request->note, 
+                    'note' => $request->note,
                     'status' => 0,
                 ]);
 
@@ -358,22 +359,22 @@ public function index()
                 'status' => 'SENDBACK',
                 'no_do' => $sjp->no_do,
                 'sender/reporter' => $sender,
-                'departure_pool' => $palletsenddept->pool_name, 
+                'departure_pool' => $palletsenddept->pool_name,
                 'destination_pool' => $palletsenddest->pool_name,
                 'transporter' => $palletsendtrans->transporter_name,
                 'driver' => $palletsenddriver->driver_name,
                 'vehicle' => $palletsendvehicle->vehicle_number,
-                'good_pallet' => $request->good_pallet, 
+                'good_pallet' => $request->good_pallet,
                 'note' => $request->note,
-                'tbr_pallet' => $request->tbr_pallet, 
-                'ber_pallet' => 0, 
-                'missing_pallet' => 0, 
+                'tbr_pallet' => $request->tbr_pallet,
+                'ber_pallet' => 0,
+                'missing_pallet' => 0,
                 'good_cement' => 0,
                 'bad_cement' => 0,
                 'sending_driver_approval' => $name,
                 'note' => $request->note
             ]);
-            
+
             // Membuat log transaksi send
             $sender = Auth::user()->name;
             $sjp_number = $sjp->sjp_number;
@@ -388,19 +389,19 @@ public function index()
                 'sjp_number' => $sjp_number,
                 'sjp_status' => $sjps_number,
                 'sender' => $sender,
-                'departure_pool' => $palletsenddept->pool_name, 
+                'departure_pool' => $palletsenddept->pool_name,
                 'destination_pool' => $palletsenddest->pool_name,
                 'transporter' => $palletsendtrans->transporter_name,
                 'driver' => $palletsenddriver->driver_name,
                 'vehicle' => $palletsendvehicle->vehicle_number,
-                'good_pallet' => $request->good_pallet, 
-                'tbr_pallet' => $request->tbr_pallet, 
-                'ber_pallet' => $request->ber_pallet, 
-                'missing_pallet' => $request->missing_pallet, 
+                'good_pallet' => $request->good_pallet,
+                'tbr_pallet' => $request->tbr_pallet,
+                'ber_pallet' => $request->ber_pallet,
+                'missing_pallet' => $request->missing_pallet,
                 'sending_driver_approval' => $name,
                 'note' => $request->note,
             ]);
-            
+
             $InventoryDept = PoolPallet::find($departure_id);
             $InventoryDept->good_pallet = (($InventoryDept->good_pallet)-($request->good_pallet));
             $InventoryDept->tbr_pallet = (($InventoryDept->tbr_pallet)-($request->tbr_pallet));
@@ -420,10 +421,10 @@ public function index()
         }catch (\Exception $e) {
                 DB::rollback();
                 return response()->json([
-                    'status' => 'error', 
+                    'status' => 'error',
                     'data' => $e->getMessage(),
                     'message' => 'Error SJP Status Sendback Record'], 422);
-        }               
+        }
     }
 
     public function receive(Request $request)
@@ -441,7 +442,7 @@ public function index()
         $good_cement = $sjp->product_quantity;
         $update = SjpStatus::find($sjp_status_id);
         $good_pallet = $update->good_pallet;
-       
+
         $this->validate($request, [
             'good_pallet' => 'required|integer|gt:-1|lte:'.$pallet_qty,
             'tbr_pallet' => 'required|integer|gt:-1'.$pallet_qty,
@@ -469,8 +470,8 @@ public function index()
                     }
 
                     $update = SjpStatus::find($sjp_status_id);
-                    $good_pallet_awal = $update->good_pallet; 
-                    $good_cement_awal = $update->good_cement; 
+                    $good_pallet_awal = $update->good_pallet;
+                    $good_cement_awal = $update->good_cement;
                     $receive = Auth::user()->id;
                     $update->checker_receive_user_id = $receive;
                     $update->good_pallet = $request->good_pallet;
@@ -486,7 +487,7 @@ public function index()
 
                     $InventoryDest = PoolPallet::find($destination_id);
                     $InventoryDest->good_pallet = (($InventoryDest->good_pallet)+($request->good_pallet));
-                    $InventoryDest->tbr_pallet = (($InventoryDest->tbr_pallet)+($request->tbr_pallet)); 
+                    $InventoryDest->tbr_pallet = (($InventoryDest->tbr_pallet)+($request->tbr_pallet));
                     $InventoryDest->save();
 
                     $InventoryTrans = Transporter::find($transporter_id);
@@ -518,16 +519,16 @@ public function index()
                         'status' => 'RECEIVE',
                         'no_do' => $sjp->no_do,
                         'receiver/approver' => $receiver,
-                        'departure_pool' => $palletsenddept->pool_name, 
+                        'departure_pool' => $palletsenddept->pool_name,
                         'destination_pool' => $palletsenddest->pool_name,
                         'transporter' => $palletsendtrans->transporter_name,
                         'driver' => $palletsenddriver->driver_name,
                         'vehicle' => $palletsendvehicle->vehicle_number,
-                        'good_pallet' => $request->good_pallet, 
+                        'good_pallet' => $request->good_pallet,
                         'note' => $request->note,
-                        'tbr_pallet' => $request->tbr_pallet, 
-                        'ber_pallet' => 0, 
-                        'missing_pallet' => 0, 
+                        'tbr_pallet' => $request->tbr_pallet,
+                        'ber_pallet' => 0,
+                        'missing_pallet' => 0,
                         'good_cement' => $request->good_cement,
                         'bad_cement' => $request->bad_cement,
                         'receiving_driver_approval' => $name,
@@ -548,17 +549,17 @@ public function index()
                         'sjp_number' => $sjp_number,
                         'sjp_status' => $sjps_number,
                         'receiver' => $receiver,
-                        'departure_pool' => $palletsenddept->pool_name, 
+                        'departure_pool' => $palletsenddept->pool_name,
                         'destination_pool' => $palletsenddest->pool_name,
                         'transporter' => $palletsendtrans->transporter_name,
                         'driver' => $palletsenddriver->driver_name,
                         'vehicle' => $palletsendvehicle->vehicle_number,
-                        'good_pallet' => $request->good_pallet, 
+                        'good_pallet' => $request->good_pallet,
                         'good_cement' => $request->good_cement,
                         'receiving_driver_approval' => $name,
                         'note' => $request->note,
                     ]);
-                    
+
                     $state = Sjp::find($sjp_id);
                     $state->state=2;
                     $state->save();
@@ -569,14 +570,14 @@ public function index()
                 }catch (\Exception $e) {
                     DB::rollback();
                     return response()->json([
-                        'status' => 'error', 
+                        'status' => 'error',
                         'data' => $e->getMessage(),
                         'message' => 'Error SJP Status Receive Record'], 422);
-                }      
+                }
             }
             // }
-            
-        }    
+
+        }
     }
 
     public function receivesendback(Request $request)
@@ -597,7 +598,7 @@ public function index()
         $ber_pallet = $update->ber_pallet;
         $missing_pallet = $update->missing_pallet;
         $total = $good_pallet+$tbr_pallet+$ber_pallet+$missing_pallet;
-       
+
         $this->validate($request, [
             'good_pallet' => 'required|integer|gt:-1|lte:'.$total,
             'tbr_pallet' => 'required|integer|gt:-1|lte:'.$total,
@@ -612,9 +613,9 @@ public function index()
         else{
                 DB::beginTransaction();
                 try{
-                    
+
                 $update = SjpStatus::find($sjp_status_id);
-                $good_pallet_awal = $update->good_pallet; 
+                $good_pallet_awal = $update->good_pallet;
                 $tbr_pallet_awal = $update->tbr_pallet;
                 $ber_pallet_awal = $update->ber_pallet;
                 $missing_pallet_awal = $update->missing_pallet;
@@ -650,21 +651,21 @@ public function index()
 
                     $InventoryDest = PoolPallet::find($destination_id);
                     $InventoryDest->good_pallet = (($InventoryDest->good_pallet)+($goodpalletrcv));
-                    $InventoryDest->tbr_pallet = (($InventoryDest->tbr_pallet)+($tbr_palletrcv)); 
+                    $InventoryDest->tbr_pallet = (($InventoryDest->tbr_pallet)+($tbr_palletrcv));
                     $InventoryDest->save();
 
                     $InventoryTrans = Transporter::find($transporter_id);
                     if($tbr_pallet_awal==0){
                         if($missing_ber>0){
                             $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($missing_ber+$request->good_pallet));
-                            $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet)); 
+                            $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet));
                             $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet));
                         }
                         else{
-                            $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));    
+                            $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
                         }
-                        
-                       
+
+
                     }
                     else if(($request->tbr_pallet)>$tbr_pallet_awal || ($request->tbr_pallet)!=$tbr_pallet_awal ){ //jika rcv tbr pallet lebih besar dari yang di send
                         if($missing_ber>0){
@@ -673,7 +674,7 @@ public function index()
                             if($selisihgood==$selisihtbr){
                                 $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($selisihtbr+$missing_ber));
                                 $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($selisihgood+$missing_ber));
-                                $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet)); 
+                                $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet));
                                 $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet));
                             }
                         }
@@ -683,14 +684,14 @@ public function index()
                             if($selisihgood==$selisihtbr){
                                 $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($tbr_pallet_awal));
                                 $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
-                            } 
+                            }
                         }
-                        
+
                     }
                     else{
                         $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($request->good_pallet));
                         $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($request->tbr_pallet));
-                        $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet)); 
+                        $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet));
                         $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet));
                     }
                     $InventoryTrans->save();
@@ -720,16 +721,16 @@ public function index()
                         'status' => 'RECEIVE SENDBACK',
                         'no_do' => $sjp->no_do,
                         'receiver/approver' => $receiver,
-                        'departure_pool' => $palletsenddept->pool_name, 
+                        'departure_pool' => $palletsenddept->pool_name,
                         'destination_pool' => $palletsenddest->pool_name,
                         'transporter' => $palletsendtrans->transporter_name,
                         'driver' => $palletsenddriver->driver_name,
                         'vehicle' => $palletsendvehicle->vehicle_number,
-                        'good_pallet' => $request->good_pallet, 
+                        'good_pallet' => $request->good_pallet,
                         'note' => $request->note,
-                        'tbr_pallet' => $request->tbr_pallet, 
-                        'ber_pallet' => $request->ber_pallet, 
-                        'missing_pallet' => $request->missing_pallet, 
+                        'tbr_pallet' => $request->tbr_pallet,
+                        'ber_pallet' => $request->ber_pallet,
+                        'missing_pallet' => $request->missing_pallet,
                         'receiving_driver_approval' => $name,
                         'good_cement' => 0,
                         'bad_cement' => 0,
@@ -751,33 +752,33 @@ public function index()
                         'sjp_number' => $sjp_number,
                         'sjp_status' => $sjps_number,
                         'receiver' => $receiver,
-                        'departure_pool' => $palletsenddept->pool_name, 
+                        'departure_pool' => $palletsenddept->pool_name,
                         'destination_pool' => $palletsenddest->pool_name,
                         'transporter' => $palletsendtrans->transporter_name,
                         'driver' => $palletsenddriver->driver_name,
                         'vehicle' => $palletsendvehicle->vehicle_number,
-                        'good_pallet' => $request->good_pallet, 
-                        'tbr_pallet' => $request->tbr_pallet, 
-                        'ber_pallet' => $request->ber_pallet, 
-                        'missing_pallet' => $request->missing_pallet, 
+                        'good_pallet' => $request->good_pallet,
+                        'tbr_pallet' => $request->tbr_pallet,
+                        'ber_pallet' => $request->ber_pallet,
+                        'missing_pallet' => $request->missing_pallet,
                         'receiving_driver_approval' => $name,
                         'note' => $request->note,
                     ]);
-                    
+
                     //membuat ber missing pallet record ketika ada pallet ber/missing
                     if(($request->ber_pallet)>0 || ($request->missing_pallet>0)){
                         $receive = Auth::user()->id;
                         $Bermissing = Bermissing::create([
-                            'reporter_user_id' => $receive, 
-                            'approver_user_id' => 5, 
+                            'reporter_user_id' => $receive,
+                            'approver_user_id' => 5,
                             'transporter_id' => $transporter_id,
                             'reference_sjp_status_id' => $sjp_status_id,
-                            'ber_pallet' => $request->ber_pallet, 
+                            'ber_pallet' => $request->ber_pallet,
                             'missing_pallet' => $request->missing_pallet,
                             'status' => 0,
-                            'note' => 'TERDAPAT PALLET YANG BER/HILANG SAAT RECEIVE OLEH CHECKER',  
+                            'note' => 'TERDAPAT PALLET YANG BER/HILANG SAAT RECEIVE OLEH CHECKER',
                         ]);
-                        
+
                         $reporter = Auth::user()->name;
                         $sjps_number    = $update->sjps_number;
                         $palletbermissingpool = PoolPallet::find($departure_id);
@@ -785,17 +786,17 @@ public function index()
                         $transporterbermissing = $palletbermissingtrans->transporter_name;
                         $Bermissingreported = Bermissingreported::create([
                             'ber_missing_id' => $Bermissing->ber_missing_pallet_id,
-                            'reporter' => $reporter, 
-                            'pool_pallet' => 5, 
+                            'reporter' => $reporter,
+                            'pool_pallet' => 5,
                             'transporter_id' => $palletbermissingtrans->transporter_name,
                             'reference_sjp_status_id' => $sjps_number,
-                            'ber_pallet' => $request->ber_pallet, 
+                            'ber_pallet' => $request->ber_pallet,
                             'missing_pallet' => $request->missing_pallet,
                             'status' => 0,
-                            'note' => 'TERDAPAT PALLET YANG BER/HILANG SAAT RECEIVE OLEH CHECKER',  
+                            'note' => 'TERDAPAT PALLET YANG BER/HILANG SAAT RECEIVE OLEH CHECKER',
                         ]);
                     }
-    
+
                     $status = 'CLOSED';
                     $Sjpstat = Sjp::find($sjp_id);
                     $Sjpstat->status = $status;
@@ -809,16 +810,16 @@ public function index()
                     DB::commit();
                     return response()->json(['status' => 'success'], 200);
                 }
-                
+
                 } catch (\Exception $e) {
                     DB::rollback();
                     return response()->json([
-                        'status' => 'error', 
+                        'status' => 'error',
                         'data' => $e->getMessage(),
                         'message' => 'Error SJP Status Receive Sendback Record'], 422);
-                }      
-            
-        }    
+                }
+
+        }
     }
 
     public function destroy($id)

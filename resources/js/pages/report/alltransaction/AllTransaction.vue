@@ -1,9 +1,9 @@
 <template>
     <div class="col-md-12">
         <div class="panel">
-            
+
             <div class="panel-body">
-              
+
               	<!-- TABLE UNTUK MENAMPILKAN LIST SJP -->
                 <template>
                     <v-card>
@@ -11,7 +11,7 @@
                         ALL TRANSACTION
                         <v-spacer></v-spacer>
                         <v-btn>
-                            <download-excel 
+                            <download-excel
                             :data= "alltransactions.data"
                             type="csv"
                             name="alltransaction.csv">
@@ -31,18 +31,19 @@
                         :loading="loading"
                         :items="alltransactions.data"
                         :search="search"
-                        >       
+                        dense
+                        >
                         <!-- <template v-slot:item.status="{ item }">
                                             <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
                                             <v-chip class="label label-success" v-else-if="item.status == 1">Received</v-chip>
                                         </template> -->
-       
+
                             </v-data-table>
                         </v-card>
                         </template>
               	<!-- TABLE UNTUK MENAMPILKAN LIST CUSTOMER -->
 
-               
+
                     <!-- <div class="col-md-6">
                         <p v-if="sjpstatuss.data"><i class="fa fa-bars"></i> {{ sjpstatuss.data.length }} item dari {{ sjpstatuss.meta.total }} total data</p>
                     </div>
@@ -57,7 +58,7 @@
                                 ></b-pagination>
                         </div>
                     </div> -->
-                
+
             </div>
         </div>
     </div>
@@ -108,7 +109,7 @@ export default {
                 { value: 'reporter_prove', text: 'Berita Acara' },
                 { value: 'reason', text: 'Reason' },
                 { value: 'note', text: 'Note' },
-                { value: 'created_at', text: 'Created At' },          
+                { value: 'created_at', text: 'Created At' },
             ],
             search: ''
         }
@@ -139,9 +140,9 @@ export default {
         }
     },
     methods: {
-        ...mapActions('alltransaction', ['getAlltransaction']), 
+        ...mapActions('alltransaction', ['getAlltransaction']),
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
-        
+
     }
 }
 </script>

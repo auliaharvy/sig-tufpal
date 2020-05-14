@@ -2,7 +2,7 @@
     <div class="container">
         <section class="content-header">
             <h1>
-                Manage Couriers
+                Manage User
             </h1>
             <breadcrumb></breadcrumb>
         </section>

@@ -21,9 +21,11 @@
       ></v-text-field>
     </v-card-title>
     <v-data-table
+    :loading="loading"
       :headers="headers"
       :items="transporters.data"
       :search="search"
+      dense
     >
     <template v-slot:item.total="{ item }">
         <v-chip class="label"  color="red"  v-if="item.good_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet > item.pallet_quota">
@@ -100,6 +102,9 @@ export default {
     computed: {
         ...mapState('transporter', {
             transporters: state => state.transporters //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+        }),
+        ...mapState('transporter', {
+            loading: state => state.loading //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
         //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {

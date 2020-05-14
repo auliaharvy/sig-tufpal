@@ -37,6 +37,7 @@
                         :loading="loading"
                         :items="bermissings.data"
                         :search="search"
+                        dense
                         >
                             <template v-slot:item.reporter_prove="{ item }">
                                 <img :src="'/storage/app/public/bermissing/reporter_prove/' + item.reporter_prove" :width="70" :height="100" :alt="item.bmp_number"> </img>

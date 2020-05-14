@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Transaction;
 use App\Alltransaction;
 use App\PoolPallet;
+use App\Transporter;
 use App\Sjppalletsend;
 use App\Sjppalletreceive;
 use DB;
@@ -52,7 +53,7 @@ class DashboardController extends Controller
         $transactionreceive = Sjppalletreceive::select(DB::raw('date(created_at) as date,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->where('created_at', 'LIKE', '%' . $filter . '%')
             ->groupBy(DB::raw('date(created_at)'))->get();
-        
+
         $data = [];
         foreach ($array_date as $row) {
             $f_date = strlen($row) == 1 ? 0 . $row:$row;
@@ -67,27 +68,88 @@ class DashboardController extends Controller
         return $data;
     }
 
-    public function totalpallet()
+    public function globalpallet()
     {
-        $filter = request()->year . '-' . request()->month;
-        $parse = Carbon::parse($filter);
-        $array_date = range($parse->startOfMonth()->format('d'), $parse->endOfMonth()->format('d'));
-        $transactionreceive = Sjppalletreceive::select(DB::raw('date(created_at) as date,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
-            ->where('created_at', 'LIKE', '%' . $filter . '%')
-            ->groupBy(DB::raw('date(created_at)'))->get();
-        
-        $data = [];
-        foreach ($array_date as $row) {
-            $f_date = strlen($row) == 1 ? 0 . $row:$row;
-            $date = $filter . '-' . $f_date;
-            $total = $transactionreceive->firstWhere('date', $date);
+        $poolTotal = PoolPallet::select(DB::raw('type,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+        ->groupBy(DB::raw('type'))
+        ->get()
+        ->toArray();
+        $transporterTotal = Transporter::select(DB::raw('tag as type,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+        ->groupBy(DB::raw('type'))
+        ->get()
+        ->toArray();
 
-            $data[] = [
-                'date' =>$date,
-                'total' => $total ? $total->total:0
-            ];
-        }
-        return $data;
+        $total = array_merge($poolTotal,$transporterTotal);
+
+        return $total;
+    }
+
+    public function pallet()
+    {
+        $goodTotal = PoolPallet::select(DB::raw('sum(good_pallet) as total'))
+        // ->groupBy(DB::raw('tag'))
+        ->get()
+        ->toArray();
+        $tbrTotal = PoolPallet::select(DB::raw('sum(tbr_pallet) as total'))
+        // ->groupBy(DB::raw('tag'))
+        ->get()
+        ->toArray();
+        $berTotal = PoolPallet::select(DB::raw('sum(ber_pallet) as total'))
+        // ->groupBy(DB::raw('tag'))
+        ->get()
+        ->toArray();
+        $missingTotal = PoolPallet::select(DB::raw('sum(missing_pallet) as total'))
+        // ->groupBy(DB::raw('tag'))
+        ->get()
+        ->toArray();
+
+        $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal);
+
+        return $total;
+    }
+
+    public function palletTransporter()
+    {
+        $goodTotal = Transporter::select(DB::raw('sum(good_pallet) as total'))
+        // ->groupBy(DB::raw('tag'))
+        ->get()
+        ->toArray();
+        $tbrTotal = Transporter::select(DB::raw('sum(tbr_pallet) as total'))
+        // ->groupBy(DB::raw('tag'))
+        ->get()
+        ->toArray();
+        $berTotal = Transporter::select(DB::raw('sum(ber_pallet) as total'))
+        // ->groupBy(DB::raw('tag'))
+        ->get()
+        ->toArray();
+        $missingTotal = Transporter::select(DB::raw('sum(missing_pallet) as total'))
+        // ->groupBy(DB::raw('tag'))
+        ->get()
+        ->toArray();
+
+        $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal);
+
+        return $total;
+    }
+
+    public function poolPalletDetail()
+    {
+        $poolDetail = PoolPallet::select(DB::raw('pool_name,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+        ->groupBy(DB::raw('pool_name'))
+        ->get()
+        ->toArray();
+
+        return $poolDetail;
+    }
+
+    public function transporterDetail()
+    {
+        $transporterDetail = Transporter::select(DB::raw('transporter_name,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+        ->groupBy(DB::raw('transporter_name'))
+        ->get()
+        ->toArray();
+
+        return $transporterDetail;
     }
 
     public function exportData(Request $request)

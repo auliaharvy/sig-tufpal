@@ -3,7 +3,7 @@ import $axios from '../api.js'
 const state = () => ({
     loading: false,
     pallettransfers: [], //STATE UNTUK MENAMPUNG DATA CUSTOMERS
-    
+
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
     pallettransfer: {
         departure_pool_pallet_id: '',
@@ -19,8 +19,8 @@ const state = () => ({
         reason: '',
         status: '',
         note: '',
-        
-        
+
+
     },
     page: 1
 })
@@ -66,6 +66,7 @@ const mutations = {
 
 const actions = {
     getPalletTransfer({ commit, state }, payload) {
+        commit('isLoading')
         let search = typeof payload != 'undefined' ? payload:''
         return new Promise((resolve, reject) => {
             //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
@@ -73,6 +74,8 @@ const actions = {
             .then((response) => {
                 commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
@@ -99,11 +102,14 @@ const actions = {
         })
       },
       editPalletTransfer({ commit }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.get(`/pallettransfer/${payload}`) //KIRIM PERMINTAAN KE SERVER UNTUK MENGAMBIL SINGLE DATA CUSTOMER BERDASARKAN PAYLOAD (ID)
             .then((response) => {
                 commit('ASSIGN_FORM', response.data.data) //ASSIGN DATA TERSEBUT KE DALAM STATE CUSTOMER
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
@@ -126,11 +132,14 @@ const actions = {
             })
         })
     },
-    removePalletTransfer({ dispatch }, payload) {
+    removePalletTransfer({ dispatch, commit }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.delete(`/pallettransfer/${payload}`) //KIRIM REQUEST KE SERVER BERDASARKAN PAYLOAD (ID)
             .then((response) => {
                 dispatch('getPalletTransfer').then(() => resolve()) //AMBIL DATA CUSTOMER TERBARU
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     }

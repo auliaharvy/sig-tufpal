@@ -1,5 +1,8 @@
 <template>
     <div class="col-md-12">
+        <loading :active.sync="loading"
+        :can-cancel="false"
+       ></loading>
         <div class="panel">
             <v-toolbar dark>
                 <h1>
@@ -20,6 +23,9 @@
 <script>
     import { mapActions, mapState } from 'vuex'
     import FormSjp from './Formeditdest.vue'
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
+
     export default {
         name: 'EditSjpdest',
         created() {
@@ -40,7 +46,8 @@
         }),
         },
         components: {
-            'sjp-form': FormSjp
+            'sjp-form': FormSjp,
+            Loading
         },
     }
 </script>

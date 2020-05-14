@@ -165,11 +165,14 @@ const actions = {
             })
         })
     },
-    removeBermissing({ dispatch }, payload) {
+    removeBermissing({ dispatch, commit  }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.delete(`/bermissing/${payload}`) //KIRIM REQUEST KE SERVER BERDASARKAN PAYLOAD (ID)
             .then((response) => {
                 dispatch('getBermissing').then(() => resolve()) //AMBIL DATA CUSTOMER TERBARU
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     }

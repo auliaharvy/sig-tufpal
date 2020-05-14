@@ -5,7 +5,7 @@
                 <router-link :to="{ name: 'newpallets.add' }"><v-btn>Add New Pallet</v-btn></router-link>
             </div>
             <div class="panel-body">
-              
+
                 <!-- TABLE UNTUK MENAMPILKAN LIST SJP -->
                 <template>
                     <v-card>
@@ -21,24 +21,26 @@
                             ></v-text-field>
                         </v-card-title>
                         <v-data-table
+                        :loading="loading"
                         :headers="headers"
                         :items="newpallets.data"
                         :search="search"
-                        >       
+                        dense
+                        >
         <!-- <template v-slot:item.approve="{ item }">
             <router-link :to="{ name: 'bermissings.edit', params: {id: item.ber_missing_pallet_id} }">
                 <v-btn color="success" small>Approve</v-btn>
-            </router-link>                        
+            </router-link>
         </template>
         <template v-slot:item.delete="{ item }">
-            <v-btn color="error" small @click="deleteBermissing(item.ber_missing_pallet_id)">Delete</v-btn>                         
+            <v-btn color="error" small @click="deleteBermissing(item.ber_missing_pallet_id)">Delete</v-btn>
         </template> -->
     </v-data-table>
   </v-card>
 </template>
               	<!-- TABLE UNTUK MENAMPILKAN LIST CUSTOMER -->
 
-               
+
                     <!-- <div class="col-md-6">
                         <p v-if="sjpstatuss.data"><i class="fa fa-bars"></i> {{ sjpstatuss.data.length }} item dari {{ sjpstatuss.meta.total }} total data</p>
                     </div>
@@ -53,7 +55,7 @@
                                 ></b-pagination>
                         </div>
                     </div> -->
-                
+
             </div>
         </div>
     </div>
@@ -88,6 +90,9 @@ export default {
         ...mapState('newpallet', {
             newpallets: state => state.newpallets //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
+        ...mapState('newpallet', {
+            loading: state => state.loading //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+        }),
         //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {
             get() {
@@ -107,7 +112,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions('newpallet', ['getNewpallet', 'removeNewpallet']), 
+        ...mapActions('newpallet', ['getNewpallet', 'removeNewpallet']),
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         deleteNewpallet(id) {
             this.$swal({

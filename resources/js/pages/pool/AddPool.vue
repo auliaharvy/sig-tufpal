@@ -1,5 +1,8 @@
 <template>
     <div class="col-md-12">
+        <loading :active.sync="loading"
+        :can-cancel="false"
+       ></loading>
         <div class="panel">
             <v-toolbar dark>
                 <h1>
@@ -21,11 +24,14 @@
 <script>
     import { mapActions, mapState, mapMutations } from 'vuex'
     import FormPool from './Form.vue'
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
+
     export default {
         name: 'AddPool',
         data() {
             return {
-                
+
             }
         },
         methods: {
@@ -45,7 +51,8 @@
         }),
         },
         components: {
-            'pool-form': FormPool //MEMBUAT CUSTOM TAG UNTUK ME-LOAD FILE FORM.VUE
+            'pool-form': FormPool,
+            Loading
         }
     }
 </script>

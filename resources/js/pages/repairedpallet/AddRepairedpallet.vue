@@ -1,9 +1,12 @@
 <template>
     <div class="col-md-12">
+        <loading :active.sync="loading"
+        :can-cancel="false"
+       ></loading>
         <div class="panel">
             <v-toolbar dark>
                 <h1>
-                    ADD REPAIRED PALLET 
+                    ADD REPAIRED PALLET
                 </h1>
             </v-toolbar>
             <div class="panel-body">
@@ -21,6 +24,9 @@
 <script>
     import { mapActions, mapState, mapMutations } from 'vuex'
     import FormRepairedpallet from './Form.vue'
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
+
     export default {
         name: 'AddRepairedpallet',
         methods: {
@@ -40,7 +46,8 @@
         }),
         },
         components: {
-            'repairedpallet-form': FormRepairedpallet //MEMBUAT CUSTOM TAG UNTUK ME-LOAD FILE FORM.VUE
+            'repairedpallet-form': FormRepairedpallet,
+            Loading
         }
     }
 </script>

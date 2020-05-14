@@ -7,6 +7,7 @@ use App\Http\Resources\SjpStatusCollection;
 use Illuminate\Support\Facades\Auth;
 use App\Damagedpallet;
 use App\PoolPallet;
+use App\DeletedItem;
 use App\Alltransaction;
 use DB;
 
@@ -32,7 +33,7 @@ class DamagedpalletController extends Controller
             ->leftJoin('sjp_status as e', 'a.reference_sjp_status_id', '=', 'e.sjp_status_id')
             ->select('a.*', 'b.name',
                     'c.pool_name','d.transporter_name', 'e.sjps_number')
-           
+
             ->paginate(10000000)
             ->toArray();
         }
@@ -49,8 +50,8 @@ class DamagedpalletController extends Controller
             ->paginate(10000000)
             ->toArray();
         }
-        
-       
+
+
         return $damagedpallet;
         // return response()->json(Sjp::all()->toArray());
     }
@@ -84,10 +85,10 @@ class DamagedpalletController extends Controller
             try{
                 $damagedpallet = Damagedpallet::create([
                     'reporter_user_id' => auth()->user()->id,
-                    'pool_pallet_id' => auth()->user()->reference_pool_pallet_id, 
-                    'transporter_id' => auth()->user()->reference_transporter_id, 
-                    'tbr_pallet' => $request->tbr_pallet, 
-                    'note' => $request->note, 
+                    'pool_pallet_id' => auth()->user()->reference_pool_pallet_id,
+                    'transporter_id' => auth()->user()->reference_transporter_id,
+                    'tbr_pallet' => $request->tbr_pallet,
+                    'note' => $request->note,
                 ]);
                     if($pool_pallet_id!=null){
                         $InventoryPool = PoolPallet::find($pool_pallet_id);
@@ -141,7 +142,7 @@ class DamagedpalletController extends Controller
             }catch (\Exception $e) {
                 DB::rollback();
                 return response()->json([
-                    'status' => 'error', 
+                    'status' => 'error',
                     'data' => $e->getMessage(),
                     'message' => 'Error Damaged Pallet Pallet Record'], 422);
                 }
@@ -150,8 +151,48 @@ class DamagedpalletController extends Controller
 
     public function destroy($id)
     {
-        $damagedpallet = Damagedpallet::find($id); //QUERY DATA BERDASARKAN ID
-        $damagedpallet->delete(); //KEMUDIAN HAPUS DATA TERSEBUT
-        return response()->json(['status' => 'success']);
+        $damagedpallet = Damagedpallet::find($id);
+        $reporter_user = User::find($damagedpallet->reporter_user_id);
+        $pool_pallet = PoolPallet::find($damagedpallet->pool_pallet_id);
+        $transporter = Transporter::find($damagedpallet->transporter_id);
+        DB::beginTransaction();
+        try{
+
+            if($transporter == null){
+                $deleted_item = DeletedItem::create([
+                    'dp_number' => $damagedpallet->bmp_number,
+                    // 'sjps_number' => $sjp_status->sjps_number,
+                    'pool_pallet' => $pool_pallet->pool_name,
+                    // 'transporter' => $transporter->transporter_name,
+                    'reporter/sender' => $reporter_user->name,
+                    // 'receiver/approver' => $approver_user->name,
+                    'tbr_pallet' => $damagedpallet->tbr_pallet,
+                    'created_by' => auth()->user()->name,
+                    'note' => $damagedpallet->note,
+                ]);
+            }else{
+                $deleted_item = DeletedItem::create([
+                    'dp_number' => $damagedpallet->bmp_number,
+                    // 'pool_pallet' => $pool_pallet->pool_name,
+                    'transporter' => $transporter->transporter_name,
+                    'reporter/sender' => $reporter_user->name,
+                    // 'receiver/approver' => $approver_user->name,
+                    'tbr_pallet' => $damagedpallet->tbr_pallet,
+                    'created_by' => auth()->user()->name,
+                    'note' => $damagedpallet->note,
+                ]);
+            }
+            $damagedpallet->delete(); //KEMUDIAN HAPUS DATA TERSEBUT
+
+        DB::commit();
+        return response()->json(['status' => 'success'], 200);
+
+        }catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => 'error',
+                'data' => $e->getMessage(),
+                'message' => 'Error Delete Damaged Pallet Record'], 422);
+        }
     }
 }

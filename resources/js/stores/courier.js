@@ -1,12 +1,19 @@
 import $axios from '../api.js'
 
 const state = () => ({
+    loading: false,
     couriers: [],
     page: 1,
     id: ''
 })
 
 const mutations = {
+    isLoading (state) {
+        state.loading = true
+      },
+      doneLoading (state) {
+        state.loading = false
+      },
     ASSIGN_DATA(state, payload) {
         state.couriers = payload
     },
@@ -20,16 +27,20 @@ const mutations = {
 
 const actions = {
     getCouriers({ commit, state }, payload) {
+        commit('isLoading')
         let search = typeof payload != 'undefined' ? payload:''
         return new Promise((resolve, reject) => {
             $axios.get(`/couriers?page=${state.page}&q=${search}`)
             .then((response) => {
                 commit('ASSIGN_DATA', response.data)
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
     submitCourier({ dispatch, commit }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.post(`/couriers`, payload, {
                 headers: {
@@ -45,18 +56,24 @@ const actions = {
                 if (error.response.status == 422) {
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
                 }
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
     editCourier({ commit }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.get(`/couriers/${payload}/edit`)
             .then((response) => {
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
     updateCourier({ state }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.post(`/couriers/${state.id}`, payload, {
                 headers: {
@@ -65,14 +82,19 @@ const actions = {
             })
             .then((response) => {
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     } ,
     removeCourier({ dispatch }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.delete(`/couriers/${payload}`)
             .then((response) => {
                 dispatch('getCouriers').then(() => resolve(response.data))
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     }

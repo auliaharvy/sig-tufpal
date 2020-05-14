@@ -3,7 +3,7 @@ import $axios from '../api.js'
 const state = () => ({
     loading: false,
     newpallets: [], //STATE UNTUK MENAMPUNG DATA CUSTOMERS
-    
+
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
     newpallet: {
         adder_user_id: '',
@@ -12,7 +12,7 @@ const state = () => ({
         good_pallet: '',
         vendor: '',
         note: '',
-      
+
     },
     page: 1
 })
@@ -51,6 +51,7 @@ const mutations = {
 
 const actions = {
     getNewpallet({ commit, state }, payload) {
+        commit('isLoading')
         let search = typeof payload != 'undefined' ? payload:''
         return new Promise((resolve, reject) => {
             //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
@@ -58,6 +59,8 @@ const actions = {
             .then((response) => {
                 commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
@@ -84,32 +87,41 @@ const actions = {
         })
       },
       editNewpallet({ commit }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.get(`/newpallet/${payload}/edit`) //KIRIM PERMINTAAN KE SERVER UNTUK MENGAMBIL SINGLE DATA CUSTOMER BERDASARKAN PAYLOAD (ID)
             .then((response) => {
                 commit('ASSIGN_FORM', response.data.data) //ASSIGN DATA TERSEBUT KE DALAM STATE CUSTOMER
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
     updateNewpallet({ state, commit }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.put(`/newpallet/${payload}`, state.pool) //KIRIM PERMINTAAN KE SERVER UNTUK MENGUPDATE DATA BERDASARKAN PAYLOAD (ID) DAN DATA YANG AKAN DI UPDATE DI AMBIL DARI STATE CUSTOMER
             .then((response) => {
                 commit('CLEAR_FORM') //BERSIHKAN FORM
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
     removeNewpallet({ dispatch }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.delete(`/newpallet/${payload}`) //KIRIM REQUEST KE SERVER BERDASARKAN PAYLOAD (ID)
             .then((response) => {
                 dispatch('getNewpallet').then(() => resolve()) //AMBIL DATA CUSTOMER TERBARU
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     }
-  
+
 }
 
 export default {

@@ -3,7 +3,7 @@ import $axios from '../api.js'
 const state = () => ({
     loading: false,
     damagedpallets: [], //STATE UNTUK MENAMPUNG DATA CUSTOMERS
-    
+
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
     damagedpallet: {
         reporter_user_id: '',
@@ -11,7 +11,7 @@ const state = () => ({
         dp_number   : '',
         tbr_pallet: '',
         note: '',
-      
+
     },
     page: 1
 })
@@ -49,6 +49,7 @@ const mutations = {
 
 const actions = {
     getDamagedpallet({ commit, state }, payload) {
+        commit('isLoading')
         let search = typeof payload != 'undefined' ? payload:''
         return new Promise((resolve, reject) => {
             //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
@@ -56,6 +57,8 @@ const actions = {
             .then((response) => {
                 commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
@@ -67,7 +70,7 @@ const actions = {
             .then((response) => {
                 //APABILA BERHASIL MAKA LOAD DATA CUSTOMER UNTUK MENGAMBIL DATA TERBARU
                 dispatch('getDamagedpallet').then(() => {
-                    resolve(response.data) 
+                    resolve(response.data)
                 })
             })
             .catch((error) => {
@@ -82,32 +85,41 @@ const actions = {
         })
       },
       editDamagedpallet({ commit }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.get(`/damagedpallet/${payload}/edit`) //KIRIM PERMINTAAN KE SERVER UNTUK MENGAMBIL SINGLE DATA CUSTOMER BERDASARKAN PAYLOAD (ID)
             .then((response) => {
                 commit('ASSIGN_FORM', response.data.data) //ASSIGN DATA TERSEBUT KE DALAM STATE CUSTOMER
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
     updateDamagedpallet({ state, commit }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.put(`/damagedpallet/${payload}`, state.pool) //KIRIM PERMINTAAN KE SERVER UNTUK MENGUPDATE DATA BERDASARKAN PAYLOAD (ID) DAN DATA YANG AKAN DI UPDATE DI AMBIL DARI STATE CUSTOMER
             .then((response) => {
                 commit('CLEAR_FORM') //BERSIHKAN FORM
                 resolve(response.data)
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     },
     removeDamagedpallet({ dispatch }, payload) {
+        commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.delete(`/damagedpallet/${payload}`) //KIRIM REQUEST KE SERVER BERDASARKAN PAYLOAD (ID)
             .then((response) => {
                 dispatch('getDamagedpallet').then(() => resolve()) //AMBIL DATA CUSTOMER TERBARU
+            }).finally(() => {
+                commit('doneLoading')
             })
         })
     }
-  
+
 }
 
 export default {

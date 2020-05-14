@@ -19,7 +19,7 @@ class PoolController extends Controller
     {
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
         $role = Auth::user()->role;
-        if($pool_pallet=='pooldli' && $role<7){
+        if($pool_pallet=='pooldli' && $role<6){
         $pool = DB::table('pool_pallet as a')
             ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
             ->select('a.*', 'b.organization_name')
