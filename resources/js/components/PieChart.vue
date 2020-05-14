@@ -1,5 +1,6 @@
 <script>
     import { Doughnut } from 'vue-chartjs'
+    import ChartDataLabels from 'chartjs-plugin-datalabels';
 
     export default {
         extends: Doughnut,
@@ -39,8 +40,17 @@
                             'rgba(153, 102, 255, 1)',
                             'rgba(255, 159, 64, 1)'
                         ],
-                        borderWidth: 1
-                    }]
+                        borderWidth: 1,
+                    }],
+                    options: {
+                        plugins: {
+                        datalabels: {
+                            display: true,
+                            align: 'center',
+                            anchor: 'center'
+                        }
+                    },
+                    }
                 }, this.options)
             }
         }

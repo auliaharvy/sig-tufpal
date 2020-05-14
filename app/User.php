@@ -41,15 +41,15 @@ class User extends Authenticatable
         return ucfirst($value);
     }
 
-    public function outlet()
-    {
-        return $this->belongsTo(Outlet::class);
-    }
+    // public function outlet()
+    // {
+    //     return $this->belongsTo(Outlet::class);
+    // }
 
-    public function scopeCourier($query)
-    {
-        return $query->where('role', 3);
-    }
+    // public function scopeCourier($query)
+    // {
+    //     return $query->where('role', 3);
+    // }
 
     public function setPasswordAttribute($value)
     {

@@ -101,12 +101,23 @@ class SjpController extends Controller
                 $checked_pool_pallet_id = DB::table('pool_pallet')
                     ->where('pool_pallet_id', '=', $request->destination_pool_pallet_id)
                     ->first();
-                if($checked_pool_pallet_id == null){
+                if($checked_pool_pallet_id == null && $pool_pallet == 'pooldli'){
                     $new_pool_pallet = PoolPallet::create([
                         'pool_pallet_id' => $request->destination_pool_pallet_id,
                         'organization_id' => 1,
                         'code' => $request->destination_pool_pallet_id,
                         'type' => 'WAREHOUSE',
+                        'pool_name' => $request->pool_name,
+                        'pool_address' => $request->pool_name,
+                        'pallet_quota' => 100,
+                        'created_by' => 'Autocreate in SJP No.Dispatch:'.$request->no_do,
+                    ]);
+                }elseif($checked_pool_pallet_id == null && $pool_pallet != 'pooldli'){
+                    $new_pool_pallet = PoolPallet::create([
+                        'pool_pallet_id' => $request->destination_pool_pallet_id,
+                        'organization_id' => 1,
+                        'code' => $request->destination_pool_pallet_id,
+                        'type' => 'SHOP',
                         'pool_name' => $request->pool_name,
                         'pool_address' => $request->pool_name,
                         'pallet_quota' => 100,

@@ -17,7 +17,7 @@ class TransporterController extends Controller
         $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
-        if($transporter==null && $role<6 ){
+        if($transporter==null && $role < 5){
         $transporter = DB::table('transporter as a')
             ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
             ->select('a.*', 'b.organization_name')
@@ -49,26 +49,26 @@ class TransporterController extends Controller
             'phone_number' => 'required|string',
             'pallet_quota' => 'required|integer',
         ]);
-        
+
         $created_by = Auth::user()->name;
         $transporter = Transporter::create([
-            'organization_id' => $request->organization_id,  
-            'transporter_name' => $request->transporter_name, 
-            'transporter_address' => $request->transporter_address, 
-            'phone_number' => $request->phone_number, 
-            'transporter_email' => $request->transporter_email, 
+            'organization_id' => $request->organization_id,
+            'transporter_name' => $request->transporter_name,
+            'transporter_address' => $request->transporter_address,
+            'phone_number' => $request->phone_number,
+            'transporter_email' => $request->transporter_email,
             'pallet_quota' => $request->pallet_quota,
-            // 'good_pallet' => $request->good_pallet, 
-            // 'tbr_pallet' => $request->tbr_pallet, 
-            // 'ber_pallet' => $request->ber_pallet, 
-            // 'missing_pallet' => $request->missing_pallet, 
+            // 'good_pallet' => $request->good_pallet,
+            // 'tbr_pallet' => $request->tbr_pallet,
+            // 'ber_pallet' => $request->ber_pallet,
+            // 'missing_pallet' => $request->missing_pallet,
             'created_by' => $created_by
         ]);
 
         $data = [
             'data' => $transporter,
             'status' => (bool) $transporter,
-            'message' => $transporter ? 'Transporter Created!' : 'Error Creating Transporter' 
+            'message' => $transporter ? 'Transporter Created!' : 'Error Creating Transporter'
         ];
 
         return response()->json($data);

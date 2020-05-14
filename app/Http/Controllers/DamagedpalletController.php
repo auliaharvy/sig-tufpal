@@ -25,7 +25,7 @@ class DamagedpalletController extends Controller
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
         $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
-        if($pool_pallet==1 && $role<7){
+        if($pool_pallet=='pooldli' && $role<5){
             $damagedpallet = DB::table('damaged_pallet as a')
             ->join('users as b', 'a.reporter_user_id', '=', 'b.id')
             ->leftJoin('pool_pallet as c', 'a.pool_pallet_id', '=', 'c.pool_pallet_id')
@@ -33,7 +33,6 @@ class DamagedpalletController extends Controller
             ->leftJoin('sjp_status as e', 'a.reference_sjp_status_id', '=', 'e.sjp_status_id')
             ->select('a.*', 'b.name',
                     'c.pool_name','d.transporter_name', 'e.sjps_number')
-
             ->paginate(10000000)
             ->toArray();
         }
@@ -50,8 +49,6 @@ class DamagedpalletController extends Controller
             ->paginate(10000000)
             ->toArray();
         }
-
-
         return $damagedpallet;
         // return response()->json(Sjp::all()->toArray());
     }

@@ -26,7 +26,7 @@ class BermissingpalletController extends Controller
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
         $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
-        if($pool_pallet=='pooldli' && $role<6){
+        if($pool_pallet=='pooldli' && $role<5){
             $bermissing = DB::table('ber_missing_pallet as a')
             ->join('users as b', 'a.reporter_user_id', '=', 'b.id')
             ->join('users as c', 'a.approver_user_id', '=', 'c.id')

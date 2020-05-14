@@ -33,7 +33,7 @@ public function index()
         $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
         $status = 'OPEN';
-        if($pool_pallet==1 && $role<6){
+        if($pool_pallet=='pooldli' && $role<5){
         $sjpstatus = DB::table('sjp_status as a')
             ->join('users as b', 'a.checker_send_user_id', '=', 'b.id')
             ->join('users as c', 'a.checker_receive_user_id', '=', 'c.id')

@@ -23,7 +23,7 @@ class PalletTransferController extends Controller
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
         $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
-        if($pool_pallet==1 && $role<7){
+        if($pool_pallet=='pooldli' && $role<5){
         $pallettransfer = DB::table('pallet_transfer as a')
             ->join('pool_pallet as b', 'a.departure_pool_pallet_id', '=', 'b.pool_pallet_id')
             ->join('pool_pallet as c', 'a.destination_pool_pallet_id', '=', 'c.pool_pallet_id')

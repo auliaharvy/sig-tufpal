@@ -14,12 +14,27 @@ class RepairedpalletController extends Controller
 {
     public function index()
     {
+        $pool_pallet = Auth::user()->reference_pool_pallet_id;
+        $transporter = Auth::user()->reference_transporter_id;
+        $role = Auth::user()->role;
+        if($pool_pallet=='pooldli' && $role<5){
             $repairedpallet = DB::table('repaired_pallet as a')
             ->join('pool_pallet as b', 'a.pool_pallet_id', '=', 'b.pool_pallet_id')
             ->join('users as c', 'a.reporter_user_id', '=', 'c.id')
             ->select('a.*', 'b.pool_name', 'c.name')
             ->paginate(10000000)
             ->toArray();
+        }
+        else{
+            $repairedpallet = DB::table('repaired_pallet as a')
+            ->join('pool_pallet as b', 'a.pool_pallet_id', '=', 'b.pool_pallet_id')
+            ->join('users as c', 'a.reporter_user_id', '=', 'c.id')
+            ->select('a.*', 'b.pool_name', 'c.name')
+            ->where('a.pool_pallet_id',$pool_pallet)
+            ->orWhere('a.transporter_id', $transporter)
+            ->paginate(10000000)
+            ->toArray();
+        }
 		 return $repairedpallet;
         // return response()->json(Sjp::all()->toArray());
     }
@@ -46,7 +61,7 @@ class RepairedpalletController extends Controller
         if($pallet_qty>$qty_pool)
         {
             return response()->json([
-                'status' => 'error', 
+                'status' => 'error',
                 'message' => 'the number of pallets exceeds the existing pallets in '. $poolname], 422);
         }
         else {
@@ -54,16 +69,16 @@ class RepairedpalletController extends Controller
             try{
                 $repairedpallet = Repairedpallet::create([
                     'reporter_user_id' => auth()->user()->id,
-                    'pool_pallet_id' => $pool_pallet_id, 
-                    'good_pallet' => $request->good_pallet, 
-                    'note' => $request->note, 
+                    'pool_pallet_id' => $pool_pallet_id,
+                    'good_pallet' => $request->good_pallet,
+                    'note' => $request->note,
                 ]);
-                
+
                 $InventoryPool = PoolPallet::find($pool_pallet_id);
                 $InventoryPool->tbr_pallet = (($InventoryPool->tbr_pallet)-($request->good_pallet));
                 $InventoryPool->good_pallet = (($InventoryPool->good_pallet)+($request->good_pallet));
                 $InventoryPool->save();
-           
+
                 // Membuat log All Transaction
                 $reporter = Auth::user()->name;
                 $poolpallet = PoolPallet::find($pool_pallet_id);
@@ -79,16 +94,16 @@ class RepairedpalletController extends Controller
 
                 DB::commit();
                 return response()->json(['status' => 'success'], 200);
-    
+
             }catch (\Exception $e) {
                 DB::rollback();
                 return response()->json([
-                    'status' => 'error', 
+                    'status' => 'error',
                     'data' => $e->getMessage(),
                     'message' => 'Error Repair Pallet Record'], 422);
             }
         }
-        
+
     }
 
     public function destroy($id)

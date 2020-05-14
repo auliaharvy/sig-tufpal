@@ -140,6 +140,8 @@
     import BarChart from '../components/BarChart.vue'
     import PieChart from '../components/PieChart.vue'
     import { mapActions, mapState } from 'vuex'
+    import ChartDataLabels from 'chartjs-plugin-datalabels';
+
     export default {
         created() {
             this.getChartDataReceive({
@@ -173,6 +175,13 @@
         data() {
             return {
                 chartOptions: {
+                     plugins: {
+                        datalabels: {
+                            display: true,
+                            align: 'center',
+                            anchor: 'center'
+                        }
+                    },
                     responsive: true,
                     maintainAspectRatio: false
                 },

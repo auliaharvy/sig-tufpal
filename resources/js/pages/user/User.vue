@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-heading">
-                <router-link v-if="$can('create users')" :to="{ name: 'user.add' }"><v-btn>Add User</v-btn></router-link>
+                <router-link  :to="{ name: 'user.add' }"><v-btn>Add User</v-btn></router-link>
             </div>
             <div class="panel-body">
                 <v-card>

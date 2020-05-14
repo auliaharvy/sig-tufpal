@@ -45,7 +45,7 @@ class UserController extends Controller
             'name' => 'required|string|max:150',
             'email' => 'required|unique:users,email',
             'password' => 'required|min:6|string',
-            'role' => 'required',
+            // 'role' => 'required',
             // 'outlet_id' => 'required|exists:outlets,id',
             // 'photo' => 'required|image'
         ]);
@@ -62,7 +62,7 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => $request->password,
-                'role' => $request->role,
+                // 'role' => $request->role,
                 // 'role' => $request->role,
                 // 'photo' => $name,
                 // 'outlet_id' => $request->outlet_id,

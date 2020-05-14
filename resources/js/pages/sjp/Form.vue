@@ -1,6 +1,6 @@
 <template>
     <div >
-        <v-layout row wrap class="px-5">
+        <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id == 'pooldli'">
             <v-flex class="px-5" xs9 md10 lg11>
                 <div class="form-group" :class="{ 'has-error': errors.vehicle_number }">
                     <label for="">Vehicle Number</label>
@@ -11,6 +11,15 @@
             <v-flex class="py-6" xs3 md2 lg1>
                 <div>
                     <v-btn class="success" :disabled="loading" :loading="loading" @click="getdispatchdata()">Load</v-btn>
+                </div>
+            </v-flex>
+        </v-layout>
+        <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id != 'pooldli'">
+            <v-flex class="px-5" xs12 md12 lg12>
+                <div class="form-group" :class="{ 'has-error': errors.vehicle_number }">
+                    <label for="">Vehicle Number</label>
+                    <input type="text" class="form-control" v-model="sjp.vehicle_number">
+                    <p class="text-danger" v-if="errors.vehicle_number">{{ errors.vehicle_number[0] }}</p>
                 </div>
             </v-flex>
         </v-layout>
@@ -27,7 +36,7 @@
             </v-flex>
         </v-layout> -->
 
-        <v-layout row wrap class="px-5">
+        <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id == 'pooldli'">
             <v-flex class="px-5" xs6 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.no_do }">
                     <label for="">No Dispatch</label>
@@ -43,7 +52,7 @@
                 </div>
             </v-flex>
         </v-layout>
-        <!-- <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id != 'pooldli'">
+        <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id != 'pooldli'">
             <v-flex class="px-5" xs6 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.no_do }">
                     <label for="">No Dispatch</label>
@@ -58,9 +67,9 @@
                     <p class="text-danger" v-if="errors.product_name">{{ errors.product_name[0] }}</p>
                 </div>
             </v-flex>
-        </v-layout> -->
+        </v-layout>
 
-        <v-layout row wrap class="px-5">
+        <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id == 'pooldli'">
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.destination_pool_pallet_id }">
                     <label for="">Destination Pool Code</label>
@@ -76,7 +85,7 @@
                 </div>
             </v-flex>
         </v-layout>
-        <!-- <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id != 'pooldli'">
+        <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id != 'pooldli'">
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.destination_pool_pallet_id }">
                     <label for="">Destination Pool Code</label>
@@ -91,9 +100,9 @@
                     <p class="text-danger" v-if="errors.dest_pool">{{ errors.dest_pool[0] }}</p>
                 </div>
             </v-flex>
-        </v-layout> -->
+        </v-layout>
 
-       <v-layout row wrap class="px-5">
+       <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id == 'pooldli'">
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.transporter_id }">
                     <label for="">Transporter Code</label>
@@ -109,7 +118,7 @@
                 </div>
             </v-flex>
        </v-layout>
-       <!-- <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id != 'pooldli'">
+       <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id != 'pooldli'">
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.transporter_id }">
                     <label for="">Transporter Code</label>
@@ -124,9 +133,9 @@
                     <p class="text-danger" v-if="errors.transporter_name">{{ errors.transporter_name[0] }}</p>
                 </div>
             </v-flex>
-       </v-layout> -->
+       </v-layout>
 
-        <v-layout row wrap class="px-5">
+        <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id == 'pooldli'">
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.driver_id }">
                     <label for="">Driver ID</label>
@@ -142,7 +151,7 @@
                 </div>
             </v-flex>
         </v-layout>
-        <!-- <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id != 'pooldli'">
+        <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id != 'pooldli'">
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.driver_id }">
                     <label for="">Driver ID</label>
@@ -157,9 +166,9 @@
                     <p class="text-danger" v-if="errors.driver_name">{{ errors.driver_name[0] }}</p>
                 </div>
             </v-flex>
-        </v-layout> -->
+        </v-layout>
 
-        <v-layout row wrap class="px-5">
+        <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id == 'pooldli'">
             <v-flex class="px-5" xs6 md3 lg3>
                 <div class="form-group" :class="{ 'has-error': errors.tonnage }">
                     <label for="">Tonnage</label>
@@ -189,7 +198,7 @@
                 </div>
             </v-flex>
         </v-layout>
-        <!-- <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id != 'pooldli'">
+        <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id != 'pooldli'">
             <v-flex class="px-5" xs6 md3 lg3>
                 <div class="form-group" :class="{ 'has-error': errors.tonnage }">
                     <label for="">Tonnage</label>
@@ -218,7 +227,7 @@
                     <p class="text-danger" v-if="errors.pallet_quantity">{{ errors.pallet_quantity[0] }}</p>
                 </div>
             </v-flex>
-        </v-layout> -->
+        </v-layout>
 
         <v-layout row wrap class="px-5">
             <v-flex class="px-5" xs12 md6 lg6>

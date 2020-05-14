@@ -1,15 +1,18 @@
 <template>
     <div class="col-md-12">
+        <loading :active.sync="loading"
+        :can-cancel="false"
+       ></loading>
         <div class="panel">
             <div class="panel-heading">
                 <h3 class="panel-title">Add New Users</h3>
             </div>
             <div class="panel-body">
                 <courier-form ref="formCourier"></courier-form>
-                <div class="form-group">
-                    <button class="btn btn-primary btn-sm btn-flat" @click.prevent="submit">
-                        <i class="fa fa-save"></i> Add New
-                    </button>
+                <div class="form-group px-7">
+                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
+                        {{ loading ? 'Loading...':'Submit' }}
+                    </v-btn>
                 </div>
             </div>
         </div>
@@ -18,6 +21,9 @@
 <script>
     import { mapActions, mapState, mapMutations } from 'vuex'
     import FormCourier from './Form.vue'
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
+
     export default {
         name: 'AddCourier',
         methods: {
@@ -25,8 +31,14 @@
                 this.$refs.formCourier.submit()
             }
         },
+        computed: {
+        ...mapState('courier', {
+            loading: state => state.loading
+        }),
+        },
         components: {
-            'courier-form': FormCourier
+            'courier-form': FormCourier,
+            Loading
         }
     }
 </script>

@@ -6,16 +6,29 @@ use Illuminate\Http\Request;
 use App\Http\Resources\SjpStatusCollection;
 use Illuminate\Support\Facades\Auth;
 use App\Alltransaction;
+use App\PoolPallet;
+use App\Transporter;
 use DB;
 
 class AlltransactionController extends Controller
 {
     public function index()
     {
-        $pool_pallet = Auth::user()->reference_pool_pallet_id;
-        $transporter = Auth::user()->reference_transporter_id;
+
+        $pool_pallet_id = Auth::user()->reference_pool_pallet_id;
+        $transporter_id = Auth::user()->reference_transporter_id;
+        if($pool_pallet_id != null && $transporter_id == null){
+            $pool_pallet = PoolPallet::find($pool_pallet_id);
+            $pool_name = $pool_pallet->pool_name;
+        }elseif($pool_pallet_id == null && $transporter_id != null){
+            $transporter = Transporter::find($transporter_id);
+            $transporter_name = $transporter->transporter_name;
+        }
+
+
+
         $role = Auth::user()->role;
-        if($pool_pallet==1){
+        if($pool_name == 'Pool Pallet DLI'){
             $alltransaction = DB::table('all_transaction as a')
             ->orderBy('created_at', 'DESC')
             ->leftJoin('surat_jalan_pallet as b', 'a.reference_sjp_id', '=', 'b.sjp_id')
@@ -42,6 +55,10 @@ class AlltransactionController extends Controller
             ->leftJoin('repaired_pallet as h', 'a.reference_repaired_pallet_id', '=', 'h.repaired_pallet_id')
             ->select('a.*', 'b.sjp_number', 'c.sjps_number', 'd.tp_number',
                     'e.bmp_number', 'f.np_number', 'g.dp_number', 'h.rp_number')
+            ->where('a.departure_pool', $pool_name)
+            ->orWhere('a.destination_pool', $pool_name)
+            ->orWhere('a.pool_pallet', $pool_name)
+            ->orWhere('a.transporter', $transporter_name)
             ->paginate(10000000)
             ->toArray();
         }
