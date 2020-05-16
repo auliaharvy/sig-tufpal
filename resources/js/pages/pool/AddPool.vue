@@ -12,7 +12,7 @@
             <div class="panel-body">
               	<!-- LOAD VIEW DARI FORM.VUE -->
                 <pool-form></pool-form>
-                <div class="form-group">
+                <div class="form-group px-7">
                     <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
                         {{ loading ? 'Loading...':'Add' }}
                     </v-btn>

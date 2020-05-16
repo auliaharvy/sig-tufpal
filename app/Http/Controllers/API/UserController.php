@@ -62,6 +62,10 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => $request->password,
+                'reference_pool_pallet_id' => $request->reference_pool_pallet_id,
+                'reference_transporter_id' => $request->reference_transporter_id,
+                'reference_driver_id' => $request->reference_driver_id,
+                // 'role' => $request->role,
                 // 'role' => $request->role,
                 // 'role' => $request->role,
                 // 'photo' => $name,
@@ -85,32 +89,44 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required|string|max:150',
-            'email' => 'required|email',
-            'password' => 'nullable|min:6|string',
-            'outlet_id' => 'required|exists:outlets,id',
-            'photo' => 'nullable|image'
-        ]);
+        // $this->validate($request, [
+        //     'name' => 'required|string|max:150',
+        //     'email' => 'required|email',
+        //     'password' => 'nullable|min:6|string',
+        //     'outlet_id' => 'required|exists:outlets,id',
+        //     'photo' => 'nullable|image'
+        // ]);
 
         try {
             $user = User::find($id);
-            $password = $request->password != '' ? bcrypt($request->password):$user->password;
-            $filename = $user->photo;
+            // $password = $request->password != '' ? bcrypt($request->password):$user->password;
+            // $filename = $user->photo;
 
-            if ($request->hasFile('photo')) {
-                $file = $request->file('photo');
-                File::delete(storage_path('app/public/couriers/' . $filename));
-                $filename = $request->email . '-' . time() . '.' . $file->getClientOriginalExtension();
-                $file->storeAs('public/couriers', $filename);
+            // if ($request->hasFile('photo')) {
+            //     $file = $request->file('photo');
+            //     File::delete(storage_path('app/public/couriers/' . $filename));
+            //     $filename = $request->email . '-' . time() . '.' . $file->getClientOriginalExtension();
+            //     $file->storeAs('public/couriers', $filename);
+            // }
+            if($request->password != null){
+                $user->update([
+                    'name' => $request->name,
+                    'password' => $request->password,
+                    // 'reference_pool_pallet_id' => $request->reference_pool_pallet_id,
+                    // 'reference_transporter_id' => $request->reference_transporter_id,
+                    // 'reference_driver_id' => $request->reference_driver_id,
+                    // 'role' => $request->role,
+                ]);
+            }else{
+                $user->update([
+                    'name' => $request->name,
+                    // 'password' => $request->password,
+                    // 'reference_pool_pallet_id' => $request->reference_pool_pallet_id,
+                    // 'reference_transporter_id' => $request->reference_transporter_id,
+                    // 'reference_driver_id' => $request->reference_driver_id,
+                    // 'role' => $request->role,
+                ]);
             }
-
-            $user->update([
-                'name' => $request->name,
-                'password' => $password,
-                'photo' => $filename,
-                'outlet_id' => $request->outlet_id
-            ]);
             return response()->json(['status' => 'success'], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'data' => $e->getMessage()], 200);

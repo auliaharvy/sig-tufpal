@@ -12,7 +12,7 @@
             <div class="panel-body">
               	<!-- LOAD VIEW DARI FORM.VUE -->
                 <transporter-form></transporter-form>
-                <div class="form-group">
+                <div class="form-group px-7">
                     <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
                         {{ loading ? 'Loading...':'Add' }}
                     </v-btn>
@@ -46,9 +46,9 @@
             }
         },
         computed: {
-        ...mapState('transporter', {
-            loading: state => state.loading //LOAD DATA CUSTOMER DARI STATE CUSTOMER
-        }),
+            ...mapState('transporter', {
+                loading: state => state.loading //LOAD DATA CUSTOMER DARI STATE CUSTOMER
+            }),
         },
         components: {
             'transporter-form': FormTransporter,

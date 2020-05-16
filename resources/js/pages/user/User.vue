@@ -24,6 +24,12 @@
                     :search="search"
                     dense
                     >
+                        <template v-if="$can('update user')" class="pa-5" v-slot:item.edit="{ item }">
+                            <router-link :to="{ name: 'user.edit', params: {id: item.id} }"><v-btn color="success" small>Edit</v-btn></router-link>
+                        </template>
+                        <template v-if="$can('delete user')" v-slot:item.delete="{ item }">
+                                <v-btn color="error" @click="deleteCourier(item.id)" small>Delete</v-btn>
+                        </template>
                     </v-data-table>
                 </v-card>
             </div>
@@ -46,7 +52,8 @@ export default {
                 { value: 'email', text: 'Username' },
                 { value: 'pool_name', text: 'Pool Name' },
                 { value: 'transporter_name', text: 'Transporter Name' },
-                // { value: 'actions', text: 'Action'}
+                { value: 'edit', text: 'Edit'},
+                { value: 'delete', text: 'Delete'}
             ],
             search: ''
         }
@@ -79,13 +86,13 @@ export default {
         ...mapActions('courier', ['getCouriers', 'removeCourier']),
         deleteCourier(id) {
             this.$swal({
-                title: 'Kamu Yakin?',
-                text: "Tindakan ini akan menghapus secara permanent!",
+                title: 'Are you sure?',
+                text: "This will delete record Permanently!",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Iya, Lanjutkan!'
+                confirmButtonText: 'Yes!'
             }).then((result) => {
                 if (result.value) {
                     this.removeCourier(id)

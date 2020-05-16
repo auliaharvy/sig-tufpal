@@ -41,19 +41,39 @@
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group">
                     <label>Pool Pallet</label>
-                    <select class='form-control' v-model='bermissing.pool_pallet_id'>
+                    <v-autocomplete
+                    :items="pools.data"
+                    dense
+                    solo
+                    v-model="bermissing.pool_pallet_id"
+                    item-text="pool_name"
+                    item-value="pool_pallet_id"
+                    clearable
+                    >
+                    </v-autocomplete>
+                    <!-- <select class='form-control' v-model='bermissing.pool_pallet_id'>
                         <option value='0' >Select Pool Pallet</option>
                         <option v-for='data in pools.data' v-bind:key='data.pool_pallet_id' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
-                    </select>
+                    </select> -->
                 </div>
             </v-flex>
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group">
                     <label>Transporter</label>
-                    <select class='form-control' v-model='bermissing.transporter_id'>
+                    <v-autocomplete
+                    :items="transporters.data"
+                    dense
+                    solo
+                    v-model="bermissing.transporter_id"
+                    item-text="transporter_name"
+                    item-value="transporter_id"
+                    clearable
+                    >
+                    </v-autocomplete>
+                    <!-- <select class='form-control' v-model='bermissing.transporter_id'>
                         <option value='0' >Select Transporter</option>
                         <option v-for='data in transporters.data' v-bind:key='data.transporter_id' :value='data.transporter_id'>{{ data.transporter_name }}</option>
-                    </select>
+                    </select> -->
                 </div>
             </v-flex>
         </v-layout>
@@ -108,8 +128,8 @@ export default {
             bermissing: {
                 pool_pallet_id: '',
                 transporter_id: '',
-                ber_pallet: '',
-                missing_pallet: '',
+                ber_pallet: 0,
+                missing_pallet: 0,
                 reporter_prove: '',
                 note: '',
             }
@@ -140,6 +160,7 @@ export default {
             this.bermissing.reporter_prove = event.target.files[0]
         },
         submit() {
+            console.log(this.bermissing.pool_pallet_id)
             let form = new FormData()
             form.append('pool_pallet_id', this.bermissing.pool_pallet_id)
             form.append('transporter_id', this.bermissing.transporter_id)

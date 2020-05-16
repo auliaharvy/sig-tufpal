@@ -9,9 +9,9 @@
             </div>
             <div class="panel-body">
                 <pool-form></pool-form>
-                <div class="form-group">
-                    <v-btn class="success" @click.prevent="submit">
-                        Edit
+                <div class="form-group px-7">
+                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
+                        {{ loading ? 'Loading...':'Edit' }}
                     </v-btn>
                 </div>
             </div>

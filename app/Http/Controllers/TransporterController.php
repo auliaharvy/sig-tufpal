@@ -17,7 +17,7 @@ class TransporterController extends Controller
         $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
-        if($transporter==null && $role < 5){
+        if($pool_pallet=='pooldli' && $role < 5){
         $transporter = DB::table('transporter as a')
             ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
             ->select('a.*', 'b.organization_name')
@@ -40,38 +40,69 @@ class TransporterController extends Controller
         // return response()->json(Sjp::all()->toArray());
     }
 
+    public function gettransporters()
+    {
+        $transporter = Auth::user()->reference_transporter_id;
+        if($transporter==null){
+        $trans = DB::table('transporter as a')
+            ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
+            ->select('a.*', 'b.organization_name')
+            ->paginate(1000)
+            ->toArray();
+        }
+        else{
+            $trans = DB::table('transporter as a')
+            ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
+            ->select('a.*', 'b.organization_name')
+            ->whereNotIn('a.transporter_id',[$transporter])
+            ->paginate(1000)
+            ->toArray();
+        }
+
+        // $pool = new SjpStatusCollection(PoolPallet::paginate(10));
+		 return $trans;
+        // return response()->json(Sjp::all()->toArray());
+    }
+
     public function store(Request $request)
     {
         $this->validate($request, [
             'transporter_name' => 'required|string',
+            'transporter_code' => 'required|string',
             'transporter_address' => 'required|string',
             'transporter_email' => 'required|string',
             'phone_number' => 'required|string',
             'pallet_quota' => 'required|integer',
         ]);
 
-        $created_by = Auth::user()->name;
-        $transporter = Transporter::create([
-            'organization_id' => $request->organization_id,
-            'transporter_name' => $request->transporter_name,
-            'transporter_address' => $request->transporter_address,
-            'phone_number' => $request->phone_number,
-            'transporter_email' => $request->transporter_email,
-            'pallet_quota' => $request->pallet_quota,
-            // 'good_pallet' => $request->good_pallet,
-            // 'tbr_pallet' => $request->tbr_pallet,
-            // 'ber_pallet' => $request->ber_pallet,
-            // 'missing_pallet' => $request->missing_pallet,
-            'created_by' => $created_by
-        ]);
-
-        $data = [
-            'data' => $transporter,
-            'status' => (bool) $transporter,
-            'message' => $transporter ? 'Transporter Created!' : 'Error Creating Transporter'
-        ];
-
-        return response()->json($data);
+        DB::beginTransaction();
+        try{
+            $created_by = Auth::user()->name;
+            $transporter = Transporter::create([
+                'organization_id' => $request->organization_id,
+                'transporter_id' => $request->transporter_code,
+                'transporter_code' => $request->transporter_code,
+                'organization_id' => $request->organization_id,
+                'transporter_name' => $request->transporter_name,
+                'transporter_address' => $request->transporter_address,
+                'phone_number' => $request->phone_number,
+                'transporter_email' => $request->transporter_email,
+                'pallet_quota' => $request->pallet_quota,
+                // 'good_pallet' => $request->good_pallet,
+                // 'tbr_pallet' => $request->tbr_pallet,
+                // 'ber_pallet' => $request->ber_pallet,
+                // 'missing_pallet' => $request->missing_pallet,
+                'created_by' => $created_by
+            ]);
+            DB::commit();
+            return response()->json(['status' => 'success'], 200);
+        }catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => 'error',
+                'data' => $e->getMessage(),
+                'message' => 'Error Create Transporter'], 422);
+        }
     }
 
     public function edit($id)
@@ -89,9 +120,28 @@ class TransporterController extends Controller
             'pallet_quota' => 'required'
         ]);
 
-        $transporter = Transporter::find($id); //QUERY UNTUK MENGAMBIL DATA BERDASARKAN ID
-        $transporter->update($request->all()); //UPDATE DATA BERDASARKAN DATA YANG DITERIMA
-        return response()->json(['status' => 'success']);
+        DB::beginTransaction();
+        try{
+            $created_by = Auth::user()->name;
+            $update = Transporter::find($id);
+            $update->transporter_name = $request->transporter_name;
+            $update->transporter_code = $request->transporter_code;
+            $update->transporter_id = $request->transporter_code;
+            $update->pallet_quota = $request->pallet_quota;
+            $update->transporter_address = $request->transporter_address;
+            $update->transporter_email = $request->transporter_email;
+            $update->phone_number = $request->phone_number;
+            $update->updated_by = $created_by;
+            $update->save();
+            DB::commit();
+            return response()->json(['status' => 'success'], 200);
+        }catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => 'error',
+                'data' => $e->getMessage(),
+                'message' => 'Error Update Transporter Record'], 422);
+        }
     }
 
     public function destroy($id)

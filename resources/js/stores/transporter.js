@@ -6,7 +6,9 @@ const state = () => ({
 
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
     transporter: {
+        organization_id: '',
         transporter_name: '',
+        transporter_code: '',
         transporter_address: '',
         phone_number: '',
         transporter_email: '',
@@ -42,7 +44,9 @@ const mutations = {
     //RESET STATE CUSTOMER
     CLEAR_FORM(state) {
         state.transporter = {
+            organization_id: '',
             transporter_name: '',
+            transporter_code: '',
             transporter_address: '',
             phone_number: '',
             transporter_email: '',
@@ -66,6 +70,17 @@ const actions = {
                 resolve(response.data)
             }).finally(() => {
                 commit('doneLoading')
+            })
+        })
+    },
+    getTransporterForm({ commit, state }, payload) {
+        let search = typeof payload != 'undefined' ? payload:''
+        return new Promise((resolve, reject) => {
+            //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
+            $axios.get(`/transporterform?page=${state.page}&q=${search}`)
+            .then((response) => {
+                commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
+                resolve(response.data)
             })
         })
     },
@@ -106,7 +121,7 @@ const actions = {
     updateTransporters({ state, commit }, payload) {
         commit('isLoading')
         return new Promise((resolve, reject) => {
-            $axios.put(`/transporter/${payload}`, state.pool) //KIRIM PERMINTAAN KE SERVER UNTUK MENGUPDATE DATA BERDASARKAN PAYLOAD (ID) DAN DATA YANG AKAN DI UPDATE DI AMBIL DARI STATE CUSTOMER
+            $axios.put(`/transporter/${payload}`, state.transporter) //KIRIM PERMINTAAN KE SERVER UNTUK MENGUPDATE DATA BERDASARKAN PAYLOAD (ID) DAN DATA YANG AKAN DI UPDATE DI AMBIL DARI STATE CUSTOMER
             .then((response) => {
                 commit('CLEAR_FORM') //BERSIHKAN FORM
                 resolve(response.data)
@@ -115,7 +130,7 @@ const actions = {
             })
         })
     },
-    removeTransporters({ dispatch }, payload) {
+    removeTransporters({ dispatch, commit }, payload) {
         commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.delete(`/transporter/${payload}`) //KIRIM REQUEST KE SERVER BERDASARKAN PAYLOAD (ID)

@@ -10,9 +10,17 @@
             <div class="panel-body">
               	<!-- TABLE UNTUK MENAMPILKAN LIST SJP -->
                 <template>
+                    <v-dialog
+                    v-model="scanner"
+                    max-width="500"
+                    >
+                    <qrcode-stream @decode="onDecode"></qrcode-stream>
+                    </v-dialog>
                     <v-card>
                         <v-card-title>
                             Surat Jalan Pallet Status
+                            <v-spacer></v-spacer>
+                            <v-btn color="success" small @click="isScanning()">Scan QR</v-btn>
                             <v-spacer></v-spacer>
                             <v-text-field
                                 v-model="search"
@@ -73,6 +81,12 @@
                             </router-link>
                         </template>
 
+                        <template v-slot:item.view="{ item }">
+                            <router-link :to="{ name: 'sjpstatuss.view', params: {id: item.sjp_status_id} }" >
+                                <v-btn color="success" small>View</v-btn>
+                            </router-link>
+                        </template>
+
                         <template v-if="$can('delete sjps')" v-slot:item.delete="{ item }">
                                 <v-btn color="error" @click="deleteSjpStatus(item.sjp_status_id)" small>Delete</v-btn>
                         </template>
@@ -97,6 +111,7 @@ export default {
     },
     data() {
         return {
+            scanner: false,
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
             headers: [
                 // { value: 'dept_pool', text: 'Departure' },
@@ -116,6 +131,7 @@ export default {
                 // { value: 'good_cement', text: 'Good Cement' },
                 // { value: 'bad_cement', text: 'Bad Cement' },
                 { value: 'note', text: 'Note' },
+                { value: 'view', text: 'View' },
                 // { value: 'driver_approve', text: 'Note' },
                 // { value: 'qrcode', text: 'QR Code' },
                 // { value: 'created_at', text: 'Send at' },
@@ -159,6 +175,14 @@ export default {
         }
     },
     methods: {
+        isScanning(){
+            this.scanner = true
+        },
+        onDecode (decodedString) {
+          console.log(decodedString)
+          this.search = decodedString
+          this.scanner = false
+        },
         ...mapActions('sjpstatus', ['getSjpStatuss', 'removeSjpStatus']),
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         deleteSjpStatus(id) {

@@ -21,20 +21,18 @@
                     <input type="text" class="form-control" v-model="sjp.vehicle_number">
                     <p class="text-danger" v-if="errors.vehicle_number">{{ errors.vehicle_number[0] }}</p>
                 </div>
+                <v-autocomplete
+                    :items="vehicles.data"
+                    dense
+                    solo
+                    v-model="sjp.vehicle_number"
+                    item-text="vehicle_number"
+                    item-value="vehicle_id"
+                    clearable
+                    >
+                    </v-autocomplete>
             </v-flex>
         </v-layout>
-        <!-- <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id != 'pooldli'">
-            <v-flex class="px-5" xs12 md12 lg12>
-                <div class="form-group">
-                    <label>Destination Pool Pallet</label>
-                    <autocomplete></autocomplete>
-                    <select class='form-control' v-model='sjp.destination_pool_pallet_id'>
-                        <option value='0' >Select Destination</option>
-                        <option v-for='data in pools.data' v-bind:key='data.destination_pool_pallet_id' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
-                    </select>
-                </div>
-            </v-flex>
-        </v-layout> -->
 
         <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id == 'pooldli'">
             <v-flex class="px-5" xs6 md6 lg6>
@@ -92,6 +90,16 @@
                     <input type="text" class="form-control" v-model="sjp.destination_pool_pallet_id" >
                     <p class="text-danger" v-if="errors.destination_pool_pallet_id">{{ errors.destination_pool_pallet_id[0] }}</p>
                 </div>
+                <v-autocomplete
+                    :items="pools.data"
+                    dense
+                    solo
+                    v-model="sjp.destination_pool_pallet_id"
+                    item-text="pool_name"
+                    item-value="pool_pallet_id"
+                    clearable
+                    >
+                    </v-autocomplete>
             </v-flex>
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.dest_pool }">
@@ -109,6 +117,7 @@
                     <input type="text" class="form-control" v-model="sjp.transporter_id" :readonly="true">
                     <p class="text-danger" v-if="errors.transporter_id">{{ errors.transporter_id[0] }}</p>
                 </div>
+
             </v-flex>
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.transporter_name }">
@@ -116,6 +125,7 @@
                     <input type="text" class="form-control" v-model="sjp.transporter_name" :readonly="true">
                     <p class="text-danger" v-if="errors.transporter_name">{{ errors.transporter_name[0] }}</p>
                 </div>
+
             </v-flex>
        </v-layout>
        <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id != 'pooldli'">
@@ -125,6 +135,16 @@
                     <input type="text" class="form-control" v-model="sjp.transporter_id" >
                     <p class="text-danger" v-if="errors.transporter_id">{{ errors.transporter_id[0] }}</p>
                 </div>
+                 <v-autocomplete
+                    :items="transporters.data"
+                    dense
+                    solo
+                    v-model="sjp.transporter_id"
+                    item-text="transporter_name"
+                    item-value="transporter_id"
+                    clearable
+                    >
+                    </v-autocomplete>
             </v-flex>
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.transporter_name }">
@@ -158,6 +178,16 @@
                     <input type="text" class="form-control" v-model="sjp.driver_id" >
                     <p class="text-danger" v-if="errors.driver_id">{{ errors.driver_id[0] }}</p>
                 </div>
+                <v-autocomplete
+                    :items="drivers.data"
+                    dense
+                    solo
+                    v-model="sjp.driver_id"
+                    item-text="driver_name"
+                    item-value="driver_id"
+                    clearable
+                    >
+                    </v-autocomplete>
             </v-flex>
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.driver_name }">
@@ -269,7 +299,7 @@ export default {
         this.getVehicleForm(),
         this.getPoolForm(),
         this.getDriverForm(),
-        this.getTransporters(),
+        this.getTransporterForm(),
         this.timeload(),
         this.getpoolautocomplete()
     },
@@ -334,7 +364,7 @@ export default {
         ...mapActions('dispatchdata', ['submitGetData']),
         ...mapActions('vehicle', ['getVehicleForm']),
         ...mapActions('driver', ['getDriverForm']),
-        ...mapActions('transporter', ['getTransporters']),
+        ...mapActions('transporter', ['getTransporterForm']),
         submit() {
             let form = new FormData()
             form.append('destination_pool_pallet_id', this.sjp.destination_pool_pallet_id)

@@ -471,6 +471,12 @@ public function index()
                     }
 
                     $update = SjpStatus::find($sjp_status_id);
+                    if($update->status != 0){
+                        return response()->json([
+                            'status' => 'error',
+                            'data' => 'Record Has Been Received',
+                            'message' => 'Record Has Been Received'], 422);
+                    }
                     $good_pallet_awal = $update->good_pallet;
                     $good_cement_awal = $update->good_cement;
                     $receive = Auth::user()->id;
@@ -616,6 +622,12 @@ public function index()
                 try{
 
                 $update = SjpStatus::find($sjp_status_id);
+                if($update->status != 0){
+                    return response()->json([
+                        'status' => 'error',
+                        'data' => 'Record Has Been Received',
+                        'message' => 'Record Has Been Received'], 422);
+                }
                 $good_pallet_awal = $update->good_pallet;
                 $tbr_pallet_awal = $update->tbr_pallet;
                 $ber_pallet_awal = $update->ber_pallet;

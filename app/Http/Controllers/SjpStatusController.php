@@ -114,6 +114,7 @@ public function index()
         $tbr_pallet = $request->tbr_pallet;
         $ber_pallet = $request->ber_pallet;
         $sjp = DB::table('surat_jalan_pallet')->where('sjp_id',$sjp_id)->first();
+        $sjp = Sjp::find($sjp_id);
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
         $pallet = PoolPallet::find($pool_pallet);
         $sjp_number = $sjp->sjp_number;
@@ -470,6 +471,12 @@ public function index()
                     }
 
                     $update = SjpStatus::find($sjp_status_id);
+                    if($update->status != 0){
+                        return response()->json([
+                            'status' => 'error',
+                            'data' => 'Record Has Been Received',
+                            'message' => 'Record Has Been Received'], 422);
+                    }
                     $good_pallet_awal = $update->good_pallet;
                     $good_cement_awal = $update->good_cement;
                     $receive = Auth::user()->id;
@@ -615,6 +622,12 @@ public function index()
                 try{
 
                 $update = SjpStatus::find($sjp_status_id);
+                if($update->status != 0){
+                    return response()->json([
+                        'status' => 'error',
+                        'data' => 'Record Has Been Received',
+                        'message' => 'Record Has Been Received'], 422);
+                }
                 $good_pallet_awal = $update->good_pallet;
                 $tbr_pallet_awal = $update->tbr_pallet;
                 $ber_pallet_awal = $update->ber_pallet;

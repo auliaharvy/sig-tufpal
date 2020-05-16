@@ -118,15 +118,16 @@ class BermissingpalletController extends Controller
             $InventoryPool = PoolPallet::find($pool_pallet_id);
             $palletpool = $InventoryPool->good_pallet;
             $this->validate($request, [
-                'ber_pallet' => 'required|integer|gt:-1|lte:'.$palletpool,
-                'missing_pallet' => 'required|integer|gt:-1|lte:'.$palletpool,
+                'ber_pallet' => 'integer|gt:-1|lte:'.$palletpool,
+                'missing_pallet' => 'integer|gt:-1|lte:'.$palletpool,
+                'reporter_prove' => 'required|image'
                 ]);
         }elseif($transporter_id != null){
             $InventoryTrans = Transporter::find($transporter_id);
             $pallettrans = $InventoryTrans->good_pallet;
             $this->validate($request, [
-                'ber_pallet' => 'required|integer|gt:-1|lte:'.$pallettrans,
-                'missing_pallet' => 'required|integer|gt:-1|lte:'.$pallettrans,
+                'ber_pallet' => 'integer|gt:-1|lte:'.$pallettrans,
+                'missing_pallet' => 'integer|gt:-1|lte:'.$pallettrans,
                 'reporter_prove' => 'required|image'
 
                 ]);
@@ -296,6 +297,12 @@ class BermissingpalletController extends Controller
                 }
 
                 $update = Bermissing::find($ber_missing_pallet_id);
+                if($update->status != 0){
+                    return response()->json([
+                        'status' => 'error',
+                        'data' => 'Record Has Been Disapproved/Approved',
+                        'message' => 'Record Has Been Disapproved/Approved'], 422);
+                }
                 // $update->reporter_user_id = $request->reporter_user_id;
                 $update->approver_user_id = auth()->user()->id;
                 // $update->pool_pallet_id = $request->pool_pallet_id;
@@ -337,7 +344,7 @@ class BermissingpalletController extends Controller
                         'status' => 'APPROVED',
                         // 'pool_pallet' => $bermissingapprovpool->pool_name,
                         'reference_sjp_status_id' => $update->reference_sjp_status,
-                        'transporter' => $bermissingreporttrans->transporter_name,
+                        'transporter' => $bermissingapprovtrans->transporter_name,
                         'ber_pallet' => $request->ber_pallet,
                         'missing_pallet' => $request->missing_pallet,
                         'reporter_prove' => $update->reporter_prove,
@@ -443,6 +450,12 @@ class BermissingpalletController extends Controller
         DB::beginTransaction();
         try{
             $update = Bermissing::find($ber_missing_pallet_id);
+            if($update->status != 0){
+                return response()->json([
+                    'status' => 'error',
+                    'data' => 'Record Has Been Disapproved/Approved',
+                    'message' => 'Record Has Been Disapproved/Approved'], 422);
+            }
             // $update->reporter_user_id = $request->reporter_user_id;
             $update->approver_user_id = auth()->user()->id;
             // $update->pool_pallet_id = $request->pool_pallet_id;
@@ -484,7 +497,7 @@ class BermissingpalletController extends Controller
                     'status' => 'DISAPPROVED',
                     // 'pool_pallet' => $bermissingapprovpool->pool_name,
                     'reference_sjp_status_id' => $update->reference_sjp_status,
-                    'transporter' => $bermissingreporttrans->transporter_name,
+                    'transporter' => $bermissingapprovtrans->transporter_name,
                     'ber_pallet' => $request->ber_pallet,
                     'missing_pallet' => $request->missing_pallet,
                     'reporter_prove' => $update->reporter_prove,

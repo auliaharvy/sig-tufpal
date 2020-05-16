@@ -57,6 +57,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('vehicle', 'VehicleController');
     Route::get('vehicleform', 'VehicleController@getvehicleform');
     Route::resource('transporter', 'TransporterController');
+    Route::get('transporterform', 'TransporterController@gettransporters');
     Route::resource('msttransaction', 'MstTransactionController');
     Route::resource('organization', 'OrganizationController');
     Route::post('/pallettransfer/receive', 'PalletTransferController@receive');

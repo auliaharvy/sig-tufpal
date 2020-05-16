@@ -37,11 +37,22 @@
             </select>
         </div> -->
         <v-layout row wrap class="px-5">
-            <v-flex class="px-5" xs12 md6 lg6>
+            <v-flex class="px-5" xs12 md12 lg12>
                 <div class="form-group" :class="{ 'has-error': errors.bmp_number }" :readonly="true">
                     <label for="">BER/Missing Pallet Number</label>
                     <input type="text" class="form-control" v-model="bermissing.bmp_number" :readonly="true">
                     <p class="text-danger" v-if="errors.bmp_number">{{ errors.bmp_number[0] }}</p>
+                </div>
+            </v-flex>
+        </v-layout>
+
+        <v-layout row wrap class="px-5">
+           <v-flex class="px-5" xs12 md6 lg6>
+                <div class="form-group" :readonly="true">
+                    <label>Transporter</label>
+                    <select class='form-control' v-model='bermissing.transporter_id' :readonly="true">
+                        <option disabled v-for='data in transporters.data' v-bind:key='data.transporter_id' :value='data.transporter_id'>{{ data.transporter_name }}</option>
+                    </select>
                 </div>
             </v-flex>
             <v-flex class="px-5" xs12 md6 lg6>
@@ -49,7 +60,7 @@
                     <label>Pool Pallet</label>
                     <select class='form-control' v-model='bermissing.pool_pallet_id' :readonly="true">
                         <option value='0' disabled>Select Destination</option>
-                        <option disabled v-for='data in pools.data' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
+                        <option disabled v-for='data in pools.data' v-bind:key='data.pool_pallet_id' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
                     </select>
                 </div>
             </v-flex>
@@ -84,7 +95,7 @@
                 </div>
             </v-flex>
         </v-layout>
-        
+
     </div>
 </template>
 
@@ -105,7 +116,7 @@ export default {
     created() {
       this.getPools(),this.getTransporters(), this.getUserLogin() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
     },
-   
+
     computed: {
         ...mapState(['errors']), //LOAD STATE ERROR UNTUK DITAMPILKAN KETIKA TERJADI ERROR VALIDASI
         ...mapState('bermissing', {
@@ -122,7 +133,7 @@ export default {
         }),
     },
     methods: {
-        ...mapMutations('bermissing', ['CLEAR_FORM']), 
+        ...mapMutations('bermissing', ['CLEAR_FORM']),
         ...mapActions('bermissing', ['updateBermissing', 'updateBermissingDisapprove']),
         ...mapActions('pool', ['getPools']),
         ...mapActions('vehicle', ['getVehicles']),
@@ -148,9 +159,9 @@ export default {
                     this.$router.push({ name: 'bermissings.data' })
                 })
         }
-       
+
     },
-   
+
     destroyed() {
         this.CLEAR_FORM() //KETIKA COMPONENT DITINGGALKAN, BERSIHKAN DATA
     }

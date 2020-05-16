@@ -9,9 +9,9 @@
             </div>
             <div class="panel-body">
                 <transporter-form></transporter-form>
-                <div class="form-group">
-                    <v-btn class="success" @click.prevent="submit">
-                        Edit
+                <div class="form-group px-7">
+                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
+                        {{ loading ? 'Loading...':'Edit' }}
                     </v-btn>
                 </div>
             </div>
@@ -30,13 +30,18 @@
             this.editTransporters(this.$route.params.id) //LOAD SINGLE DATA CUSTOMER BERDASARKAN ID
         },
         methods: {
-            ...mapActions('transporter', ['editTransporter', 'updateTransporter']),
+            ...mapActions('transporter', ['editTransporters', 'updateTransporters']),
             submit() {
                 //MENGIRIM PERMINTAAN KE SERVER UNTUK ME-NGUBAH DATA
                 this.updateTransporters(this.$route.params.id).then(() => {
                     this.$router.push({ name: 'transporters.data' }) //KETIKA UPDATE BERHASIL, MAKA REDIRECT KE HALAMAN LIST CUSTOMER
                 })
             }
+        },
+        computed: {
+            ...mapState('transporter', {
+                loading: state => state.loading //LOAD DATA CUSTOMER DARI STATE CUSTOMER
+            }),
         },
         components: {
             'transporter-form': FormTransporter,

@@ -11,18 +11,17 @@
 
                 <!-- TABLE UNTUK MENAMPILKAN LIST SJP -->
                 <template>
+                    <v-dialog
+                    v-model="scanner"
+                    max-width="500"
+                    >
+                    <qrcode-stream @decode="onDecode"></qrcode-stream>
+                    </v-dialog>
                     <v-card>
                         <v-card-title>
                             BER/Missing Pallet
                             <v-spacer></v-spacer>
-                            <!-- <v-btn>
-                            <download-excel
-                            :data= "bermissings.data"
-                            type="csv"
-                            name="PalletTransfers.csv">
-                                Download Data
-                            </download-excel>
-                            </v-btn> -->
+                            <v-btn color="success" small @click="isScanning()">Scan QR</v-btn>
                             <v-spacer></v-spacer>
                             <v-text-field
                             v-model="search"
@@ -85,7 +84,7 @@ export default {
     },
     data() {
         return {
-            dialog: false,
+            scanner: false,
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
             headers: [
                 { value: 'bmp_number', text: 'BMP Number' },
@@ -139,6 +138,14 @@ export default {
         ...mapActions('bermissing', ['getBermissing', 'removeBermissing']),
         showimage(id) {
             this.dialog=true
+        },
+        isScanning(){
+            this.scanner = true
+        },
+        onDecode (decodedString) {
+          console.log(decodedString)
+          this.search = decodedString
+          this.scanner = false
         },
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         deleteBermissings(id) {

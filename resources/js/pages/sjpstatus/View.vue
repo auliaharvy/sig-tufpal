@@ -1,56 +1,47 @@
 <template>
-    <div ref="printMe" id="print" class="col-md-12">
-        <div class="panel">
+    <div  class=" text-center col-md-3 col-lg-3 ">
+        <div class=" panel">
             <div class="panel-heading">
                 <h3 class="panel-title">SJP Status Print</h3>
             </div>
-            <div class="panel-body">
+            <div id="print" ref="printMe" class="panel-body text-center" >
                 <template>
-                    <v-divider />
                     <v-layout align="center" justify="center">
-                        <v-flex class="px-5" xs12 md6 lg6>
+                        <v-flex class="px-5" xs12 md12 lg12>
                             <dt>{{ sjp_number }}</dt>
                             <dd>
-                                <div id="qrcode">
-                                    <VueQrcode :value="sjp_number" />
-                                </div>
+                                    <qrcode-vue
+                                    :value="sjp_number"
+                                    renderAs="svg"
+                                    level="H"></qrcode-vue>
                             </dd>
                             <br>
-                            <dt>Good Pallet</dt>
-                            <dd>{{ good_pallet }} Pallet</dd>
+                            <dt>Pallet</dt>
+                            <dd>Good Pallet: {{ good_pallet }} Pallet</dd>
+                            <dd>TBR Pallet: {{ tbr_pallet }} Pallet</dd>
+                            <dd>BER Pallet: {{ ber_pallet }} Pallet</dd>
+                            <dd>Missing Pallet: {{ missing_pallet }} Pallet</dd>
                             <br>
-                            <dt>TBR Pallet</dt>
-                            <dd>{{ tbr_pallet }} Pallet</dd>
+                            <dt>Pool Pallet</dt>
+                            <dd>Departure: {{ dept_pool_name }} </dd>
+                            <dd>Destination: {{ dest_pool_name }} </dd>
                             <br>
-                            <br>
-                            <dt>BER Pallet</dt>
-                            <dd>{{ ber_pallet }} Pallet</dd>
-                            <br>
-                            <dt>Missing Pallet</dt>
-                            <dd>{{ missing_pallet }} Pallet</dd>
+                            <dt>Transporter</dt>
+                            <dd>{{ transporter_name }} </dd>
                             <br>
                             <dt>Note</dt>
                             <dd>{{ note }} </dd>
-                        </v-flex>
-                        <v-divider />
-                        <v-flex class="px-5" xs12 md6 lg6>
-                            <dt>Pool Pallet</dt>
-                            <dd>{{ pool_pallet_id }} </dd>
                             <br>
-                            <dt>Transporter</dt>
-                            <dd>{{ transporter_id }} </dd>
+                            <dt>Print At</dt>
+                            <dd>{{ print_at }} </dd>
                             <br>
                         </v-flex>
                     </v-layout>
-                    <v-divider />
-                    <!-- <v-layout align="center" justify="center">
-                        <v-flex class="px-5" xs12 md6 lg6>
-                            <v-btn @click="print">Download PDF</v-btn>
-                        </v-flex>
-                    </v-layout> -->
                 </template>
             </div>
-            
+            <div class="pa-5">
+                <v-btn @click="print">Print</v-btn>
+            </div>
         </div>
     </div>
 </template>
@@ -67,7 +58,7 @@ import jsPDF from 'jspdf'
         created() {
             this.editSjpStatus(this.$route.params.id).then((res) => {
                 let row = res.data
-                this.sjp_number =  row.sjp_number
+                this.sjps_number =  row.sjps_number
                 this.checker_send_user_id =  row.checker_send_user_id
                 this.checker_receive_user_id =  row.checker_receive_user_id
                 this.sjp_id =  row.sjp_id
@@ -81,15 +72,34 @@ import jsPDF from 'jspdf'
                 this.bad_cement =  row.bad_cement
                 this.driver_approval = row.driver_approval
                 this.note = row.note
-            }),
-            this.editPools(this.pool_pallet_id).then((res) => {
-                let row = res.data
-                this.pool_name = row.pool_name  
+                this.editSjp(this.sjp_id).then((res) => {
+                    let row = res.data
+                    this.sjp_number = row.sjp_number
+                    this.dest_pool_pallet_id = row.destination_pool_pallet_id
+                    this.dept_pool_pallet_id = row.departure_pool_pallet_id
+                    this.transporter_id = row.transporter_id
+
+                    this.editTransporters(this.transporter_id).then((res) => {
+                    let row = res.data
+                    this.transporter_name = row.transporter_name
+                    })
+                    this.editPools(this.dept_pool_pallet_id).then((res) => {
+                    let row = res.data
+                    this.dept_pool_name = row.pool_name
+                    })
+                    this.editPools(this.dest_pool_pallet_id).then((res) => {
+                    let row = res.data
+                    this.dest_pool_name = row.pool_name
+                    })
+                })
+
             })
+
         },
         data() {
             return {
                 output: null,
+                sjps_number: '',
                 checker_send_user_id: '',
                 checker_receive_user_id: '',
                 sjp_id: '',
@@ -104,70 +114,48 @@ import jsPDF from 'jspdf'
                 bad_cement: '',
                 driver_approval: '',
                 note: '',
-                
-                pool_name: '',
+                print_at: new Date().toLocaleString(),
+
+                dept_pool_name: '',
+                dest_pool_name: '',
                 transporter_name: '',
                 sjp_status: '',
                 reporter_name: '',
                 approver_name: '',
             }
         },
-        
+
         computed: {
             ...mapState('pool', {
-            pools: state => state.pools 
+            pools: state => state.pools
         }),
         ...mapState('pool', {
-            pool: state => state.pool 
+            pool: state => state.pool
         }),
         },
         methods: {
             ...mapActions('sjpstatus', ['editSjpStatus']),
+            ...mapActions('sjp', ['editSjp']),
             ...mapActions('pool', ['getPools', 'editPools']),
+            ...mapActions('transporter', ['editTransporters']),
            async print() {
-                const el = this.$refs.printMe;
+                this.output = null;
+                    const filename  = this.sjp_number + '.pdf';
+                    const el = this.$refs.printMe;
                 // add option type to get the image version
-                // if not provided the promise will return 
+                // if not provided the promise will return
                 // the canvas.
                 const options = {
                     type: 'dataURL'
                 }
                 this.output = await this.$html2canvas(el, options);
+
+                let pdf = new jsPDF('p', 'mm', 'a4');
+                    var width = pdf.internal.pageSize.getWidth();
+                    var height = pdf.internal.pageSize.getHeight();
+                    pdf.addImage(this.output, 'PNG', 0, 0, width, height);
+                    pdf.save(filename);
             },
-            
-            accept() {
-                this.$swal({
-                    title: 'Kamu Yakin?',
-                    text: "Permintaan yang disetujui tidak dapat dikembalikan!",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Iya, Lanjutkan!'
-                }).then((result) => {
-                    if (result.value) {
-                        this.acceptExpenses(this.$route.params.id).then(() => this.$router.push({ name: 'expenses.data' }))
-                    }
-                })
-            },
-            cancelRequest() {
-                this.$swal({
-                    title: 'Kamu Yakin?',
-                    text: "Permintaan yang ditolak tidak dapat dikembalikan!",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Iya, Lanjutkan!'
-                }).then((result) => {
-                    if (result.value) {
-                        this.cancelExpenses({id: this.$route.params.id, reason: this.inputReason}).then(() => {
-                            this.formReason = false
-                            this.$router.push({ name: 'expenses.data' })
-                        })
-                    }
-                })
-            }
         }
     }
 </script>

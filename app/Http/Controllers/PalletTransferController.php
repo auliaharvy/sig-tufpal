@@ -216,6 +216,12 @@ class PalletTransferController extends Controller
                 try{
                     $checker = Auth::user()->id;
                     $update = PalletTransfer::find($pallet_transfer_id);
+                    if($update->status != 0){
+                        return response()->json([
+                            'status' => 'error',
+                            'data' => 'Record Has Been Received',
+                            'message' => 'Record Has Been Received'], 422);
+                    }
                     // $update->departure_pool_pallet_id = $request->departure_pool_pallet_id;
                     // $update->destination_pool_pallet_id = $request->destination_pool_pallet_id;
                     // $update->sender_user_id = $request->sender_user_id;

@@ -4,7 +4,14 @@ const state = () => ({
     loading: false,
     couriers: [],
     page: 1,
-    id: ''
+    id: '',
+    courier: {
+        name: '',
+        email: '',
+        password: '',
+        reference_pool_pallet_id: '',
+        reference_transporter_id: '',
+    }
 })
 
 const mutations = {
@@ -14,6 +21,9 @@ const mutations = {
       doneLoading (state) {
         state.loading = false
       },
+    ASSIGN_FORM(state, payload) {
+        state.courier = payload
+    },
     ASSIGN_DATA(state, payload) {
         state.couriers = payload
     },
@@ -53,6 +63,7 @@ const actions = {
                 })
             })
             .catch((error) => {
+                alert(error.response.data.message)
                 if (error.response.status == 422) {
                     commit('SET_ERRORS', error.response.data.errors, { root: true })
                 }
@@ -66,13 +77,14 @@ const actions = {
         return new Promise((resolve, reject) => {
             $axios.get(`/couriers/${payload}/edit`)
             .then((response) => {
+                commit('ASSIGN_FORM', response.data.data)
                 resolve(response.data)
             }).finally(() => {
                 commit('doneLoading')
             })
         })
     },
-    updateCourier({ state }, payload) {
+    updateCourier({ state, commit }, payload) {
         commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.post(`/couriers/${state.id}`, payload, {
@@ -82,12 +94,17 @@ const actions = {
             })
             .then((response) => {
                 resolve(response.data)
+            }).catch((error) => {
+                alert(error.response.data.message)
+                if (error.response.status == 422) {
+                    commit('SET_ERRORS', error.response.data.errors, { root: true })
+                }
             }).finally(() => {
                 commit('doneLoading')
             })
         })
     } ,
-    removeCourier({ dispatch }, payload) {
+    removeCourier({ dispatch, commit }, payload) {
         commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.delete(`/couriers/${payload}`)

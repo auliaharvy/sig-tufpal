@@ -18,10 +18,20 @@
                         </div>
                         <div class="form-group">
                             <label for="">User</label>
-                            <select class="form-control" v-model="role_user.user_id">
+                            <v-autocomplete
+                            :items="users"
+                            dense
+                            solo
+                            v-model="role_user.user_id"
+                            item-text="name"
+                            item-value="id"
+                            clearable
+                            >
+                            </v-autocomplete>
+                            <!-- <select class="form-control" v-model="role_user.user_id">
                                 <option value="">Pilih</option>
                                 <option v-for="(row, index) in users" :value="row.id" :key="index">{{ row.name }} ({{row.email}})</option>
-                            </select>
+                            </select> -->
                         </div>
                         <div class="form-group">
                             <button v-if="$can('set permission')" class="btn btn-danger btn-sm" @click="setRole">Set Role</button>
@@ -55,8 +65,8 @@
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="tab_1">
                                         <template v-for="(row, index) in permissions">
-                                            <input type="checkbox" 
-                                                class="minimal-red" 
+                                            <input type="checkbox"
+                                                class="minimal-red"
                                                 :key="index"
                                                 :value="row.name"
                                                 :checked="role_permission.findIndex(x => x.name == row.name) != -1"
@@ -81,7 +91,7 @@
 </template>
 <script>
     import { mapActions, mapState, mapMutations } from 'vuex'
-    
+
     export default {
         name: 'SetPermission',
         data() {
@@ -113,10 +123,10 @@
         },
         methods: {
             ...mapActions('user', [
-                'getUserLists', 
-                'getRoles', 
-                'getAllPermission', 
-                'getRolePermission', 
+                'getUserLists',
+                'getRoles',
+                'getAllPermission',
+                'getRolePermission',
                 'setRolePermission',
                 'setRoleUser'
             ]),

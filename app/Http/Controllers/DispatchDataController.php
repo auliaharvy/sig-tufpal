@@ -31,7 +31,11 @@ class DispatchDataController extends Controller
         // return $response;
 
         $client = new \GuzzleHttp\Client();
-        $response = $client->request('GET', 'https://b2b.indocement.co.id/WSTufpalBridge_TEST/TUFPAL.svc/json/GetDataDispatch/'.$vehicle);
+        $response = $client->request('GET', 'https://b2b.indocement.co.id/WSTufpalBridge/TUFPAL.svc/json/GetDataDispatch/'.$vehicle, [
+            'headers' => [
+                'API-key' => '99cf18ca-7ae1-4571-a076-815e94eb22c5',
+            ]
+        ]);
 
         // return $response->getStatusCode(); // 200
         // return $response->getHeaderLine('content-type'); // 'application/json; charset=utf8'

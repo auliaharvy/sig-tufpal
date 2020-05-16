@@ -76,41 +76,45 @@ class PoolController extends Controller
     {
 
         $this->validate($request, [
-            'code' => 'required|unique"pool_pallet,code',
+            'code' => 'required|unique:pool_pallet,code',
             'type' => 'required',
             'pool_name' => 'required|string',
-            'pool_address' => 'required|string',
-            'pool_city' => 'required|integer',
-            'phone_number' => 'required|string',
-            'pool_email' => 'required|integer',
+            // 'pool_address' => 'required|string',
+            // 'pool_city' => 'required|integer',
+            // 'phone_number' => 'required|string',
+            // 'pool_email' => 'required|integer',
             'pallet_quota' => 'required|integer',
         ]);
 
-        $created_by = Auth::user()->name;
-        $pool = PoolPallet::create([
-            'organization_id' => $request->organization_id,
-            'code' => $request->code,
-            'type' => $request->type,
-            'pool_name' => $request->pool_name,
-            'pool_address' => $request->pool_address,
-            'pool_city' => $request->pool_city,
-            'phone_number' => $request->phone_number,
-            'pool_email' => $request->pool_email,
-            'pallet_quota' => $request->pallet_quota,
-            // 'good_pallet' => $request->good_pallet,
-            // 'tbr_pallet' => $request->tbr_pallet,
-            // 'ber_pallet' => $request->ber_pallet,
-            // 'missing_pallet' => $request->missing_pallet,
-            'created_by' => $created_by
-        ]);
-
-        $data = [
-            'data' => $pool,
-            'status' => (bool) $pool,
-            'message' => $pool ? 'Pool Pallet Created!' : 'Error Creating Pool Pallet'
-        ];
-
-        return response()->json($data);
+        DB::beginTransaction();
+        try{
+            $created_by = Auth::user()->name;
+            $pool = PoolPallet::create([
+                'pool_pallet_id' => $request->code,
+                'organization_id' => $request->organization_id,
+                'code' => $request->code,
+                'type' => $request->type,
+                'pool_name' => $request->pool_name,
+                'pool_address' => $request->pool_address,
+                'pool_city' => $request->pool_city,
+                'phone_number' => $request->phone_number,
+                'pool_email' => $request->pool_email,
+                'pallet_quota' => $request->pallet_quota,
+                // 'good_pallet' => $request->good_pallet,
+                // 'tbr_pallet' => $request->tbr_pallet,
+                // 'ber_pallet' => $request->ber_pallet,
+                // 'missing_pallet' => $request->missing_pallet,
+                'created_by' => $created_by
+            ]);
+            DB::commit();
+            return response()->json(['status' => 'success'], 200);
+        }catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => 'error',
+                'data' => $e->getMessage(),
+                'message' => 'Error Create Pool'], 422);
+        }
     }
 
     public function edit($id)
@@ -128,9 +132,31 @@ class PoolController extends Controller
             'pallet_quota' => 'required'
         ]);
 
-        $pool = PoolPallet::find($id); //QUERY UNTUK MENGAMBIL DATA BERDASARKAN ID
-        $pool->update($request->all()); //UPDATE DATA BERDASARKAN DATA YANG DITERIMA
-        return response()->json(['status' => 'success']);
+        DB::beginTransaction();
+        try{
+            $created_by = Auth::user()->name;
+            $update = PoolPallet::find($id);
+            $update->organization_id = $request->organization_id;
+            $update->pool_name = $request->pool_name;
+            $update->code = $request->code;
+            $update->pool_pallet_id = $request->code;
+            $update->pallet_quota = $request->pallet_quota;
+            $update->pool_address = $request->pool_address;
+            $update->pool_email = $request->pool_email;
+            $update->phone_number = $request->phone_number;
+            $update->type = $request->type;
+            $update->pool_city = $request->pool_city;
+            $update->updated_by = $created_by;
+            $update->save();
+            DB::commit();
+            return response()->json(['status' => 'success'], 200);
+        }catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => 'error',
+                'data' => $e->getMessage(),
+                'message' => 'Error Update Pool Record'], 422);
+        }
     }
 
     public function destroy($id)

@@ -202,6 +202,22 @@
             </v-card-title>
           </v-card>
         </v-flex>
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/vehicle" class="text-center ma-3" v-if="$can('read vehicle')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-truck</v-icon>
+              <span right> Vehicle </span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/driver" class="text-center ma-3" v-if="$can('read driver')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-clipboard-account</v-icon>
+              <span right> Driver </span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
       </v-layout>
       </v-card>
     </v-container>

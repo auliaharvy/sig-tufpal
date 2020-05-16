@@ -40,7 +40,7 @@ import IndexSjpStatus from './pages/sjpstatus/Index.vue'
 import DataSjpStatus from './pages/sjpstatus/SjpStatus.vue'
 import AddSjpStatus from './pages/sjpstatus/AddSjpStatus.vue'
 import SendApprovalSjpStatus from './pages/sjpstatus/SendDriverApproval.vue'
-// import SendbackSjpStatus from './pages/sjpstatus/SendbackSjpStatus.vue'
+import ViewSjpStatus from './pages/sjpstatus/View.vue'
 import EditSjpStatus from './pages/sjpstatus/EditSjpStatus.vue'
 import EditSjpStatussendback from './pages/sjpstatus/EditSjpStatussendback.vue'
 import AddSjpStatusbyMaster from './pages/sjpstatus/AddSjpStatusbyMaster.vue'
@@ -51,6 +51,16 @@ import DataPool from './pages/pool/Pool.vue'
 import AddPool from './pages/pool/AddPool.vue'
 import EditPool from './pages/pool/EditPool.vue'
 
+import IndexVehicle from './pages/vehicle/Index.vue'
+import DataVehicle from './pages/vehicle/Vehicle.vue'
+import AddVehicle from './pages/vehicle/AddVehicle.vue'
+import EditVehicle from './pages/vehicle/EditVehicle.vue'
+
+import IndexDriver from './pages/driver/Index.vue'
+import DataDriver from './pages/driver/Driver.vue'
+import AddDriver from './pages/driver/AddDriver.vue'
+import EditDriver from './pages/driver/EditDriver.vue'
+
 import IndexTransporter from './pages/transporter/Index.vue'
 import DataTransporter from './pages/transporter/Transporter.vue'
 import AddTransporter from './pages/transporter/AddTransporter.vue'
@@ -60,6 +70,7 @@ import IndexPalletTransfer from './pages/pallettransfer/Index.vue'
 import DataPalletTransfer from './pages/pallettransfer/PalletTransfer.vue'
 import AddPalletTransfer from './pages/pallettransfer/AddPalletTransfer.vue'
 import EditPalletTransfer from './pages/pallettransfer/EditPalletTransfer.vue'
+import ViewPalletTransfer from './pages/pallettransfer/View.vue'
 
 import IndexBermissing from './pages/bermissing/Index.vue'
 import DataBermissing from './pages/bermissing/Bermissing.vue'
@@ -195,6 +206,12 @@ const router = new Router({
                     name: 'sjpstatuss.edit',
                     component: EditSjpStatus,
                     meta: { title: 'Edit Sjp' }
+                },
+                {
+                    path: 'view/:id',
+                    name: 'sjpstatuss.view',
+                    component: ViewSjpStatus,
+                    meta: { title: 'View SJP Status' }
                 },
                 {
                     path: 'addsjp/:id',
@@ -342,6 +359,58 @@ const router = new Router({
         },
 
         {
+            path: '/vehicle',
+            component: IndexVehicle,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'vehicles.data',
+                    component: DataVehicle,
+                    meta: { title: 'Manage Vehicle' }
+                },
+                {
+                    path: 'add',
+                    name: 'vehicles.add',
+                    component: AddVehicle,
+                    meta: { title: 'Add Vehicle' }
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'vehicles.edit',
+                    component: EditVehicle,
+                    meta: { title: 'Edit Vehicle' }
+                },
+            ]
+        },
+
+        {
+            path: '/driver',
+            component: IndexDriver,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'drivers.data',
+                    component: DataDriver,
+                    meta: { title: 'Manage Driver' }
+                },
+                {
+                    path: 'add',
+                    name: 'drivers.add',
+                    component: AddDriver,
+                    meta: { title: 'Add Driver' }
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'drivers.edit',
+                    component: EditDriver,
+                    meta: { title: 'Edit Driver' }
+                },
+            ]
+        },
+
+        {
             path: '/transporter',
             component: IndexTransporter,
             meta: { requiresAuth: true },
@@ -389,6 +458,12 @@ const router = new Router({
                     name: 'pallettransfers.edit',
                     component: EditPalletTransfer,
                     meta: { title: 'Edit Pallet Transfer' }
+                },
+                {
+                    path: 'view/:id',
+                    name: 'pallettransfers.view',
+                    component: ViewPalletTransfer,
+                    meta: { title: 'View Pallet Transfer' }
                 },
             ]
         },

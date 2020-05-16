@@ -134,7 +134,7 @@ const actions = {
             })
         })
     },
-    removePools({ dispatch }, payload) {
+    removePools({ dispatch, commit }, payload) {
         commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.delete(`/pool/${payload}`) //KIRIM REQUEST KE SERVER BERDASARKAN PAYLOAD (ID)
