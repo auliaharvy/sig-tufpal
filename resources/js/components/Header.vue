@@ -240,6 +240,22 @@
                         <v-list-item-title color="black">User Management</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                 <v-list-item link router to="/vehicle" v-if="$can('read vehicle')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-truck</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Vehicle</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link router to="/driver" v-if="$can('read driver')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-clipboard-account</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Driver</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
             </v-list>
         </v-navigation-drawer>
 
