@@ -224,6 +224,14 @@
 
                 <v-divider></v-divider>
                 <h3> Setting </h3>
+                <v-list-item link router :to="{ name: 'user.editprofile', params: {id: authenticated.id} }">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-account</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Edit Profile</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
                 <v-list-item link router to="/setting/role-permission" v-if="$can('read permission')">
                     <v-list-item-icon>
                         <v-icon color="black">mdi-lock</v-icon>

@@ -102,6 +102,7 @@ import IndexUser from './pages/user/Index.vue'
 import DataUser from './pages/user/User.vue'
 import AddUser from './pages/user/Add.vue'
 import EditUser from './pages/user/Edit.vue'
+import EditUserProfile from './pages/user/EditProfile.vue'
 
 import IndexProduct from './pages/products/Index.vue'
 import DataProduct from './pages/products/Product.vue'
@@ -601,6 +602,12 @@ const router = new Router({
                     name: 'user.edit',
                     component: EditUser,
                     meta: { title: 'Edit User' }
+                },
+                {
+                    path: 'editprofile/:id',
+                    name: 'user.editprofile',
+                    component: EditUserProfile,
+                    meta: { title: 'Edit User Profile' }
                 },
             ]
         },

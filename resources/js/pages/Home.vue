@@ -187,6 +187,14 @@
       </h1>
       <v-layout row wrap class="px-5">
         <v-flex xs12 md3 lg3 link >
+          <v-card link router :to="{ name: 'user.editprofile', params: {id: authenticated.id} }" class="text-center ma-3" >
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-account</v-icon>
+              <span right> Edit Profile </span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md3 lg3 link >
           <v-card link router to="/setting/role-permission" class="text-center ma-3" v-if="$can('read permission')">
             <v-card-title class="text-center" color="black">
               <v-icon color="black" left>mdi-lock</v-icon>
@@ -225,7 +233,12 @@
 
 </template>
 <script>
+import { mapActions, mapState, mapMutations } from 'vuex'
+
 export default {
+   created() {
+        this.getUserLogin() //LOAD DATA
+    },
     data(){
         return{
             drawer: false,
@@ -248,8 +261,18 @@ export default {
                 { title: 'Setting', icon: 'mdi-monitor-dashboard', route:'/setting' },
 
             ],
+            
             right: null,
         }
+    },
+    computed: {
+                ...mapState('user', {
+                    authenticated: state => state.authenticated
+                }),
+            },
+
+    methods: {
+        ...mapActions('user', ['getUserLogin']),
     },
 }
 </script>
