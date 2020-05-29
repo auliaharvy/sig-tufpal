@@ -477,7 +477,7 @@ export default {
             $axios.get('poolautocomplete')
                 .then(function (response) {
                     // handle success
-                    console.log(response.data);
+                    // console.log(response.data);
                 })
         }
     },

@@ -75,6 +75,8 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('pallettransporter', 'API\DashboardController@palletTransporter');
     Route::get('poolpalletdetail', 'API\DashboardController@poolPalletDetail');
     Route::get('transporterdetail', 'API\DashboardController@transporterDetail');
+    Route::get('totalallpallet', 'API\DashboardController@totalAllPallet');
+    
 
     Route::get('export', 'API\DashboardController@exportData');
     Route::resource('/outlets', 'API\OutletController')->except(['show']);

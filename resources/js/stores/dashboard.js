@@ -9,6 +9,7 @@ const state = () => ({
     pallettransporter: [],
     poolpalletdetail: [],
     transporterdetail: [],
+    totalallpallet: '',
 })
 
 const mutations = {
@@ -32,6 +33,9 @@ const mutations = {
     },
     ASSIGN_DATA_TRANSPORTER_DETAIL(state, payload) {
         state.transporterdetail = payload
+    },
+    ASSIGN_DATA_TOTAL_ALL_PALLET(state, payload) {
+        state.totalallpallet = payload
     },
 }
 
@@ -59,6 +63,15 @@ const actions = {
             $axios.get(`/globalpallet`)
             .then((response) => {
                 commit('ASSIGN_DATA_GLOBAL_PALLET', response.data)
+                resolve(response.data)
+            })
+        })
+    },
+    getTotalAllPallet({ commit }, payload) {
+        return new Promise((resolve, reject) => {
+            $axios.get(`/totalallpallet`)
+            .then((response) => {
+                commit('ASSIGN_DATA_TOTAL_ALL_PALLET', response.data)
                 resolve(response.data)
             })
         })

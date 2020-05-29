@@ -8,7 +8,8 @@
                                     <v-flex class="pa-5" xs12 md12 lg12>
                                     <v-card>
                                         <v-toolbar>
-                                            <v-toolbar-title>All Pallet</v-toolbar-title>
+                                            <v-toolbar-title>All Pallet : <span>{{totalallpallet}}</span></v-toolbar-title>
+                                            
                                         </v-toolbar>
                                         <div>
                                             <bar-chart v-if="globalpallet.length > 0" :data="dataglobalpallet" :options="chartOptions" :labels="labelsglobalpallet"/>
@@ -22,7 +23,7 @@
                                     <v-flex class="pa-5" xs12 md9 lg9>
                                     <v-card>
                                         <v-toolbar>
-                                            <v-toolbar-title>Pool Pallet Detail</v-toolbar-title>
+                                            <v-toolbar-title>Warehouse Detail</v-toolbar-title>
                                         </v-toolbar>
                                         <div>
                                             <bar-chart v-if="poolpalletdetail.length > 0" :data="datapoolpalletdetail" :options="chartOptions" :labels="labelspoolpalletdetail"/>
@@ -157,6 +158,9 @@
             this.getChartDataGlobalPalllet().then((res) => {
                 let row = res.data
             }),
+            this.getTotalAllPallet().then((res) => {
+                let row = res.data
+            }),
             this.getChartDataPoolPalletDetail().then((res) => {
                 let row = res.data
             }),
@@ -174,6 +178,7 @@
         },
         data() {
             return {
+                totalGlobal: 0,
                 chartOptions: {
                      plugins: {
                         datalabels: {
@@ -222,12 +227,12 @@
                 transactions: state => state.transactions,
                 transactions_receive: state => state.transactions_receive,
                 globalpallet: state => state.globalpallet,
+                totalallpallet: state => state.totalallpallet,
                 poolpalletdetail: state => state.poolpalletdetail,
                 transporterdetail: state => state.transporterdetail,
                 pallet: state => state.pallet,
                 pallettransporter: state => state.pallettransporter,
             }),
-
             ...mapState('pool', {
                 pools: state => state.pools
             }),
@@ -250,6 +255,7 @@
             years() {
                 return _.range(2010, moment().add(1, 'years').format('Y'))
             },
+            
             labels() {
                 return _.map(this.transactions, function(o) {
                     return moment(o.date).format('DD')
@@ -314,7 +320,7 @@
             ...mapActions('dashboard', ['getChartData', 'getChartDataReceive',
                             'getChartDataGlobalPalllet', 'getChartDataPallet',
                             'getChartDataPoolPalletDetail', 'getChartDataTransporterDetail',
-                            'getChartDataPalletTransporter']),
+                            'getChartDataPalletTransporter', 'getTotalAllPallet']),
             ...mapActions('pool', ['getPools', 'removePools']),
             exportData() {
                 window.open(`/api/export?api_token=${this.token}&month=${this.month}&year=${this.year}`)

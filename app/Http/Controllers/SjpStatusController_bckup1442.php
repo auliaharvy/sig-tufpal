@@ -131,7 +131,7 @@ public function index()
         $checker = Auth::user()->id;
 
         $this->validate($request, [
-            'sending_driver_approval' => 'required',
+            // 'sending_driver_approval' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -295,7 +295,7 @@ public function index()
             'tbr_pallet' => 'required|integer|gt:-1|lte:'.$tbr_pallet,
             'ber_pallet' => 'required|integer|gt:-1|lte:'.$ber_pallet,
             'missing_pallet' => 'required|integer|gt:-1|lte:'.$missing_pallet,
-            'sending_driver_approval' => 'required | image',
+            // 'sending_driver_approval' => 'required | image',
         ]);
 
             if ($distribution == 1){

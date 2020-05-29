@@ -136,6 +136,8 @@ class DashboardController extends Controller
     {
         $poolDetail = PoolPallet::select(DB::raw('pool_name,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
         ->groupBy(DB::raw('pool_name'))
+        ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
+        ->where('type', '=' , "WAREHOUSE")
         ->get()
         ->toArray();
 
@@ -146,10 +148,32 @@ class DashboardController extends Controller
     {
         $transporterDetail = Transporter::select(DB::raw('transporter_name,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
         ->groupBy(DB::raw('transporter_name'))
+        ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
         ->get()
         ->toArray();
 
         return $transporterDetail;
+    }
+
+    public function totalAllPallet()
+    {
+        $poolTotal = PoolPallet::select(DB::raw('type, sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+        ->groupBy(DB::raw('type'))
+        ->get()
+        ->toArray();
+        $transporterTotal = Transporter::select(DB::raw('tag as type, sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+        ->groupBy(DB::raw('type'))
+        ->get()
+        ->toArray();
+
+        $total = array_merge($poolTotal, $transporterTotal);
+
+        $sum = 0;
+        foreach ($total as $item) {
+            $sum += $item['total'];
+        }
+
+        return $sum;
     }
 
     public function exportData(Request $request)
