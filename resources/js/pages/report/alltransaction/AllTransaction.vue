@@ -77,7 +77,7 @@ export default {
     data() {
         return {
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
-            exportName: 'All Transaction ' + new Date().toISOString().slice(0,10) + '.xlsx',
+            exportName: 'All Transaction ' + new Date().toISOString().slice(0,10),
              headers: [
                 { value: 'tid_number', text: 'TID Number' },
                 { value: 'sjp_number', text: 'SJP Number' },
