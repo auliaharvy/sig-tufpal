@@ -13,8 +13,7 @@
                         <v-btn>
                             <download-excel
                             :data= "alltransactions.data"
-                            type="csv"
-                            name="alltransaction.csv">
+                            :name="exportName">
                                 Download Data
                             </download-excel>
                         </v-btn>
@@ -70,12 +69,15 @@ import { mapActions, mapState } from 'vuex'
 export default {
     name: 'DataSjpPalletSend',
     created() {
-        this.getAlltransaction() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
+        this.getAlltransaction().then((res) => {
+                let row = res.data
+                console.log(row.pool_pallet)
+            })
     },
     data() {
         return {
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
-            exportName: '',
+            exportName: 'All Transaction ' + new Date().toISOString().slice(0,10) + '.xlsx',
              headers: [
                 { value: 'tid_number', text: 'TID Number' },
                 { value: 'sjp_number', text: 'SJP Number' },

@@ -12,7 +12,7 @@
                                             
                                         </v-toolbar>
                                         <div>
-                                            <bar-chart v-if="globalpallet.length > 0" :data="dataglobalpallet" :options="chartOptions" :labels="labelsglobalpallet"/>
+                                            <bar-chart v-if="globalpallet.length > 0" :data="dataglobalpallet" :options="barChartOptions" :labels="labelsglobalpallet"/>
                                         </div>
                                     </v-card>
                                 </v-flex>
@@ -26,7 +26,7 @@
                                             <v-toolbar-title>Warehouse Detail</v-toolbar-title>
                                         </v-toolbar>
                                         <div>
-                                            <bar-chart v-if="poolpalletdetail.length > 0" :data="datapoolpalletdetail" :options="chartOptions" :labels="labelspoolpalletdetail"/>
+                                            <bar-chart v-if="poolpalletdetail.length > 0" :data="datapoolpalletdetail" :options="barChartOptions" :labels="labelspoolpalletdetail"/>
                                         </div>
                                     </v-card>
                                 </v-flex>
@@ -50,7 +50,7 @@
                                             <v-toolbar-title>Transporter Detail</v-toolbar-title>
                                         </v-toolbar>
                                         <div>
-                                            <bar-chart v-if="transporterdetail.length > 0" :data="datatransporterdetail" :options="chartOptions" :labels="labelstransporterdetail"/>
+                                            <bar-chart v-if="transporterdetail.length > 0" :data="datatransporterdetail" :options="barChartOptions" :labels="labelstransporterdetail"/>
                                         </div>
                                     </v-card>
                                 </v-flex>
@@ -112,7 +112,7 @@
                                             </v-toolbar>
 
                                             <div class="panel-body">
-                                                <line-chart v-if="transactions.length > 0" :data="transaction_data" :options="chartOptions" :labels="labels"/>
+                                                <line-chart v-if="transactions.length > 0" :data="transaction_data" :options="barChartOptions" :labels="labels"/>
                                             </div>
                                         </v-card>
                                     </v-flex>
@@ -122,7 +122,7 @@
                                                 <v-toolbar-title>Pallet Receive</v-toolbar-title>
                                             </v-toolbar>
                                             <div class="panel-body">
-                                                <line-chart v-if="transactions.length > 0" :data="transaction_receive_data" :options="chartOptions" :labels="labels"/>
+                                                <line-chart v-if="transactions.length > 0" :data="transaction_receive_data" :options="barChartOptions" :labels="labels"/>
                                             </div>
                                         </v-card>
                                     </v-flex>
@@ -179,6 +179,27 @@
         data() {
             return {
                 totalGlobal: 0,
+                barChartOptions: {
+                    scales: {
+                            yAxes: [{
+                                ticks: {
+                                    // stepSize: 50,
+                                    // maxTicksLimit: 3,
+                                    suggestedMin: 0
+                                }
+                            }]
+                        },
+                     plugins: {
+                        datalabels: {
+                            display: true,
+                            align: 'center',
+                            anchor: 'center'
+                        },
+                        
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                },
                 chartOptions: {
                      plugins: {
                         datalabels: {

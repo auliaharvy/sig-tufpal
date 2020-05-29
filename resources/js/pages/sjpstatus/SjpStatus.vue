@@ -90,6 +90,12 @@
                         <template v-if="$can('delete sjps')" v-slot:item.delete="{ item }">
                                 <v-btn color="error" @click="deleteSjpStatus(item.sjp_status_id)" small>Delete</v-btn>
                         </template>
+                        <!-- <template v-slot:item.image="{ item }">
+                                <img :src="'/storage/app/public/driverapproval/' + item.sending_driver_approval" :width="70" :height="100" :alt="item.bmp_number"> </img>
+                                <v-btn dark color="success" text small :href="'/storage/app/public/driverapproval/' + item.sending_driver_approval" target="_blank">
+                                    show
+                                </v-btn>
+                        </template> -->
                         <!-- <template v-slot:item.qrcode="{ item }">
                             <qrcode-vue :value="sjpstatuss.sjps_number" :size="size" level="H"></qrcode-vue>
                         </template> -->
@@ -131,6 +137,7 @@ export default {
                 // { value: 'good_cement', text: 'Good Cement' },
                 // { value: 'bad_cement', text: 'Bad Cement' },
                 { value: 'note', text: 'Note' },
+                // { value: 'image', text: 'Image' },
                 { value: 'view', text: 'View' },
                 // { value: 'driver_approve', text: 'Note' },
                 // { value: 'qrcode', text: 'QR Code' },
