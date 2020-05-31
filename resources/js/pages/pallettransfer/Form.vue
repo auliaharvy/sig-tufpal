@@ -153,7 +153,7 @@ export default {
         this.getVehicleForm(), //LOAD DATA VEHICLES KETIKA COMPONENT DI-LOAD
         this.getPoolForm(), //LOAD DATA POOLS KETIKA COMPONENT DI-LOAD
         this.getDriverForm(), //LOAD DATA DRIVERS KETIKA COMPONENT DI-LOAD
-        this.getTransporters(), //LOAD DATA TRANSPORTER KETIKA COMPONENT DI-LOAD
+        this.getTransporterForm(), //LOAD DATA TRANSPORTER KETIKA COMPONENT DI-LOAD
         this.getUserLogin() //LOAD DATA USER LOGIN KETIKA COMPONENT DI-LOAD
     },
 
@@ -183,7 +183,7 @@ export default {
         ...mapActions('pool', ['getPoolForm']),
         ...mapActions('vehicle', ['getVehicleForm']),
         ...mapActions('driver', ['getDriverForm']),
-        ...mapActions('transporter', ['getTransporters']),
+        ...mapActions('transporter', ['getTransporterForm']),
         ...mapActions('user', ['getUserLogin']),
 
     },
