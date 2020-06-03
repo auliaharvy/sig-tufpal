@@ -33,7 +33,8 @@
                             </template>
                             <template v-slot:item.late="{ item }">
                                 <v-chip class="error " v-if="item.eta < now">{{ item.eta | moment("from", true) }}</v-chip>
-                                <v-chip class="success " v-else-if="item.eta > now && item.eta == now ">0 Day</v-chip>
+                                <v-chip class="success " v-else-if="item.eta > now ">0 Day</v-chip>
+                                <v-chip class="success " v-else-if="item.eta == now ">0 Day</v-chip>
                             </template>
 
                         </v-data-table>
