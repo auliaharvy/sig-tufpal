@@ -127,6 +127,29 @@
                                         </v-card>
                                     </v-flex>
                                 </v-layout>
+                                <v-layout row wrap class="px-5">
+                                    <v-flex class="pa-5" xs12 md6 lg6>
+                                        <v-card>
+                                            <v-toolbar>
+                                                <v-toolbar-title>Pallet Sendback</v-toolbar-title>
+                                            </v-toolbar>
+
+                                            <div class="panel-body">
+                                                <line-chart v-if="transactionssendback.length > 0" :data="transaction_senback_data" :options="barChartOptions" :labels="labels"/>
+                                            </div>
+                                        </v-card>
+                                    </v-flex>
+                                    <v-flex class="pa-5" xs12 md6 lg6>
+                                        <v-card>
+                                            <v-toolbar>
+                                                <v-toolbar-title>Pallet Receive Sendback</v-toolbar-title>
+                                            </v-toolbar>
+                                            <div class="panel-body">
+                                                <line-chart v-if="transactionssendback.length > 0" :data="transaction_receive_sendback_data" :options="barChartOptions" :labels="labels"/>
+                                            </div>
+                                        </v-card>
+                                    </v-flex>
+                                </v-layout>
                             </div>
                         </div>
                     </div>
@@ -145,11 +168,9 @@
 
     export default {
         created() {
-            this.getChartDataReceive({
-                month: this.monthReceive,
-                year: this.yearReceive
-            }).then((res) => {
-                let row = res.data
+            this.getChart2Data({
+                month: this.month,
+                year: this.year
             }),
             this.getChartData({
                 month: this.month,
@@ -223,9 +244,17 @@
                     month: this.month,
                     year: this.year
                 })
+                this.getChart2Data({
+                    month: this.month,
+                    year: this.year
+                })
             },
             year() {
                 this.getChartData({
+                    month: this.month,
+                    year: this.year
+                })
+                this.getChart2Data({
                     month: this.month,
                     year: this.year
                 })
@@ -246,7 +275,7 @@
         computed: {
             ...mapState('dashboard', {
                 transactions: state => state.transactions,
-                transactions_receive: state => state.transactions_receive,
+                transactionssendback: state => state.transactionssendback,
                 globalpallet: state => state.globalpallet,
                 totalallpallet: state => state.totalallpallet,
                 poolpalletdetail: state => state.poolpalletdetail,
@@ -257,21 +286,6 @@
             ...mapState('pool', {
                 pools: state => state.pools
             }),
-            datasetsfull () {
-                return {
-                labels: [ 'Pool DLI', 'BCTD', 'Sukabumi'],
-                datasets: [
-                {
-                    label: 'pool_name',
-                    backgroundColor: ['#41B883',
-                                    '#E46651',
-                                    '#00D8FF',
-                                    '#DD1B16'],
-                    data: [ 557,0,0]
-                }
-                    ]
-                    }
-            },
             ...mapState(['token']),
             years() {
                 return _.range(2010, moment().add(1, 'years').format('Y'))
@@ -306,8 +320,18 @@
                     return o.total
                 });
             },
+            transaction_senback_data() {
+                return _.map(this.transactionssendback, function(o) {
+                    return o.total
+                });
+            },
             transaction_receive_data() {
                 return _.map(this.transactions, function(o) {
+                    return o.totalreceive
+                });
+            },
+            transaction_receive_sendback_data() {
+                return _.map(this.transactionssendback, function(o) {
                     return o.totalreceive
                 });
             },
@@ -338,7 +362,7 @@
             },
         },
         methods: {
-            ...mapActions('dashboard', ['getChartData', 'getChartDataReceive',
+            ...mapActions('dashboard', ['getChartData', 'getChart2Data',
                             'getChartDataGlobalPalllet', 'getChartDataPallet',
                             'getChartDataPoolPalletDetail', 'getChartDataTransporterDetail',
                             'getChartDataPalletTransporter', 'getTotalAllPallet']),

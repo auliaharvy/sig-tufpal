@@ -69,7 +69,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 
     Route::get('chart', 'API\DashboardController@chart');
-    Route::get('receive', 'API\DashboardController@receive');
+    Route::get('chart2', 'API\DashboardController@chart2');
     Route::get('globalpallet', 'API\DashboardController@globalpallet');
     Route::get('pallet', 'API\DashboardController@pallet');
     Route::get('pallettransporter', 'API\DashboardController@palletTransporter');

@@ -4,6 +4,8 @@ import $axios from '../api.js'
 const state = () => ({
     transactions: [],
     transactionreceive: [],
+    transactionssendback: [],
+    transactionreceivesendback: [],
     globalpallet: [],
     pallet: [],
     pallettransporter: [],
@@ -16,8 +18,8 @@ const mutations = {
     ASSIGN_DATA_TRANSACTION(state, payload) {
         state.transactions = payload
     },
-    ASSIGN_DATA_TRANSACTION_RECEIVE(state, payload) {
-        state.transactions_receive = payload
+    ASSIGN_DATA_TRANSACTION2(state, payload) {
+        state.transactionssendback = payload
     },
     ASSIGN_DATA_GLOBAL_PALLET(state, payload) {
         state.globalpallet = payload
@@ -49,11 +51,11 @@ const actions = {
             })
         })
     },
-    getChartDataReceive({ commit }, payload) {
+    getChart2Data({ commit }, payload) {
         return new Promise((resolve, reject) => {
-            $axios.get(`/receive?month=${payload.month}&year=${payload.year}`)
+            $axios.get(`/chart2?month=${payload.month}&year=${payload.year}`)
             .then((response) => {
-                commit('ASSIGN_DATA_TRANSACTION_RECEIVE', response.data)
+                commit('ASSIGN_DATA_TRANSACTION2', response.data)
                 resolve(response.data)
             })
         })
