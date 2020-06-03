@@ -6,56 +6,39 @@
 
               	<!-- TABLE UNTUK MENAMPILKAN LIST SJP -->
                 <template>
-  <v-card>
-    <v-card-title>
-      Pallet Movement
-      <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        prepend-icon="mdi-search"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field>
-    </v-card-title>
-    <v-data-table
-    :loading="loading"
-      :headers="headers"
-      :items="palletmovements.data"
-      :search="search"
-      dense
-    >
-        <template v-slot:item.status="{ item }">
-            <!-- <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
-            <v-chip class="label label-success" v-else-if="item.status == 1">Received</v-chip> -->
-            <p v-if="item.status == 0">Sending</p>
-            <p class="text-blue" v-else-if="item.status == 1">Received</p>
-        </template>
-        <template v-slot:item.late="{ item }">
-            <span>{{ item.eta | moment("from", true) }}</span>
-        </template>
+                    <v-card>
+                        <v-card-title>
+                        Pallet Movement
+                        <v-spacer></v-spacer>
+                        <v-text-field
+                            v-model="search"
+                            prepend-icon="mdi-search"
+                            label="Search"
+                            single-line
+                            hide-details
+                        ></v-text-field>
+                        </v-card-title>
+                        <v-data-table
+                        :loading="loading"
+                        :headers="headers"
+                        :items="palletmovements.data"
+                        :search="search"
+                        dense
+                        >
+                            <template v-slot:item.status="{ item }">
+                                <!-- <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
+                                <v-chip class="label label-success" v-else-if="item.status == 1">Received</v-chip> -->
+                                <p v-if="item.status == 0">Sending</p>
+                                <p class="text-blue" v-else-if="item.status == 1">Received</p>
+                            </template>
+                            <template v-slot:item.late="{ item }">
+                                <v-chip class="error " v-if="item.eta < now">{{ item.eta | moment("from", true) }}</v-chip>
+                                <v-chip class="success " v-else-if="item.eta > now">0 Day</v-chip>
+                            </template>
 
-    </v-data-table>
-  </v-card>
-</template>
-              	<!-- TABLE UNTUK MENAMPILKAN LIST CUSTOMER -->
-
-
-                    <!-- <div class="col-md-6">
-                        <p v-if="sjpstatuss.data"><i class="fa fa-bars"></i> {{ sjpstatuss.data.length }} item dari {{ sjpstatuss.meta.total }} total data</p>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="pull-right">
-                            <b-pagination
-                                v-model="page"
-                                :total-rows="sjpstatuss.meta.total"
-                                :per-page="sjpstatuss.meta.per_page"
-                                aria-controls="sjpstatuss"
-                                v-if="sjpstatuss.data && sjpstatuss.data.length > 0"
-                                ></b-pagination>
-                        </div>
-                    </div> -->
-
+                        </v-data-table>
+                    </v-card>
+                </template>
             </div>
         </div>
     </div>
@@ -63,14 +46,16 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import moment from 'moment'
 
 export default {
     name: 'DataPalletMovement',
     created() {
-        this.getPalletMovements() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
+        this.getPalletMovements()
     },
     data() {
         return {
+            now: moment().format("YYYY-MM-DD"),
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
              headers: [
                 // { value: 'sjps_number', text: 'SJP Status Number' },
