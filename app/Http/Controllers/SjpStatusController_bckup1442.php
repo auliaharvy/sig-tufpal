@@ -306,6 +306,13 @@ public function index()
             $checker = Auth::user()->id;
             DB::beginTransaction();
             try{
+                // $update = SjpStatus::find($sjp_status_id);
+                if($sjp->is_sendback != 0){
+                    return response()->json([
+                        'status' => 'error',
+                        'data' => 'Record Has Been Send Back',
+                        'message' => 'Record Has Been Send Back'], 422);
+                }
                 $name = NULL;
                 if ($request->hasFile('sending_driver_approval')) {
                     $file = $request->file('sending_driver_approval');
