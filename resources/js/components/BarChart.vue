@@ -21,7 +21,7 @@
                 this.renderChart({
                     labels: this.labels,
                     datasets: [{
-                        label: '',
+                        label: 'Total Pallet',
                         data: this.data,
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',

@@ -11,13 +11,17 @@ use App\PoolPallet;
 use App\Transporter;
 use App\Sjppalletsend;
 use App\Sjppalletreceive;
+use App\Newpallet;
+use App\Pallettransfersend;
+use App\Pallettransferreceive;
+use App\Sjp;
 use DB;
 use Excel;
 use App\Exports\TransactionExport;
 
 class DashboardController extends Controller
 {
-    public function chart() //send & receive
+    public function chart() //grafik send & receive
     {
         $filter = request()->year . '-' . request()->month;
         $parse = Carbon::parse($filter);
@@ -47,7 +51,7 @@ class DashboardController extends Controller
         return $data;
     }
 
-    public function chart2() //sendback & receive sendback
+    public function chart2() //grafik sendback & receive sendback
     {
         $filter = request()->year . '-' . request()->month;
         $parse = Carbon::parse($filter);
@@ -77,7 +81,7 @@ class DashboardController extends Controller
         return $data;
     }
 
-    public function globalpallet()
+    public function globalpallet() //grafik all pallet
     {
         $poolTotal = PoolPallet::select(DB::raw('type,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
         ->groupBy(DB::raw('type'))
@@ -93,7 +97,7 @@ class DashboardController extends Controller
         return $total;
     }
 
-    public function pallet()
+    public function pallet() // grafik pool pallet status
     {
         $goodTotal = PoolPallet::select(DB::raw('sum(good_pallet) as total'))
         // ->groupBy(DB::raw('tag'))
@@ -117,7 +121,7 @@ class DashboardController extends Controller
         return $total;
     }
 
-    public function palletTransporter()
+    public function palletTransporter() // grafik transporter pallet status
     {
         $goodTotal = Transporter::select(DB::raw('sum(good_pallet) as total'))
         // ->groupBy(DB::raw('tag'))
@@ -141,7 +145,7 @@ class DashboardController extends Controller
         return $total;
     }
 
-    public function poolPalletDetail()
+    public function poolPalletDetail() //grafik warehouse detail
     {
         $poolDetail = PoolPallet::select(DB::raw('pool_name,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
         ->groupBy(DB::raw('pool_name'))
@@ -153,7 +157,7 @@ class DashboardController extends Controller
         return $poolDetail;
     }
 
-    public function transporterDetail()
+    public function transporterDetail() //grafik transporter detail
     {
         $transporterDetail = Transporter::select(DB::raw('transporter_name,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
         ->groupBy(DB::raw('transporter_name'))
@@ -164,7 +168,7 @@ class DashboardController extends Controller
         return $transporterDetail;
     }
 
-    public function totalAllPallet()
+    public function totalAllPallet() //total all pallet
     {
         $poolTotal = PoolPallet::select(DB::raw('type, sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
         ->groupBy(DB::raw('type'))
@@ -183,6 +187,122 @@ class DashboardController extends Controller
         }
 
         return $sum;
+    }
+
+    public function detailPoolPallet() //Grafik Pallet Status (Good, TBR, BER, Missing) di Warehouse
+    {
+        $poolName = request()->pool_name;
+            $goodTotal = PoolPallet::select(DB::raw('sum(good_pallet) as total'))
+            ->where('pool_name', '=', "$poolName")
+            ->get()
+            ->toArray();
+            $tbrTotal = PoolPallet::select(DB::raw('sum(tbr_pallet) as total'))
+            ->where('pool_name', '=', "$poolName")
+            ->get()
+            ->toArray();
+            $berTotal = PoolPallet::select(DB::raw('sum(ber_pallet) as total'))
+            ->where('pool_name', '=', "$poolName")
+            ->get()
+            ->toArray();
+            $missingTotal = PoolPallet::select(DB::raw('sum(missing_pallet) as total'))
+            ->where('pool_name', '=', "$poolName")
+            ->get()
+            ->toArray();        
+
+            $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal);
+
+        return $total;
+    }
+
+    public function detailTransporter() //Grafik Pallet Status (Good, TBR, BER, Missing) di Transporter
+    {
+        $transporterName = request()->transporter_name;
+            $goodTotal = Transporter::select(DB::raw('sum(good_pallet) as total'))
+            ->where('transporter_name', '=', "$transporterName")
+            ->get()
+            ->toArray();
+            $tbrTotal = Transporter::select(DB::raw('sum(tbr_pallet) as total'))
+            ->where('transporter_name', '=', "$transporterName")
+            ->get()
+            ->toArray();
+            $berTotal = Transporter::select(DB::raw('sum(ber_pallet) as total'))
+            ->where('transporter_name', '=', "$transporterName")
+            ->get()
+            ->toArray();
+            $missingTotal = Transporter::select(DB::raw('sum(missing_pallet) as total'))
+            ->where('transporter_name', '=', "$transporterName")
+            ->get()
+            ->toArray();        
+
+            $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal);
+
+        return $total;
+    }
+
+    public function workshopInOut() //grafik New Pallet, TBR in to workshop, Good Pallet out from workshop
+    {
+        $newPallet = Newpallet::select(DB::raw(' concat("New Pallet From " ,vendor) as label ,sum(good_pallet) as total'))
+        ->groupBy(DB::raw('vendor'))
+        // ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
+        ->get()
+        ->toArray();
+
+        $tbrReceive = Pallettransferreceive::select(DB::raw(' concat("TBR Pallet Receive " ,destination_pool) as label ,sum(tbr_pallet) as total'))
+        ->groupBy(DB::raw('destination_pool'))
+        ->where('destination_pool',  '=', "Workshop DLI")
+        ->get()
+        ->toArray();
+
+        $goodSend = Pallettransfersend::select(DB::raw(' concat("Good Pallet Send " ,departure_pool) as label ,sum(good_pallet) as total'))
+        ->groupBy(DB::raw('departure_pool'))
+        ->where('departure_pool',  '=', "Workshop DLI")
+        ->get()
+        ->toArray();
+
+
+
+        $total = array_merge($newPallet,$tbrReceive,$goodSend);
+
+        return $total;
+    }
+
+    public function transporterToPool() //grafik Transporter send to pool
+    {
+        $transporterName = request()->transporter;
+        $transporter = Transporter::where('transporter_name', '=', $transporterName)->firstOrFail();
+        $transporterId = $transporter->transporter_code;
+        $sjp = Sjp::where('transporter_id', '=', $transporterId)
+        ->where('status', "OPEN")
+        ->where('is_sendback', 0)
+        ->get();
+
+                
+        // $poolId = [$sjp->destination_pool_pallet_id];
+        // $poolName = PoolPallet::where('pool_name',)
+
+        // $newPallet = Newpallet::select(DB::raw(' destination_pool as label ,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet ) as total'))
+        // ->groupBy(DB::raw('vendor'))
+        // // ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
+        // ->get()
+        // ->toArray();
+
+        // $tbrReceive = Pallettransferreceive::select(DB::raw(' concat("TBR Pallet Receive " ,destination_pool) as label ,sum(tbr_pallet) as total'))
+        // ->groupBy(DB::raw('destination_pool'))
+        // ->where('destination_pool',  '=', "Workshop DLI")
+        // ->get()
+        // ->toArray();
+
+        // $goodSend = Pallettransfersend::select(DB::raw(' concat("Good Pallet Send " ,departure_pool) as label ,sum(good_pallet) as total'))
+        // ->groupBy(DB::raw('departure_pool'))
+        // ->where('departure_pool',  '=', "Workshop DLI")
+        // ->get()
+        // ->toArray();
+
+
+
+        // $total = array_merge($newPallet,$tbrReceive,$goodSend);
+
+        return $sjp;
     }
 
     public function exportData(Request $request)

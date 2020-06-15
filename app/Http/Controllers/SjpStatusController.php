@@ -136,6 +136,12 @@ public function index()
 
         DB::beginTransaction();
         try{
+            if($sjp->state != 0){
+                return response()->json([
+                    'status' => 'error',
+                    'data' => 'Record Has Been Send',
+                    'message' => 'Record Has Been Send'], 422);
+            }
             $name = NULL;
             if ($request->hasFile('sending_driver_approval')) {
                 $file = $request->file('sending_driver_approval');

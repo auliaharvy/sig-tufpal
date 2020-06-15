@@ -201,6 +201,15 @@
             return {
                 totalGlobal: 0,
                 barChartOptions: {
+                    onClick: function(evt, array) {
+                        if (array.length != 0) {
+                            var position = array[0]._index;
+                            var activeElement = this.tooltip._data.labels[position]
+                            console.log(activeElement);
+                        } else {
+                            console.log("You selected the background!");            
+                        }  
+                    },    
                     scales: {
                             yAxes: [{
                                 ticks: {
