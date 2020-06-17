@@ -20,23 +20,58 @@
                         </div>
                         <div class="row">
                                 <v-layout row wrap class="px-5">
-                                    <v-flex class="pa-5" xs12 md9 lg9>
-                                    <v-card>
-                                        <v-toolbar>
-                                            <v-toolbar-title>Warehouse Detail</v-toolbar-title>
-                                        </v-toolbar>
-                                        <div>
-                                            <bar-chart v-if="poolpalletdetail.length > 0" :data="datapoolpalletdetail" :options="barChartOptions" :labels="labelspoolpalletdetail"/>
-                                        </div>
-                                    </v-card>
-                                </v-flex>
-                                <v-flex class="pa-5" xs12 md3 lg3>
+                                <v-flex class="pa-5" xs12 md6 lg6>
                                     <v-card>
                                         <v-toolbar>
                                             <v-toolbar-title>Pallet Pool</v-toolbar-title>
                                         </v-toolbar>
                                         <div>
                                             <pie-chart v-if="datapallet.length > 0" :data="datapallet" :options="chartOptions" :labels="labelspallet"/>
+                                        </div>
+                                    </v-card>
+                                </v-flex>
+                                <v-flex class="pa-5" xs12 md6 lg6>
+                                    <v-card>
+                                        <v-toolbar>
+                                            <v-toolbar-title>Pallet Transporter</v-toolbar-title>
+                                        </v-toolbar>
+                                        <div>
+                                            <pie-chart v-if="datapallettransporter.length > 0" :data="datapallettransporter" :options="chartOptions" :labels="labelspallet"/>
+                                        </div>
+                                    </v-card>
+                                </v-flex>
+                                </v-layout>
+                        </div>
+                        <div class="row">
+                                <v-layout row wrap class="px-5">
+                                    <v-flex class="pa-5" xs12 md9 lg9>
+                                    <v-card>
+                                        <v-toolbar>
+                                            <v-toolbar-title>Warehouse Detail</v-toolbar-title>
+                                        </v-toolbar>
+                                        <div>
+                                            <bar-chart v-if="poolpalletdetail.length > 0" :data="datapoolpalletdetail" :options="barChartPoolOptions" :labels="labelspoolpalletdetail"/>
+                                        </div>
+                                    </v-card>
+                                </v-flex>
+                                <v-flex class="pa-5" xs12 md3 lg3>
+                                    <v-card>
+                                        <v-toolbar>
+                                            <v-toolbar-title>
+                                                <v-autocomplete
+                                                :items="labelspoolpalletdetail"
+                                                dense
+                                                solo
+                                                v-model="detail_pool_name"
+                                                item-text="label"
+                                                item-value="label"
+                                                clearable
+                                                >
+                                                </v-autocomplete>
+                                            </v-toolbar-title>
+                                        </v-toolbar>
+                                        <div>
+                                            <pie-chart v-if="datadetailpoolpallet.length > 0" :data="datadetailpoolpallet" :options="chartOptions" :labels="labelspallet"/>
                                         </div>
                                     </v-card>
                                 </v-flex>
@@ -57,10 +92,21 @@
                                 <v-flex class="pa-5" xs12 md3 lg3>
                                     <v-card>
                                         <v-toolbar>
-                                            <v-toolbar-title>Pallet Transporter</v-toolbar-title>
+                                            <v-toolbar-title>
+                                                <v-autocomplete
+                                                :items="labelstransporterdetail"
+                                                dense
+                                                solo
+                                                v-model="detail_transporter_name"
+                                                item-text="label"
+                                                item-value="label"
+                                                clearable
+                                                >
+                                                </v-autocomplete>
+                                            </v-toolbar-title>
                                         </v-toolbar>
                                         <div>
-                                            <pie-chart v-if="datapallettransporter.length > 0" :data="datapallettransporter" :options="chartOptions" :labels="labelspallet"/>
+                                            <pie-chart v-if="datadetailtransporter.length > 0" :data="datadetailtransporter" :options="chartOptions" :labels="labelspallet"/>
                                         </div>
                                     </v-card>
                                 </v-flex>
@@ -194,6 +240,16 @@
             this.getChartDataPalletTransporter().then((res) => {
                 let row = res.data
             }),
+            this.getChartDataDetailPoolPallet({
+                detail_pool_name: this.detail_pool_name,
+            }).then((res) => {
+                let row = res.data
+            }),
+            this.getChartDataDetailTransporter({
+                detail_transporter_name: this.detail_transporter_name,
+            }).then((res) => {
+                let row = res.data
+            }),
 
             this.getPools()
         },
@@ -230,6 +286,36 @@
                     responsive: true,
                     maintainAspectRatio: false
                 },
+                barChartPoolOptions: {
+                    onClick: function(evt, array) {
+                        if (array.length != 0) {
+                            var position = array[0]._index;
+                            var activeElement = this.tooltip._data.labels[position]
+                            console.log(activeElement)
+                        } else {
+                            console.log("You selected the background!");            
+                        }  
+                    },    
+                    scales: {
+                            yAxes: [{
+                                ticks: {
+                                    // stepSize: 50,
+                                    // maxTicksLimit: 3,
+                                    suggestedMin: 0
+                                }
+                            }]
+                        },
+                     plugins: {
+                        datalabels: {
+                            display: true,
+                            align: 'center',
+                            anchor: 'center'
+                        },
+                        
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                },
                 chartOptions: {
                      plugins: {
                         datalabels: {
@@ -241,6 +327,8 @@
                     responsive: true,
                     maintainAspectRatio: false
                 },
+                detail_pool_name: 'BCTD',
+                detail_transporter_name: 'ANGGADA PERKASA, P.T.',
                 month: moment().format('MM'),
                 year: moment().format('Y'),
                 monthReceive: moment().format('MM'),
@@ -279,6 +367,16 @@
                     month: this.monthReceive,
                     year: this.yearReceive
                 })
+            },
+            detail_pool_name() {
+                this.getChartDataDetailPoolPallet({
+                    detail_pool_name: this.detail_pool_name
+                })
+            },
+            detail_transporter_name() {
+                this.getChartDataDetailTransporter({
+                    detail_transporter_name: this.detail_transporter_name
+                })
             }
         },
         computed: {
@@ -291,6 +389,8 @@
                 transporterdetail: state => state.transporterdetail,
                 pallet: state => state.pallet,
                 pallettransporter: state => state.pallettransporter,
+                detailpoolpallet: state => state.detailpoolpallet,
+                detailtransporter: state => state.detailtransporter,
             }),
             ...mapState('pool', {
                 pools: state => state.pools
@@ -354,6 +454,16 @@
                     return o.total
                 });
             },
+            datadetailpoolpallet() {
+                return _.map(this.detailpoolpallet, function(o) {
+                    return o.total
+                });
+            },
+            datadetailtransporter() {
+                return _.map(this.detailtransporter, function(o) {
+                    return o.total
+                });
+            },
             datatransporterdetail() {
                 return _.map(this.transporterdetail, function(o) {
                     return o.total
@@ -374,7 +484,8 @@
             ...mapActions('dashboard', ['getChartData', 'getChart2Data',
                             'getChartDataGlobalPalllet', 'getChartDataPallet',
                             'getChartDataPoolPalletDetail', 'getChartDataTransporterDetail',
-                            'getChartDataPalletTransporter', 'getTotalAllPallet']),
+                            'getChartDataPalletTransporter', 'getTotalAllPallet', 'getChartDataDetailPoolPallet',
+                            'getChartDataDetailTransporter']),
             ...mapActions('pool', ['getPools', 'removePools']),
             exportData() {
                 window.open(`/api/export?api_token=${this.token}&month=${this.month}&year=${this.year}`)

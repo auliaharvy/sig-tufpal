@@ -11,6 +11,8 @@ const state = () => ({
     pallettransporter: [],
     poolpalletdetail: [],
     transporterdetail: [],
+    detailpoolpallet: [], //detail pool pallet satu satu
+    detailtransporter: [], //detail transporter satu satu
     totalallpallet: '',
 })
 
@@ -35,6 +37,12 @@ const mutations = {
     },
     ASSIGN_DATA_TRANSPORTER_DETAIL(state, payload) {
         state.transporterdetail = payload
+    },
+    ASSIGN_DATA_DETAIL_POOL_PALLET(state, payload) {
+        state.detailpoolpallet = payload
+    },
+    ASSIGN_DATA_DETAIL_TRANSPORTER(state, payload) {
+        state.detailtransporter = payload
     },
     ASSIGN_DATA_TOTAL_ALL_PALLET(state, payload) {
         state.totalallpallet = payload
@@ -110,6 +118,24 @@ const actions = {
             $axios.get(`/transporterdetail`)
             .then((response) => {
                 commit('ASSIGN_DATA_TRANSPORTER_DETAIL', response.data)
+                resolve(response.data)
+            })
+        })
+    },
+    getChartDataDetailPoolPallet({ commit }, payload) {
+        return new Promise((resolve, reject) => {
+            $axios.get(`/detailpoolpallet?detail_pool_name=${payload.detail_pool_name}`)
+            .then((response) => {
+                commit('ASSIGN_DATA_DETAIL_POOL_PALLET', response.data)
+                resolve(response.data)
+            })
+        })
+    },
+    getChartDataDetailTransporter({ commit }, payload) {
+        return new Promise((resolve, reject) => {
+            $axios.get(`/detailtransporter?detail_transporter_name=${payload.detail_transporter_name}`)
+            .then((response) => {
+                commit('ASSIGN_DATA_DETAIL_TRANSPORTER', response.data)
                 resolve(response.data)
             })
         })

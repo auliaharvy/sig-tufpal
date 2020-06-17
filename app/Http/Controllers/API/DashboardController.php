@@ -191,7 +191,7 @@ class DashboardController extends Controller
 
     public function detailPoolPallet() //Grafik Pallet Status (Good, TBR, BER, Missing) di Warehouse
     {
-        $poolName = request()->pool_name;
+        $poolName = request()->detail_pool_name;
             $goodTotal = PoolPallet::select(DB::raw('sum(good_pallet) as total'))
             ->where('pool_name', '=', "$poolName")
             ->get()
@@ -216,7 +216,7 @@ class DashboardController extends Controller
 
     public function detailTransporter() //Grafik Pallet Status (Good, TBR, BER, Missing) di Transporter
     {
-        $transporterName = request()->transporter_name;
+        $transporterName = request()->detail_transporter_name;
             $goodTotal = Transporter::select(DB::raw('sum(good_pallet) as total'))
             ->where('transporter_name', '=', "$transporterName")
             ->get()
