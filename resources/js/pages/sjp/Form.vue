@@ -38,7 +38,7 @@
             <v-flex class="px-5" xs6 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.no_do }">
                     <label for="">No Dispatch</label>
-                    <input type="text" class="form-control" v-model="sjp.no_do" :readonly="true">
+                    <input type="text" class="form-control" v-model="sjp.no_do">
                     <p class="text-danger" v-if="errors.no_do">{{ errors.no_do[0] }}</p>
                 </div>
             </v-flex>
@@ -73,6 +73,7 @@
                     <label for="">Destination Pool Code</label>
                     <input type="text" class="form-control" v-model="sjp.destination_pool_pallet_id" :readonly="true">
                     <p class="text-danger" v-if="errors.destination_pool_pallet_id">{{ errors.destination_pool_pallet_id[0] }}</p>
+                
                 </div>
             </v-flex>
             <v-flex class="px-5" xs12 md6 lg6>
@@ -81,6 +82,16 @@
                     <input type="text" class="form-control" v-model="sjp.dest_pool" :readonly="true">
                     <p class="text-danger" v-if="errors.dest_pool">{{ errors.dest_pool[0] }}</p>
                 </div>
+                <v-autocomplete
+                    :items="pools.data"
+                    dense
+                    solo
+                    v-model="sjp.destination_pool_pallet_id"
+                    item-text="pool_name"
+                    item-value="pool_pallet_id"
+                    clearable
+                    >
+                </v-autocomplete>
             </v-flex>
         </v-layout>
         <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id != 'pooldli'">
@@ -99,7 +110,7 @@
                     item-value="pool_pallet_id"
                     clearable
                     >
-                    </v-autocomplete>
+                </v-autocomplete>
             </v-flex>
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.dest_pool }">
@@ -125,7 +136,16 @@
                     <input type="text" class="form-control" v-model="sjp.transporter_name" :readonly="true">
                     <p class="text-danger" v-if="errors.transporter_name">{{ errors.transporter_name[0] }}</p>
                 </div>
-
+                <v-autocomplete
+                    :items="transporters.data"
+                    dense
+                    solo
+                    v-model="sjp.transporter_id"
+                    item-text="transporter_name"
+                    item-value="transporter_id"
+                    clearable
+                    >
+                </v-autocomplete>
             </v-flex>
        </v-layout>
        <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id != 'pooldli'">
@@ -144,7 +164,7 @@
                     item-value="transporter_id"
                     clearable
                     >
-                    </v-autocomplete>
+                </v-autocomplete>
             </v-flex>
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.transporter_name }">
@@ -169,6 +189,16 @@
                     <input type="text" class="form-control" v-model="sjp.driver_name" :readonly="true">
                     <p class="text-danger" v-if="errors.driver_name">{{ errors.driver_name[0] }}</p>
                 </div>
+                <v-autocomplete
+                    :items="drivers.data"
+                    dense
+                    solo
+                    v-model="sjp.driver_id"
+                    item-text="driver_name"
+                    item-value="driver_id"
+                    clearable
+                    >
+                </v-autocomplete>
             </v-flex>
         </v-layout>
         <v-layout row wrap class="px-5" v-if="authenticated.reference_pool_pallet_id != 'pooldli'">
@@ -187,7 +217,7 @@
                     item-value="driver_id"
                     clearable
                     >
-                    </v-autocomplete>
+                </v-autocomplete>
             </v-flex>
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.driver_name }">
@@ -202,28 +232,28 @@
             <v-flex class="px-5" xs6 md3 lg3>
                 <div class="form-group" :class="{ 'has-error': errors.tonnage }">
                     <label for="">Tonnage</label>
-                    <input type="text" class="form-control" v-model="sjp.tonnage" :readonly="true">
+                    <input type="text" class="form-control" v-model="sjp.tonnage" >
                     <p class="text-danger" v-if="errors.tonnage">{{ errors.tonnage[0] }}</p>
                 </div>
             </v-flex>
             <v-flex class="px-5" xs6 md3 lg3>
                 <div class="form-group" :class="{ 'has-error': errors.packaging }">
                     <label for="">Packaging (kg)</label>
-                    <input type="text" class="form-control" v-model="sjp.packaging" :readonly="true">
+                    <input type="text" class="form-control" v-model="sjp.packaging" >
                     <p class="text-danger" v-if="errors.packaging">{{ errors.packaging[0] }}</p>
                 </div>
             </v-flex>
             <v-flex class="px-5" xs6 md3 lg3>
                 <div class="form-group" :class="{ 'has-error': errors.product_quantity }">
                     <label for="">Product Quantity (zak)</label>
-                    <input type="text" class="form-control" v-model="sjp.product_quantity" :readonly="true">
+                    <input type="text" class="form-control" v-model="sjp.product_quantity" >
                     <p class="text-danger" v-if="errors.product_quantity">{{ errors.product_quantity[0] }}</p>
                 </div>
             </v-flex>
             <v-flex class="px-5" xs6 md3 lg3>
                 <div class="form-group" :class="{ 'has-error': errors.pallet_quantity }">
                     <label for=""><b>Pallet Quantity</b></label>
-                    <input type="text" class="form-control" v-model="sjp.pallet_quantity" :readonly="true">
+                    <input type="text" class="form-control" v-model="sjp.pallet_quantity" >
                     <p class="text-danger" v-if="errors.pallet_quantity">{{ errors.pallet_quantity[0] }}</p>
                 </div>
             </v-flex>
