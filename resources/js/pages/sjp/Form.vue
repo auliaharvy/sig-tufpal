@@ -476,6 +476,38 @@ export default {
                         this.sjp.transporter_id = row.transporter_id;
                         this.sjp.transporter_name = row.transporter_name;
                         this.sjp.vehicle_number = row.vehicle_number;
+                        if(row.destination_pool_pallet_id == '011410'){
+                            this.sjp.destination_pool_pallet_id = '011405'
+                            this.sjp.dest_pool = 'Pademangan';
+                        };
+                        if(row.destination_pool_pallet_id == '020169'){
+                            this.sjp.destination_pool_pallet_id = '020137'
+                            this.sjp.dest_pool = 'BCTD';
+                        };
+                        if(row.destination_pool_pallet_id == '020171'){
+                            this.sjp.destination_pool_pallet_id = '020142'
+                            this.sjp.dest_pool = 'Klapanuggal';
+                        };
+                        if(row.destination_pool_pallet_id == '020498'){
+                            this.sjp.destination_pool_pallet_id = '020442'
+                            this.sjp.dest_pool = 'Ngamprah';
+                        };
+                        if(row.destination_pool_pallet_id == '026508'){
+                            this.sjp.destination_pool_pallet_id = '026507'
+                            this.sjp.dest_pool = 'Sukabumi Lembursitu';
+                        };
+                        if(row.destination_pool_pallet_id == '027349'){
+                            this.sjp.destination_pool_pallet_id = '027309'
+                            this.sjp.dest_pool = 'Tarogong';
+                        };
+                        if(row.destination_pool_pallet_id == '310539'){
+                            this.sjp.destination_pool_pallet_id = '310522'
+                            this.sjp.dest_pool = 'BSD Cisauk Warehouse';
+                        };
+                        if(row.destination_pool_pallet_id == '310639'){
+                            this.sjp.destination_pool_pallet_id = '310611'
+                            this.sjp.dest_pool = 'SERANG TAKTAKAN';
+                        };
                     }
                     // console.log(response.data); // works fine
 
@@ -495,6 +527,38 @@ export default {
                     this.sjp.transporter_id = row.transporter_id;
                     this.sjp.transporter_name = row.transporter_name;
                     this.sjp.vehicle_number = row.vehicle_number;
+                    if(row.destination_pool_pallet_id == '011410'){
+                            this.sjp.destination_pool_pallet_id = '011405'
+                            this.sjp.dest_pool = 'Pademangan';
+                        };
+                        if(row.destination_pool_pallet_id == '020169'){
+                            this.sjp.destination_pool_pallet_id = '020137'
+                            this.sjp.dest_pool = 'BCTD';
+                        };
+                        if(row.destination_pool_pallet_id == '020171'){
+                            this.sjp.destination_pool_pallet_id = '020142'
+                            this.sjp.dest_pool = 'Klapanuggal';
+                        };
+                        if(row.destination_pool_pallet_id == '020498'){
+                            this.sjp.destination_pool_pallet_id = '020442'
+                            this.sjp.dest_pool = 'Ngamprah';
+                        };
+                        if(row.destination_pool_pallet_id == '026508'){
+                            this.sjp.destination_pool_pallet_id = '026507'
+                            this.sjp.dest_pool = 'Sukabumi Lembursitu';
+                        };
+                        if(row.destination_pool_pallet_id == '027349'){
+                            this.sjp.destination_pool_pallet_id = '027309'
+                            this.sjp.dest_pool = 'Tarogong';
+                        };
+                        if(row.destination_pool_pallet_id == '310539'){
+                            this.sjp.destination_pool_pallet_id = '310522'
+                            this.sjp.dest_pool = 'BSD Cisauk Warehouse';
+                        };
+                        if(row.destination_pool_pallet_id == '310639'){
+                            this.sjp.destination_pool_pallet_id = '310611'
+                            this.sjp.dest_pool = 'SERANG TAKTAKAN';
+                        };
 
                 //jika data dispatch tidak ada
                 }).catch((error) => {
