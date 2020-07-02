@@ -188,8 +188,8 @@ class PalletTransferController extends Controller
         $total = $good_pallet_send+$tbr_pallet_send;
 
         $this->validate($request, [
-            'good_pallet' => 'required|integer|gt:-1|lte:'.$total,
-            'tbr_pallet' => 'required|integer|gt:-1|lte:'.$total,
+            'good_pallet' => 'required|integer|gt:-1|lte:'.$good_pallet_trans,
+            'tbr_pallet' => 'required|integer|gt:-1|lte:'.$tbr_pallet_trans,
         ]);
 
         $palletTransfer = PalletTransfer::where('pallet_transfer_id',$pallet_transfer_id)->first();
