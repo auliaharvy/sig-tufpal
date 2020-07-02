@@ -472,7 +472,10 @@ public function index()
             $goodpalletrcv = $request->good_pallet;
             $tbr_palletrcv = $request->tbr_pallet;
             if($tbr_palletrcv>($good_pallet-$goodpalletrcv)){
-                return response()->json(['error' => 'Input Error! Total Quantity Of Received Pallet  Over Than Total Quantity Of Pallet Send'], 404);
+                return response()->json([
+                    'status' => 'error',
+                    'data' => 'the number of pallets received exceeds the sent pallet',
+                    'message' => 'the number of pallets received exceeds the sent pallet'], 422);
             }else {
                 DB::beginTransaction();
                 try{
@@ -653,7 +656,10 @@ public function index()
                 $missing_palletrcv = $request->missing_pallet;
                 $missing_ber = $ber_palletrcv+$missing_palletrcv;
                 if($tbr_palletrcv>($total-$goodpalletrcv) ||$missing_ber>($total-$good_tbr) ){
-                    return response()->json(['error' => 'Qty Receive melebihi data yang di send'], 404);
+                    return response()->json([
+                        'status' => 'error',
+                        'data' => 'the number of pallets received exceeds the sent pallet',
+                        'message' => 'the number of pallets received exceeds the sent pallet'], 422);
                 }
                 else{
                     $name = NULL;

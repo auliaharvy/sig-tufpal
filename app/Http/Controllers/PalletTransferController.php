@@ -181,11 +181,11 @@ class PalletTransferController extends Controller
         $destination_id = $request->destination_pool_pallet_id;
         $InventoryTrans = Transporter::find($transporter_id);
         $update = PalletTransfer::find($pallet_transfer_id);
-        $good_pallet = $update->good_pallet;
-        $tbr_pallet = $update->tbr_pallet;
-        $good_pallet = $InventoryTrans->good_pallet;
-        $tbr_pallet  = $InventoryTrans->tbr_pallet;
-        $total = $good_pallet+$tbr_pallet;
+        $good_pallet_send = $update->good_pallet;
+        $tbr_pallet_send = $update->tbr_pallet;
+        $good_pallet_trans = $InventoryTrans->good_pallet;
+        $tbr_pallet_trans  = $InventoryTrans->tbr_pallet;
+        $total = $good_pallet_send+$tbr_pallet_send;
 
         $this->validate($request, [
             'good_pallet' => 'required|integer|gt:-1|lte:'.$total,
@@ -209,7 +209,16 @@ class PalletTransferController extends Controller
             $tbr_palletrcv = $request->tbr_pallet;
 
             if($tbr_palletrcv>($total-$good_palletrcv)){
-                return response()->json(['error' => 'Qty Receive melebihi data yang di send'], 404);
+                return response()->json([
+                    'status' => 'error',
+                    'data' => 'the number of pallets received exceeds the sent pallet',
+                    'message' => 'the number of pallets received exceeds the sent pallet'], 422);
+            }
+            elseif($good_palletrcv>($total-$tbr_palletrcv)){
+                return response()->json([
+                    'status' => 'error',
+                    'data' => 'the number of pallets received exceeds the sent pallet',
+                    'message' => 'the number of pallets received exceeds the sent pallet'], 422);
             }
             else{
                 DB::beginTransaction();
