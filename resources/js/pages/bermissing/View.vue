@@ -31,8 +31,8 @@
                             <dt>Note</dt>
                             <dd>{{ note }} </dd>
                             <br>
-                            <dt>Print At</dt>
-                            <dd>{{ print_at }} </dd>
+                            <dt>Reported At</dt>
+                            <dd>{{ created_at }} </dd>
                             <br>
                         </v-flex>
                     </v-layout>
@@ -69,6 +69,7 @@ import jsPDF from 'jspdf'
                 this.reporter_prove = row.reporter_prove
                 this.status =  row.status
                 this.note = row.note
+                this.created_at = row.created_at
                 this.editPools(this.pool_pallet_id).then((res) => {
                 let row = res.data
                 this.pool_name = row.pool_name
@@ -94,6 +95,7 @@ import jsPDF from 'jspdf'
                 reporter_prove: '',
                 status: '',
                 note: '',
+                created_at: '',
                 print_at: new Date().toLocaleString(),
 
                 pool_name: '',

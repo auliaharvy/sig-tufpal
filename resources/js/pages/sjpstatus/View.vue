@@ -32,8 +32,8 @@
                             <dt>Note</dt>
                             <dd>{{ note }} </dd>
                             <br>
-                            <dt>Print At</dt>
-                            <dd>{{ print_at }} </dd>
+                            <dt>Send At</dt>
+                            <dd>{{ created_at }} </dd>
                             <br>
                         </v-flex>
                     </v-layout>
@@ -72,6 +72,7 @@ import jsPDF from 'jspdf'
                 this.bad_cement =  row.bad_cement
                 this.driver_approval = row.driver_approval
                 this.note = row.note
+                this.created_at = row.created_at
                 this.editSjp(this.sjp_id).then((res) => {
                     let row = res.data
                     this.sjp_number = row.sjp_number
@@ -114,6 +115,7 @@ import jsPDF from 'jspdf'
                 bad_cement: '',
                 driver_approval: '',
                 note: '',
+                created_at: '',
                 print_at: new Date().toLocaleString(),
 
                 dept_pool_name: '',
