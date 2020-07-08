@@ -38,12 +38,14 @@
                             {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
                         </v-chip>
                     </template>
-                        <template v-slot:item.actions="{ item }">
-                            <router-link :to="{ name: 'pools.edit', params: {id: item.pool_pallet_id} }">
-                                <v-btn color="success" small>Update</v-btn>
-                            </router-link>
-                            <v-btn color="error" small @click="deletePools(item.pool_pallet_id)">Delete</v-btn>
-                        </template>
+                    <template v-if="$can('update poolpallets') " v-slot:item.actions="{ item }">
+                        <router-link :to="{ name: 'pools.edit', params: {id: item.pool_pallet_id} }">
+                            <v-btn color="success" small>Update</v-btn>
+                        </router-link>
+                    </template>
+                    <template v-if="$can('delete poolpallets') " v-slot:item.actions="{ item }">
+                        <v-btn color="error" small @click="deletePools(item.pool_pallet_id)">Delete</v-btn>
+                    </template>
                 </v-data-table>
             </v-card>
             </template>

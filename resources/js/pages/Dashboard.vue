@@ -5,6 +5,9 @@
                     <div class="panel">
                         <div class="row">
                                 <v-layout row wrap class="px-5">
+                                    <v-btn class="ma-5" @click.prevent="exportData()">
+                                        Download Today Transaction
+                                    </v-btn>
                                     <v-flex class="pa-5" xs12 md12 lg12>
                                     <v-card>
                                         <v-toolbar>
@@ -488,7 +491,7 @@
                             'getChartDataDetailTransporter']),
             ...mapActions('pool', ['getPools', 'removePools']),
             exportData() {
-                window.open(`/api/export?api_token=${this.token}&month=${this.month}&year=${this.year}`)
+                window.open(`api/exportalltransactiontoday?api_token=${this.token}`)
             }
         },
         components: {

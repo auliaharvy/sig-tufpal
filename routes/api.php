@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::post('/login', 'Auth\LoginController@login');
+Route::get('sendattachmentemail', 'API\TodayTransactionController@attachment_email');
 
 Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('sjp', 'SjpController');
@@ -81,6 +82,10 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('workshop', 'API\DashboardController@workshopInOut');
     Route::get('transportertopool', 'API\DashboardController@transporterToPool');
 
+    Route::get('alltransactiontoday', 'API\TodayTransactionController@allTransactionToday');
+    Route::get('exportalltransactiontoday', 'API\TodayTransactionController@exportData');
+    Route::get('storealltransactiontoday', 'API\TodayTransactionController@storeData');
+    // Route::get('sendattachmentemail', 'API\TodayTransactionController@attachment_email');
     Route::get('export', 'API\DashboardController@exportData');
     Route::resource('/outlets', 'API\OutletController')->except(['show']);
 

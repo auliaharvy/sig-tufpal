@@ -17,6 +17,9 @@
                                 Download Data
                             </download-excel>
                         </v-btn>
+                        <v-btn @click.prevent="exportData()">
+                            Download Today Transaction
+                        </v-btn>
                         <v-text-field
                             v-model="search"
                             prepend-icon="mdi-search"
@@ -72,6 +75,10 @@ export default {
         this.getAlltransaction().then((res) => {
                 let row = res.data
                 console.log(row.pool_pallet)
+            });
+        this.getUserLogin().then((res) => {
+                let row = res.data
+                console.log(row)
             })
     },
     data() {
@@ -123,6 +130,9 @@ export default {
         ...mapState('alltransaction', {
             loading: state => state.loading //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
+        ...mapState('user', {
+            authenticated: state => state.authenticated
+        }),
         //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {
             get() {
@@ -143,8 +153,11 @@ export default {
     },
     methods: {
         ...mapActions('alltransaction', ['getAlltransaction']),
+        ...mapActions('user', ['getUserLogin']),
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
-
+        exportData() {
+            window.open(`api/exportalltransactiontoday?api_token=${this.token}`)
+        }
     }
 }
 </script>
