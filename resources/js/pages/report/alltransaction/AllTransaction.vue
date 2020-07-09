@@ -17,9 +17,6 @@
                                 Download Data
                             </download-excel>
                         </v-btn>
-                        <v-btn @click.prevent="exportData()">
-                            Download Today Transaction
-                        </v-btn>
                         <v-text-field
                             v-model="search"
                             prepend-icon="mdi-search"
