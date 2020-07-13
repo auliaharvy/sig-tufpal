@@ -4,7 +4,7 @@
             <template v-slot:prepend>
                 <v-list-item two-line>
                     <v-list-item-avatar>
-                        <img src="../assets/logo.png">
+                        <img src="../assets/android-chrome 512x512.png">
                     </v-list-item-avatar>
                     <v-list-item-content>
                         <v-list-item-title>Tufpal System</v-list-item-title>
