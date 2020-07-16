@@ -41,12 +41,12 @@
                         <!-- <template v-slot:item.total="{ item }">
                         {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
                         </template> -->
-                            <template v-if="$can('update transporters') " v-slot:item.actions="{ item }">
+                            <template v-if="$can('update transporters') " v-slot:item.update="{ item }">
                                 <router-link :to="{ name: 'transporters.edit', params: {id: item.transporter_id} }">
                                     <v-btn color="success" small>Update</v-btn>
                                 </router-link>
                             </template>
-                            <template v-if="$can('delete transporters') " v-slot:item.actions="{ item }">
+                            <template v-if="$can('delete transporters') " v-slot:item.delete="{ item }">
                                 <v-btn color="error" small @click="deleteTransporters(item.transporter_id)">Delete</v-btn>
                             </template>
                         </v-data-table>
@@ -78,7 +78,8 @@ export default {
                 { value: 'missing_pallet', text: 'Missing Pallet' },
                 { value: 'total', text: 'Total Pallet' },
                 { value: 'pallet_quota', text: 'Pallet Quota' },
-                { value: 'actions', text: 'Action'}
+                { value: 'update', text: 'Update'},
+                { value: 'delete', text: 'Delete'}
             ],
             search: ''
         }
