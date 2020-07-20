@@ -23,6 +23,10 @@ class PoolController extends Controller
         $pool = DB::table('pool_pallet as a')
             ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
             ->select('a.*', 'b.organization_name')
+            ->where('a.good_pallet', '>', 0 )
+            ->orWhere('a.tbr_pallet', '>', 0 )
+            ->orWhere('a.ber_pallet', '>', 0 )
+            ->orWhere('a.missing_pallet', '>', 0 )
             ->paginate(10000000)
             ->toArray();
         }
@@ -31,6 +35,10 @@ class PoolController extends Controller
             ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
             ->select('a.*', 'b.organization_name')
             ->where('a.pool_pallet_id',[$pool_pallet])
+            // ->where('a.good_pallet', '>', 0 )
+            // ->orWhere('a.tbr_pallet', '>', 0 )
+            // ->orWhere('a.ber_pallet', '>', 0 )
+            // ->orWhere('a.missing_pallet', '>', 0 )
             ->paginate(1000000)
             ->toArray();
         }

@@ -21,6 +21,10 @@ class TransporterController extends Controller
         $transporter = DB::table('transporter as a')
             ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
             ->select('a.*', 'b.organization_name')
+            ->where('a.good_pallet', '>', 0 )
+            ->orWhere('a.tbr_pallet', '>', 0 )
+            ->orWhere('a.ber_pallet', '>', 0 )
+            ->orWhere('a.missing_pallet', '>', 0 )
             ->paginate(10000000)
             ->toArray();
         }
@@ -29,6 +33,10 @@ class TransporterController extends Controller
             ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
             ->select('a.*', 'b.organization_name')
             ->where('a.transporter_id',$transporter)
+            // ->where('a.good_pallet', '>', 0 )
+            // ->orWhere('a.tbr_pallet', '>', 0 )
+            // ->orWhere('a.ber_pallet', '>', 0 )
+            // ->orWhere('a.missing_pallet', '>', 0 )
             ->paginate(1000000)
             ->toArray();
         }
@@ -116,7 +124,7 @@ class TransporterController extends Controller
         //VALIDASI DATA YANG DITERIMA
         $this->validate($request, [
             'transporter_name' => 'required|string',
-            'transporter_address' => 'required|string',
+            // 'transporter_address' => 'required|string',
             'pallet_quota' => 'required'
         ]);
 

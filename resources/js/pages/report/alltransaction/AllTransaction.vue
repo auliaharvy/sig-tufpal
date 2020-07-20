@@ -10,7 +10,7 @@
                         <v-card-title>
                         ALL TRANSACTION
                         <v-spacer></v-spacer>
-                        <v-btn>
+                        <v-btn v-if=" authenticated.reference_pool_pallet_id == 'pooldli' ">
                             <download-excel
                             :data= "alltransactions.data"
                             :name="exportName">
@@ -71,11 +71,11 @@ export default {
     created() {
         this.getAlltransaction().then((res) => {
                 let row = res.data
-                console.log(row.pool_pallet)
+                // console.log(row)
             });
         this.getUserLogin().then((res) => {
                 let row = res.data
-                console.log(row)
+                // console.log(row.reference_pool_pallet_id)
             })
     },
     data() {

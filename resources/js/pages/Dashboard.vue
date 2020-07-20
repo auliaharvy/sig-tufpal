@@ -5,7 +5,7 @@
                     <div class="panel">
                         <div class="row">
                                 <v-layout row wrap class="px-5">
-                                    <v-btn class="ma-5" @click.prevent="exportData()">
+                                    <v-btn  v-if=" authenticated.reference_pool_pallet_id == 'pooldli' " class="ma-5" @click.prevent="exportData()">
                                         Download Today Transaction
                                     </v-btn>
                                     <v-flex class="pa-5" xs12 md12 lg12>
