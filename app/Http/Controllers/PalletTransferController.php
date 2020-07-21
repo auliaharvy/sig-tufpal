@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Resources\PalletTransferCollection;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 use App\DeletedItem;
 use App\PalletTransfer;
 use App\Pallettransfersend;
@@ -73,6 +74,7 @@ class PalletTransferController extends Controller
 
     public function store(Request $request)
     {
+        $now = Carbon::now()->toDateTimeString();
         $pallet_transfer_id = $request->pallet_transfer_id;
         $pallet_transfer = DB::table('pallet_transfer')->where('pallet_transfer_id',$pallet_transfer_id)->first();
         $transporter_id = $request->transporter_id;
@@ -90,6 +92,8 @@ class PalletTransferController extends Controller
             'reason' => 'required',
         ]);
 
+        echo $now;
+
         DB::beginTransaction();
         try{
             $checker = Auth::user()->id;
@@ -106,6 +110,8 @@ class PalletTransferController extends Controller
                 'reason' => $request->reason,
                 'note' => $request->note,
                 'status' => 0,
+                // 'created_at' => $now,
+                // 'updated_at' => $now,
             ]);
 
             // Membuat log transaksi send pallet transfer
@@ -127,6 +133,8 @@ class PalletTransferController extends Controller
                 'good_pallet' => $request->good_pallet,
                 'tbr_pallet' => $request->tbr_pallet,
                 'note' => $request->note,
+                // 'created_at' => $now,
+                // 'updated_at' => $now,
             ]);
 
             // Membuat log All Transaction
@@ -150,6 +158,8 @@ class PalletTransferController extends Controller
                 'tbr_pallet' => $palletTransfer->tbr_pallet,
                 'reason' => $palletTransfer->reason,
                 'note' => $request->note,
+                // 'created_at' => $now,
+                // 'updated_at' => $now,
             ]);
 
             $InventoryDept = PoolPallet::find($departure_id);

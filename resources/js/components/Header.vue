@@ -338,7 +338,7 @@ export default {
                 this.$store.state.token = localStorage.getItem('token')
                 this.$router.push('/login')
             })
-        }
-    }
+        },
+    },
 }
 </script>

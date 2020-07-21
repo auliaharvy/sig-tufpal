@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Resources\SjpStatusCollection;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 use App\Newpallet;
 use App\PoolPallet;
 use App\Alltransaction;
@@ -31,6 +32,7 @@ class NewpalletController extends Controller
 
     public function store(Request $request)
     {
+        $now = Carbon::now()->toDateTimeString();
         $this->validate($request, [
             'good_pallet' => 'required|integer|gt:-1',
         ]);
@@ -48,6 +50,8 @@ class NewpalletController extends Controller
                     'driver' => $request->driver,
                     'vendor' => $request->vendor,
                     'note' => $request->note,
+                    // 'created_at' => $now,
+                    // 'updated_at' => $now,
                 ]);
 
                 // Membuat log All Transaction
@@ -66,6 +70,8 @@ class NewpalletController extends Controller
                         'vehicle' => $newpallet->vehicle,
                         'driver' => $newpallet->driver,
                         'note' => $request->note,
+                        // 'created_at' => $now,
+                        // 'updated_at' => $now,
                     ]);
 
                 $InventoryPool = PoolPallet::find($pool_pallet_id);
@@ -73,7 +79,8 @@ class NewpalletController extends Controller
                 $InventoryPool->save();
 
                 DB::commit();
-                return response()->json(['status' => 'success'], 200);
+                return response()->json(['status' => 'success',
+                                           'data' => $newpallet, ], 200);
             }catch (\Exception $e) {
                 DB::rollback();
                 return response()->json([
