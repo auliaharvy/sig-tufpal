@@ -2,7 +2,7 @@
     <v-footer app dark absolute class="font-weight-light">
         <v-col class="text-center">
             Copyright&copy; 2019 <a href="https://dinamikalogistindo.com">PT Dinamika Logistindo Indonesia</a>  — By <a href="https://suryamicrosystems.co.id">Surya Microsystems</a>
-            <p>{{dateNow}}</p>
+            <!-- <p>{{dateNow}}</p> -->
         </v-col>
             
     </v-footer>
@@ -22,21 +22,21 @@
 -->
 <script>
 export default {
-     data(){
-        return{
-            dateNow:'',
-        }
-    },
-    methods: {
-        time() {
-            var self = this
-            this.dateNow = new Date().toLocaleString(),
+    //  data(){
+    //     return{
+    //         dateNow:'',
+    //     }
+    // },
+    // methods: {
+    //     time() {
+    //         var self = this
+    //         this.dateNow = new Date().toLocaleString(),
 
-            setInterval(self.time, 1000)
-        },
-    },
-    mounted: function(){
-        this.time()
-    }
+    //         setInterval(self.time, 1000)
+    //     },
+    // },
+    // mounted: function(){
+    //     this.time()
+    // }
 }
 </script>
