@@ -86,6 +86,29 @@ const actions = {
             commit('doneLoading')
         })
     },
+
+    checkSjp({ dispatch ,commit}, payload) {
+        commit('isLoading')
+        return new Promise((resolve, reject) => {
+            //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
+            $axios.post(`/api/sjp/checktruck`, payload, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then((response) => {
+                console.log(response)})
+            }).catch((error) => {
+                alert(error.response.data.message)
+                //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
+                if (error.response.status == 422) {
+                    commit('SET_ERRORS', error.response.data.errors, { root: true })
+                }
+            }).finally(() => {
+                commit('doneLoading')
+            })
+        },
+
     submitSjp({ dispatch, commit }, payload) {
         commit('isLoading')
         return new Promise((resolve, reject) => {

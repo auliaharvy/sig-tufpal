@@ -123,6 +123,35 @@ export default {
         }),
     },
     methods: {
+        sendBackCheck(){
+            this.editSjp(this.sjpstatus.sjp_id).then((res) => {
+                let row = res.data
+                var sendData = this.sendSjpStatus
+                var data = this.sjpstatus
+                var checkContent = 
+                "<div><strong><span>" + 
+                "<p> | Send Good Pallet : <b>" + sendData.good_pallet + " </b> | Receive Good Pallet : <b> " + data.good_pallet + " </b> | </p>" + 
+                "<p> | Send TBR Pallet : <b> " + sendData.tbr_pallet  + " </b> | Receive TBR Pallet : <b> " + data.tbr_pallet + " </b> | </p>" +
+                "<p> | Send BER Pallet : <b> " + sendData.ber_pallet  + " </b> | Receive BER Pallet : <b> " + data.ber_pallet + " </b> | </p>" +
+                "<p> | Send Missing Pallet : <b> " + sendData.missing_pallet  + " </b> | Receive Missing Pallet : <b> " + data.missing_pallet + " </b> | </p>" +
+                "</span> </strong></div>"
+                        
+                this.$swal({
+                    title: "Receive " + row.sjp_number,
+                    text: "...<div>" + checkContent + "</div>...",
+                    html: "...<div>" + checkContent +   "</div>...",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Receive!'
+                }).then((result) => {
+                    if (result.value) {
+                        this.submit() //JIKA SETUJU MAKA PERMINTAAN HAPUS AKAN DI EKSEKUSI
+                    }
+                })
+            })
+        },
         ...mapMutations('sjpstatus', ['CLEAR_FORM']), 
         ...mapActions('sjp', ['getSjp']),
         ...mapActions('msttransaction', ['getMstTransaction']),

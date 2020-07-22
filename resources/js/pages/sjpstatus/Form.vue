@@ -89,6 +89,8 @@
 
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
+import $axios from '../../api.js'
+
 export default {
     name: 'FormSjpStatus',
     created() {
@@ -102,6 +104,7 @@ export default {
     },
    data() {
         return {
+            truckNumber: '',
             sjpstatus: {
                 sjp_status_id: '',
                 sjp_id: '',
@@ -118,7 +121,8 @@ export default {
     computed: {
         ...mapState(['errors']),
         ...mapState('sjp', {
-            sjps: state => state.sjps
+            sjps: state => state.sjps,
+            sjp: state => state.sjp
         }),
         ...mapState('msttransaction', {
             msttransactions: state => state.msttransactions
@@ -130,9 +134,50 @@ export default {
     methods: {
         ...mapMutations('sjpstatus', ['CLEAR_FORM']),
         ...mapActions('sjpstatus', ['addSjpStatusbyMaster','submitSjpStatus']),
-        ...mapActions('sjp', ['getSjp']),
+        ...mapActions('sjp', ['getSjp', 'checkSjp', 'editSjp']),
         ...mapActions('msttransaction', ['getMstTransaction']),
         ...mapActions('user', ['getUserLogin']),
+        SjpCheck(){
+            this.editSjp(this.sjpstatus.sjp_id).then((res) => {
+                let row = res.data
+                this.truckNumber =  row.vehicle_id
+                // console.log(this.truckNumber)
+                let bodyFormData = new FormData()
+                bodyFormData.set('vehicle_number', this.truckNumber);
+                    $axios({
+                        method: 'post',
+                        url: '/sjp/checktruck',
+                        data: bodyFormData,
+                        headers: {'Content-Type': 'multipart/form-data' }
+                    })
+                    .then((response) => {
+                        // console.log(response.data); 
+                        var data = response.data
+                        var checkContent = data.map(function(item) {
+                            return "<div><strong><span>" + 
+                            " | SJP Number : <b> " + item.sjp_number + "</b> | Destination : <b> " + item.dest_pool + "</b> | </span> </strong></div>"
+                        }).join('')
+                            this.$swal({
+                                title: response.data.length + ' open SJP for Truck ' + this.truckNumber,
+                                text: "...<div>" + checkContent + "</div>...",
+                                html: "...<div>" + checkContent + "</div>...",
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Send!'
+                            }).then((result) => {
+                                if (result.value) {
+                                    this.submit() //JIKA SETUJU MAKA PERMINTAAN HAPUS AKAN DI EKSEKUSI
+                                }
+                            })
+                        
+                    }).catch((error) => {
+                    alert(error.response.data.message)
+                })
+            
+            })
+        },
         uploadImage(event) {
             this.sjpstatus.sending_driver_approval = event.target.files[0]
         },

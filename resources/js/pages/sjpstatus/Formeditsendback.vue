@@ -117,6 +117,15 @@ export default {
                 this.sjpstatus.good_cement = row.good_cement
                 this.sjpstatus.bad_cement = row.bad_cement
                 this.sjpstatus.note = row.note
+                this.sendSjpStatus.sjp_id =  row.sjp_id
+                this.sendSjpStatus.sjp_status_id = row.sjp_status_id
+                this.sendSjpStatus.good_pallet = row.good_pallet
+                this.sendSjpStatus.tbr_pallet = row.tbr_pallet
+                this.sendSjpStatus.ber_pallet = row.ber_pallet
+                this.sendSjpStatus.missing_pallet = row.missing_pallet
+                this.sendSjpStatus.good_cement = row.good_cement
+                this.sendSjpStatus.bad_cement = row.bad_cement
+                this.sendSjpStatus.note = row.note
             }),
         this.getSjp(), 
         this.getMstTransaction(), 
@@ -124,6 +133,18 @@ export default {
     },
     data() {
         return {
+            sendSjpStatus: {
+                sjp_status_id: '',
+                sjp_id: '',
+                good_pallet: '',
+                tbr_pallet: '',
+                ber_pallet: '',
+                missing_pallet: '',
+                good_cement: '',
+                bad_cement: '',
+                note: '',
+                receiving_driver_approval: '',
+            },
             sjpstatus: {
                 sjp_status_id: '',
                 sjp_id: '',
@@ -142,7 +163,8 @@ export default {
     computed: {
         ...mapState(['errors']),
         ...mapState('sjp', {
-            sjps: state => state.sjps
+            sjps: state => state.sjps,
+            sjp: state => state.sjp
         }),
         ...mapState('msttransaction', {
             msttransactions: state => state.msttransactions
@@ -153,11 +175,40 @@ export default {
     },
     methods: {
         ...mapMutations('sjpstatus', ['CLEAR_FORM']), 
-        ...mapActions('sjp', ['getSjp']),
+        ...mapActions('sjp', ['getSjp', 'editSjp']),
         ...mapActions('sjpstatus', ['editSjpStatus','updateSjpStatussendback']),
         ...mapActions('msttransaction', ['getMstTransaction']),
         ...mapActions('user', ['getUserLogin']),
         ...mapActions('sjpstatus', ['getSjpStatus']),
+        receiveCheck(){
+            this.editSjp(this.sjpstatus.sjp_id).then((res) => {
+                let row = res.data
+                var sendData = this.sendSjpStatus
+                var data = this.sjpstatus
+                var checkContent = 
+                "<div><strong><span>" + 
+                "<p> | Send Good Pallet : <b>" + sendData.good_pallet + " </b> | Receive Good Pallet : <b> " + data.good_pallet + " </b> | </p>" + 
+                "<p> | Send TBR Pallet : <b> " + sendData.tbr_pallet  + " </b> | Receive TBR Pallet : <b> " + data.tbr_pallet + " </b> | </p>" +
+                "<p> | Send BER Pallet : <b> " + sendData.ber_pallet  + " </b> | Receive BER Pallet : <b> " + data.ber_pallet + " </b> | </p>" +
+                "<p> | Send Missing Pallet : <b> " + sendData.missing_pallet  + " </b> | Receive Missing Pallet : <b> " + data.missing_pallet + " </b> | </p>" +
+                "</span> </strong></div>"
+                        
+                this.$swal({
+                    title: "Receive " + row.sjp_number,
+                    text: "...<div>" + checkContent + "</div>...",
+                    html: "...<div>" + checkContent +   "</div>...",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Receive!'
+                }).then((result) => {
+                    if (result.value) {
+                        this.submit() //JIKA SETUJU MAKA PERMINTAAN HAPUS AKAN DI EKSEKUSI
+                    }
+                })
+            })
+        },
        uploadImage(event) {
             this.sjpstatus.receiving_driver_approval = event.target.files[0]
         },

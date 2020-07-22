@@ -12,8 +12,8 @@
             <div class="panel-body">
                 <sjpstatus-form ref="FormSjpStatus"></sjpstatus-form>
                 <div class="form-group px-7">
-                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
-                        {{ loading ? 'Loading...':'Send' }}
+                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="checkSJP()">
+                        {{ loading ? 'Loading...':'Check' }}
                     </v-btn>
                 </div>
             </div>
@@ -35,6 +35,9 @@
             ...mapActions('sjpstatus', ['addSjpStatusbyMaster', 'submitSjpStatus']),
             ...mapActions('sjp', ['editSjp', 'updateSjp']),
             //KETIKA TOMBOL DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
+            checkSJP() {
+                this.$refs.FormSjpStatus.SjpCheck()
+            },
             submit() {
                 this.$refs.FormSjpStatus.submit()
                 //MELAKUKAN REQUEST KE SERVER UNTUK MENAMBAHKAN DATA

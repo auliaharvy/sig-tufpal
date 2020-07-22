@@ -34,7 +34,7 @@
         methods: {
             ...mapActions('sjpstatus', ['editSjpStatus', 'updateSjpStatus']),
             submit() {
-                this.$refs.FormSjpStatus.submit()
+                this.$refs.FormSjpStatus.receiveCheck()
             },
         },
         computed: {

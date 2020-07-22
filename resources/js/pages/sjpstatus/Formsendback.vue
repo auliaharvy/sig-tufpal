@@ -105,7 +105,8 @@ export default {
     computed: {
         ...mapState(['errors']),
         ...mapState('sjp', {
-            sjps: state => state.sjps
+            sjps: state => state.sjps,
+            sjp: state => state.sjp
         }),
         ...mapState('msttransaction', {
             msttransactions: state => state.msttransactions
@@ -116,10 +117,39 @@ export default {
     },
     methods: {
         ...mapMutations('sjpstatus', ['CLEAR_FORM']), 
-        ...mapActions('sjp', ['getSjp']),
+        ...mapActions('sjp', ['getSjp', 'editSjp']),
         ...mapActions('sjpstatus', ['editSjpStatus','submitSjpStatussendback']),
         ...mapActions('msttransaction', ['getMstTransaction']),
         ...mapActions('user', ['getUserLogin']),
+        sendBackCheck(){
+            this.editSjp(this.sjpstatus.sjp_id).then((res) => {
+                let row = res.data
+                var sendData = this.sendSjpStatus
+                var data = this.sjpstatus
+                var checkContent = 
+                "<div><strong><span>" + 
+                "| Send Back Good Pallet : <b> " + data.good_pallet + " </b> | </p>" + 
+                "| Send Back TBR Pallet : <b> " + data.tbr_pallet + " </b> | </p>" +
+                "| Send Back BER Pallet : <b> " + data.ber_pallet + " </b> | </p>" +
+                "| Send Back Missing Pallet : <b> " + data.missing_pallet + " </b> | </p>" +
+                "</span> </strong></div>"
+                        
+                this.$swal({
+                    title: "Send Back " + row.sjp_number,
+                    text: "...<div>" + checkContent + "</div>...",
+                    html: "...<div>" + checkContent +   "</div>...",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Send Back!'
+                }).then((result) => {
+                    if (result.value) {
+                        this.submit() //JIKA SETUJU MAKA PERMINTAAN HAPUS AKAN DI EKSEKUSI
+                    }
+                })
+            })
+        },
         uploadImage(event) {
             this.sjpstatus.sending_driver_approval = event.target.files[0]
         },
