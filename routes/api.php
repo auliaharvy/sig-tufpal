@@ -18,6 +18,7 @@ Route::get('sendattachmentemail', 'API\TodayTransactionController@attachment_ema
 
 Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('sjp', 'SjpController');
+    Route::post('/sjp/checktruck', 'SjpController@checkTruck');
     Route::resource('sjppalletsend', 'SjppalletsendController');
     Route::resource('sjppalletreceive', 'SjppalletreceiveController');
     Route::post('/sjp/adjust', 'SjpController@adjust');

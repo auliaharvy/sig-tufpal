@@ -128,9 +128,9 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
     name: 'FormCourier',
     created() {
-        this.getPools(),
-        this.getTransporters(),
-        this.getDrivers(),
+        this.getPoolForm(),
+        this.getDriverForm(),
+        this.getTransporterForm(),
         this.getUserLogin(),
         this.getOutlets(),
         this.getRoles()
@@ -176,9 +176,9 @@ export default {
                 'setRolePermission',
                 'setRoleUser'
             ]),
-        ...mapActions('pool', ['getPools']),
-        ...mapActions('transporter', ['getTransporters']),
-        ...mapActions('driver', ['getDrivers']),
+        ...mapActions('pool', ['getPoolForm']),
+        ...mapActions('transporter', ['getTransporterForm']),
+        ...mapActions('driver', ['getDriverForm']),
         ...mapActions('user', ['getUserLogin']),
         ...mapActions('outlet', ['getOutlets']),
         ...mapActions('courier', ['submitCourier', 'editCourier', 'updateCourier']),

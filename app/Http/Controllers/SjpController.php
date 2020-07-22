@@ -61,6 +61,28 @@ class SjpController extends Controller
         return $sjp;
     }
 
+    public function checkTruck(Request $request)
+    {
+        $vehicle = $request->vehicle_number;
+        $status = 'OPEN';
+        $sjpTruckOpen = DB::table('surat_jalan_pallet as a')
+        ->join('pool_pallet as b', 'a.destination_pool_pallet_id', '=', 'b.pool_pallet_id')
+        ->join('pool_pallet as c', 'a.departure_pool_pallet_id', '=', 'c.pool_pallet_id')
+        ->join('vehicle as d', 'a.vehicle_id', '=', 'd.vehicle_id')
+        ->join('transporter as e', 'a.transporter_id', '=', 'e.transporter_id')
+        ->join('driver as f', 'a.driver_id', '=', 'f.driver_id')
+        ->select('a.*', 'b.pool_name as dest_pool', 'c.pool_name as dept_pool',
+                'd.vehicle_number','e.transporter_name', 'f.driver_name')
+        ->where('a.status',$status)
+        ->where('a.vehicle_id',$vehicle)
+        // ->paginate(1000000)
+        ->get();
+       
+
+        // // $sjp = new SjpCollection($sjp1);
+        return $sjpTruckOpen;
+    }
+
     public function store(Request $request)
     {
         $now = new DateTime();
