@@ -154,8 +154,23 @@ export default {
                         // console.log(response.data); 
                         var data = response.data
                         var checkContent = data.map(function(item) {
+                            if(item.state == 0){
+                                item.statusSjp = "DRAFT"
+                            }
+                            if(item.state == 1){
+                                item.statusSjp = "SEND"
+                            }
+                            if(item.state == 2){
+                                item.statusSjp = "RECEIVED"
+                            }
+                            if(item.state == 3){
+                                item.statusSjp = "SENDBACK"
+                            }
+                            if(item.state == 4){
+                                item.statusSjp = "RECEIVE SENDBACK"
+                            }
                             return "<div><strong><span>" + 
-                            " | SJP Number : <b> " + item.sjp_number + "</b> | Destination : <b> " + item.dest_pool + "</b> | </span> </strong></div>"
+                            " | SJP Number : <b> " + item.sjp_number + "</b> | Destination : <b> " + item.dest_pool + "</b> | Status : <b> " + item.statusSjp  + "</b> | </span> </strong></div>"
                         }).join('')
                             this.$swal({
                                 title: response.data.length + ' open SJP for Truck ' + this.truckNumber,

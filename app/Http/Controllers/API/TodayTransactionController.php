@@ -62,6 +62,7 @@ class TodayTransactionController extends Controller
 
     public function attachment_email() 
     {
+        
         $now = Carbon::today()->toDateString();
         $filename = $now .'-'.'Transaction.xlsx';
         $alltransactiontoday = $this->allTransactionToday();
@@ -72,7 +73,7 @@ class TodayTransactionController extends Controller
         // $attacment = Excel::download(new TodayTransactionExport($alltransactiontoday),  $now .' ' .'Transaction.xlsx');
         $data = array('name'=>"Tufpal System");
         Mail::send('mail', $data, function($message) use($fullPath) {
-           $message->to('triyatmo@indocement.co.id', 'Indocement')->subject
+           $message->to('triyatmo@indocement.co.id', 'pallet_ho@yahoo.com')->subject
               ('Tufpal One Day Transaction');
            $message->attach($fullPath);
            $message->from('tufpalsystem@gmail.com','Tufpal System');
