@@ -82,6 +82,14 @@
                         <v-list-item-title color="black">Repaired Pallet</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item link router to="/transporteradjusment" v-if="$can('read transporter adjusment')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-file-document</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Transporter Adjusment</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
                 <!-- { title: 'Home', icon: 'mdi-home', route:'/' },
                 { title: 'Surat Jalan Pallet', icon: 'mdi-file-document', route:'/sjp' },
                 { title: 'SJP Status', icon: 'mdi-file-document', route:'/sjpstatus' },

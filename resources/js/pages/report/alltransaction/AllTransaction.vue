@@ -91,6 +91,7 @@ export default {
                 { value: 'np_number', text: 'NP Number' },
                 { value: 'dp_number', text: 'DP Number' },
                 { value: 'rp_number', text: 'RP Number' },
+                { value: 'ta_number', text: 'TA Number' },
                 { value: 'transaction', text: 'Transaction Type' },
                 { value: 'no_do', text: 'No Dispatch' },
                 { value: 'new_no_do', text: 'New No Dispatch' },

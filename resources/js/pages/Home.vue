@@ -67,6 +67,14 @@
             </v-card-title>
           </v-card>
         </v-flex>
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/transporteradjusment" class="text-center ma-3" v-if="$can('read transporter adjusment')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-file-document</v-icon>
+              <span right>Transporter Adjusment</span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
       </v-layout>
 
 

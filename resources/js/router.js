@@ -83,6 +83,11 @@ import DataNewpallet from './pages/newpallet/Newpallet.vue'
 import AddNewpallet from './pages/newpallet/AddNewpallet.vue'
 import EditNewpallet from './pages/newpallet/EditNewpallet.vue'
 
+import IndexTransporterAdjusment from './pages/transporteradjusment/Index.vue'
+import DataTransporterAdjusment from './pages/transporteradjusment/TransporterAdjusment.vue'
+import AddTransporterAdjusment from './pages/transporteradjusment/AddTransporterAdjusment.vue'
+import EditTransporterAdjusment from './pages/transporteradjusment/EditTransporterAdjusment.vue'
+
 import IndexDamagedpallet from './pages/damagedpallet/Index.vue'
 import DataDamagedpallet from './pages/damagedpallet/Damagedpallet.vue'
 import AddDamagedpallet from './pages/damagedpallet/AddDamagedpallet.vue'
@@ -277,6 +282,32 @@ const router = new Router({
                     name: 'newpallets.edit',
                     component: EditNewpallet,
                     meta: { title: 'Edit New Pallet' }
+                },
+            ]
+        },
+
+        {
+            path: '/transporteradjusment',
+            component: IndexTransporterAdjusment,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'transporteradjusments.data',
+                    component: DataTransporterAdjusment,
+                    meta: { title: 'Manage Transporter Adjusment' }
+                },
+                {
+                    path: 'add',
+                    name: 'transporteradjusments.add',
+                    component: AddTransporterAdjusment,
+                    meta: { title: 'Add Transporter Adjusment' }
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'transporteradjusments.edit',
+                    component: EditTransporterAdjusment,
+                    meta: { title: 'Edit Transporter Adjusment' }
                 },
             ]
         },

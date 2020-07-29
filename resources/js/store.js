@@ -36,6 +36,7 @@ import alltransaction from './stores/alltransaction.js'
 import sjpadjusment from './stores/sjpadjusment.js'
 import sjpchangedestination from './stores/sjpchangedestination.js'
 import dispatchdata from './stores/dispatchdata.js'
+import transporterAdjusment from './stores/transporterAdjusment.js'
 
 Vue.use(Vuex)
 
@@ -76,6 +77,7 @@ const store = new Vuex.Store({
         repairedpallet,
         alltransaction,
         dispatchdata,
+        transporterAdjusment,
     },
     state: {
         token: localStorage.getItem('token'),
