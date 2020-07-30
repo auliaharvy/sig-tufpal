@@ -111,7 +111,7 @@ const actions = {
     updateTransporterAdjusment({ state, commit }, payload) {
         commit('isLoading')
         return new Promise((resolve, reject) => {
-            $axios.put(`/transporteradjusment/${payload}`, state.pool) //KIRIM PERMINTAAN KE SERVER UNTUK MENGUPDATE DATA BERDASARKAN PAYLOAD (ID) DAN DATA YANG AKAN DI UPDATE DI AMBIL DARI STATE CUSTOMER
+            $axios.put(`/transporteradjusment/${payload}`, state.transporterAdjusment) //KIRIM PERMINTAAN KE SERVER UNTUK MENGUPDATE DATA BERDASARKAN PAYLOAD (ID) DAN DATA YANG AKAN DI UPDATE DI AMBIL DARI STATE CUSTOMER
             .then((response) => {
                 commit('CLEAR_FORM') //BERSIHKAN FORM
                 resolve(response.data)

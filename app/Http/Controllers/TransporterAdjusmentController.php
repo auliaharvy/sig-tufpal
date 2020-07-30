@@ -55,9 +55,9 @@ class TransporterAdjusmentController extends Controller
     {
         $now = Carbon::now()->toDateTimeString();
         $transporter_id = $request->transporter_id;
-        $transporter = Transporter::find($transporter_id);
+        $transporter = Transporter::find($request->transporter_id);
         $pool_pallet_id = $request->pool_pallet_id;
-        $pool_pallet = PoolPallet::find($pool_pallet_id);
+        $pool_pallet = PoolPallet::find($request->pool_pallet_id);
         $is_from_pool = $request->is_from_pool;
 
         if($is_from_pool == 0){
@@ -68,6 +68,7 @@ class TransporterAdjusmentController extends Controller
                 'tbr_pallet' => 'required|integer|gt:-1|lte:'.$tbr_pallet_pool,
                 'is_from_pool' => 'required',
                 'reason' => 'required',
+                'note' => 'required',
             ]);
         }
         else{
@@ -78,6 +79,7 @@ class TransporterAdjusmentController extends Controller
                 'tbr_pallet' => 'required|integer|gt:-1|lte:'.$tbr_pallet_transporter,
                 'is_from_pool' => 'required',
                 'reason' => 'required',
+                'note' => 'required',
             ]);
         }
 

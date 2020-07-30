@@ -21,7 +21,7 @@
             solo
             v-model="transporterAdjusment.transporter_id"
             item-text="transporter_name"
-            item-value="trasnporter_id"
+            item-value="transporter_id"
             clearable
             >
             </v-autocomplete>
