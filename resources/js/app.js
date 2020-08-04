@@ -18,6 +18,7 @@ import pdf  from 'vue-pdf'
 import VueHtml2Canvas from 'vue-html2canvas';
 import VueHtmlToPaper from 'vue-html-to-paper';
 import VueSignaturePad from 'vue-signature-pad';
+import VueGeolocation from 'vue-browser-geolocation';
 
 
 Vue.use(Vuetify);
@@ -38,7 +39,7 @@ Vue.use(VueHtml2Canvas);
 Vue.use(VueHtmlToPaper);
 Vue.use(VueSignaturePad);
 Vue.use(require('vue-moment'));
-
+Vue.use(VueGeolocation);
 
 delete Icon.Default.prototype._getIconUrl;
 
