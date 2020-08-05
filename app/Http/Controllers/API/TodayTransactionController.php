@@ -73,7 +73,9 @@ class TodayTransactionController extends Controller
         // $attacment = Excel::download(new TodayTransactionExport($alltransactiontoday),  $now .' ' .'Transaction.xlsx');
         $data = array('name'=>"Tufpal System");
         Mail::send('mail', $data, function($message) use($fullPath) {
-           $message->to('triyatmo@indocement.co.id', 'pallet_ho@yahoo.com')->subject
+           $message->to('triyatmo@indocement.co.id', 'Indocement')->subject
+              ('Tufpal One Day Transaction');
+            $message->cc('pallet_ho@yahoo.com', 'PT DLI')->subject
               ('Tufpal One Day Transaction');
            $message->attach($fullPath);
            $message->from('tufpalsystem@gmail.com','Tufpal System');
