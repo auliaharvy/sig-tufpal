@@ -10,7 +10,7 @@
                         <v-card-title>
                         ALL TRANSACTION
                         <v-spacer></v-spacer>
-                        <v-btn v-if=" authenticated.reference_pool_pallet_id == 'pooldli' ">
+                        <v-btn>
                             <download-excel
                             :data= "alltransactions.data"
                             :name="exportName">
