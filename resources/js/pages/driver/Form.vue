@@ -80,7 +80,7 @@ import { mapActions, mapState, mapMutations } from 'vuex'
 export default {
     name: 'FormVehicles',
     created() {
-        this.getTransporters()
+        this.getTransporterForm()
     },
     computed: {
         ...mapState(['errors']), //LOAD STATE ERROR UNTUK DITAMPILKAN KETIKA TERJADI ERROR VALIDASI
@@ -94,7 +94,7 @@ export default {
     methods: {
         ...mapMutations('driver', ['CLEAR_FORM']),
         ...mapActions('driver', ['getDrivers']),
-        ...mapActions('transporter', ['getTransporters']),
+        ...mapActions('transporter', ['getTransporterForm']),
     },
     destroyed() {
         this.CLEAR_FORM() //KETIKA COMPONENT DITINGGALKAN, BERSIHKAN DATA
