@@ -47,18 +47,26 @@ class RepairedpalletController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'good_pallet' => 'required|gt:0',
-        ]);
+       
 
         $repaired_pallet_id = $request->repaired_pallet_id;
-        $pool_pallet_id = 2;
+        $pool_pallet_id =  Auth::user()->reference_pool_pallet_id;
         $pallet = PoolPallet::find($pool_pallet_id); //jgn lupa add model poolpallet
         $poolname = $pallet->pool_name;
         $qty_pool = $pallet->tbr_pallet;
         $pallet_qty = $request->good_pallet;
 
-        if($pallet_qty>$qty_pool)
+        $this->validate($request, [
+            'good_pallet' => 'required|gt:0|lte:'.$qty_pool,
+        ]);
+
+        if($pool_pallet_id != 11112)
+        {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Cannot Record Repaired Pallet If Not Using User at Workshop'], 422);
+        }
+        elseif($pallet_qty>$qty_pool)
         {
             return response()->json([
                 'status' => 'error',
