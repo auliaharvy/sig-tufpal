@@ -512,6 +512,10 @@ export default {
                             this.sjp.destination_pool_pallet_id = '026827'
                             this.sjp.dest_pool = 'CIANJUR SUKALUYU';
                         };
+                        if(row.destination_pool_pallet_id == '023701'){
+                            this.sjp.destination_pool_pallet_id = '020871'
+                            this.sjp.dest_pool = 'CIKARANG WAD';
+                        };
                     }
                     // console.log(response.data); // works fine
 
