@@ -10,12 +10,8 @@
                         <v-card-title>
                         ALL TRANSACTION
                         <v-spacer></v-spacer>
-                        <v-btn>
-                            <download-excel
-                            :data= "alltransactions.data"
-                            :name="exportName">
-                                Download Data
-                            </download-excel>
+                        <v-btn  @click.prevent="exportData()">
+                            Download All Transaction
                         </v-btn>
                         <v-text-field
                             v-model="search"
@@ -131,6 +127,7 @@ export default {
         ...mapState('user', {
             authenticated: state => state.authenticated
         }),
+        ...mapState(['token']),
         //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {
             get() {
@@ -154,7 +151,7 @@ export default {
         ...mapActions('user', ['getUserLogin']),
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         exportData() {
-            window.open(`api/exportalltransactiontoday?api_token=${this.token}`)
+            window.open(`api/exportalltransaction?api_token=${this.token}`)
         }
     }
 }
