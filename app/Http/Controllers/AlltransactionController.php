@@ -21,14 +21,12 @@ use Excel;
 
 class AlltransactionController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
 
-        $now = Carbon::today()->toDateString();
-        $monthAgo = Carbon::now()->subDays(30)->toDateString();
-        $fromDate = $request->from;
-        $toDate = $request->to;
-        
+        // $from = Carbon::now()->toDateString()->subDays(30);
+        // $to = Carbon::now()->toDateString();
+
         $pool_pallet_id = Auth::user()->reference_pool_pallet_id;
         $transporter_id = Auth::user()->reference_transporter_id;
         if($pool_pallet_id != null && $transporter_id == null){
@@ -55,8 +53,8 @@ class AlltransactionController extends Controller
             ->leftJoin('transporter_adjusment as i', 'a.reference_transporter_adjusment_id', '=', 'i.transporter_adjusment_id')
             ->select('a.*', 'b.sjp_number', 'c.sjps_number', 'd.tp_number',
                     'e.bmp_number', 'f.np_number', 'g.dp_number', 'h.rp_number', 'i.ta_number')
-            ->whereBetween('a.created_at', [$now.' 00:00:00',$monthAgo.' 23:59:59'])
-            ->paginate(10000000)
+            ->where( 'a.created_at', '>', Carbon::now()->subDays(60))
+            ->paginate(99999999999)
             ->toArray();
         }
         elseif($pool_name != 'Pool Pallet DLI'){
@@ -72,8 +70,8 @@ class AlltransactionController extends Controller
             ->leftJoin('transporter_adjusment as i', 'a.reference_transporter_adjusment_id', '=', 'i.transporter_adjusment_id')
             ->select('a.*', 'b.sjp_number', 'c.sjps_number', 'd.tp_number',
                     'e.bmp_number', 'f.np_number', 'g.dp_number', 'h.rp_number', 'i.ta_number')
+            ->where( 'a.created_at', '>', Carbon::now()->subDays(60))
             ->where('a.departure_pool', $pool_name)
-            ->whereBetween('a.created_at', [$now.' 00:00:00',$monthAgo.' 23:59:59'])
             ->orWhere('a.destination_pool', $pool_name)
             ->orWhere('a.pool_pallet', $pool_name)
             // ->orWhere('a.transporter', $transporter_name)
@@ -93,8 +91,8 @@ class AlltransactionController extends Controller
             ->leftJoin('transporter_adjusment as i', 'a.reference_transporter_adjusment_id', '=', 'i.transporter_adjusment_id')
             ->select('a.*', 'b.sjp_number', 'c.sjps_number', 'd.tp_number',
                     'e.bmp_number', 'f.np_number', 'g.dp_number', 'h.rp_number', 'i.ta_number')
+            ->where( 'a.created_at', '>', Carbon::now()->subDays(60))
             ->where('a.transporter', $transporter_name)
-            ->whereBetween('a.created_at', [$now.' 00:00:00',$monthAgo.' 23:59:59'])
             ->paginate(10000000)
             ->toArray();
         }
@@ -106,11 +104,6 @@ class AlltransactionController extends Controller
 
     public function allTransactionExportData()
     {
-        $now = Carbon::today()->toDateString();
-        $monthAgo = Carbon::now()->subDays(30)->toDateString();
-        $fromDate = $request->from;
-        $toDate = $request->to;
-
         $pool_pallet_id = Auth::user()->reference_pool_pallet_id;
         $transporter_id = Auth::user()->reference_transporter_id;
         if($pool_pallet_id != null && $transporter_id == null){
@@ -137,7 +130,7 @@ class AlltransactionController extends Controller
             ->leftJoin('repaired_pallet as h', 'a.reference_repaired_pallet_id', '=', 'h.repaired_pallet_id')
             ->select('a.*', 'b.sjp_number', 'c.sjps_number', 'd.tp_number',
                     'e.bmp_number', 'f.np_number', 'g.dp_number', 'h.rp_number')
-            ->whereBetween('a.created_at', [$now.' 00:00:00',$monthAgo.' 23:59:59'])
+            ->where( 'a.created_at', '>', Carbon::now()->subDays(60))
             // ->whereDate('a.created_at', '=', Carbon::today()->toDateString())
             ->latest()
             ->get();
@@ -155,8 +148,8 @@ class AlltransactionController extends Controller
             ->leftJoin('repaired_pallet as h', 'a.reference_repaired_pallet_id', '=', 'h.repaired_pallet_id')
             ->select('a.*', 'b.sjp_number', 'c.sjps_number', 'd.tp_number',
                     'e.bmp_number', 'f.np_number', 'g.dp_number', 'h.rp_number')
+            ->where( 'a.created_at', '>', Carbon::now()->subDays(60))
             ->where('a.departure_pool', $pool_name)
-            ->whereBetween('a.created_at', [$now.' 00:00:00',$monthAgo.' 23:59:59'])
             ->orWhere('a.destination_pool', $pool_name)
             ->orWhere('a.pool_pallet', $pool_name)        
             // ->whereDate('a.created_at', '=', Carbon::today()->toDateString())
@@ -175,8 +168,8 @@ class AlltransactionController extends Controller
             ->leftJoin('repaired_pallet as h', 'a.reference_repaired_pallet_id', '=', 'h.repaired_pallet_id')
             ->select('a.*', 'b.sjp_number', 'c.sjps_number', 'd.tp_number',
                     'e.bmp_number', 'f.np_number', 'g.dp_number', 'h.rp_number')
+            ->where( 'a.created_at', '>', Carbon::now()->subDays(60))
             ->where('a.transporter', $transporter_name)
-            ->whereBetween('a.created_at', [$now.' 00:00:00',$monthAgo.' 23:59:59'])
             // ->whereDate('a.created_at', '=', Carbon::today()->toDateString())
             ->latest()
             ->get();
