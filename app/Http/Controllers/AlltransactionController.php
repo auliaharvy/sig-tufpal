@@ -53,7 +53,7 @@ class AlltransactionController extends Controller
             ->leftJoin('transporter_adjusment as i', 'a.reference_transporter_adjusment_id', '=', 'i.transporter_adjusment_id')
             ->select('a.*', 'b.sjp_number', 'c.sjps_number', 'd.tp_number',
                     'e.bmp_number', 'f.np_number', 'g.dp_number', 'h.rp_number', 'i.ta_number')
-            ->where( 'a.created_at', '>', Carbon::now()->subDays(60))
+            ->where( 'a.created_at', '>', Carbon::now()->subDays(30))
             ->paginate(99999999999)
             ->toArray();
         }
@@ -70,7 +70,7 @@ class AlltransactionController extends Controller
             ->leftJoin('transporter_adjusment as i', 'a.reference_transporter_adjusment_id', '=', 'i.transporter_adjusment_id')
             ->select('a.*', 'b.sjp_number', 'c.sjps_number', 'd.tp_number',
                     'e.bmp_number', 'f.np_number', 'g.dp_number', 'h.rp_number', 'i.ta_number')
-            ->where( 'a.created_at', '>', Carbon::now()->subDays(60))
+            ->where( 'a.created_at', '>', Carbon::now()->subDays(30))
             ->where('a.departure_pool', $pool_name)
             ->orWhere('a.destination_pool', $pool_name)
             ->orWhere('a.pool_pallet', $pool_name)
@@ -91,7 +91,7 @@ class AlltransactionController extends Controller
             ->leftJoin('transporter_adjusment as i', 'a.reference_transporter_adjusment_id', '=', 'i.transporter_adjusment_id')
             ->select('a.*', 'b.sjp_number', 'c.sjps_number', 'd.tp_number',
                     'e.bmp_number', 'f.np_number', 'g.dp_number', 'h.rp_number', 'i.ta_number')
-            ->where( 'a.created_at', '>', Carbon::now()->subDays(60))
+            ->where( 'a.created_at', '>', Carbon::now()->subDays(30))
             ->where('a.transporter', $transporter_name)
             ->paginate(10000000)
             ->toArray();
@@ -130,7 +130,7 @@ class AlltransactionController extends Controller
             ->leftJoin('repaired_pallet as h', 'a.reference_repaired_pallet_id', '=', 'h.repaired_pallet_id')
             ->select('a.*', 'b.sjp_number', 'c.sjps_number', 'd.tp_number',
                     'e.bmp_number', 'f.np_number', 'g.dp_number', 'h.rp_number')
-            ->where( 'a.created_at', '>', Carbon::now()->subDays(60))
+            ->where( 'a.created_at', '>', Carbon::now()->subDays(30))
             // ->whereDate('a.created_at', '=', Carbon::today()->toDateString())
             ->latest()
             ->get();
@@ -148,7 +148,7 @@ class AlltransactionController extends Controller
             ->leftJoin('repaired_pallet as h', 'a.reference_repaired_pallet_id', '=', 'h.repaired_pallet_id')
             ->select('a.*', 'b.sjp_number', 'c.sjps_number', 'd.tp_number',
                     'e.bmp_number', 'f.np_number', 'g.dp_number', 'h.rp_number')
-            ->where( 'a.created_at', '>', Carbon::now()->subDays(60))
+            ->where( 'a.created_at', '>', Carbon::now()->subDays(30))
             ->where('a.departure_pool', $pool_name)
             ->orWhere('a.destination_pool', $pool_name)
             ->orWhere('a.pool_pallet', $pool_name)        
@@ -168,7 +168,7 @@ class AlltransactionController extends Controller
             ->leftJoin('repaired_pallet as h', 'a.reference_repaired_pallet_id', '=', 'h.repaired_pallet_id')
             ->select('a.*', 'b.sjp_number', 'c.sjps_number', 'd.tp_number',
                     'e.bmp_number', 'f.np_number', 'g.dp_number', 'h.rp_number')
-            ->where( 'a.created_at', '>', Carbon::now()->subDays(60))
+            ->where( 'a.created_at', '>', Carbon::now()->subDays(30))
             ->where('a.transporter', $transporter_name)
             // ->whereDate('a.created_at', '=', Carbon::today()->toDateString())
             ->latest()
