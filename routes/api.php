@@ -51,7 +51,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('repairedpallet', 'RepairedpalletController');
     Route::resource('palletmovement', 'PalletMovementController');
     Route::resource('alltransaction', 'AlltransactionController');
-    Route::get('exportalltransaction', 'AlltransactionController@exportAllTransactionData');
+    Route::post('exportalltransaction', 'AlltransactionController@exportAllTransactionData');
     Route::resource('sjpadjusment', 'SjpadjusmentController');
     Route::resource('sjpchangedestination', 'SjpchangedestinationController');
     Route::resource('pool', 'PoolController');

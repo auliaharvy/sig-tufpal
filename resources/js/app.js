@@ -19,6 +19,8 @@ import VueHtml2Canvas from 'vue-html2canvas';
 import VueHtmlToPaper from 'vue-html-to-paper';
 import VueSignaturePad from 'vue-signature-pad';
 import VueGeolocation from 'vue-browser-geolocation';
+import VDateRange from 'vuetify-daterange-picker';
+import 'vuetify-daterange-picker/dist/vuetify-daterange-picker.css';
 
 
 Vue.use(Vuetify);
@@ -40,6 +42,7 @@ Vue.use(VueHtmlToPaper);
 Vue.use(VueSignaturePad);
 Vue.use(require('vue-moment'));
 Vue.use(VueGeolocation);
+Vue.use(VDateRange);
 
 delete Icon.Default.prototype._getIconUrl;
 

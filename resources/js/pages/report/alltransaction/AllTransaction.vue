@@ -3,23 +3,68 @@
         <div class="panel">
 
             <div class="panel-body">
-
+                <p> From : {{ fromDate }} </p>
+                <p> To : {{ toDate }} </p>
+                <v-btn  @click.prevent="weekAgo()">
+                    A Week
+                </v-btn>
+                <v-btn  @click.prevent="monthAgo()">
+                    A Month
+                </v-btn>
+                <v-btn>
+                    <download-excel
+                    :data= "alltransactions.data"
+                    :name="dateRangeText">
+                    Download Data
+                    </download-excel>
+                </v-btn>
+                
               	<!-- TABLE UNTUK MENAMPILKAN LIST SJP -->
                 <template>
                     <v-card>
                         <v-card-title>
                         ALL TRANSACTION
                         <v-spacer></v-spacer>
-                        <v-btn  @click.prevent="exportData()">
-                            Download All Transaction
-                        </v-btn>
+                        <template>
+                <v-row>
+                    <v-menu
+                        ref="menu"
+                        v-model="menu"
+                        :close-on-content-click="false"
+                        :return-value.sync="dates"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px"
+                    >
+                    <template v-slot:activator="{ on, attrs }">
                         <v-text-field
-                            v-model="search"
+                            v-model="dateRangeText"
+                            label="Query Range"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                            single-line
+                            hide-details
+                        ></v-text-field>
+                        <v-btn text color="primary" @click="selectedDate">Query</v-btn>
+                        </template>
+                        <v-date-picker v-model="dates" no-title range>
+                        <v-spacer></v-spacer>
+                        <v-btn text color="primary" @click="menu = false">Close</v-btn>
+                        <v-btn text color="primary" @click="$refs.menu.save(dates)">Ok</v-btn>
+                        </v-date-picker>
+                    </v-menu>
+                </v-row>
+                </template>
+                        
+                        <!-- <v-text-field
+                            v-model="fromDate"
                             prepend-icon="mdi-search"
                             label="Search"
                             single-line
                             hide-details
-                        ></v-text-field>
+                        ></v-text-field> -->
                         </v-card-title>
                         <v-data-table
                         :headers="headers"
@@ -61,10 +106,14 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import { VDaterange } from "vuetify-daterange-picker"
+import "vuetify-daterange-picker/dist/vuetify-daterange-picker.css";
 
 export default {
+    components: { VDaterange },
     name: 'DataSjpPalletSend',
     created() {
+        this.monthAgo();
         this.getAlltransaction().then((res) => {
                 let row = res.data
                 // console.log(row)
@@ -73,11 +122,12 @@ export default {
                 let row = res.data
                 // console.log(row.reference_pool_pallet_id)
             })
+            
     },
     data() {
         return {
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
-            exportName: 'All Transaction ' + new Date().toISOString().slice(0,10),
+            exportName: 'All Transaction ' + this.dateRangeText,
              headers: [
                 { value: 'tid_number', text: 'TID Number' },
                 { value: 'sjp_number', text: 'SJP Number' },
@@ -114,7 +164,11 @@ export default {
                 { value: 'note', text: 'Note' },
                 { value: 'created_at', text: 'Created At' },
             ],
-            search: ''
+            search: '',
+            dates: [ ],
+            menu: false,
+            fromDate: '',
+            toDate: '',
         }
     },
     computed: {
@@ -136,7 +190,20 @@ export default {
             set(val) {
                 this.$store.commit('alltransactions/SET_PAGE', val)
             }
-        }
+        },
+        dateRangeText () {
+            return this.dates.join(' ~ ')
+        },
+        aMonth(){
+            this.fromDate = this.dates[0]
+            this.toDate = this.dates[1]
+        },
+        aWeek(){
+            this.fromDate = this.dates[0]
+            this.toDate = this.dates[1]
+        },
+        
+        
     },
     watch: {
         page() {
@@ -144,7 +211,11 @@ export default {
         },
         search() {
             this.getAlltransaction(this.search) //KETIKA VALUE SEARCH TERJADI PERUBAHAN, MAKA REQUEST DATA BARU
+        },
+        dates() {
+            this.getAlltransaction()
         }
+        
     },
     methods: {
         ...mapActions('alltransaction', ['getAlltransaction']),
@@ -152,7 +223,34 @@ export default {
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         exportData() {
             window.open(`api/exportalltransaction?api_token=${this.token}`)
-        }
+        },
+        monthAgo(){
+            this.toDate = new Date ().toISOString().slice(0,10)
+            var month = new Date();
+            month.setDate(month.getDate() - 30);
+            this.fromDate = month.toISOString().slice(0,10)
+            var today = new Date ().toISOString().slice(0,10)
+            this.dates = [month.toISOString().slice(0,10), today ]
+            this.$store.state.alltransaction.fromDate = this.dates[0]
+            this.$store.state.alltransaction.toDate = this.dates[1]
+        },
+        weekAgo(){
+            this.toDate = new Date ().toISOString().slice(0,10)
+            var week = new Date();
+            week.setDate(week.getDate() - 7);
+            this.fromDate = week.toISOString().slice(0,10)
+            var today = new Date ().toISOString().slice(0,10)
+            this.dates = [week.toISOString().slice(0,10), today ]
+             this.$store.state.alltransaction.fromDate = this.dates[0]
+            this.$store.state.alltransaction.toDate = this.dates[1]
+        },
+        selectedDate(){
+            this.fromDate = this.dates[0]
+            this.toDate = this.dates[1]
+            this.$store.state.alltransaction.fromDate = this.dates[0]
+            this.$store.state.alltransaction.toDate = this.dates[1]
+            this.getAlltransaction()
+        },
     }
 }
 </script>
