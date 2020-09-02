@@ -3,6 +3,14 @@
         <div class="panel">
             <div class="panel-heading">
                 <router-link v-if="$can('create vehicle')" :to="{ name: 'vehicles.add' }"><v-btn>Add Vehicle</v-btn></router-link>
+                <v-btn class="mx-2">
+                    <download-excel
+                    :data= "vehicles.data"
+                    :fields="json_fields"
+                    :name="exportName">
+                    Download Data
+                    </download-excel>
+                </v-btn>
             </div>
             <div class="panel-body">
 
@@ -51,6 +59,12 @@ export default {
     },
     data() {
         return {
+            exportName: 'Vehicle ' + new Date ().toISOString().slice(0,10),
+            json_fields: {
+                'Transporter Name' : 'transporter_name',
+                'Vehicle Number' : 'vehicle_number',
+                'Vehicle Type' : 'vehicle_type',
+            },
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
             headers: [
                 // { value: 'organization_name', text: 'Organization' },

@@ -1,25 +1,26 @@
 <template>
     <div class="col-md-12">
         <div class="panel">
-
-            <div class="panel-body">
+            <div class="panel-heading">
                 <p> From : {{ fromDate }} </p>
                 <p> To : {{ toDate }} </p>
-                <v-btn  @click.prevent="weekAgo()">
+                <v-btn class="mx-2"  @click.prevent="weekAgo()">
                     A Week
                 </v-btn>
-                <v-btn  @click.prevent="monthAgo()">
+                <v-btn class="mx-2" @click.prevent="monthAgo()">
                     A Month
                 </v-btn>
-                <v-btn>
+                <v-btn class="mx-2">
                     <download-excel
                     :data= "alltransactions.data"
                     :fields="json_fields"
-                    :name="dateRangeText">
+                    :name="exportName">
                     Download Data
                     </download-excel>
                 </v-btn>
-                
+            </div>
+            <div class="panel-body">
+                  
               	<!-- TABLE UNTUK MENAMPILKAN LIST SJP -->
                 <template>
                     <v-card>
@@ -114,7 +115,7 @@ export default {
     components: { VDaterange },
     name: 'DataSjpPalletSend',
     created() {
-        this.monthAgo();
+        this.weekAgo();
         this.getAlltransaction().then((res) => {
                 let row = res.data
                 // console.log(row)

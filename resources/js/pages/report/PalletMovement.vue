@@ -1,7 +1,16 @@
 <template>
     <div class="col-md-12">
         <div class="panel">
-
+            <div class="panel-heading">
+                <v-btn>
+                            <download-excel
+                            :data= "palletmovements.data"
+                            :fields="json_fields"
+                            :name='exportName'>
+                            Download Data
+                            </download-excel>
+                        </v-btn>
+            </div>
             <div class="panel-body">
 
               	<!-- TABLE UNTUK MENAMPILKAN LIST SJP -->
@@ -10,9 +19,11 @@
                         <v-card-title>
                         Pallet Movement
                         <v-spacer></v-spacer>
+                        
+                        <v-spacer></v-spacer>
                         <v-text-field
                             v-model="search"
-                            prepend-icon="mdi-search"
+                            prepend-icon="mdi-magnify"
                             label="Search"
                             single-line
                             hide-details
@@ -57,6 +68,22 @@ export default {
     data() {
         return {
             now: moment().format("YYYY-MM-DD"),
+            exportName: 'Pallet Movement ' + new Date ().toISOString().slice(0,10),
+            json_fields: {
+                'SJP Number' : 'sjp_number',
+                'Transaction Type' : 'transaction',
+                'Status' : 'status',
+                'Departure' : 'dept_pool',
+                'Destination' : 'dest_pool',
+                'Transporter' : 'transporter_name',
+                'Vehicle' : 'vehicle_number',
+                'Good Pallet' : 'good_pallet',
+                'TBR Pallet' : 'tbr_pallet',
+                'BER Pallet' : 'ber_pallet',
+                'Missing Pallet' : 'missing_pallet',
+                'Departure Time' : 'departure_time',
+                'ETA' : 'eta',
+            },
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
              headers: [
                 // { value: 'sjps_number', text: 'SJP Status Number' },

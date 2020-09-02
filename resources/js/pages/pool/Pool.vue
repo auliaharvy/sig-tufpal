@@ -3,6 +3,14 @@
         <div class="panel">
             <div class="panel-heading">
                 <router-link v-if="$can('create poolpallets')" :to="{ name: 'pools.add' }"><v-btn>Add Pool Pallet</v-btn></router-link>
+                <v-btn class="mx-2">
+                    <download-excel
+                    :data= "pools.data"
+                    :fields="json_fields"
+                    :name="exportName">
+                    Download Data
+                    </download-excel>
+                </v-btn>
             </div>
             <div class="panel-body">
 
@@ -64,6 +72,18 @@ export default {
     },
     data() {
         return {
+            exportName: 'Pool Pallet ' + new Date ().toISOString().slice(0,10),
+            json_fields: {
+                'Pool Name' : 'pool_name',
+                'Code' : 'code',
+                'Pool Address' : 'pool_address',
+                'Good Pallet' : 'good_pallet',
+                'TBR Pallet' : 'tbr_pallet',
+                'BER Pallet' : 'ber_pallet',
+                'Missing Pallet' : 'missing_pallet',
+                'Total Pallet' : 'total_pallet',
+                'Pallet Quota' : 'pallet_quota',
+            },
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
             headers: [
                 // { value: 'organization_name', text: 'Organization' },
@@ -71,7 +91,6 @@ export default {
                 { value: 'code', text: 'Pool Code' },
                 // { value: 'type', text: 'Pool Type' },
                 { value: 'pool_address', text: 'Pool Address' },
-
                 { value: 'good_pallet', text: 'Good Pallet' },
                 { value: 'tbr_pallet', text: 'TBR Pallet' },
                 { value: 'ber_pallet', text: 'BER Pallet' },

@@ -3,6 +3,14 @@
         <div class="panel">
             <div class="panel-heading">
                 <router-link v-if="$can('create transporters')" :to="{ name: 'transporters.add' }"><v-btn>Add Transporters</v-btn></router-link>
+                <v-btn class="mx-2">
+                    <download-excel
+                    :data= "transporters.data"
+                    :fields="json_fields"
+                    :name="exportName">
+                    Download Data
+                    </download-excel>
+                </v-btn>
             </div>
             <div class="panel-body">
 
@@ -67,11 +75,21 @@ export default {
     },
     data() {
         return {
+            exportName: 'Transporter ' + new Date ().toISOString().slice(0,10),
+            json_fields: {
+                'Transporter Name' : 'transporter_name',
+                'Transporter Address' : 'transporter_address',
+                'Good Pallet' : 'good_pallet',
+                'TBR Pallet' : 'tbr_pallet',
+                'BER Pallet' : 'ber_pallet',
+                'Missing Pallet' : 'missing_pallet',
+                'Total Pallet' : 'total_pallet',
+                'Pallet Quota' : 'pallet_quota',
+            },
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
             headers: [
                 { value: 'transporter_name', text: 'Transporter Name' },
                 { value: 'transporter_address', text: 'Transporter Address' },
-
                 { value: 'good_pallet', text: 'Good Pallet' },
                 { value: 'tbr_pallet', text: 'TBR Pallet' },
                 { value: 'ber_pallet', text: 'BER Pallet' },

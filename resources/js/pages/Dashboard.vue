@@ -1,6 +1,6 @@
 <template>
-        <section class="content">
-            <div class="row">
+        <section class="content" >
+            <div class="row" ref="printMe">
                 <div class="col-md-12">
                     <div class="panel">
                         <div class="row">
@@ -9,6 +9,9 @@
                                     <v-btn  class="ma-5" @click.prevent="exportData()">
                                         Download Today Transaction
                                     </v-btn>
+                                    <!-- <v-btn class="ma-5" @click="print">
+                                        Print
+                                    </v-btn> -->
                                     </div>
                                     <v-flex class="pa-5" xs12 md12 lg12>
                                     <v-card>
@@ -214,8 +217,10 @@
     import LineChart from '../components/LineChart.vue'
     import BarChart from '../components/BarChart.vue'
     import PieChart from '../components/PieChart.vue'
+    import jsPDF from 'jspdf'
     import { mapActions, mapState } from 'vuex'
     import ChartDataLabels from 'chartjs-plugin-datalabels';
+
 
     export default {
         created() {
@@ -497,7 +502,26 @@
             ...mapActions('pool', ['getPools', 'removePools']),
             exportData() {
                 window.open(`api/exportalltransactiontoday?api_token=${this.token}`)
-            }
+            },
+            async print() {
+                var now = new Date().toLocaleString();
+                this.output = null;
+                    const filename  = 'Dashboard' + now + '.pdf';
+                    const el = this.$refs.printMe;
+                // add option type to get the image version
+                // if not provided the promise will return
+                // the canvas.
+                const options = {
+                    type: 'dataURL'
+                }
+                this.output = await this.$html2canvas(el, options);
+
+                let pdf = new jsPDF('l', 'mm', 'a4');
+                    var width = pdf.internal.pageSize.getWidth();
+                    var height = pdf.internal.pageSize.getHeight();
+                    pdf.addImage(this.output, 'PNG', 0, 0, width, height);
+                    pdf.save(filename);
+            },
         },
         components: {
             'line-chart': LineChart,
