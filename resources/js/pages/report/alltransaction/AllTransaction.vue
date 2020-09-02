@@ -14,6 +14,7 @@
                 <v-btn>
                     <download-excel
                     :data= "alltransactions.data"
+                    :fields="json_fields"
                     :name="dateRangeText">
                     Download Data
                     </download-excel>
@@ -128,6 +129,42 @@ export default {
         return {
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
             exportName: 'All Transaction ' + this.dateRangeText,
+            json_fields: {
+                'TID Number' : 'tid_number',
+                'SJP Number' : 'sjp_number',
+                'SJPS_Number' : 'sjps_number',
+                'TP Number' : 'tp_number',
+                'BMP Number' : 'bmp_number',
+                'NP Number' : 'np_number',
+                'DP Number' : 'dp_number' ,
+                'RP Number' : 'rp_number',
+                'TA Number' : 'ta_number',
+                'Transaction Type' : 'transaction',
+                'No Dispatch' : 'no_do',
+                'New No Dispatch' : 'new_no_do',
+                'Status' : 'status',
+                'Sender/Reporter' : 'sender/reporter' ,
+                'Receiver/Approver' : 'receiver/approver',
+                'Departure' : 'departure_pool',
+                'Destination' : 'destination_pool',
+                'New Destination' : 'new_destination',
+                'Pool Pallet' : 'pool_pallet',
+                'Transporter' : 'transporter',
+                'Vehicle' : 'vehicle',
+                'New Vehicle' : 'new_vehicle',
+                'Driver' : 'driver',
+                'New Driver' : 'new_driver',
+                'Good Pallet' : 'good_pallet',
+                'TBR Pallet' : 'tbr_pallet',
+                'BER Pallet' : 'ber_pallet',
+                'Missing Pallet' : 'missing_pallet',
+                'Good Cement' : 'good_cement',
+                'Bad Cement' : 'bad_cement',
+                'Berita Acara' : 'reporter_prove',
+                'Reason' : 'reason',
+                'Note' : 'note',
+                'Created At' : 'created_at' 
+            },
              headers: [
                 { value: 'tid_number', text: 'TID Number' },
                 { value: 'sjp_number', text: 'SJP Number' },
