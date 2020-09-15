@@ -53,7 +53,7 @@
             <v-flex class="px-5" xs6 md3 lg3>
                 <div class="form-group" :class="{ 'has-error': errors.good_pallet }">
                     <label for="">Good Pallet</label>
-                    <input type="text" class="form-control" v-model="sjpstatus.good_pallet">
+                    <input type="text" class="form-control" v-model="sjpstatus.good_pallet" :readonly="true">
                     <p class="text-danger" v-if="errors.good_pallet">{{ errors.good_pallet[0] }}</p>
                 </div>
             </v-flex>
@@ -159,6 +159,11 @@ export default {
             }
         }
     },
+    watch: {
+        autoGoodPallet(){
+            this.sjpstatus.good_pallet = this.sendSjpStatus.good_pallet - this.sjpstatus.tbr_pallet - this.sjpstatus.ber_pallet - this.sjpstatus.missing_pallet;
+        },
+    },
    
     computed: {
         ...mapState(['errors']),
@@ -172,6 +177,9 @@ export default {
         ...mapState('user', {
             authenticated: state => state.authenticated
         }),
+        autoGoodPallet(){
+            this.sjpstatus.good_pallet = this.sendSjpStatus.good_pallet - this.sjpstatus.tbr_pallet - this.sjpstatus.ber_pallet - this.sjpstatus.missing_pallet;
+        },
     },
     methods: {
         ...mapMutations('sjpstatus', ['CLEAR_FORM']), 

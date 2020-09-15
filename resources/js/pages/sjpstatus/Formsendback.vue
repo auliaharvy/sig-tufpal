@@ -85,7 +85,7 @@ export default {
             }),
         this.getSjp(), 
         this.getMstTransaction(), 
-        this.getUserLogin() //LOAD DATA
+        this.getUserLogin()
     },
     data() {
         return {

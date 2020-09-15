@@ -53,7 +53,7 @@
             <v-flex class="px-5" xs6 md3 lg3>
                 <div class="form-group" :class="{ 'has-error': errors.good_pallet }">
                     <label for="">Good Pallet</label>
-                    <input type="text" class="form-control" v-model="sjpstatus.good_pallet" >
+                    <input type="text" class="form-control" v-model="sjpstatus.good_pallet" :readonly="true">
                     <p class="text-danger" v-if="errors.good_pallet">{{ errors.good_pallet[0] }}</p>
                 </div>
             </v-flex>
@@ -176,6 +176,11 @@ export default {
         }
     },
    
+    watch: {
+        autoGoodPallet(){
+            this.sjpstatus.good_pallet = this.sendSjpStatus.good_pallet - this.sjpstatus.tbr_pallet;
+        },
+    },
     computed: {
         ...mapState(['errors']),
         ...mapState('sjp', {
@@ -188,6 +193,10 @@ export default {
         ...mapState('user', {
             authenticated: state => state.authenticated
         }),
+        autoGoodPallet(){
+            this.sjpstatus.good_pallet = this.sendSjpStatus.good_pallet - this.sjpstatus.tbr_pallet;
+        },
+                
     },
     methods: {
         ...mapMutations('sjpstatus', ['CLEAR_FORM']), 
@@ -196,6 +205,13 @@ export default {
         ...mapActions('msttransaction', ['getMstTransaction']),
         ...mapActions('user', ['getUserLogin']),
         ...mapActions('sjpstatus', ['getSjpStatus']),
+        updateQuantity(event) {
+            this.form.sale_quantity = event.target.value
+            this.form.sale_total = this.form.sale_quantity * this.form.sale_rate
+        },
+        autoSendback(){
+            
+        },
         receiveCheck(){
             this.editSjp(this.sjpstatus.sjp_id).then((res) => {
                 let row = res.data
@@ -253,7 +269,7 @@ export default {
                         note: '',
                         receiving_driver_approval: '',
                     }
-                    this.$router.push({ name: 'sjpstatuss.data' })
+                    this.$router.push({ name: 'sjpstatuss.sendback', params: {id: this.sendSjpStatus.sjp_status_id} })
                 })
         },
        
