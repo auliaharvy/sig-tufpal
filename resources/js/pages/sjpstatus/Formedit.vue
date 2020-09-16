@@ -176,10 +176,10 @@ export default {
             sendbackSjpstatus: {
                 sjp_status_id: '',
                 sjp_id: '',
-                good_pallet: 16,
-                tbr_pallet: 0,
-                ber_pallet: 0,
-                missing_pallet: 0,
+                good_pallet: '',
+                tbr_pallet: '',
+                ber_pallet: '',
+                missing_pallet: '',
                 good_cement: '',
                 bad_cement: '',
                 note: '',
@@ -257,10 +257,10 @@ export default {
             let form = new FormData()
             form.append('sjp_id', this.sjpstatus.sjp_id)
             form.append('sjp_status_id', this.sjpstatus.sjp_status_id)
-            form.append('good_pallet', this.sendbackSjpstatus.good_pallet)
-            form.append('tbr_pallet', this.sendbackSjpstatus.tbr_pallet)
-            form.append('ber_pallet', this.sendbackSjpstatus.ber_pallet)
-            form.append('missing_pallet', this.sendbackSjpstatus.missing_pallet)
+            form.append('good_pallet', this.sendSjpStatus.good_pallet)
+            form.append('tbr_pallet', this.sendSjpStatus.tbr_pallet)
+            form.append('ber_pallet', this.sendSjpStatus.ber_pallet)
+            form.append('missing_pallet', this.sendSjpStatus.missing_pallet)
             form.append('sending_driver_approval', this.sendbackSjpstatus.sending_driver_approval)
             form.append('note', this.sendbackSjpstatus.note)
                 this.submitSjpStatussendback(form).then(() => {
