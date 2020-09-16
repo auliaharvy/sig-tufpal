@@ -172,7 +172,19 @@ export default {
                 bad_cement: '',
                 note: '',
                 receiving_driver_approval: '',
-            }
+            },
+            sendbackSjpstatus: {
+                sjp_status_id: '',
+                sjp_id: '',
+                good_pallet: 16,
+                tbr_pallet: 0,
+                ber_pallet: 0,
+                missing_pallet: 0,
+                good_cement: '',
+                bad_cement: '',
+                note: '',
+                sending_driver_approval: '',
+            },
         }
     },
    
@@ -201,7 +213,7 @@ export default {
     methods: {
         ...mapMutations('sjpstatus', ['CLEAR_FORM']), 
         ...mapActions('sjp', ['getSjp' , 'editSjp']),
-        ...mapActions('sjpstatus', ['editSjpStatus','updateSjpStatus']),
+        ...mapActions('sjpstatus', ['editSjpStatus','updateSjpStatus', 'submitSjpStatussendback']),
         ...mapActions('msttransaction', ['getMstTransaction']),
         ...mapActions('user', ['getUserLogin']),
         ...mapActions('sjpstatus', ['getSjpStatus']),
@@ -209,8 +221,51 @@ export default {
             this.form.sale_quantity = event.target.value
             this.form.sale_total = this.form.sale_quantity * this.form.sale_rate
         },
+        sendbackCheck(){
+            this.editSjp(this.sjpstatus.sjp_id).then((res) => {
+                let row = res.data
+                // var sendData = this.sendSjpStatus
+                var data = this.sjpstatus
+                var checkContent = 
+                "<div><strong><span>Did you want Sendback?" + 
+                "<p> Good Pallet : <b>" + 16 +
+                "<p> TBR Pallet : <b> " + 0 +
+                "<p> BER Pallet : <b> " + 0 +
+                "<p> Missing Pallet : <b> " + 0 +
+                "</span> </strong></div>"
+                        
+                this.$swal({
+                    title: "Sendback " + row.sjp_number,
+                    text: "...<div>" + checkContent + "</div>...",
+                    html: "...<div>" + checkContent +   "</div>...",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sendback!',
+                    cancelButtonText: 'No!'
+                }).then((result) => {
+                    if (result.value) {
+                        this.autoSendback() //JIKA SETUJU MAKA PERMINTAAN HAPUS AKAN DI EKSEKUSI
+                    }else{
+                        this.$router.push({ name: 'sjpstatuss.sendback', params: {id: this.sjpstatus.sjp_status_id} })
+                    }
+                })
+            })
+        },
         autoSendback(){
-            
+            let form = new FormData()
+            form.append('sjp_id', this.sjpstatus.sjp_id)
+            form.append('sjp_status_id', this.sjpstatus.sjp_status_id)
+            form.append('good_pallet', this.sendbackSjpstatus.good_pallet)
+            form.append('tbr_pallet', this.sendbackSjpstatus.tbr_pallet)
+            form.append('ber_pallet', this.sendbackSjpstatus.ber_pallet)
+            form.append('missing_pallet', this.sendbackSjpstatus.missing_pallet)
+            form.append('sending_driver_approval', this.sendbackSjpstatus.sending_driver_approval)
+            form.append('note', this.sendbackSjpstatus.note)
+                this.submitSjpStatussendback(form).then(() => {
+                    this.$router.push({ name: 'sjpstatuss.data' })
+                })
         },
         receiveCheck(){
             this.editSjp(this.sjpstatus.sjp_id).then((res) => {
@@ -257,19 +312,7 @@ export default {
             form.append('sending_driver_approval', this.sjpstatus.receiving_driver_approval)
             form.append('note', this.sjpstatus.note)
                 this.updateSjpStatus(form).then(() => {
-                    this.sjpstatus = {
-                        sjp_status_id: '',
-                        sjp_id: '',
-                        good_pallet: '',
-                        tbr_pallet: '',
-                        ber_pallet: '',
-                        missing_pallet: '',
-                        good_cement: '',
-                        bad_cement: '',
-                        note: '',
-                        receiving_driver_approval: '',
-                    }
-                    this.$router.push({ name: 'sjpstatuss.sendback', params: {id: this.sendSjpStatus.sjp_status_id} })
+                    this.sendbackCheck()
                 })
         },
        
