@@ -161,7 +161,11 @@ export default {
     },
     watch: {
         autoGoodPallet(){
-            this.sjpstatus.good_pallet = this.sendSjpStatus.good_pallet - this.sjpstatus.tbr_pallet - this.sjpstatus.ber_pallet - this.sjpstatus.missing_pallet;
+            if(this.sendSjpStatus.tbr_pallet == 0 && this.sendSjpStatus.ber_pallet == 0 && this.sendSjpStatus.missing_pallet){
+                this.sjpstatus.good_pallet = this.sendSjpStatus.good_pallet - this.sjpstatus.tbr_pallet - this.sjpstatus.ber_pallet - this.sjpstatus.missing_pallet;
+            }else{
+                this.sjpstatus.good_pallet = (this.sendSjpStatus.good_pallet + this.sendSjpStatus.tbr_pallet + this.sendSjpStatus.ber_pallet + this.sendSjpStatus.missing_pallet) - this.sjpstatus.tbr_pallet - this.sjpstatus.ber_pallet - this.sjpstatus.missing_pallet;
+            }
         },
     },
    
@@ -178,7 +182,11 @@ export default {
             authenticated: state => state.authenticated
         }),
         autoGoodPallet(){
-            this.sjpstatus.good_pallet = this.sendSjpStatus.good_pallet - this.sjpstatus.tbr_pallet - this.sjpstatus.ber_pallet - this.sjpstatus.missing_pallet;
+            if(this.sendSjpStatus.tbr_pallet == 0 && this.sendSjpStatus.ber_pallet == 0 && this.sendSjpStatus.missing_pallet){
+                this.sjpstatus.good_pallet = this.sendSjpStatus.good_pallet - this.sjpstatus.tbr_pallet - this.sjpstatus.ber_pallet - this.sjpstatus.missing_pallet;
+            }else{
+                this.sjpstatus.good_pallet = (this.sendSjpStatus.good_pallet + this.sendSjpStatus.tbr_pallet + this.sendSjpStatus.ber_pallet + this.sendSjpStatus.missing_pallet) - this.sjpstatus.tbr_pallet - this.sjpstatus.ber_pallet - this.sjpstatus.missing_pallet;
+            }
         },
     },
     methods: {
