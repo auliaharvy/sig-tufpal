@@ -35,6 +35,7 @@ import DataSjp from './pages/sjp/sjp.vue'
 import AddSjp from './pages/sjp/Add.vue'
 import EditSjp from './pages/sjp/Edit.vue'
 import EditSjpdest from './pages/sjp/Editdest.vue'
+import CancelSjp from './pages/sjp/Cancel.vue'
 
 import IndexSjpStatus from './pages/sjpstatus/Index.vue'
 import DataSjpStatus from './pages/sjpstatus/SjpStatus.vue'
@@ -168,6 +169,12 @@ const router = new Router({
                     name: 'sjps.editdestination',
                     component: EditSjpdest,
                     meta: { title: 'Edit Sjp Destination' }
+                },
+                {
+                    path: 'cancel/:id',
+                    name: 'sjps.cancel',
+                    component: CancelSjp,
+                    meta: { title: 'Cancel Sjp' }
                 },
 
             ]

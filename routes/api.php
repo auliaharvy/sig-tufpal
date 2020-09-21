@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/sjp/changedestination', 'SjpController@changedestination');
     Route::get('/sjpstatusbymaster/{id}', 'SjpStatusController@sjpstatusbymaster'); //get data untuk add sjp status
     Route::get('/view/{id}', 'SjpStatusController@view');
+    Route::post('/sjp/cancel', 'SjpController@cancelled');
 
     Route::resource('sjpstatus', 'SjpStatusController');
     Route::post('/sjpstatus/sendingapproval', 'SjpStatusController@sendingdriverapproval');

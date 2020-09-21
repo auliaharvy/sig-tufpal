@@ -410,6 +410,78 @@ class SjpController extends Controller
         }
     }
 
+    public function cancelled(Request $request)
+    {
+        $sjp_id = $request->sjp_id;
+
+        $sjp = Sjp::where('sjp_id',$sjp_id)->first();
+        if (empty($sjp)){
+            return response()->json(['error' => 'Data not found'], 404);
+        }
+        else{
+            DB::beginTransaction();
+            try{
+                $update = Sjp::find($sjp_id);
+                if($update->state != 0){
+                    return response()->json([
+                        'status' => 'error',
+                        'data' => 'SJP Has Been Send',
+                        'message' => 'SJP Has Been Send'], 422);
+                }
+                $update->status = "CLOSED";
+                $update->state = 5;
+                $update->adjust_by = auth()->user()->name;
+                $update->save();
+
+                // Membuat log All Transaction
+                $reporter = Auth::user()->name;
+                $sjp_number = $sjp->sjp_number;
+                $transporter_id = $sjp->transporter_id;
+                $transporter = Transporter::find($transporter_id);
+                $vehicle_id = $sjp->vehicle_id;
+                $vehicle = Vehicle::find($vehicle_id);
+                $driver_id = $sjp->driver_id;
+                $driver = Driver::find($driver_id);
+                $checker = Auth::user()->name;
+                $departure_id = $sjp->departure_pool_pallet_id;
+                $departure = PoolPallet::find($departure_id);
+                $destination_pool_pallet_id = $sjp->destination_pool_pallet_id;
+                $destination = PoolPallet::find($destination_pool_pallet_id);
+                $alltransaction = Alltransaction::create([
+                    'reference_sjp_id' => $update->sjp_id,
+                    'transaction' => 'Surat Jalan Pallet Cancel',
+                    'no_do' => $sjp->no_do,
+                    'status' => 'CANCELLED',
+                    'sender/reporter' => $reporter,
+                    'departure_pool' => $departure->pool_name,
+                    'destination_pool' => $destination->pool_name,
+                    'transporter' => $transporter->transporter_name,
+                    'vehicle' => $vehicle->vehicle_number,
+                    'driver' => $driver->driver_name,
+                    'good_pallet' => $sjp->tonnage/2,
+                    'tbr_pallet' => 0,
+                    'ber_pallet' => 0,
+                    'missing_pallet' => 0,
+                    'good_cement' => $sjp->product_quantity,
+                    'bad_cement' => 0,
+                    'reason' => $request->reason,
+                    'note' => $request->note,
+                ]);
+
+
+                DB::commit();
+                return response()->json(['status' => 'success'], 200);
+
+            }catch (\Exception $e) {
+                DB::rollback();
+                return response()->json([
+                    'status' => 'error',
+                    'data' => $e->getMessage(),
+                    'message' => 'Error Cancel Surat Jalan Pallet Record'], 422);
+            }
+        }
+    }
+
     public function destroy($id)
     {
         $sjp = Sjp::find($id); //QUERY DATA BERDASARKAN ID

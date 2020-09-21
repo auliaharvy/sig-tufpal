@@ -24,6 +24,8 @@ const state = () => ({
         departure_time: new Date().toISOString().slice(0,10),
         eta: '',
         pallet_quantity: '',
+        reason: '',
+        note: '',
     },
     page: 1
 })
@@ -67,6 +69,8 @@ const mutations = {
             departure_time: '',
             eta: '',
             pallet_quantity: '',
+            reason: '', 
+            note: '',
         }
     }
 }
@@ -150,6 +154,25 @@ const actions = {
         commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.post(`/sjp/adjust`, state.sjp) //KIRIM PERMINTAAN KE SERVER UNTUK MENGUPDATE DATA BERDASARKAN PAYLOAD (ID) DAN DATA YANG AKAN DI UPDATE DI AMBIL DARI STATE CUSTOMER
+            .then((response) => {
+                commit('CLEAR_FORM') //BERSIHKAN FORM
+                resolve(response.data)
+            })
+            .catch((error) => {
+                alert(error.response.data.message)
+                //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
+                if (error.response.status == 422) {
+                    commit('SET_ERRORS', error.response.data.errors, { root: true })
+                }
+            }).finally(() => {
+                commit('doneLoading')
+            })
+        })
+    },
+    cancelSjp({ state, commit }, payload) {
+        commit('isLoading')
+        return new Promise((resolve, reject) => {
+            $axios.post(`/sjp/cancel`, state.sjp) //KIRIM PERMINTAAN KE SERVER UNTUK MENGUPDATE DATA BERDASARKAN PAYLOAD (ID) DAN DATA YANG AKAN DI UPDATE DI AMBIL DARI STATE CUSTOMER
             .then((response) => {
                 commit('CLEAR_FORM') //BERSIHKAN FORM
                 resolve(response.data)

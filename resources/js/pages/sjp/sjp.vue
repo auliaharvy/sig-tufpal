@@ -73,6 +73,10 @@
                             <router-link :to="{ name: 'sjps.editdestination', params: {id: item.sjp_id} }" v-if="item.status == 'OPEN' && item.state <= 2"><v-btn color="success" small>Change Dest</v-btn></router-link>
                         </template>
 
+                        <template v-if="$can('update sjps')" class="pa-5" v-slot:item.cancel="{ item }">
+                            <router-link :to="{ name: 'sjps.cancel', params: {id: item.sjp_id} }" v-if="item.status == 'OPEN' && item.state == 0"><v-btn color="primary" small>Cancel</v-btn></router-link>
+                        </template>
+
                         <template v-if="$can('delete sjps')" class="pa-5" v-slot:item.delete="{ item }">
                             <v-btn color="error" @click="deleteSjp(item.sjp_id)" small>Delete</v-btn>
                         </template>
@@ -144,6 +148,7 @@ export default {
                 { value: 'send', text: 'Send Pallet' },
                 { value: 'adjusment', text: 'SJP Adjusment' },
                 { value: 'changedest', text: 'SJP Destination Change' },
+                { value: 'cancel', text: 'SJP Cancel' },
                 { value: 'delete', text: 'Delete' }
 
             ],
@@ -185,6 +190,21 @@ export default {
             this.$swal({
                 title: 'Are you sure?',
                 text: "This will delete record Permanently!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if (result.value) {
+                    this.removeSjp(id) //JIKA SETUJU MAKA PERMINTAAN HAPUS AKAN DI EKSEKUSI
+                }
+            })
+        },
+        cancelSjp(id) {
+            this.$swal({
+                title: 'Are you sure?',
+                text: "This will cancel Surat Jalan Pallet record!",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
