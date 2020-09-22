@@ -472,7 +472,10 @@ public function index()
             $goodpalletrcv = $request->good_pallet;
             $tbr_palletrcv = $request->tbr_pallet;
             if($tbr_palletrcv>($good_pallet-$goodpalletrcv)){
-                return response()->json(['error' => 'Input Error! Total Quantity Of Received Pallet  Over Than Total Quantity Of Pallet Send'], 404);
+                return response()->json([
+                    'status' => 'error',
+                    'data' => 'the number of pallets received exceeds the sent pallet',
+                    'message' => 'the number of pallets received exceeds the sent pallet'], 422);
             }else {
                 DB::beginTransaction();
                 try{
@@ -645,6 +648,7 @@ public function index()
                 $tbr_pallet_awal = $update->tbr_pallet;
                 $ber_pallet_awal = $update->ber_pallet;
                 $missing_pallet_awal = $update->missing_pallet;
+                $total_sendback = $good_pallet_awal + $tbr_pallet_awal + $ber_pallet_awal + $missing_pallet_awal;
                 $sjps_number    = $update->sjps_number;
                 $goodpalletrcv = $request->good_pallet;
                 $tbr_palletrcv = $request->tbr_pallet;
@@ -652,8 +656,18 @@ public function index()
                 $ber_palletrcv = $request->ber_pallet;
                 $missing_palletrcv = $request->missing_pallet;
                 $missing_ber = $ber_palletrcv+$missing_palletrcv;
-                if($tbr_palletrcv>($total-$goodpalletrcv) ||$missing_ber>($total-$good_tbr) ){
-                    return response()->json(['error' => 'Qty Receive melebihi data yang di send'], 404);
+                $total_receive_sendback = $goodpalletrcv + $tbr_palletrcv + $ber_palletrcv + $missing_palletrcv;
+                if($tbr_palletrcv>($total-$goodpalletrcv) || $missing_ber>($total-$good_tbr) ){
+                    return response()->json([
+                        'status' => 'error',
+                        'data' => 'the number of pallets received exceeds the sent pallet',
+                        'message' => 'the number of pallets received exceeds the sent pallet'], 422);
+                }
+                elseif($total_receive_sendback > $total_sendback){
+                    return response()->json([
+                        'status' => 'error',
+                        'data' => 'the number of pallets received exceeds the sent pallet',
+                        'message' => 'the number of pallets received exceeds the sent pallet'], 422);
                 }
                 else{
                     $name = NULL;
@@ -678,6 +692,8 @@ public function index()
                     $InventoryDest = PoolPallet::find($destination_id);
                     $InventoryDest->good_pallet = (($InventoryDest->good_pallet)+($goodpalletrcv));
                     $InventoryDest->tbr_pallet = (($InventoryDest->tbr_pallet)+($tbr_palletrcv));
+                    $InventoryDest->ber_pallet = (($InventoryDest->ber_pallet)+($ber_palletrcv));
+                    $InventoryDest->missing_pallet = (($InventoryDest->missing_pallet)+($missing_palletrcv));
                     $InventoryDest->save();
 
                     $InventoryTrans = Transporter::find($transporter_id);
@@ -690,10 +706,8 @@ public function index()
                         else{
                             $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($good_pallet_awal));
                         }
-
-
                     }
-                    else if(($request->tbr_pallet)>$tbr_pallet_awal || ($request->tbr_pallet)!=$tbr_pallet_awal ){ //jika rcv tbr pallet lebih besar dari yang di send
+                    else if(($request->tbr_pallet)>$tbr_pallet_awal){ //jika rcv tbr pallet lebih besar dari yang di send
                         if($missing_ber>0){
                             $selisihtbr = ($request->tbr_pallet)-$tbr_pallet_awal;
                             $selisihgood = $good_pallet_awal-($request->good_pallet);
@@ -713,6 +727,10 @@ public function index()
                             }
                         }
 
+                    }
+                    elseif(($request->good_pallet) == $good_pallet_awal && ($request->tbr_pallet) == $tbr_pallet_awal){
+                        $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($request->good_pallet));
+                        $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)-($request->tbr_pallet));
                     }
                     else{
                         $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($request->good_pallet));
