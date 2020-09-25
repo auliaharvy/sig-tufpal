@@ -6,10 +6,12 @@ const state = () => ({
 
     //STATE INI UNTUK FORM ADD DAN EDIT NANTINYA
     newpallet: {
+        new_pallet_id: '',
         adder_user_id: '',
         pool_pallet_id: '',
         np_number   : '',
         good_pallet: '',
+        status: '',
         vendor: '',
         note: '',
 
@@ -39,10 +41,12 @@ const mutations = {
     //RESET STATE CUSTOMER
     CLEAR_FORM(state) {
         state.newpallet = {
+            new_pallet_id: '',
             adder_user_id: '',
             pool_pallet_id: '',
             np_number   : '',
             good_pallet: '',
+            status: '',
             vendor: '',
             note: '',
         }
@@ -69,6 +73,28 @@ const actions = {
         return new Promise((resolve, reject) => {
             //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
             $axios.post(`/newpallet`, state.newpallet)
+            .then((response) => {
+                //APABILA BERHASIL MAKA LOAD DATA CUSTOMER UNTUK MENGAMBIL DATA TERBARU
+                dispatch('getNewpallet').then(() => {
+                    resolve(response.data)
+                })
+            })
+            .catch((error) => {
+                alert(error.response.data.message)
+                //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
+                if (error.response.status == 422) {
+                    commit('SET_ERRORS', error.response.data.errors, { root: true })
+                }
+            }).finally(() => {
+                commit('doneLoading')
+            })
+        })
+      },
+      cancelNewpallet({ dispatch, commit, state }) {
+        commit('isLoading')
+        return new Promise((resolve, reject) => {
+            //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
+            $axios.post(`/newpallet/cancel`, state.newpallet)
             .then((response) => {
                 //APABILA BERHASIL MAKA LOAD DATA CUSTOMER UNTUK MENGAMBIL DATA TERBARU
                 dispatch('getNewpallet').then(() => {

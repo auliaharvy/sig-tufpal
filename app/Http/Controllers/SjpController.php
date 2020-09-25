@@ -30,6 +30,7 @@ class SjpController extends Controller
         $status = 'OPEN';
         if($pool_pallet=="pooldli" && $role<6){
             $sjp = DB::table('surat_jalan_pallet as a')
+            ->orderBy('created_at', 'DESC')
             ->join('pool_pallet as b', 'a.destination_pool_pallet_id', '=', 'b.pool_pallet_id')
             ->join('pool_pallet as c', 'a.departure_pool_pallet_id', '=', 'c.pool_pallet_id')
             ->join('vehicle as d', 'a.vehicle_id', '=', 'd.vehicle_id')
@@ -43,6 +44,7 @@ class SjpController extends Controller
         }
         else{
             $sjp = DB::table(DB::raw('(SELECT * FROM surat_jalan_pallet WHERE status = "OPEN")a'))
+            ->orderBy('created_at', 'DESC')
             ->join('pool_pallet as b', 'a.departure_pool_pallet_id', '=', 'b.pool_pallet_id')
             ->join('pool_pallet as c', 'a.destination_pool_pallet_id', '=', 'c.pool_pallet_id')
             ->join('vehicle as d', 'a.vehicle_id', '=', 'd.vehicle_id')

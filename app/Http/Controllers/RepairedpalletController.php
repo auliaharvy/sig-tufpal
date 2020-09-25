@@ -19,6 +19,7 @@ class RepairedpalletController extends Controller
         $role = Auth::user()->role;
         if($pool_pallet=='pooldli' && $role<5){
             $repairedpallet = DB::table('repaired_pallet as a')
+            ->orderBy('created_at', 'DESC')
             ->join('pool_pallet as b', 'a.pool_pallet_id', '=', 'b.pool_pallet_id')
             ->join('users as c', 'a.reporter_user_id', '=', 'c.id')
             ->select('a.*', 'b.pool_name', 'c.name')
@@ -27,6 +28,7 @@ class RepairedpalletController extends Controller
         }
         else{
             $repairedpallet = DB::table('repaired_pallet as a')
+            ->orderBy('created_at', 'DESC')
             ->join('pool_pallet as b', 'a.pool_pallet_id', '=', 'b.pool_pallet_id')
             ->join('users as c', 'a.reporter_user_id', '=', 'c.id')
             ->select('a.*', 'b.pool_name', 'c.name')

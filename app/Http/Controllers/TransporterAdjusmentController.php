@@ -24,6 +24,7 @@ class TransporterAdjusmentController extends Controller
         $role = Auth::user()->role;
         if($pool_pallet=='pooldli' && $role<5){
         $transporterAdjusment = DB::table('transporter_adjusment as a')
+            ->orderBy('created_at', 'DESC')
             ->join('pool_pallet as b', 'a.pool_pallet_id', '=', 'b.pool_pallet_id')
             ->join('users as c', 'a.reporter_user_id', '=', 'c.id')
             ->join('transporter as d', 'a.transporter_id', '=', 'd.transporter_id')
@@ -33,6 +34,7 @@ class TransporterAdjusmentController extends Controller
         }
         else{
             $transporterAdjusment = DB::table('transporter_adjusment as a')
+            ->orderBy('created_at', 'DESC')
             ->join('pool_pallet as b', 'a.pool_pallet_id', '=', 'b.pool_pallet_id')
             ->join('users as c', 'a.reporter_user_id', '=', 'c.id')
             ->join('transporter as d', 'a.transporter_id', '=', 'd.transporter_id')

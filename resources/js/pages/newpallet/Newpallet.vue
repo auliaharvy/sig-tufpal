@@ -27,6 +27,9 @@
                         :search="search"
                         dense
                         >
+                        <template v-if="$can('update newpallet')" class="pa-5" v-slot:item.cancel="{ item }">
+                            <router-link :to="{ name: 'newpallets.cancel', params: {id: item.new_pallet_id} }" v-if="item.status == 0"><v-btn color="primary" small>Cancel</v-btn></router-link>
+                        </template>
         <!-- <template v-slot:item.approve="{ item }">
             <router-link :to="{ name: 'bermissings.edit', params: {id: item.ber_missing_pallet_id} }">
                 <v-btn color="success" small>Approve</v-btn>
@@ -82,6 +85,7 @@ export default {
                 { value: 'driver', text: 'Driver' },
                 { value: 'created_at', text: 'Created At' },
                 { value: 'note', text: 'Note' },
+                { value: 'cancel', text: 'Cancel' },
             ],
             search: ''
         }

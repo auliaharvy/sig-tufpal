@@ -27,6 +27,7 @@ class DamagedpalletController extends Controller
         $role = Auth::user()->role;
         if($pool_pallet=='pooldli' && $role<5){
             $damagedpallet = DB::table('damaged_pallet as a')
+            ->orderBy('created_at', 'DESC')
             ->join('users as b', 'a.reporter_user_id', '=', 'b.id')
             ->leftJoin('pool_pallet as c', 'a.pool_pallet_id', '=', 'c.pool_pallet_id')
             ->leftJoin('transporter as d', 'a.transporter_id', '=', 'd.transporter_id')

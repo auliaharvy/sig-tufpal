@@ -83,6 +83,7 @@ import IndexNewpallet from './pages/newpallet/Index.vue'
 import DataNewpallet from './pages/newpallet/Newpallet.vue'
 import AddNewpallet from './pages/newpallet/AddNewpallet.vue'
 import EditNewpallet from './pages/newpallet/EditNewpallet.vue'
+import CancelNewpallet from './pages/newpallet/CancelNewpallet.vue'
 
 import IndexTransporterAdjusment from './pages/transporteradjusment/Index.vue'
 import DataTransporterAdjusment from './pages/transporteradjusment/TransporterAdjusment.vue'
@@ -289,6 +290,12 @@ const router = new Router({
                     name: 'newpallets.edit',
                     component: EditNewpallet,
                     meta: { title: 'Edit New Pallet' }
+                },
+                {
+                    path: 'cancel/:id',
+                    name: 'newpallets.cancel',
+                    component: CancelNewpallet,
+                    meta: { title: 'Cancel New Pallet' }
                 },
             ]
         },

@@ -48,6 +48,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('bermissingdisapproved', 'BermissingpalletdisapprovedController');
 
     Route::resource('newpallet', 'NewpalletController');
+    Route::post('/newpallet/cancel', 'NewpalletController@newPalletCancel');
     Route::resource('damagedpallet', 'DamagedpalletController');
     Route::resource('repairedpallet', 'RepairedpalletController');
     Route::resource('palletmovement', 'PalletMovementController');
