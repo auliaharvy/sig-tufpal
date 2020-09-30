@@ -84,7 +84,8 @@
                     <div class="text-center">
                             <v-pagination
                             v-model="page"
-                            :length="10"
+                            :length="20"
+                            :total-visible="10"
                             circle
                             ></v-pagination>
                         </div>
