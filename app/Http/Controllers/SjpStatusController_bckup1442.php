@@ -49,7 +49,7 @@ public function index()
                     , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool'
                     , 'd.distribution' )
             ->where('d.status',$status)
-            ->paginate(1000000)
+            ->paginate(100)
             ->toArray();
         }
         else{
@@ -73,7 +73,7 @@ public function index()
             ->where('d.departure_pool_pallet_id',$pool_pallet)
             ->orWhere('d.destination_pool_pallet_id', $pool_pallet)
             ->orWhere('d.transporter_id', $transporter)
-            ->paginate(10000000)
+            ->paginate(100)
             ->toArray();
         }
         return $sjpstatus;

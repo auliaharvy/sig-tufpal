@@ -85,6 +85,20 @@
                                 </v-flex>
                                 </v-layout>
                         </div>
+                        <!-- <div class="row">
+                                <v-layout row wrap class="px-5">
+                                    <v-flex class="pa-5" xs12 md12 lg12>
+                                    <v-card>
+                                        <v-toolbar>
+                                            <v-toolbar-title>Warehouse In & Out</v-toolbar-title>
+                                        </v-toolbar>
+                                        <div>
+                                            <bar-chart v-if="poolpalletdetail.length > 0" :data="datapoolpalletdetail" :options="barChartPoolOptions" :labels="labelspoolpalletdetail"/>
+                                        </div>
+                                    </v-card>
+                                </v-flex>
+                                </v-layout>
+                        </div> -->
                         <div class="row">
                                 <v-layout row wrap class="px-5">
                                     <v-flex class="pa-5" xs12 md9 lg9>
@@ -216,6 +230,7 @@
     import _ from 'lodash'
     import LineChart from '../components/LineChart.vue'
     import BarChart from '../components/BarChart.vue'
+    import BarChartWarehouse from '../components/BarChartWarehouse.vue'
     import PieChart from '../components/PieChart.vue'
     import jsPDF from 'jspdf'
     import { mapActions, mapState } from 'vuex'
@@ -428,6 +443,11 @@
                     return o.pool_name
                 });
             },
+            labelswarehouseinout() {
+                return _.map(this.warehouseinout, function(o) {
+                    return o.pool_name
+                });
+            },
             labelstransporterdetail() {
                 return _.map(this.transporterdetail, function(o) {
                     return o.transporter_name
@@ -464,6 +484,11 @@
             },
             datapoolpalletdetail() {
                 return _.map(this.poolpalletdetail, function(o) {
+                    return o.total
+                });
+            },
+            datawarehouseinout() {
+                return _.map(this.warehouseinout, function(o) {
                     return o.total
                 });
             },
@@ -527,6 +552,7 @@
             'line-chart': LineChart,
             'pie-chart' : PieChart,
             'bar-chart' :BarChart,
+            'bar-chart-warehouse' :BarChartWarehouse,
         },
     }
 </script>

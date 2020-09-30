@@ -81,6 +81,13 @@
                             <v-btn color="error" @click="deleteSjp(item.sjp_id)" small>Delete</v-btn>
                         </template>
                     </v-data-table>
+                    <div class="text-center">
+                            <v-pagination
+                            v-model="page"
+                            :length="10"
+                            circle
+                            ></v-pagination>
+                        </div>
                      </v-card>
               	<!-- TABLE UNTUK MENAMPILKAN LIST SJP -->
                 <!-- <b-table striped hover bordered :items="sjps.data" :fields="fields" show-empty>

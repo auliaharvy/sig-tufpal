@@ -15,6 +15,7 @@ use App\Newpallet;
 use App\Pallettransfersend;
 use App\Pallettransferreceive;
 use App\Sjp;
+use App\SjpStatus;
 use DB;
 use Excel;
 use App\Exports\TransactionExport;
@@ -153,8 +154,61 @@ class DashboardController extends Controller
         ->where('type', '=' , "WAREHOUSE")
         ->get()
         ->toArray();
+        $palletIn = DB::table('sjp_status as a')
+        ->join('surat_jalan_pallet as b', 'a.sjp_id', '=', 'b.sjp_id')
+        ->join('pool_pallet as c', 'b.destination_pool_pallet_id', '=', 'c.pool_pallet_id')
+        ->select('c.pool_name', DB::raw('sum(a.good_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as pallet_in') )
+        ->groupBy('c.pool_name')
+        ->where('a.transaction_id', 1)
+        ->where('a.status', 0)
+        ->get()
+        ->toArray();
+        $palletOut = DB::table('sjp_status as a')
+        ->join('surat_jalan_pallet as b', 'a.sjp_id', '=', 'b.sjp_id')
+        ->join('pool_pallet as c', 'b.destination_pool_pallet_id', '=', 'c.pool_pallet_id')
+        ->select('c.pool_name', DB::raw('sum(a.good_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as pallet_out') )
+        ->groupBy('c.pool_name')
+        ->where('a.transaction_id', 2)
+        ->where('a.status', 0)
+        ->get()
+        ->toArray();
 
         return $poolDetail;
+    }
+
+    public function warehouse_in_out() //grafik warehouse in_out
+    {
+        $palletIn = DB::table('sjp_status as a')
+        ->join('surat_jalan_pallet as b', 'a.sjp_id', '=', 'b.sjp_id')
+        ->join('pool_pallet as c', 'b.destination_pool_pallet_id', '=', 'c.pool_pallet_id')
+        ->select('c.pool_name', DB::raw('sum(a.good_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as pallet_in') )
+        ->groupBy('c.pool_name')
+        ->where('a.transaction_id', 1)
+        ->where('a.status', 0)
+        ->get()
+        ->toArray();
+        $palletOut = DB::table('sjp_status as a')
+        ->join('surat_jalan_pallet as b', 'a.sjp_id', '=', 'b.sjp_id')
+        ->join('pool_pallet as c', 'b.destination_pool_pallet_id', '=', 'c.pool_pallet_id')
+        ->select('c.pool_name', DB::raw('sum(a.good_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as pallet_out') )
+        ->groupBy('c.pool_name')
+        ->where('a.transaction_id', 2)
+        ->where('a.status', 0)
+        ->get()
+        ->toArray();
+
+    
+
+            $data= [
+                'pallet_in' => $palletIn,
+                'pallet_out' => $palletOut
+            ];
+        return $data;
+
+        // $merged = array_merge($palletIn, $palletOut);
+        // $grouped = $merged->groupBy('pool_name');
+
+        // return $merged;
     }
 
     public function transporterDetail() //grafik transporter detail
