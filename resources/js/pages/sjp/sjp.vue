@@ -82,12 +82,12 @@
                         </template>
                     </v-data-table>
                     <div class="text-center">
-                            <v-pagination
+                            <!-- <v-pagination
                             v-model="page"
                             :length="20"
                             :total-visible="10"
                             circle
-                            ></v-pagination>
+                            ></v-pagination> -->
                         </div>
                      </v-card>
               	<!-- TABLE UNTUK MENAMPILKAN LIST SJP -->

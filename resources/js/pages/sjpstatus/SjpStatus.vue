@@ -100,14 +100,14 @@
                             <qrcode-vue :value="sjpstatuss.sjps_number" :size="size" level="H"></qrcode-vue>
                         </template> -->
                         </v-data-table>
-                        <div class="text-center">
+                        <!-- <div class="text-center">
                             <v-pagination
                             v-model="page"
                             :length="20"
                             :total-visible="10"
                             circle
                             ></v-pagination>
-                        </div>
+                        </div> -->
                     </v-card>
                 </template>
             </div>

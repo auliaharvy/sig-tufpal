@@ -39,7 +39,7 @@ class SjpController extends Controller
             ->select('a.*', 'b.pool_name as dest_pool', 'c.pool_name as dept_pool',
                     'd.vehicle_number','e.transporter_name', 'f.driver_name')
              ->where('a.status',$status)
-            ->paginate(100)
+            ->paginate(1000000)
             ->toArray();
         }
         else{
@@ -55,7 +55,7 @@ class SjpController extends Controller
             ->where('b.pool_pallet_id',$pool_pallet)
             ->orWhere('c.pool_pallet_id',$pool_pallet)
             ->orWhere('a.transporter_id',$transporter)
-            ->paginate(100)
+            ->paginate(1000000)
             ->toArray();
         }
 
