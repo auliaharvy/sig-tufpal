@@ -34,10 +34,13 @@ public function index()
         $role = Auth::user()->role;
         $status = 'OPEN';
         if($pool_pallet=='pooldli' && $role<5){
-        $sjpstatus = DB::table('sjp_status as a')
+        $sjpstatus = DB::table(DB::raw('(SELECT * FROM sjp_status )a'))
             ->join('users as b', 'a.checker_send_user_id', '=', 'b.id')
             ->join('users as c', 'a.checker_receive_user_id', '=', 'c.id')
-            ->join('surat_jalan_pallet as d', 'a.sjp_id', '=', 'd.sjp_id')
+            ->leftJoin(DB::raw('(SELECT * FROM surat_jalan_pallet WHERE STATUS = "OPEN")d'),
+            function($join){
+                $join->on('a.sjp_id','=','d.sjp_id');
+            })
             ->join('mst_transaction as e', 'a.transaction_id', '=', 'e.id')
             ->join('vehicle as f', 'd.vehicle_id', '=', 'f.vehicle_id')
             ->join('transporter as g', 'd.transporter_id', '=', 'g.transporter_id')
@@ -48,7 +51,7 @@ public function index()
                     , 'd.departure_pool_pallet_id', 'd.transporter_id', 'f.vehicle_number'
                     , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool'
                     , 'd.distribution' )
-            ->where('d.status',$status)
+            // ->where('d.status',$status)
             ->paginate(1000000)
             ->toArray();
         }
