@@ -161,8 +161,15 @@ public function index()
         $checker = Auth::user()->id;
 
         $this->validate($request, [
+            'good_pallet' => 'required|integer|gt:-1|lte:'.$qty_pool,
             // 'sending_driver_approval' => 'required',
         ]);
+        if($qty_pool<$request->good_pallet)
+        {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'the number of pallets to be sent exceeds the number of pallets in the pool'], 422);
+        }
 
         DB::beginTransaction();
         try{
@@ -183,7 +190,7 @@ public function index()
                 'checker_send_user_id' => $checker,
                 'checker_receive_user_id' => 5,
                 'sjp_id' => $request->sjp_id,
-                'good_pallet' => $pallet_qty,
+                'good_pallet' => $request->good_pallet,
                 'tbr_pallet' => 0,
                 'ber_pallet' => 0,
                 'missing_pallet' => 0,
