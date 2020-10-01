@@ -2,7 +2,7 @@ import Vue from 'vue'
 import router from './router.js'
 import store from './store.js'
 import App from './App.vue'
-// import BootstrapVue from 'bootstrap-vue'
+import BootstrapVue from 'bootstrap-vue'
 import VueSweetalert2 from 'vue-sweetalert2'
 import Permissions from './mixins/permission.js'
 import vuetify from './plugins/vuetify'
@@ -13,7 +13,7 @@ import { Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import QrcodeVue from 'qrcode.vue'
 import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
-// import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
+import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 import pdf  from 'vue-pdf'
 import VueHtml2Canvas from 'vue-html2canvas';
 import VueHtmlToPaper from 'vue-html-to-paper';
@@ -25,9 +25,9 @@ import 'vuetify-daterange-picker/dist/vuetify-daterange-picker.css';
 
 Vue.use(Vuetify);
 Vue.use(VueSweetalert2)
-// Vue.use(BootstrapVue)
+Vue.use(BootstrapVue)
 Vue.mixin(Permissions)
-// Vue.component('vue-bootstrap-typeahead', VueBootstrapTypeahead)
+Vue.component('vue-bootstrap-typeahead', VueBootstrapTypeahead)
 Vue.component('downloadExcel', JsonExcel)
 Vue.component('QrcodeStream', QrcodeStream)
 Vue.component('QrcodeDropZone', QrcodeDropZone)
@@ -55,7 +55,7 @@ Icon.Default.mergeOptions({
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import Echo from 'laravel-echo'
-// import Pusher from 'pusher-js'
+import Pusher from 'pusher-js'
 
 new Vue({
     el: '#dw',
