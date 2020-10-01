@@ -32,47 +32,23 @@ public function index()
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
         $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
-        $status = 'OPEN';
         if($pool_pallet=='pooldli' && $role<5){
-        $sjpstatus = DB::table(DB::raw('(SELECT * FROM sjp_status )a'))
-            ->join('users as b', 'a.checker_send_user_id', '=', 'b.id')
-            ->join('users as c', 'a.checker_receive_user_id', '=', 'c.id')
-            ->leftJoin(DB::raw('(SELECT * FROM surat_jalan_pallet WHERE STATUS = "OPEN")d'),
+        $sjpstatus = DB::table('sjp_status as a')
+        ->join(DB::raw('(SELECT * FROM surat_jalan_pallet WHERE STATUS = "OPEN")d'),
             function($join){
                 $join->on('a.sjp_id','=','d.sjp_id');
             })
-            ->join('mst_transaction as e', 'a.transaction_id', '=', 'e.id')
-            ->join('vehicle as f', 'd.vehicle_id', '=', 'f.vehicle_id')
-            ->join('transporter as g', 'd.transporter_id', '=', 'g.transporter_id')
-            ->join('pool_pallet as h', 'd.departure_pool_pallet_id', '=', 'h.pool_pallet_id')
-            ->join('pool_pallet as i', 'd.destination_pool_pallet_id', '=', 'i.pool_pallet_id')
-            ->select('a.*', 'b.name as checker_sender', 'c.name as checker_receiver',
-                    'd.sjp_number','e.transaction', 'd.is_sendback', 'd.destination_pool_pallet_id'
-                    , 'd.departure_pool_pallet_id', 'd.transporter_id', 'f.vehicle_number'
-                    , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool'
-                    , 'd.distribution' )
-            // ->where('d.status',$status)
-            ->paginate(1000000)
-            ->toArray();
+        ->select('a.*', 'a.status as status_sjps', 'a.note as note_sjps', 'd.*')
+        ->paginate(1000000)
+        ->toArray();
         }
         else{
             $sjpstatus = DB::table('sjp_status as a')
-            ->join('users as b', 'a.checker_send_user_id', '=', 'b.id')
-            ->join('users as c', 'a.checker_receive_user_id', '=', 'c.id')
-            ->leftJoin(DB::raw('(SELECT * FROM surat_jalan_pallet WHERE STATUS = "OPEN")d'),
-            function($join){
-                $join->on('a.sjp_id','=','d.sjp_id');
-            })
-            ->join('mst_transaction as e', 'a.transaction_id', '=', 'e.id')
-            ->join('vehicle as f', 'd.vehicle_id', '=', 'f.vehicle_id')
-            ->join('transporter as g', 'd.transporter_id', '=', 'g.transporter_id')
-            ->join('pool_pallet as h', 'd.departure_pool_pallet_id', '=', 'h.pool_pallet_id')
-            ->join('pool_pallet as i', 'd.destination_pool_pallet_id', '=', 'i.pool_pallet_id')
-            ->select('a.*', 'b.name as checker_sender', 'c.name as checker_receiver',
-                    'd.sjp_number','e.transaction', 'd.is_sendback', 'd.destination_pool_pallet_id'
-                    , 'd.departure_pool_pallet_id', 'd.transporter_id', 'f.vehicle_number'
-                    , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool'
-                    , 'd.distribution' )
+            ->join(DB::raw('(SELECT * FROM surat_jalan_pallet WHERE STATUS = "OPEN")d'),
+                function($join){
+                    $join->on('a.sjp_id','=','d.sjp_id');
+                })
+            ->select('a.*', 'a.status as status_sjps', 'a.note as note_sjps', 'd.*')
             ->where('d.departure_pool_pallet_id',$pool_pallet)
             ->orWhere('d.destination_pool_pallet_id', $pool_pallet)
             ->orWhere('d.transporter_id', $transporter)
@@ -80,6 +56,57 @@ public function index()
             ->toArray();
         }
         return $sjpstatus;
+        // $pool_pallet = Auth::user()->reference_pool_pallet_id;
+        // $transporter = Auth::user()->reference_transporter_id;
+        // $role = Auth::user()->role;
+        // $status = 'OPEN';
+        // if($pool_pallet=='pooldli' && $role<5){
+        // $sjpstatus = DB::table(DB::raw('(SELECT * FROM sjp_status )a'))
+        //     ->join('users as b', 'a.checker_send_user_id', '=', 'b.id')
+        //     ->join('users as c', 'a.checker_receive_user_id', '=', 'c.id')
+        //     ->leftJoin(DB::raw('(SELECT * FROM surat_jalan_pallet WHERE STATUS = "OPEN")d'),
+        //     function($join){
+        //         $join->on('a.sjp_id','=','d.sjp_id');
+        //     })
+        //     ->join('mst_transaction as e', 'a.transaction_id', '=', 'e.id')
+        //     ->join('vehicle as f', 'd.vehicle_id', '=', 'f.vehicle_id')
+        //     ->join('transporter as g', 'd.transporter_id', '=', 'g.transporter_id')
+        //     ->join('pool_pallet as h', 'd.departure_pool_pallet_id', '=', 'h.pool_pallet_id')
+        //     ->join('pool_pallet as i', 'd.destination_pool_pallet_id', '=', 'i.pool_pallet_id')
+        //     ->select('a.*', 'b.name as checker_sender', 'c.name as checker_receiver',
+        //             'd.sjp_number','e.transaction', 'd.is_sendback', 'd.destination_pool_pallet_id'
+        //             , 'd.departure_pool_pallet_id', 'd.transporter_id', 'f.vehicle_number'
+        //             , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool'
+        //             , 'd.distribution' )
+        //     // ->where('d.status',$status)
+        //     ->paginate(1000000)
+        //     ->toArray();
+        // }
+        // else{
+        //     $sjpstatus = DB::table('sjp_status as a')
+        //     ->join('users as b', 'a.checker_send_user_id', '=', 'b.id')
+        //     ->join('users as c', 'a.checker_receive_user_id', '=', 'c.id')
+        //     ->leftJoin(DB::raw('(SELECT * FROM surat_jalan_pallet WHERE STATUS = "OPEN")d'),
+        //     function($join){
+        //         $join->on('a.sjp_id','=','d.sjp_id');
+        //     })
+        //     ->join('mst_transaction as e', 'a.transaction_id', '=', 'e.id')
+        //     ->join('vehicle as f', 'd.vehicle_id', '=', 'f.vehicle_id')
+        //     ->join('transporter as g', 'd.transporter_id', '=', 'g.transporter_id')
+        //     ->join('pool_pallet as h', 'd.departure_pool_pallet_id', '=', 'h.pool_pallet_id')
+        //     ->join('pool_pallet as i', 'd.destination_pool_pallet_id', '=', 'i.pool_pallet_id')
+        //     ->select('a.*', 'b.name as checker_sender', 'c.name as checker_receiver',
+        //             'd.sjp_number','e.transaction', 'd.is_sendback', 'd.destination_pool_pallet_id'
+        //             , 'd.departure_pool_pallet_id', 'd.transporter_id', 'f.vehicle_number'
+        //             , 'g.transporter_name', 'h.pool_name as dept_pool ', 'i.pool_name as dest_pool'
+        //             , 'd.distribution' )
+        //     ->where('d.departure_pool_pallet_id',$pool_pallet)
+        //     ->orWhere('d.destination_pool_pallet_id', $pool_pallet)
+        //     ->orWhere('d.transporter_id', $transporter)
+        //     ->paginate(1000000)
+        //     ->toArray();
+        // }
+        // return $sjpstatus;
     }
 
     public function show($sjp_status_id)

@@ -37,36 +37,42 @@
                         :search="search"
                         dense
                         >
-                        <template v-slot:item.status="{ item }">
+                        <template v-slot:item.status_sjps="{ item }">
                             <!-- <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
                             <v-chip class="label label-success" v-else-if="item.status == 1">Received</v-chip> -->
-                            <p class="text-green" v-if="item.status == 0">Sending</p>
-                            <p class="text-blue" v-else-if="item.status == 1">Received</p>
+                            <p class="text-green" v-if="item.status_sjps == 0">Sending</p>
+                            <p class="text-blue" v-else-if="item.status_sjps == 1">Received</p>
+                        </template>
+                        <template v-slot:item.transaction_id="{ item }">
+                            <!-- <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
+                            <v-chip class="label label-success" v-else-if="item.status == 1">Received</v-chip> -->
+                            <p class="text-black" v-if="item.transaction_id == 1">SEND</p>
+                            <p class="text-black" v-else-if="item.transaction_id == 2">SEND_BACK</p>
                         </template>
 
                         <template v-if="$can('update sjpstatuss')" v-slot:item.receive="{ item }">
-                            <router-link v-if="item.status == 0 && item.transaction_id == 1 && authenticated.reference_pool_pallet_id == item.destination_pool_pallet_id " :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
+                            <router-link v-if="item.status_sjps == 0 && item.transaction_id == 1 && authenticated.reference_pool_pallet_id == item.destination_pool_pallet_id " :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Receive</v-btn>
                             </router-link>
-                            <router-link v-if="item.status == 0 && item.transaction_id == 1 && item.distribution == 1" :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
+                            <router-link v-if="item.status_sjps == 0 && item.transaction_id == 1 && item.distribution == 1" :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Receive</v-btn>
                             </router-link>
 
-                            <router-link v-else-if="item.status == 0 && item.transaction_id == 2  && authenticated.reference_pool_pallet_id == item.departure_pool_pallet_id " :to="{ name: 'sjpstatuss.editsendback', params: {id: item.sjp_status_id} }">
+                            <router-link v-else-if="item.status_sjps == 0 && item.transaction_id == 2  && authenticated.reference_pool_pallet_id == item.departure_pool_pallet_id " :to="{ name: 'sjpstatuss.editsendback', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Receive Sendback</v-btn>
                             </router-link>
 
-                            <router-link v-else-if="item.status == 0 && item.transaction_id == 2 && item.distribution == 1 " :to="{ name: 'sjpstatuss.editsendback', params: {id: item.sjp_status_id} }">
+                            <router-link v-else-if="item.status_sjps == 0 && item.transaction_id == 2 && item.distribution == 1 " :to="{ name: 'sjpstatuss.editsendback', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Receive Sendback</v-btn>
                             </router-link>
                         </template>
 
                         <template v-if="$can('create sjpstatuss') " v-slot:item.send_back="{ item }">
-                            <router-link v-if="item.transaction_id == 1 && item.status == 1 && item.is_sendback == 0 && authenticated.reference_pool_pallet_id == item.destination_pool_pallet_id" :to="{ name: 'sjpstatuss.sendback', params: {id: item.sjp_status_id} }">
+                            <router-link v-if="item.transaction_id == 1 && item.status_sjps == 1 && item.is_sendback == 0 && authenticated.reference_pool_pallet_id == item.destination_pool_pallet_id" :to="{ name: 'sjpstatuss.sendback', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Send Back</v-btn>
                             </router-link>
 
-                            <router-link v-if="item.transaction_id == 1 && item.status == 1 && item.distribution == 1 && item.is_sendback == 0" :to="{ name: 'sjpstatuss.sendback', params: {id: item.sjp_status_id} }">
+                            <router-link v-if="item.transaction_id == 1 && item.status_sjps == 1 && item.distribution == 1 && item.is_sendback == 0" :to="{ name: 'sjpstatuss.sendback', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Send Back</v-btn>
                             </router-link>
                         </template>
@@ -134,17 +140,17 @@ export default {
                 // { value: 'checker_receiver', text: 'Checker Receive' },
                 { value: 'sjp_number', text: 'SJP' },
                 // { value: 'transporter_name', text: 'Transporter' },
-                { value: 'vehicle_number', text: 'Vehicle' },
+                { value: 'vehicle_id', text: 'Vehicle' },
                 // { value: 'sjps_number', text: 'SJP Status' },
-                { value: 'transaction', text: 'SJP Status' },
-                { value: 'status', text: 'Status' },
+                { value: 'transaction_id', text: 'SJP Status' },
+                { value: 'status_sjps', text: 'Status' },
                 // { value: 'good_pallet', text: 'Good Pallet' },
                 // { value: 'tbr_pallet', text: 'TBR Pallet' },
                 // { value: 'ber_pallet', text: 'BER Pallet' },
                 // { value: 'missing_pallet', text: 'Missing Pallet' },
                 // { value: 'good_cement', text: 'Good Cement' },
                 // { value: 'bad_cement', text: 'Bad Cement' },
-                { value: 'note', text: 'Note' },
+                { value: 'note_sjps', text: 'Note' },
                 // { value: 'image', text: 'Image' },
                 { value: 'view', text: 'View' },
                 // { value: 'driver_approve', text: 'Note' },
