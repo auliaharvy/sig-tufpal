@@ -161,6 +161,7 @@ public function index()
         $checker = Auth::user()->id;
 
         $this->validate($request, [
+            'good_pallet' => 'required|integer|gt:-1|lte:'.$qty_pool,
             // 'sending_driver_approval' => 'required',
         ]);
 
