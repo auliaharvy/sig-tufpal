@@ -476,9 +476,9 @@ export default {
                         this.sjp.transporter_id = row.transporter_id;
                         this.sjp.transporter_name = row.transporter_name;
                         this.sjp.vehicle_number = row.vehicle_number;
-                        if(row.destination_pool_pallet_id == '011410'){
-                            this.sjp.destination_pool_pallet_id = '011405'
-                            this.sjp.dest_pool = 'Pademangan';
+                        if(row.destination_pool_pallet_id == '011405'){
+                            this.sjp.destination_pool_pallet_id = '011410'
+                            this.sjp.dest_pool = 'ITP Sunda Kelapa';
                         };
                         if(row.destination_pool_pallet_id == '020169'){
                             this.sjp.destination_pool_pallet_id = '020137'
@@ -535,9 +535,9 @@ export default {
                     this.sjp.transporter_id = row.transporter_id;
                     this.sjp.transporter_name = row.transporter_name;
                     this.sjp.vehicle_number = row.vehicle_number;
-                    if(row.destination_pool_pallet_id == '011410'){
-                            this.sjp.destination_pool_pallet_id = '011405'
-                            this.sjp.dest_pool = 'Pademangan';
+                    if(row.destination_pool_pallet_id == '011405'){
+                            this.sjp.destination_pool_pallet_id = '011410'
+                            this.sjp.dest_pool = 'ITP Sunda Kelapa';
                         };
                         if(row.destination_pool_pallet_id == '020169'){
                             this.sjp.destination_pool_pallet_id = '020137'
