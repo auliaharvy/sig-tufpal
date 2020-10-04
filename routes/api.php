@@ -82,6 +82,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('pallettransporter', 'API\DashboardController@palletTransporter');
     Route::get('poolpalletdetail', 'API\DashboardController@poolPalletDetail');
     Route::get('warehouseinout', 'API\DashboardController@warehouse_in_out');
+    Route::get('transportersendsendback', 'API\DashboardController@transporterSendSendback');
     Route::get('transporterdetail', 'API\DashboardController@transporterDetail');
     Route::get('totalallpallet', 'API\DashboardController@totalAllPallet');
     Route::get('detailpoolpallet', 'API\DashboardController@detailPoolPallet');

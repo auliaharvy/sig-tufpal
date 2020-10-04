@@ -10,6 +10,8 @@ const state = () => ({
     pallet: [],
     pallettransporter: [],
     poolpalletdetail: [],
+    warehouseinout: [],
+    transportersendsendback: [],
     transporterdetail: [],
     detailpoolpallet: [], //detail pool pallet satu satu
     detailtransporter: [], //detail transporter satu satu
@@ -34,6 +36,12 @@ const mutations = {
     },
     ASSIGN_DATA_POOL_PALLET_DETAIL(state, payload) {
         state.poolpalletdetail = payload
+    },
+    ASSIGN_DATA_WAREHOUSE_IN_OUT(state, payload) {
+        state.warehouseinout = payload
+    },
+    ASSIGN_DATA_TRANSPORTER_SEND_SENDBACK(state, payload) {
+        state.transportersendsendback = payload
     },
     ASSIGN_DATA_TRANSPORTER_DETAIL(state, payload) {
         state.transporterdetail = payload
@@ -109,6 +117,24 @@ const actions = {
             $axios.get(`/poolpalletdetail`)
             .then((response) => {
                 commit('ASSIGN_DATA_POOL_PALLET_DETAIL', response.data)
+                resolve(response.data)
+            })
+        })
+    },
+    getChartDataWarehouseInOut({ commit }, payload) {
+        return new Promise((resolve, reject) => {
+            $axios.get(`/warehouseinout`)
+            .then((response) => {
+                commit('ASSIGN_DATA_WAREHOUSE_IN_OUT', response.data)
+                resolve(response.data)
+            })
+        })
+    },
+    getChartDataTransporterSendSendback({ commit }, payload) {
+        return new Promise((resolve, reject) => {
+            $axios.get(`/transportersendsendback`)
+            .then((response) => {
+                commit('ASSIGN_DATA_TRANSPORTER_SEND_SENDBACK', response.data)
                 resolve(response.data)
             })
         })

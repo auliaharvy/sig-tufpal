@@ -58,7 +58,7 @@
                                             <v-toolbar-title>Warehouse Detail</v-toolbar-title>
                                         </v-toolbar>
                                         <div>
-                                            <bar-chart v-if="poolpalletdetail.length > 0" :data="datapoolpalletdetail" :options="barChartPoolOptions" :labels="labelspoolpalletdetail"/>
+                                            <bar-chart-warehouse v-if="warehouseinout.length > 0"  :data1="datawarehouseinoutpalletin" :data2="datawarehouseinoutpalletout" :data="datawarehouseinoutstock" :options="barChartPoolInOutOptions" :labels="labelswarehouseinout"/>
                                         </div>
                                     </v-card>
                                 </v-flex>
@@ -93,7 +93,7 @@
                                             <v-toolbar-title>Warehouse In & Out</v-toolbar-title>
                                         </v-toolbar>
                                         <div>
-                                            <bar-chart v-if="poolpalletdetail.length > 0" :data="datapoolpalletdetail" :options="barChartPoolOptions" :labels="labelspoolpalletdetail"/>
+                                            <bar-chart-warehouse v-if="warehouseinout.length > 0"  :data1="datawarehouseinoutpalletin" :data2="datawarehouseinoutpalletout" :data="datawarehouseinoutstock" :options="barChartPoolInOutOptions" :labels="labelswarehouseinout"/>
                                         </div>
                                     </v-card>
                                 </v-flex>
@@ -107,7 +107,7 @@
                                             <v-toolbar-title>Transporter Detail</v-toolbar-title>
                                         </v-toolbar>
                                         <div>
-                                            <bar-chart v-if="transporterdetail.length > 0" :data="datatransporterdetail" :options="barChartOptions" :labels="labelstransporterdetail"/>
+                                            <bar-chart-transporter v-if="transportersendsendback.length > 0"  :data1="datatransportersendsendbackpalletsendback"  :data="datatransportersendsendbackpalletsend" :options="barChartPoolInOutOptions" :labels="labelstransportersendsendback"/>
                                         </div>
                                     </v-card>
                                 </v-flex>
@@ -231,6 +231,7 @@
     import LineChart from '../components/LineChart.vue'
     import BarChart from '../components/BarChart.vue'
     import BarChartWarehouse from '../components/BarChartWarehouse.vue'
+    import BarChartTransporter from '../components/BarChartTransporter.vue'
     import PieChart from '../components/PieChart.vue'
     import jsPDF from 'jspdf'
     import { mapActions, mapState } from 'vuex'
@@ -254,6 +255,12 @@
                 let row = res.data
             }),
             this.getChartDataPoolPalletDetail().then((res) => {
+                let row = res.data
+            }),
+            this.getChartDataWarehouseInOut().then((res) => {
+                let row = res.data
+            }),
+            this.getChartDataTransporterSendSendback().then((res) => {
                 let row = res.data
             }),
             this.getChartDataTransporterDetail().then((res) => {
@@ -323,6 +330,40 @@
                     },    
                     scales: {
                             yAxes: [{
+                                ticks: {
+                                    // stepSize: 50,
+                                    // maxTicksLimit: 3,
+                                    suggestedMin: 0
+                                }
+                            }]
+                        },
+                     plugins: {
+                        datalabels: {
+                            display: true,
+                            align: 'center',
+                            anchor: 'center'
+                        },
+                        
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                },
+                barChartPoolInOutOptions: {
+                    onClick: function(evt, array) {
+                        if (array.length != 0) {
+                            var position = array[0]._index;
+                            var activeElement = this.tooltip._data.labels[position]
+                            console.log(activeElement)
+                        } else {
+                            console.log("You selected the background!");            
+                        }  
+                    },    
+                    scales: {
+                            xAxes:[{
+                                stacked: true
+                            }],
+                            yAxes: [{
+                                stacked: true,
                                 ticks: {
                                     // stepSize: 50,
                                     // maxTicksLimit: 3,
@@ -416,6 +457,8 @@
                 pallettransporter: state => state.pallettransporter,
                 detailpoolpallet: state => state.detailpoolpallet,
                 detailtransporter: state => state.detailtransporter,
+                warehouseinout: state => state.warehouseinout,
+                transportersendsendback: state => state.transportersendsendback,
             }),
             ...mapState('pool', {
                 pools: state => state.pools
@@ -446,6 +489,11 @@
             labelswarehouseinout() {
                 return _.map(this.warehouseinout, function(o) {
                     return o.pool_name
+                });
+            },
+            labelstransportersendsendback() {
+                return _.map(this.transportersendsendback, function(o) {
+                    return o.transporter_name
                 });
             },
             labelstransporterdetail() {
@@ -487,9 +535,29 @@
                     return o.total
                 });
             },
-            datawarehouseinout() {
+            datawarehouseinoutstock() {
                 return _.map(this.warehouseinout, function(o) {
-                    return o.total
+                    return o.stock
+                });
+            },
+            datawarehouseinoutpalletin() {
+                return _.map(this.warehouseinout, function(o) {
+                    return o.pallet_in
+                });
+            },
+            datawarehouseinoutpalletout() {
+                return _.map(this.warehouseinout, function(o) {
+                    return o.pallet_out
+                });
+            },
+            datatransportersendsendbackpalletsend() {
+                return _.map(this.transportersendsendback, function(o) {
+                    return o.pallet_send
+                });
+            },
+            datatransportersendsendbackpalletsendback() {
+                return _.map(this.transportersendsendback, function(o) {
+                    return o.pallet_sendback
                 });
             },
             datadetailpoolpallet() {
@@ -523,7 +591,7 @@
                             'getChartDataGlobalPalllet', 'getChartDataPallet',
                             'getChartDataPoolPalletDetail', 'getChartDataTransporterDetail',
                             'getChartDataPalletTransporter', 'getTotalAllPallet', 'getChartDataDetailPoolPallet',
-                            'getChartDataDetailTransporter']),
+                            'getChartDataDetailTransporter','getChartDataWarehouseInOut','getChartDataTransporterSendSendback']),
             ...mapActions('pool', ['getPools', 'removePools']),
             exportData() {
                 window.open(`api/exportalltransactiontoday?api_token=${this.token}`)
@@ -553,6 +621,7 @@
             'pie-chart' : PieChart,
             'bar-chart' :BarChart,
             'bar-chart-warehouse' :BarChartWarehouse,
+            'bar-chart-transporter' :BarChartTransporter,
         },
     }
 </script>

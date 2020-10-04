@@ -3,7 +3,7 @@
 
     export default {
         extends: Bar,
-        props: ['data', 'options', 'labels'],
+        props: ['data','data1', 'data2', 'options', 'labels'],
         mounted() {
             this.lineRenderChart()
         },
@@ -22,8 +22,8 @@
                     labels: this.labels,
                     datasets: [
                         {
-                            label: 'Total Pallet In',
-                            data: this.pallet_in,
+                            label: 'Stock',
+                            data: this.data,
                             backgroundColor: 
                                 'rgba(255, 99, 132, 0.2)'
                             ,
@@ -33,13 +33,24 @@
                             borderWidth: 1
                         },
                         {
-                            label: 'Pallet Out',
-                            data: this.pallet_out,
+                            label: 'Pallet In',
+                            data: this.data1,
                             backgroundColor: 
-                                'rgba(99, 99, 132, 0.2)'
+                                'rgba(21, 123, 190, 0.2)'
                             ,
                             borderColor: 
-                                'rgba(99,99,132,1)'
+                                'rgba(21,123,190,1)'
+                            ,
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Pallet Out',
+                            data: this.data2,
+                            backgroundColor: 
+                                'rgba(67, 188, 110, 0.2)'
+                            ,
+                            borderColor: 
+                                'rgba(67,188,110,1)'
                             ,
                             borderWidth: 1
                         },
