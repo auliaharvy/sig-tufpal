@@ -51,10 +51,16 @@
                         </template>
 
                         <template v-if="$can('update sjpstatuss')" v-slot:item.receive="{ item }">
-                            <router-link v-if="item.status_sjps == 0 && item.transaction_id == 1 && authenticated.reference_pool_pallet_id == item.destination_pool_pallet_id " :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
+                            <router-link v-if="item.status_sjps == 0 && item.transaction_id == 1 && item.distribution == 0 &&  authenticated.reference_pool_pallet_id == item.destination_pool_pallet_id " :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Receive</v-btn>
                             </router-link>
-                            <router-link v-if="item.status_sjps == 0 && item.transaction_id == 1 && item.distribution == 1" :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
+                            <router-link v-if="item.status_sjps == 0 && item.transaction_id == 1 && item.distribution == 1  " :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
+                                <v-btn color="success" small>Receive</v-btn>
+                            </router-link>
+                            <router-link v-if="item.status_sjps == 0 && item.transaction_id == 1 && item.distribution == 2 &&  authenticated.reference_pool_pallet_id == item.destination_pool_pallet_id " :to="{ name: 'sjpstatuss.edit2nddist', params: {id: item.sjp_status_id} }">
+                                <v-btn color="success" small>Receive</v-btn>
+                            </router-link>
+                            <router-link v-if="item.status_sjps == 0 && item.transaction_id == 1 &&  item.distribution == 3 " :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Receive</v-btn>
                             </router-link>
 

@@ -624,6 +624,13 @@ public function index()
                     $state->state=2;
                     $state->save();
 
+                    if($sjp->distribution == 2)
+                    $status = 'CLOSED';
+                    $Sjpstat = Sjp::find($sjp_id);
+                    $Sjpstat->status = $status;
+                    $Sjpstat->save();
+                    
+
                     DB::commit();
                     return response()->json(['status' => 'success'], 200);
 

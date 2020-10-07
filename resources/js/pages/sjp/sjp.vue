@@ -2,7 +2,10 @@
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-heading">
-                <router-link :to="{ name: 'sjps.add' }" class="v-btn btn-primary text-black" v-if="$can('create sjps')"><v-btn>Add SJP</v-btn></router-link>
+                <router-link :to="{ name: 'sjps.add' }" class="v-btn btn-primary text-black" v-if="$can('create sjps') && authenticated.reference_pool_pallet_id != 'stationnambo' && pool.type != 'STATION' "><v-btn>Add SJP</v-btn></router-link>
+                <router-link :to="{ name: 'sjps.add2nddiststation' }" class="v-btn btn-primary text-black" v-if="$can('create sjps') && authenticated.reference_pool_pallet_id == 'stationnambo' "><v-btn>Add SJP</v-btn></router-link>
+                <router-link :to="{ name: 'sjps.add2nddiststation' }" class="v-btn btn-primary text-black" v-if="$can('create sjps') && pool.type == 'STATION' && authenticated.reference_pool_pallet_id != 'stationnambo' "><v-btn>Add to Nambo</v-btn></router-link>
+                <router-link :to="{ name: 'sjps.add' }" class="v-btn btn-primary text-black" v-if="$can('create sjps') && pool.type == 'STATION' && authenticated.reference_pool_pallet_id != 'stationnambo' "><v-btn>Add to Warehouse</v-btn></router-link>
                 <!-- <v-btn>
                     <download-excel
                     :data= "sjps.data"
@@ -129,7 +132,11 @@ import { mapActions, mapState } from 'vuex'
 export default {
     name: 'DataSjp',
     created() {
-        this.getSjp() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
+        this.getSjp().then((res) => {
+                let row = res.data    
+                let reference_pool_pallet_id = this.authenticated.reference_pool_pallet_id
+                this.editPools(reference_pool_pallet_id)
+            })
     },
     data() {
         return {
@@ -173,6 +180,9 @@ export default {
         ...mapState('user', {
             authenticated: state => state.authenticated
         }),
+        ...mapState('pool', {
+            pool: state => state.pool //LOAD DATA CUSTOMER DARI STATE CUSTOMER
+        }),
         //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {
             get() {
@@ -192,6 +202,7 @@ export default {
         }
     },
     methods: {
+        ...mapActions('pool', ['editPools', 'updatePools']),
         ...mapActions('sjp', ['getSjp', 'removeSjp']),
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         deleteSjp(id) {

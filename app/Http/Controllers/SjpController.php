@@ -92,13 +92,27 @@ class SjpController extends Controller
         $pallet = PoolPallet::find($pool_pallet); //jgn lupa add model poolpallet
         $qty_pool = $pallet->good_pallet;
         $pallet_qty = $request->tonnage/2;
+        $stationnambo = 'stationnambo';
+        $pool_type = $pallet->type;
+        $organization_id = $pallet->organization_id;
 
         if($pool_pallet=='pooldli'){ //jika pengiriman dari pool pallet DLI (Main Distribution)
             $distribution = 0;
         }
-        else if($pool_pallet!='pooldli'){ //pengiriman bukan dari pool pallet DLI (Secondary Distribution)
+        else if($pool_type == 'WAREHOUSE' && $pool_pallet != 'pooldli'){ //pengiriman bukan dari pool pallet DLI (Secondary Distribution)
             $distribution = 1;
         }
+        else if($pool_pallet == $stationnambo ){ //pengiriman dari Station Nambo (Second Distribution Station)
+            $distribution = 2;
+        }
+        else if($pool_type == 'STATION' && $request->destination_pool_pallet_id == $stationnambo){ //pengiriman dari Station Selain Nambo (Third Distribution Station)
+            $distribution = 2;
+        }
+        else if($pool_type == 'STATION' && $pool_pallet != $stationnambo){ //pengiriman dari Station Selain Nambo (Third Distribution Station)
+            $distribution = 3;
+        }
+        
+        
 
 
 
@@ -126,6 +140,28 @@ class SjpController extends Controller
                     ->where('pool_pallet_id', '=', $request->destination_pool_pallet_id)
                     ->first();
                 if($checked_pool_pallet_id == null && $pool_pallet == 'pooldli'){
+                    $new_pool_pallet = PoolPallet::create([
+                        'pool_pallet_id' => $request->destination_pool_pallet_id,
+                        'organization_id' => 1,
+                        'code' => $request->destination_pool_pallet_id,
+                        'type' => 'WAREHOUSE',
+                        'pool_name' => $request->pool_name,
+                        'pool_address' => $request->pool_name,
+                        'pallet_quota' => 100,
+                        'created_by' => 'Autocreate in SJP No.Dispatch:'.$request->no_do,
+                    ]);
+                }elseif($checked_pool_pallet_id == null && $pool_pallet == $stationnambo){
+                    $new_pool_pallet = PoolPallet::create([
+                        'pool_pallet_id' => $request->destination_pool_pallet_id,
+                        'organization_id' => 1,
+                        'code' => $request->destination_pool_pallet_id,
+                        'type' => 'STATION',
+                        'pool_name' => $request->pool_name,
+                        'pool_address' => $request->pool_name,
+                        'pallet_quota' => 100,
+                        'created_by' => 'Autocreate in SJP No.Dispatch:'.$request->no_do,
+                    ]);
+                }elseif($checked_pool_pallet_id == null && $pool_pallet != $stationnambo && $pool_type = 'STATION'){
                     $new_pool_pallet = PoolPallet::create([
                         'pool_pallet_id' => $request->destination_pool_pallet_id,
                         'organization_id' => 1,

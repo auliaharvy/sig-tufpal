@@ -190,7 +190,7 @@ public function index()
                 'checker_send_user_id' => $checker,
                 'checker_receive_user_id' => 5,
                 'sjp_id' => $request->sjp_id,
-                'good_pallet' => $request->good_pallet,
+                'good_pallet' => $pallet_qty,
                 'tbr_pallet' => 0,
                 'ber_pallet' => 0,
                 'missing_pallet' => 0,
@@ -623,6 +623,13 @@ public function index()
                     $state = Sjp::find($sjp_id);
                     $state->state=2;
                     $state->save();
+
+                    if($sjp->distribution == 2)
+                    $status = 'CLOSED';
+                    $Sjpstat = Sjp::find($sjp_id);
+                    $Sjpstat->status = $status;
+                    $Sjpstat->save();
+                    
 
                     DB::commit();
                     return response()->json(['status' => 'success'], 200);

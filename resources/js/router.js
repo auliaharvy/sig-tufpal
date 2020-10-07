@@ -33,6 +33,7 @@ import DataPallettransferreceive from './pages/report/pallettransferreceive/Pall
 import IndexSjp from './pages/sjp/index.vue'
 import DataSjp from './pages/sjp/sjp.vue'
 import AddSjp from './pages/sjp/Add.vue'
+import AddSjpNambo from './pages/sjp/AddFromNambo.vue'
 import EditSjp from './pages/sjp/Edit.vue'
 import EditSjpdest from './pages/sjp/Editdest.vue'
 import CancelSjp from './pages/sjp/Cancel.vue'
@@ -43,6 +44,7 @@ import AddSjpStatus from './pages/sjpstatus/AddSjpStatus.vue'
 import SendApprovalSjpStatus from './pages/sjpstatus/SendDriverApproval.vue'
 import ViewSjpStatus from './pages/sjpstatus/View.vue'
 import EditSjpStatus from './pages/sjpstatus/EditSjpStatus.vue'
+import EditSjpStatus2ndDist from './pages/sjpstatus/EditSjpStatus2nddist.vue'
 import EditSjpStatussendback from './pages/sjpstatus/EditSjpStatussendback.vue'
 import AddSjpStatusbyMaster from './pages/sjpstatus/AddSjpStatusbyMaster.vue'
 import SendbackSjpStatus from './pages/sjpstatus/AddSjpStatussendback.vue'
@@ -160,6 +162,12 @@ const router = new Router({
                     meta: { title: 'Add New SJP' }
                 },
                 {
+                    path: 'add2nddiststation',
+                    name: 'sjps.add2nddiststation',
+                    component: AddSjpNambo,
+                    meta: { title: 'Add New SJP 2nd Distribution Station' }
+                },
+                {
                     path: 'edit/:id',
                     name: 'sjps.edit',
                     component: EditSjp,
@@ -219,6 +227,12 @@ const router = new Router({
                     path: 'edit/:id',
                     name: 'sjpstatuss.edit',
                     component: EditSjpStatus,
+                    meta: { title: 'Edit Sjp' }
+                },
+                {
+                    path: 'edit2nddist/:id',
+                    name: 'sjpstatuss.edit2nddist',
+                    component: EditSjpStatus2ndDist,
                     meta: { title: 'Edit Sjp' }
                 },
                 {
