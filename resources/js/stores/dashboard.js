@@ -2,6 +2,7 @@
 import $axios from '../api.js'
 
 const state = () => ({
+    tonnase_out: [],
     transactions: [],
     transactionreceive: [],
     transactionssendback: [],
@@ -19,6 +20,9 @@ const state = () => ({
 })
 
 const mutations = {
+    ASSIGN_DATA_TONNASE_OUT(state, payload) {
+        state.tonnase_out = payload
+    },
     ASSIGN_DATA_TRANSACTION(state, payload) {
         state.transactions = payload
     },
@@ -58,6 +62,15 @@ const mutations = {
 }
 
 const actions = {
+    getTonnaseOut({ commit }, payload) {
+        return new Promise((resolve, reject) => {
+            $axios.get(`/tonnaseout?month=${payload.month}&year=${payload.year}`)
+            .then((response) => {
+                commit('ASSIGN_DATA_TONNASE_OUT', response.data)
+                resolve(response.data)
+            })
+        })
+    },
     getChartData({ commit }, payload) {
         return new Promise((resolve, reject) => {
             $axios.get(`/chart?month=${payload.month}&year=${payload.year}`)

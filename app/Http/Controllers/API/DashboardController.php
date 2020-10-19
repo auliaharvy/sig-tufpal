@@ -22,6 +22,31 @@ use App\Exports\TransactionExport;
 
 class DashboardController extends Controller
 {
+    public function tonnaseOut() //grafik send & receive
+    {
+        $filter = request()->year . '-' . request()->month;
+        $parse = Carbon::parse($filter);
+        $array_date = range($parse->startOfMonth()->format('d'), $parse->endOfMonth()->format('d'));
+        $transaction = Sjppalletsend::select(DB::raw('date(created_at) as date, floor(sum(good_cement/20)) as tonnase'))
+            ->where('created_at', 'LIKE', '%' . $filter . '%')
+            ->where('sjp_status', '=', "SEND")
+            ->groupBy(DB::raw('date(created_at)'))->get();
+
+        $data = [];
+        foreach ($array_date as $row) {
+            $f_date = strlen($row) == 1 ? 0 . $row:$row;
+            $date = $filter . '-' . $f_date;
+            $tonnase = $transaction->firstWhere('date', $date);
+            // round($tonnase);
+
+            $data[] = [
+                'date' =>$date,
+                'tonnase' => $tonnase ? $tonnase->tonnase:0,
+                // 'tonnase' => $good_cement ? $good_cement->good_cement:0,
+            ];
+        }
+        return $data;
+    }
     public function chart() //grafik send & receive
     {
         $filter = request()->year . '-' . request()->month;

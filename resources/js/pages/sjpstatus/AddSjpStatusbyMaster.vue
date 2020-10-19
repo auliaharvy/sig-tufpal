@@ -12,7 +12,10 @@
             <div class="panel-body">
                 <sjpstatus-form ref="FormSjpStatus"></sjpstatus-form>
                 <div class="form-group px-7">
-                    <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="checkSJP()">
+                    <v-btn v-if="distri == 2" :disabled="loading" :loading="loading" class="success" @click.prevent="checkDist2()">
+                        {{ loading ? 'Loading...':'Check' }}
+                    </v-btn>
+                    <v-btn v-else :disabled="loading" :loading="loading" class="success" @click.prevent="checkSJP()">
                         {{ loading ? 'Loading...':'Check' }}
                     </v-btn>
                 </div>
@@ -29,12 +32,23 @@
     export default {
         name: 'AddSjpStatusbyMaster',
         created() {
-            this.addSjpStatusbyMaster(this.$route.params.id)
+            this.addSjpStatusbyMaster(this.$route.params.id).then((res) => {
+                let row = res.data
+                this.distri = row.distribution
+            })
         },
+       data() {
+        return {
+            distri: '',
+        }
+    },
        methods: {
             ...mapActions('sjpstatus', ['addSjpStatusbyMaster', 'submitSjpStatus']),
             ...mapActions('sjp', ['editSjp', 'updateSjp']),
             //KETIKA TOMBOL DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
+            checkDist2() {
+                this.$refs.FormSjpStatus.sendCheck()
+            },
             checkSJP() {
                 this.$refs.FormSjpStatus.SjpCheck()
             },
@@ -50,7 +64,8 @@
 
         computed: {
         ...mapState('sjpstatus', {
-            loading: state => state.loading
+            loading: state => state.loading,
+            sjp: state => state.sjp
         }),
         },
         components: {

@@ -148,6 +148,37 @@ export default {
         ...mapActions('sjp', ['getSjp', 'checkSjp', 'editSjp']),
         ...mapActions('msttransaction', ['getMstTransaction']),
         ...mapActions('user', ['getUserLogin']),
+        sendCheck(){
+            this.editSjp(this.sjpstatus.sjp_id).then((res) => {
+                let row = res.data
+                var sendData = this.sendSjpStatus
+                var data = this.sjpstatus
+                var checkContent = 
+                "<div><strong><span>" + 
+                "| Send Back Good Pallet : <b> " + data.good_pallet + " </b> | </p>" + 
+                "| Send Back TBR Pallet : <b> " + data.tbr_pallet + " </b> | </p>" +
+                "| Send Back BER Pallet : <b> " + data.ber_pallet + " </b> | </p>" +
+                "| Send Back Missing Pallet : <b> " + data.missing_pallet + " </b> | </p>" +
+                "</span> </strong></div>"
+                        
+                this.$swal({
+                    title: "Send " + row.sjp_number,
+                    text: "...<div>" + checkContent + "</div>...",
+                    html: "...<div>" + checkContent +   "</div>...",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Send!'
+                }).then((result) => {
+                    if (result.value) {
+                        this.submit() //JIKA SETUJU MAKA PERMINTAAN HAPUS AKAN DI EKSEKUSI
+                    }
+                }).catch((error) => {
+                    alert(error.response.data.message)
+                })
+            })
+        },
         SjpCheck(){
             this.editSjp(this.sjpstatus.sjp_id).then((res) => {
                 let row = res.data

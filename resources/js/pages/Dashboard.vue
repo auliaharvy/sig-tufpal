@@ -218,6 +218,18 @@
                                         </v-card>
                                     </v-flex>
                                 </v-layout>
+                                <v-layout row wrap class="px-5">
+                                    <v-flex class="pa-5" xs12 md12 lg12>
+                                        <v-card>
+                                            <v-toolbar>
+                                                <v-toolbar-title>Tonnase Out</v-toolbar-title>
+                                            </v-toolbar>
+                                            <div class="panel-body">
+                                                <line-chart-tonnase v-if="tonnase_out.length > 0" :data="tonnase_out_data" :options="barChartOptions" :labels="labelsTonnaseOut"/>
+                                            </div>
+                                        </v-card>
+                                    </v-flex>
+                                </v-layout>
                             </div>
                         </div>
                     </div>
@@ -229,6 +241,7 @@
     import moment from 'moment'
     import _ from 'lodash'
     import LineChart from '../components/LineChart.vue'
+    import LineChartTonnase from '../components/LineChartTonnase.vue'
     import BarChart from '../components/BarChart.vue'
     import BarChartWarehouse from '../components/BarChartWarehouse.vue'
     import BarChartTransporter from '../components/BarChartTransporter.vue'
@@ -240,6 +253,10 @@
 
     export default {
         created() {
+            this.getTonnaseOut({
+                month: this.month,
+                year: this.year
+            }),
             this.getChart2Data({
                 month: this.month,
                 year: this.year
@@ -403,6 +420,10 @@
         },
         watch: {
             month() {
+                this.getTonnaseOut({
+                    month: this.month,
+                    year: this.year
+                })
                 this.getChartData({
                     month: this.month,
                     year: this.year
@@ -413,6 +434,10 @@
                 })
             },
             year() {
+                this.getTonnaseOut({
+                    month: this.month,
+                    year: this.year
+                })
                 this.getChartData({
                     month: this.month,
                     year: this.year
@@ -447,6 +472,7 @@
         },
         computed: {
             ...mapState('dashboard', {
+                tonnase_out: state => state.tonnase_out,
                 transactions: state => state.transactions,
                 transactionssendback: state => state.transactionssendback,
                 globalpallet: state => state.globalpallet,
@@ -471,6 +497,11 @@
                 return _.range(2010, moment().add(1, 'years').format('Y'))
             },
             
+            labelsTonnaseOut() {
+                return _.map(this.tonnase_out, function(o) {
+                    return moment(o.date).format('DD')
+                });
+            },
             labels() {
                 return _.map(this.transactions, function(o) {
                     return moment(o.date).format('DD')
@@ -504,6 +535,11 @@
             labelspallet() {
                 let label = ['Good Pallet','TBR Pallet','BER Pallet','Missing Pallet' ]
                 return label
+            },
+            tonnase_out_data() {
+                return _.map(this.tonnase_out, function(o) {
+                    return o.tonnase
+                });
             },
             transaction_data() {
                 return _.map(this.transactions, function(o) {
@@ -591,7 +627,8 @@
                             'getChartDataGlobalPalllet', 'getChartDataPallet',
                             'getChartDataPoolPalletDetail', 'getChartDataTransporterDetail',
                             'getChartDataPalletTransporter', 'getTotalAllPallet', 'getChartDataDetailPoolPallet',
-                            'getChartDataDetailTransporter','getChartDataWarehouseInOut','getChartDataTransporterSendSendback']),
+                            'getChartDataDetailTransporter','getChartDataWarehouseInOut','getChartDataTransporterSendSendback',
+                            'getTonnaseOut']),
             ...mapActions('pool', ['getPools', 'removePools']),
             exportData() {
                 window.open(`api/exportalltransactiontoday?api_token=${this.token}`)
@@ -618,6 +655,7 @@
         },
         components: {
             'line-chart': LineChart,
+            'line-chart-tonnase': LineChartTonnase,
             'pie-chart' : PieChart,
             'bar-chart' :BarChart,
             'bar-chart-warehouse' :BarChartWarehouse,

@@ -75,6 +75,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('getdispatch', 'DispatchDataController@dispatchData');
 
 
+    Route::get('tonnaseout', 'API\DashboardController@tonnaseOut');
     Route::get('chart', 'API\DashboardController@chart');
     Route::get('chart2', 'API\DashboardController@chart2');
     Route::get('globalpallet', 'API\DashboardController@globalpallet');
@@ -89,6 +90,21 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('detailtransporter', 'API\DashboardController@detailTransporter');
     Route::get('workshop', 'API\DashboardController@workshopInOut');
     Route::get('transportertopool', 'API\DashboardController@transporterToPool');
+
+    Route::get('organizationchart', 'API\DashboardOrganizationController@chart');
+    Route::get('organizationchart2', 'API\DashboardOrganizationController@chart2');
+    Route::get('organizationglobalpallet', 'API\DashboardOrganizationController@globalpallet');
+    Route::get('organizationpallet', 'API\DashboardOrganizationController@pallet');
+    Route::get('organizationpallettransporter', 'API\DashboardOrganizationController@palletTransporter');
+    Route::get('organizationpoolpalletdetail', 'API\DashboardOrganizationController@poolPalletDetail');
+    Route::get('organizationwarehouseinout', 'API\DashboardOrganizationController@warehouse_in_out');
+    Route::get('organizationtransportersendsendback', 'API\DashboardOrganizationController@transporterSendSendback');
+    Route::get('organizationtransporterdetail', 'API\DashboardOrganizationController@transporterDetail');
+    Route::get('organizationtotalallpallet', 'API\DashboardOrganizationController@totalAllPallet');
+    Route::get('organizationdetailpoolpallet', 'API\DashboardOrganizationController@detailPoolPallet');
+    Route::get('organizationdetailtransporter', 'API\DashboardOrganizationController@detailTransporter');
+    Route::get('organizationworkshop', 'API\DashboardOrganizationController@workshopInOut');
+    Route::get('organizationtransportertopool', 'API\DashboardOrganizationController@transporterToPool');
 
     Route::get('alltransactiontoday', 'API\TodayTransactionController@allTransactionToday');
     Route::get('exportalltransactiontoday', 'API\TodayTransactionController@exportData');
