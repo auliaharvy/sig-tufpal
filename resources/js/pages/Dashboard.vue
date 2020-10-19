@@ -642,42 +642,9 @@
                 window.open(`api/exportalltransactiontoday?api_token=${this.token}`)
             },
             exportName() {
-               var month = this.month
-                if(month == 1){
-                     return 'Tonnase Out January'
-                }if(month == 2){
-                     return 'Tonnase Out February'
-                }
-                if(month == 3){
-                     return 'Tonnase Out March'
-                }
-                if(month == 4){
-                     return 'Tonnase Out April'
-                }
-                if(month == 5){
-                     return 'Tonnase Out May'
-                }
-                if(month == 6){
-                     return 'Tonnase Out June'
-                }
-                if(month == 7){
-                     return 'Tonnase Out July'
-                }
-                if(month == 8){
-                     return 'Tonnase Out August'
-                }
-                if(month == 9){
-                     return 'Tonnase Out September'
-                }
-                if(month == 10){
-                     return 'Tonnase Out October'
-                }
-                if(month == 11){
-                     return 'Tonnase Out November'
-                }
-                if(month == 12){
-                     return 'Tonnase Out December'
-                }
+                var month = this.month
+                var year = this.year
+                return 'Tonnase_out_' + month + '_'  + year
             },
             async print() {
                 var now = new Date().toLocaleString();
