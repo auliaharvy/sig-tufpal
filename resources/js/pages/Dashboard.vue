@@ -223,6 +223,13 @@
                                         <v-card>
                                             <v-toolbar>
                                                 <v-toolbar-title>Tonnase Out</v-toolbar-title>
+                                                <v-btn class="mx-2">
+                                                    <download-excel
+                                                    :data= "tonnase_out"
+                                                    :name="exportName()">
+                                                    Download Data
+                                                    </download-excel>
+                                                </v-btn>
                                             </v-toolbar>
                                             <div class="panel-body">
                                                 <line-chart-tonnase v-if="tonnase_out.length > 0" :data="tonnase_out_data" :options="barChartOptions" :labels="labelsTonnaseOut"/>
@@ -419,6 +426,7 @@
             }
         },
         watch: {
+            
             month() {
                 this.getTonnaseOut({
                     month: this.month,
@@ -632,6 +640,44 @@
             ...mapActions('pool', ['getPools', 'removePools']),
             exportData() {
                 window.open(`api/exportalltransactiontoday?api_token=${this.token}`)
+            },
+            exportName() {
+               var month = this.month
+                if(month == 1){
+                     return 'Tonnase Out January'
+                }if(month == 2){
+                     return 'Tonnase Out February'
+                }
+                if(month == 3){
+                     return 'Tonnase Out March'
+                }
+                if(month == 4){
+                     return 'Tonnase Out April'
+                }
+                if(month == 5){
+                     return 'Tonnase Out May'
+                }
+                if(month == 6){
+                     return 'Tonnase Out June'
+                }
+                if(month == 7){
+                     return 'Tonnase Out July'
+                }
+                if(month == 8){
+                     return 'Tonnase Out August'
+                }
+                if(month == 9){
+                     return 'Tonnase Out September'
+                }
+                if(month == 10){
+                     return 'Tonnase Out October'
+                }
+                if(month == 11){
+                     return 'Tonnase Out November'
+                }
+                if(month == 12){
+                     return 'Tonnase Out December'
+                }
             },
             async print() {
                 var now = new Date().toLocaleString();
