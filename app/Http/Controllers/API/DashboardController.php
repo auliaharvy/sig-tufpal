@@ -27,7 +27,7 @@ class DashboardController extends Controller
         $filter = request()->year . '-' . request()->month;
         $parse = Carbon::parse($filter);
         $array_date = range($parse->startOfMonth()->format('d'), $parse->endOfMonth()->format('d'));
-        $transaction = Sjppalletsend::select(DB::raw('date(created_at) as date, floor(sum(good_cement/20)) as tonnase'))
+        $transaction = Sjppalletsend::select(DB::raw('date(created_at) as date, floor(sum((good_pallet*2000/good_cement)*good_cement/1000)) as tonnase'))
             ->where('created_at', 'LIKE', '%' . $filter . '%')
             ->where('sjp_status', '=', "SEND")
             ->groupBy(DB::raw('date(created_at)'))->get();
