@@ -11,6 +11,7 @@ import notification from './stores/notification.js'
 import customer from './stores/customer.js'
 import transaction from './stores/transaction.js'
 import dashboard from './stores/dashboard.js'
+import dashboardorganization from './stores/dashboardorganization.js'
 import sjp from './stores/sjp.js'
 import sjppalletsend from './stores/sjppalletsend.js'
 import sjppalletreceive from './stores/sjppalletreceive.js'
@@ -37,6 +38,7 @@ import sjpadjusment from './stores/sjpadjusment.js'
 import sjpchangedestination from './stores/sjpchangedestination.js'
 import dispatchdata from './stores/dispatchdata.js'
 import transporterAdjusment from './stores/transporterAdjusment.js'
+import sjpphoto from './stores/sjpphoto.js'
 
 Vue.use(Vuex)
 
@@ -52,6 +54,7 @@ const store = new Vuex.Store({
         customer,
         transaction,
         dashboard,
+        dashboardorganization,
         sjp,
         sjppalletsend,
         sjppalletreceive,
@@ -78,6 +81,7 @@ const store = new Vuex.Store({
         alltransaction,
         dispatchdata,
         transporterAdjusment,
+        sjpphoto,
     },
     state: {
         token: localStorage.getItem('token'),

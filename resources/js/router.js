@@ -4,6 +4,7 @@ import Home from './pages/Home.vue'
 import Map from './pages/Map.vue'
 import Login from './pages/Login.vue'
 import Dashboard from './pages/Dashboard.vue'
+import DashboardOrganization from './pages/DashboardOrganization.vue'
 import store from './store.js'
 
 import IndexPalletMovement from './pages/report/index.vue'
@@ -20,6 +21,9 @@ import DataSjpchangedest from './pages/report/sjpchangedest/Sjpchangedest.vue'
 
 import IndexSjpsend from './pages/report/sjppalletsend/index.vue'
 import DataSjpsend from './pages/report/sjppalletsend/Sjppalletsend.vue'
+
+import IndexSjpphoto from './pages/report/sjpphoto/index.vue'
+import DataSjpphoto from './pages/report/sjpphoto/Sjpphoto.vue'
 
 import IndexSjpreceive from './pages/report/sjppalletreceive/index.vue'
 import DataSjpreceive from './pages/report/sjppalletreceive/Sjppalletreceive.vue'
@@ -53,6 +57,11 @@ import IndexPool from './pages/pool/Index.vue'
 import DataPool from './pages/pool/Pool.vue'
 import AddPool from './pages/pool/AddPool.vue'
 import EditPool from './pages/pool/EditPool.vue'
+
+import IndexOrganization from './pages/organization/Index.vue'
+import DataOrganization from './pages/organization/Organization.vue'
+import AddOrganization from './pages/organization/AddOrganization.vue'
+import EditOrganization from './pages/organization/EditOrganization.vue'
 
 import IndexVehicle from './pages/vehicle/Index.vue'
 import DataVehicle from './pages/vehicle/Vehicle.vue'
@@ -419,6 +428,32 @@ const router = new Router({
         },
 
         {
+            path: '/organization',
+            component: IndexOrganization,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'organizations.data',
+                    component: DataOrganization,
+                    meta: { title: 'Manage Organization' }
+                },
+                {
+                    path: 'add',
+                    name: 'organizations.add',
+                    component: AddOrganization,
+                    meta: { title: 'Add Organization' }
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'organizations.edit',
+                    component: EditOrganization,
+                    meta: { title: 'Edit Oganization' }
+                },
+            ]
+        },
+
+        {
             path: '/vehicle',
             component: IndexVehicle,
             meta: { requiresAuth: true },
@@ -612,6 +647,20 @@ const router = new Router({
         },
 
         {
+            path: '/sjpphoto',
+            component: IndexSjpphoto,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'sjpphoto.data',
+                    component: DataSjpphoto,
+                    meta: { title: 'SJP Photo' }
+                },
+            ]
+        },
+
+        {
             path: '/pallettransferreceive',
             component: IndexPallettransferreceive,
             meta: { requiresAuth: true },
@@ -695,6 +744,13 @@ const router = new Router({
             path: '/dashboard',
             name: 'dashboard',
             component: Dashboard,
+            meta: { requiresAuth: true }
+        },
+
+        {
+            path: '/dashboardorganization',
+            name: 'dashboardorganization',
+            component: DashboardOrganization,
             meta: { requiresAuth: true }
         },
 

@@ -116,6 +116,14 @@
                         <v-list-item-title color="black">Dashboard</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item link router to="/dashboardorganization" v-if="$can('read dashboard organization')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-monitor-dashboard</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Dashboard Organization</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
                 <v-list-item link router to="/poolpallet" v-if="$can('read poolpallets')">
                     <v-list-item-icon>
                         <v-icon color="black">mdi-numeric</v-icon>
@@ -138,6 +146,14 @@
                     </v-list-item-icon>
                     <v-list-item-content>
                         <v-list-item-title color="black">Pallet Movement</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link router to="/sjpphoto" v-if="$can('read dashboard')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-camera</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">SJP Photo</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item link router to="/alltransaction" v-if="$can('read alltransaction')">
@@ -232,6 +248,14 @@
 
                 <v-divider></v-divider>
                 <h3> Setting </h3>
+                <v-list-item link router to="/organization" v-if="$can('read permission')">
+                    <v-list-item-icon>
+                        <v-icon color="black">mdi-domain</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title color="black">Organization</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
                 <v-list-item link router :to="{ name: 'user.editprofile', params: {id: authenticated.id} }">
                     <v-list-item-icon>
                         <v-icon color="black">mdi-account</v-icon>

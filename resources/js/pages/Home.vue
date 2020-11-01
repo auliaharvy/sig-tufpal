@@ -91,6 +91,14 @@
           </v-card>
         </v-flex>
         <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/dashboardorganization" class="text-center ma-3" v-if="$can('read dashboard organization')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-monitor-dashboard</v-icon>
+              <span right> Dashboard Organization </span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md3 lg3 link >
           <v-card link router to="/poolpallet" class="text-center ma-3" v-if="$can('read poolpallets')">
             <v-card-title class="text-center" color="black">
               <v-icon color="black" left>mdi-numeric</v-icon>
@@ -111,6 +119,14 @@
             <v-card-title class="text-center" color="black">
               <v-icon color="black" left>mdi-transfer</v-icon>
               <span right> Pallet Movement </span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router to="/sjpphoto" class="text-center ma-3" v-if="$can('read dashboard')">
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-camera</v-icon>
+              <span right> SJP Photo </span>
             </v-card-title>
           </v-card>
         </v-flex>
@@ -194,6 +210,7 @@
         Setting
       </h1>
       <v-layout row wrap class="px-5">
+        
         <v-flex xs12 md3 lg3 link >
           <v-card link router :to="{ name: 'user.editprofile', params: {id: authenticated.id} }" class="text-center ma-3" >
             <v-card-title class="text-center" color="black">
@@ -231,6 +248,14 @@
             <v-card-title class="text-center" color="black">
               <v-icon color="black" left>mdi-clipboard-account</v-icon>
               <span right> Driver </span>
+            </v-card-title>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 md3 lg3 link >
+          <v-card link router :to="{ name: 'organizations.data'}" class="text-center ma-3" v-if="$can('read permission')" >
+            <v-card-title class="text-center" color="black">
+              <v-icon color="black" left>mdi-domain</v-icon>
+              <span right> Organization </span>
             </v-card-title>
           </v-card>
         </v-flex>

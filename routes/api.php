@@ -57,6 +57,8 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::resource('sjpadjusment', 'SjpadjusmentController');
     Route::resource('sjpchangedestination', 'SjpchangedestinationController');
     Route::resource('pool', 'PoolController');
+    Route::resource('organization', 'OrganizationController');
+    Route::resource('sjpphoto', 'SjpPhotoController');
     Route::get('poolform', 'PoolController@getpoolpallet');
     Route::get('poolautocomplete', 'PoolController@poolautocomplete');
     Route::resource('driver', 'DriverController');
