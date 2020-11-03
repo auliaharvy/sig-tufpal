@@ -11,17 +11,31 @@
             <v-flex class="px-5" xs12 md4 lg4>
                 <div class="form-group">
                     <label>Pool Pallet</label>
-                    <select class='form-control' v-model='courier.reference_pool_pallet_id' :readonly="true">
-                        <option disabled v-for='data in pools.data' v-bind:key='data.pool_pallet_id' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
-                    </select>
+                    <template v-if="courier.reference_pool_pallet_id == null">
+                        <select class='form-control' v-model='courier.reference_pool_pallet_id' :readonly="true">
+                            <option disabled v-for='data in pools.data' v-bind:key='data.pool_pallet_id' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
+                        </select>
+                    </template>
+                    <template v-if="courier.reference_pool_pallet_id != null">
+                        <select class='form-control' v-model='courier.reference_pool_pallet_id'>
+                            <option v-for='data in pools.data' v-bind:key='data.pool_pallet_id' :value='data.pool_pallet_id'>{{ data.pool_name }}</option>
+                        </select>
+                    </template>
                 </div>
             </v-flex>
              <v-flex class="px-5" xs12 md4 lg4>
                 <div class="form-group">
                     <label>Transporter</label>
-                    <select class='form-control' v-model='courier.reference_transporter_id' :readonly="true">
-                        <option disabled v-for='data in transporters.data' v-bind:key='data.transporter_id' :value='data.transporter_id'>{{ data.transporter_name }}</option>
-                    </select>
+                    <template v-if="courier.reference_transporter_id == null">
+                        <select class='form-control' v-model='courier.reference_transporter_id' :readonly="true">
+                            <option disabled v-for='data in transporters.data' v-bind:key='data.transporter_id' :value='data.transporter_id'>{{ data.transporter_name }}</option>
+                        </select>
+                    </template>
+                    <template v-if="courier.reference_transporter_id != null">
+                        <select class='form-control' v-model='courier.reference_transporter_id'>
+                            <option v-for='data in transporters.data' v-bind:key='data.transporter_id' :value='data.transporter_id'>{{ data.transporter_name }}</option>
+                        </select>
+                    </template>
                 </div>
             </v-flex>
             </v-layout>

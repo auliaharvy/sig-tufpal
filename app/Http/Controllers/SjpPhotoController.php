@@ -27,7 +27,7 @@ class SjpPhotoController extends Controller
             function($join){
                 $join->on('a.sjp_number','=','c.sjp_number');
             })
-        ->select('a.sjp_number', 'b.sender', 'b.departure_pool', 'b.destination_pool', 'b.sending_driver_approval', 'c.receiver', 'c.receiving_driver_approval',)
+        ->select('a.sjp_number', 'b.sender', 'b.sjp_status as status_send', 'c.sjp_status as status_receive','b.departure_pool', 'b.destination_pool', 'b.sending_driver_approval', 'c.receiver', 'c.receiving_driver_approval',)
         ->whereBetween('a.created_at',[$dateS,$dateE])
         ->paginate(1000000)
         ->toArray();

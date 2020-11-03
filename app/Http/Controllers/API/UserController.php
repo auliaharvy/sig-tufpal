@@ -112,18 +112,18 @@ class UserController extends Controller
                 $user->update([
                     'name' => $request->name,
                     'password' => $request->password,
-                    // 'reference_pool_pallet_id' => $request->reference_pool_pallet_id,
-                    // 'reference_transporter_id' => $request->reference_transporter_id,
-                    // 'reference_driver_id' => $request->reference_driver_id,
+                    'reference_pool_pallet_id' => $request->reference_pool_pallet_id,
+                    'reference_transporter_id' => $request->reference_transporter_id,
+                    'reference_driver_id' => $request->reference_driver_id,
                     // 'role' => $request->role,
                 ]);
             }else{
                 $user->update([
                     'name' => $request->name,
                     // 'password' => $request->password,
-                    // 'reference_pool_pallet_id' => $request->reference_pool_pallet_id,
-                    // 'reference_transporter_id' => $request->reference_transporter_id,
-                    // 'reference_driver_id' => $request->reference_driver_id,
+                    'reference_pool_pallet_id' => $request->reference_pool_pallet_id,
+                    'reference_transporter_id' => $request->reference_transporter_id,
+                    'reference_driver_id' => $request->reference_driver_id,
                     // 'role' => $request->role,
                 ]);
             }
@@ -132,6 +132,8 @@ class UserController extends Controller
             return response()->json(['status' => 'error', 'data' => $e->getMessage()], 200);
         }
     }
+
+    
 
     public function destroy($id)
     {

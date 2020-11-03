@@ -71,19 +71,19 @@ class DashboardOrganizationController extends Controller
                 ->where('a.sjp_status', '=', "RECEIVE")
                 ->groupBy(DB::raw('date(a.created_at)'))->get();
 
-            $data = [];
-            foreach ($array_date as $row) {
-                $f_date = strlen($row) == 1 ? 0 . $row:$row;
-                $date = $filter . '-' . $f_date;
-                $total = $transaction->firstWhere('date', $date);
-                $totalreceive = $transactionreceive->firstWhere('date', $date);
-
-                $data[] = [
-                    'date' =>$date,
-                    'total' => $total ? $total->total:0,
-                    'totalreceive' => $totalreceive ? $totalreceive->totalreceive:0,
-                ];
-            }
+                $data = [];
+                foreach ($array_date as $row) {
+                    $f_date = strlen($row) == 1 ? 0 . $row:$row;
+                    $date = $filter . '-' . $f_date;
+                    $total = $transaction->firstWhere('date', $date);
+                    $totalreceive = $transactionreceive->firstWhere('date', $date);
+        
+                    $data[] = [
+                        'date' =>$date,
+                        'total' => $total ? $total->total:0,
+                        'totalreceive' => $totalreceive ? $totalreceive->total:0
+                    ];
+                }
         }
         if($user_transporter != null){
             $transporter_id = $user_transporter;
@@ -109,19 +109,19 @@ class DashboardOrganizationController extends Controller
                 ->where('b.organization_id', $organization)
                 ->groupBy(DB::raw('date(a.created_at)'))->get();
 
-            $data = [];
-            foreach ($array_date as $row) {
-                $f_date = strlen($row) == 1 ? 0 . $row:$row;
-                $date = $filter . '-' . $f_date;
-                $total = $transaction->firstWhere('date', $date);
-                $totalreceive = $transactionreceive->firstWhere('date', $date);
-
-                $data[] = [
-                    'date' =>$date,
-                    'total' => $total ? $total->total:0,
-                    'totalreceive' => $totalreceive ? $totalreceive->totalreceive:0,
-                ];
-            }
+                $data = [];
+                foreach ($array_date as $row) {
+                    $f_date = strlen($row) == 1 ? 0 . $row:$row;
+                    $date = $filter . '-' . $f_date;
+                    $total = $transaction->firstWhere('date', $date);
+                    $totalreceive = $transactionreceive->firstWhere('date', $date);
+        
+                    $data[] = [
+                        'date' =>$date,
+                        'total' => $total ? $total->total:0,
+                        'totalreceive' => $totalreceive ? $totalreceive->total:0
+                    ];
+                }
         }
         
         return $transaction;

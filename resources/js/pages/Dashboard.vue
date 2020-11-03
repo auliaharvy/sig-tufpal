@@ -203,7 +203,7 @@
                                             </v-toolbar>
 
                                             <div class="panel-body">
-                                                <line-chart v-if="transactionssendback.length > 0" :data="transaction_senback_data" :options="barChartOptions" :labels="labels"/>
+                                                <line-chart v-if="transactions.length > 0" :data="transaction_senback_data" :options="barChartOptions" :labels="labels"/>
                                             </div>
                                         </v-card>
                                     </v-flex>
@@ -213,7 +213,7 @@
                                                 <v-toolbar-title>Pallet Receive Sendback</v-toolbar-title>
                                             </v-toolbar>
                                             <div class="panel-body">
-                                                <line-chart v-if="transactionssendback.length > 0" :data="transaction_receive_sendback_data" :options="barChartOptions" :labels="labels"/>
+                                                <line-chart v-if="transactions.length > 0" :data="transaction_receive_sendback_data" :options="barChartOptions" :labels="labels"/>
                                             </div>
                                         </v-card>
                                     </v-flex>
