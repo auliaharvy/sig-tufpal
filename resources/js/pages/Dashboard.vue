@@ -9,6 +9,9 @@
                                     <v-btn  class="ma-5" @click.prevent="exportData()">
                                         Download Today Transaction
                                     </v-btn>
+                                    <v-btn  class="" @click.prevent="allDataExport()">
+                                        All Data Export
+                                    </v-btn>
                                     <!-- <v-btn class="ma-5" @click="print">
                                         Print
                                     </v-btn> -->
@@ -19,7 +22,15 @@
                                             <v-toolbar-title>All Pallet : <span>{{totalallpallet}}</span></v-toolbar-title>
                                             
                                         </v-toolbar>
-                                        <div>
+                                        <div class="panel-body">
+                                            <v-btn class="mx-2">
+                                                <download-excel
+                                                ref="all_pallet"
+                                                :data= "globalpallet"
+                                                :name="allPalletExportName()">
+                                                    Download Data
+                                                </download-excel>
+                                            </v-btn>
                                             <bar-chart v-if="globalpallet.length > 0" :data="dataglobalpallet" :options="barChartOptions" :labels="labelsglobalpallet"/>
                                         </div>
                                     </v-card>
@@ -57,7 +68,15 @@
                                         <v-toolbar>
                                             <v-toolbar-title>Warehouse Detail</v-toolbar-title>
                                         </v-toolbar>
-                                        <div>
+                                        <div class="panel-body">
+                                            <v-btn class="mx-2">
+                                                <download-excel
+                                                ref="warehouse_detail"
+                                                :data= "warehouseinout"
+                                                :name="warehouseDetailExportName()">
+                                                    Download Data
+                                                </download-excel>
+                                            </v-btn>
                                             <bar-chart-warehouse v-if="warehouseinout.length > 0"  :data1="datawarehouseinoutpalletin" :data2="datawarehouseinoutpalletout" :data="datawarehouseinoutstock" :options="barChartPoolInOutOptions" :labels="labelswarehouseinout"/>
                                         </div>
                                     </v-card>
@@ -100,13 +119,21 @@
                                 </v-layout>
                         </div> -->
                         <div class="row">
-                                <v-layout row wrap class="px-5">
-                                    <v-flex class="pa-5" xs12 md9 lg9>
+                            <v-layout row wrap class="px-5">
+                                <v-flex class="pa-5" xs12 md9 lg9>
                                     <v-card>
                                         <v-toolbar>
                                             <v-toolbar-title>Transporter Detail</v-toolbar-title>
                                         </v-toolbar>
-                                        <div>
+                                        <div class="panel-body">
+                                            <v-btn class="mx-2">
+                                                <download-excel
+                                                ref="transporter_detail"
+                                                :data= "transportersendsendback"
+                                                :name="transDetailExportName()">
+                                                    Download Data
+                                                </download-excel>
+                                            </v-btn>
                                             <bar-chart-transporter v-if="transportersendsendback.length > 0"  :data1="datatransportersendsendbackpalletsendback"  :data="datatransportersendsendbackpalletsend" :options="barChartPoolInOutOptions" :labels="labelstransportersendsendback"/>
                                         </div>
                                     </v-card>
@@ -132,8 +159,7 @@
                                         </div>
                                     </v-card>
                                 </v-flex>
-
-                                </v-layout>
+                            </v-layout>
                         </div>
                     </div>
                 </div>
@@ -171,6 +197,18 @@
                                     </div>
                                 </v-flex>
                             </v-layout>
+                            <v-layout>
+                                <v-flex class="px-3" xs12 md6 lg6>
+                                    <v-btn class="mx-2">
+                                        <download-excel
+                                        ref="pallet_send"
+                                        :data= "transactions"
+                                        :name="palletSendExportName()">
+                                            Download Data Send
+                                        </download-excel>
+                                    </v-btn>
+                                </v-flex>
+                            </v-layout>
                             <div class="row">
                                 <v-layout row wrap class="px-5">
                                     <v-flex class="pa-5" xs12 md6 lg6>
@@ -178,7 +216,6 @@
                                             <v-toolbar>
                                                 <v-toolbar-title>Pallet Send</v-toolbar-title>
                                             </v-toolbar>
-
                                             <div class="panel-body">
                                                 <line-chart v-if="transactions.length > 0" :data="transaction_data" :options="barChartOptions" :labels="labels"/>
                                             </div>
@@ -195,6 +232,20 @@
                                         </v-card>
                                     </v-flex>
                                 </v-layout>
+                            </div>
+                            <v-layout>
+                                <v-flex class="px-3" xs12 md6 lg6>
+                                    <v-btn class="mx-2">
+                                        <download-excel
+                                        ref="pallet_sendback"
+                                        :data= "transactionssendback"
+                                        :name="palletSendbackExportName()">
+                                            Download Data Sendback
+                                        </download-excel>
+                                    </v-btn>
+                                </v-flex>
+                            </v-layout>
+                            <div class="row">
                                 <v-layout row wrap class="px-5">
                                     <v-flex class="pa-5" xs12 md6 lg6>
                                         <v-card>
@@ -223,15 +274,16 @@
                                         <v-card>
                                             <v-toolbar>
                                                 <v-toolbar-title>Tonnase Out</v-toolbar-title>
+                                            </v-toolbar>
+                                            <div class="panel-body">
                                                 <v-btn class="mx-2">
                                                     <download-excel
+                                                    ref="tonnase_out"
                                                     :data= "tonnase_out"
-                                                    :name="exportName()">
+                                                    :name="tonnaseExportName()">
                                                     Download Data
                                                     </download-excel>
                                                 </v-btn>
-                                            </v-toolbar>
-                                            <div class="panel-body">
                                                 <line-chart-tonnase v-if="tonnase_out.length > 0" :data="tonnase_out_data" :options="barChartOptions" :labels="labelsTonnaseOut"/>
                                             </div>
                                         </v-card>
@@ -641,7 +693,60 @@
             exportData() {
                 window.open(`api/exportalltransactiontoday?api_token=${this.token}`)
             },
-            exportName() {
+            allDataExport() {
+                this.$refs.all_pallet.$el.click();
+                this.$refs.warehouse_detail.$el.click();
+                this.$refs.transporter_detail.$el.click();
+                this.$refs.pallet_send.$el.click();
+                this.$refs.pallet_sendback.$el.click();
+                this.$refs.tonnase_out.$el.click();
+            },
+            allPalletExportName() {
+                var month = this.month
+                var year = this.year
+                return 'All_Pallet_' + month + '_'  + year
+            },
+            palletPoolStatusExportName() {
+                var month = this.month
+                var year = this.year
+                return 'Pallet_Pool_Status_' + month + '_'  + year
+            },
+            palletTransStatusExportName() {
+                var month = this.month
+                var year = this.year
+                return 'Pallet_Transporter_Status_' + month + '_'  + year
+            },
+            warehouseDetailExportName() {
+                var month = this.month
+                var year = this.year
+                return 'Warehouse_Detail_' + month + '_'  + year
+            },
+            warehouseDetailStatusExportName() {
+                var month = this.month
+                var year = this.year
+                return 'Warehouse_Detail_Status' + month + '_'  + year
+            },
+            transDetailExportName() {
+                var month = this.month
+                var year = this.year
+                return 'Transporter_Detail_' + month + '_'  + year
+            },
+            transDetailStatusExportName() {
+                var month = this.month
+                var year = this.year
+                return 'Transporter_Detail_Status_' + month + '_'  + year
+            },
+            palletSendExportName() {
+                var month = this.month
+                var year = this.year
+                return 'Pallet_Send' + month + '_'  + year
+            },
+             palletSendbackExportName() {
+                var month = this.month
+                var year = this.year
+                return 'Pallet_Sendback_' + month + '_'  + year
+            },
+            tonnaseExportName() {
                 var month = this.month
                 var year = this.year
                 return 'Tonnase_out_' + month + '_'  + year

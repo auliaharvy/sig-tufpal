@@ -124,7 +124,7 @@ class DashboardOrganizationController extends Controller
                 }
         }
         
-        return $transaction;
+        return $data;
     }
 
     public function chart2() //grafik sendback & receive sendback
