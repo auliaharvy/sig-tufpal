@@ -214,7 +214,7 @@ body {
                             position: absolute;
                             margin-left: 20px;
                             margin-top: 13px;
-                            font: 30px/30px verdana;
+                            font: 30px/30px russo one;
                             color: black;"
                     >
                         Tufpal
