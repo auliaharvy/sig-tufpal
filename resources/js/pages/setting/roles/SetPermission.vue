@@ -144,11 +144,13 @@
                 })
             },
             addPermission(name) {
-                let index = this.new_permission.findIndex(x => x == name)
-                if (index == -1) {
-                    this.new_permission.push(name)
+                const record = this.new_permission.find(el => el.name == name)
+                if (record) {
+                    this.new_permission.splice(this.new_permission.indexOf(record), 1)
                 } else {
-                    this.new_permission.splice(index, 1)
+                    this.new_permission.push({
+                        name
+                    })
                 }
             },
             checkPermission() {
