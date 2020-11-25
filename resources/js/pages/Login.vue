@@ -23,7 +23,7 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
 .firstone{
   font: 40px/40px arial;
   color: white;
-  text-shadow: 2px 2px orangered;
+  text-shadow: 2px 2px black;
 }
 .firstoneone{
   position: relative;
@@ -40,7 +40,7 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
 .secondone{
   font: 40px/40px arial;
   color: white;
-  text-shadow: 2px 2px orangered;
+  text-shadow: 2px 2px black;
 }
 .secondoneone{
   position: relative;
@@ -60,7 +60,7 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
 .thirdone{
   font: 40px/40px arial;
   color: white;
-  text-shadow: 2px 2px orangered;
+  text-shadow: 2px 2px black;
 }
 .thirdoneone{
   position: relative;
@@ -225,7 +225,7 @@ body {
             </v-toolbar-title>
         </router-link>
         <v-spacer></v-spacer>
-        <v-btn text @click="dialog = true">
+        <v-btn primary @click="dialog = true">
             <span left>Login</span>
             <v-icon right color="black">mdi-account-arrow-right</v-icon>
         </v-btn>
@@ -283,8 +283,8 @@ body {
         </v-container>
     </v-dialog>
     <v-container fluid>
-        <v-card>
-            <v-parallax dark height="500" :src="require('../assets/gambarpallet2.jpg')">
+        <v-card style="background-color: orange;">
+            <v-parallax dark height="500" :src="require('../assets/gambarpallet1.jpg')">
             <div class="firstone">
                 Pallet Management by <img class="pb-5" src="../assets/logotoolbar.png">
                 <div class="firstoneone">
@@ -295,9 +295,9 @@ body {
         </v-card>
     </v-container>
     <v-container fluid>
-        <v-card>
-            <v-parallax dark height="500" :src="require('../assets/gudang pallet1.jpg')">
-            <v-card flat img="../assets/gudang pallet1.jpg'" class="px-10">
+        <v-card style="background-color: orange;">
+            <v-parallax dark height="500" :src="require('../assets/gudang pallet.jpg')">
+            <v-card flat img="../assets/gudang pallet.jpg'" class="px-10">
                 <v-row align="center" justify="end">
                     <v-flex  xs12 md6 lg6>
                         <div class="secondone">
@@ -315,8 +315,8 @@ body {
         </v-card>
     </v-container>
     <v-container fluid>
-      <v-parallax dark height="700" :src="require('../assets/handling pallet1.jpg')">
-        <v-card flat img="../assets/handling pallet1.jpg'" class="px-10">
+      <v-parallax dark height="700" :src="require('../assets/handling pallet.jpg')">
+        <v-card flat img="../assets/handling pallet.jpg'" class="px-10">
             <v-row align="center" justify="start">
               <v-flex  xs12 md6 lg6>
                 <div class="thirdone">
@@ -334,8 +334,8 @@ body {
     </v-container>
     <v-container fluid>
         <v-card>
-            <v-parallax dark height="800" :src="require('../assets/security pallet1.jpg')">
-            <v-card flat img="../assets/security pallet1.jpg'" class="px-10">
+            <v-parallax dark height="800" :src="require('../assets/security pallet.jpg')">
+            <v-card flat img="../assets/security pallet.jpg'" class="px-10">
                 <v-row align="center" justify="end">
                     <v-flex  xs12 md6 lg6>
                         <div class="secondone">
