@@ -1,5 +1,6 @@
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
 html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
 .login-page {
   width: 360px;
@@ -214,6 +215,7 @@ body {
                             position: absolute;
                             margin-left: 20px;
                             margin-top: 13px;
+                            font-family: 'Russo One', sans-serif;
                             font: 30px/30px russo one;
                             color: black;"
                     >
