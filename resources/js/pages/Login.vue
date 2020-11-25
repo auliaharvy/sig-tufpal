@@ -225,9 +225,9 @@ body {
             </v-toolbar-title>
         </router-link>
         <v-spacer></v-spacer>
-        <v-btn primary @click="dialog = true">
+        <v-btn class="primary" @click="dialog = true">
             <span left>Login</span>
-            <v-icon right color="black">mdi-account-arrow-right</v-icon>
+            <v-icon right class="primary ">mdi-account-arrow-right</v-icon>
         </v-btn>
     </v-app-bar>
     <v-dialog v-model="dialog" persistent max-width="600px">
