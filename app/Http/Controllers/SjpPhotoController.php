@@ -18,17 +18,14 @@ class SjpPhotoController extends Controller
         $dateE = Carbon::now()->startOfMonth(); 
 
 
-        $sjp = DB::table('surat_jalan_pallet as a')
-        ->join(DB::raw('(SELECT * FROM sjp_pallet_send )b'),
+        $sjp = DB::table('all_transaction as a')
+        ->where('a.reference_sjp_id', '!=', null )
+        ->join(DB::raw('(SELECT * FROM surat_jalan_pallet )b'),
             function($join){
-                $join->on('a.sjp_number','=','b.sjp_number');
+                $join->on('a.reference_sjp_id','=','b.sjp_id');
             })
-        ->join(DB::raw('(SELECT * FROM sjp_pallet_receive )c'),
-            function($join){
-                $join->on('a.sjp_number','=','c.sjp_number');
-            })
-        ->select('a.sjp_number', 'b.sender', 'b.sjp_status as status_send', 'c.sjp_status as status_receive','b.departure_pool', 'b.destination_pool', 'b.sending_driver_approval', 'c.receiver', 'c.receiving_driver_approval',)
-        ->whereBetween('a.created_at',[$dateS,$dateE])
+        ->select('a.*', 'b.sjp_number')
+        // ->whereBetween('a.created_at',[$dateS,$dateE])
         ->paginate(1000000)
         ->toArray();
         return $sjp;

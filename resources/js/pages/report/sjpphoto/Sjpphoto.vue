@@ -25,13 +25,13 @@
       :loading="loading"
     >       
     <template v-slot:item.sending_driver_approval="{ item }">
-        <img :src="'/storage/app/public/driverapproval/' + item.sending_driver_approval" :width="70" :height="100" :alt="item.sjp_number"> </img>
+        <img :src="'../storage/app/public/driverapproval/'+item.sending_driver_approval" :width="70" :height="100" :alt="item.sending_driver_approval"> </img>
         <v-btn dark color="success" text small :href="'/storage/app/public/driverapproval/' + item.sending_driver_approval" target="_blank">
             show
         </v-btn>
     </template>
     <template v-slot:item.receiving_driver_approval="{ item }">
-        <img :src="'/storage/app/public/driverapproval/' + item.receiving_driver_approval" :width="70" :height="100" :alt="item.receiving_driver_approval"> </img>
+        <img :src="'/storage/app/public/driverapproval/'+item.receiving_driver_approval" :width="70" :height="100" :alt="item.receiving_driver_approval"> </img>
         <v-btn dark color="success" text small :href="'/storage/app/public/driverapproval/' + item.receiving_driver_approval" target="_blank">
             show
         </v-btn>
@@ -76,10 +76,11 @@ export default {
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
              headers: [
                 { value: 'sjp_number', text: 'SJP Number' },
+                { value: 'transaction', text: 'Transaction' },
                 { value: 'departure_pool', text: 'Departure Pool' },
                 { value: 'destination_pool', text: 'Destination Pool' },
-                { value: 'sender', text: 'Sender' },
-                { value: 'receiver', text: 'Receiver' },
+                { value: 'sender/reporter', text: 'Sender' },
+                { value: 'receiver/approver', text: 'Receiver' },
                 { value: 'sending_driver_approval', text: 'Photo Send' },
                 { value: 'receiving_driver_approval', text: 'Photo Receive' },          
             ],
