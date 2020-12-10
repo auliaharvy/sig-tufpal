@@ -28,37 +28,37 @@
                         ALL TRANSACTION
                         <v-spacer></v-spacer>
                         <template>
-                <v-row>
-                    <v-menu
-                        ref="menu"
-                        v-model="menu"
-                        :close-on-content-click="false"
-                        :return-value.sync="dates"
-                        transition="scale-transition"
-                        offset-y
-                        min-width="290px"
-                    >
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                            v-model="dateRangeText"
-                            label="Query Range"
-                            prepend-icon="mdi-calendar"
-                            readonly
-                            v-bind="attrs"
-                            v-on="on"
-                            single-line
-                            hide-details
-                        ></v-text-field>
-                        <v-btn text color="primary" @click="selectedDate">Query</v-btn>
-                        </template>
-                        <v-date-picker v-model="dates" no-title range>
-                        <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="menu = false">Close</v-btn>
-                        <v-btn text color="primary" @click="$refs.menu.save(dates)">Ok</v-btn>
-                        </v-date-picker>
-                    </v-menu>
-                </v-row>
-                </template>
+                            <v-row>
+                                <v-menu
+                                    ref="menu"
+                                    v-model="menu"
+                                    :close-on-content-click="false"
+                                    :return-value.sync="dates"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="290px"
+                                >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="dateRangeText"
+                                        label="Query Range"
+                                        prepend-icon="mdi-calendar"
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                        single-line
+                                        hide-details
+                                    ></v-text-field>
+                                    <v-btn text color="primary" @click="selectedDate">Query</v-btn>
+                                    </template>
+                                    <v-date-picker v-model="dates" no-title range>
+                                    <v-spacer></v-spacer>
+                                    <v-btn text color="primary" @click="menu = false">Close</v-btn>
+                                    <v-btn text color="primary" @click="$refs.menu.save(dates)">Ok</v-btn>
+                                    </v-date-picker>
+                                </v-menu>
+                            </v-row>
+                            </template>
                         
                         <!-- <v-text-field
                             v-model="fromDate"

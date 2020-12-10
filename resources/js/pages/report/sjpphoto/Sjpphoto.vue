@@ -1,6 +1,16 @@
 <template>
     <div class="col-md-12">
         <div class="panel">
+            <div class="panel-heading">
+                <p> From : {{ fromDate }} </p>
+                <p> To : {{ toDate }} </p>
+                <v-btn class="mx-2"  @click.prevent="weekAgo()">
+                    A Week
+                </v-btn>
+                <v-btn class="mx-2" @click.prevent="monthAgo()">
+                    A Month
+                </v-btn>
+            </div>
             
             <div class="panel-body">
               
@@ -10,13 +20,38 @@
     <v-card-title>
       SJP PHOTO
       <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        prepend-icon="mdi-search"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field>
+      <template>
+                            <v-row>
+                                <v-menu
+                                    ref="menu"
+                                    v-model="menu"
+                                    :close-on-content-click="false"
+                                    :return-value.sync="dates"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="290px"
+                                >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="dateRangeText"
+                                        label="Query Range"
+                                        prepend-icon="mdi-calendar"
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                        single-line
+                                        hide-details
+                                    ></v-text-field>
+                                    <v-btn text color="primary" @click="selectedDate">Query</v-btn>
+                                    </template>
+                                    <v-date-picker v-model="dates" no-title range>
+                                    <v-spacer></v-spacer>
+                                    <v-btn text color="primary" @click="menu = false">Close</v-btn>
+                                    <v-btn text color="primary" @click="$refs.menu.save(dates)">Ok</v-btn>
+                                    </v-date-picker>
+                                </v-menu>
+                            </v-row>
+                            </template>
     </v-card-title>
     <v-data-table
       :headers="headers"
@@ -86,6 +121,7 @@ export default {
             ],
             search: '',
             dates: [ ],
+            menu: false,
             fromDate: '',
             toDate: '',
         }
@@ -154,7 +190,7 @@ export default {
             this.toDate = this.dates[1]
             this.$store.state.alltransaction.fromDate = this.dates[0]
             this.$store.state.alltransaction.toDate = this.dates[1]
-            this.getAlltransaction()
+            this.getSjpPhoto()
         },
     }
 }

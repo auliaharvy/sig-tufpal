@@ -12,10 +12,10 @@ use DB;
 
 class SjpPhotoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $dateS = Carbon::now()->startOfMonth()->subMonth(3);
-        $dateE = Carbon::now()->startOfMonth(); 
+        $fromDate = $request->fromDate;
+        $toDate = $request->toDate;
 
 
         $sjp = DB::table('all_transaction as a')
@@ -25,6 +25,7 @@ class SjpPhotoController extends Controller
                 $join->on('a.reference_sjp_id','=','b.sjp_id');
             })
         ->select('a.*', 'b.sjp_number')
+        ->whereBetween( 'a.created_at', [ $fromDate . ' 00:01:00', $toDate . ' 23:59:59'])
         // ->whereBetween('a.created_at',[$dateS,$dateE])
         ->paginate(1000000)
         ->toArray();
