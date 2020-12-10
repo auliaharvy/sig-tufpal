@@ -160,6 +160,9 @@ export default {
         },
         search() {
             this.getSjpPhoto(this.search) //KETIKA VALUE SEARCH TERJADI PERUBAHAN, MAKA REQUEST DATA BARU
+        },
+        dates() {
+            this.getSjpPhoto()
         }
     },
     methods: {
@@ -172,8 +175,8 @@ export default {
             this.fromDate = month.toISOString().slice(0,10)
             var today = new Date ().toISOString().slice(0,10)
             this.dates = [month.toISOString().slice(0,10), today ]
-            this.$store.state.alltransaction.fromDate = this.dates[0]
-            this.$store.state.alltransaction.toDate = this.dates[1]
+            this.$store.state.sjpphoto.fromDate = this.dates[0]
+            this.$store.state.sjpphoto.toDate = this.dates[1]
         },
         weekAgo(){
             this.toDate = new Date ().toISOString().slice(0,10)
@@ -182,14 +185,14 @@ export default {
             this.fromDate = week.toISOString().slice(0,10)
             var today = new Date ().toISOString().slice(0,10)
             this.dates = [week.toISOString().slice(0,10), today ]
-             this.$store.state.alltransaction.fromDate = this.dates[0]
-            this.$store.state.alltransaction.toDate = this.dates[1]
+             this.$store.state.sjpphoto.fromDate = this.dates[0]
+            this.$store.state.sjpphoto.toDate = this.dates[1]
         },
         selectedDate(){
             this.fromDate = this.dates[0]
             this.toDate = this.dates[1]
-            this.$store.state.alltransaction.fromDate = this.dates[0]
-            this.$store.state.alltransaction.toDate = this.dates[1]
+            this.$store.state.sjpphoto.fromDate = this.dates[0]
+            this.$store.state.sjpphoto.toDate = this.dates[1]
             this.getSjpPhoto()
         },
     }
