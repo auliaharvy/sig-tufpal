@@ -14,18 +14,19 @@ class SjpPhotoController extends Controller
 {
     public function index(Request $request)
     {
-        $fromDate = $request->fromDate;
-        $toDate = $request->toDate;
+        $filter = request()->year . '-' . request()->month;
+        $parse = Carbon::parse($filter);
 
 
         $sjp = DB::table('all_transaction as a')
+        ->where('a.created_at', 'LIKE', '%' . $filter . '%')
         ->where('a.reference_sjp_id', '!=', null )
         ->join(DB::raw('(SELECT * FROM surat_jalan_pallet )b'),
             function($join){
                 $join->on('a.reference_sjp_id','=','b.sjp_id');
             })
         ->select('a.*', 'b.sjp_number')
-        ->whereBetween( 'a.created_at', [ $fromDate . ' 00:01:00', $toDate . ' 23:59:59'])
+        // ->whereBetween( 'a.created_at', [ $fromDate . ' 00:01:00', $toDate . ' 23:59:59'])
         // ->whereBetween('a.created_at',[$dateS,$dateE])
         ->paginate(1000000)
         ->toArray();

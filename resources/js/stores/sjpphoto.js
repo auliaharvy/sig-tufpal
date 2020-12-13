@@ -58,11 +58,7 @@ const actions = {
         let search = typeof payload != 'undefined' ? payload:''
         return new Promise((resolve, reject) => {
             //REQUEST DATA CUSTOMER  DENGAN MENGIRIMKAN PARAMETER PAGE YG SEDANG AKTIF DAN VALUE PENCARIAN
-            $axios.get(`/sjpphoto`, {
-                params: {
-                    fromDate: state.fromDate,
-                    toDate: state.toDate
-                },
+            $axios.get(`/sjpphoto?month=${payload.month}&year=${payload.year}`, {
             })
             .then((response) => {
                 commit('ASSIGN_DATA', response.data) //JIKA DATA DITERIMA, SIMPAN DATA KEDALMA MUTATIONS
