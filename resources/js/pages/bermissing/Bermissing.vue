@@ -39,8 +39,8 @@
                         dense
                         >
                             <template v-slot:item.reporter_prove="{ item }">
-                                <img :src="'/storage/app/public/bermissing/reporter_prove/' + item.reporter_prove" :width="70" :height="100" :alt="item.bmp_number"> </img>
-                                <v-btn dark color="success" text small :href="'/storage/app/public/bermissing/reporter_prove/' + item.reporter_prove" target="_blank">
+                                <img :src="'/storage/bermissing/reporter_prove/' + item.reporter_prove" :width="70" :height="100" :alt="item.bmp_number"> </img>
+                                <v-btn dark color="success" text small :href="'/storage/bermissing/reporter_prove/' + item.reporter_prove" target="_blank">
                                     show
                                 </v-btn>
                             </template>

@@ -53,14 +53,14 @@
       :loading="loading"
     >       
     <template v-slot:item.sending_driver_approval="{ item }">
-        <img :src="'../storage/app/public/driverapproval/'+item.sending_driver_approval" :width="70" :height="100" :alt="item.sending_driver_approval"> </img>
-        <v-btn dark color="success" text small :href="'/storage/app/public/driverapproval/' + item.sending_driver_approval" target="_blank">
+        <img :src="'/storage/driverapproval/'+item.sending_driver_approval" :width="70" :height="100" :alt="item.sending_driver_approval"> </img>
+        <v-btn dark color="success" text small :href="'/storage/driverapproval/' + item.sending_driver_approval" target="_blank">
             show
         </v-btn>
     </template>
     <template v-slot:item.receiving_driver_approval="{ item }">
-        <img :src="'/storage/app/public/driverapproval/'+item.receiving_driver_approval" :width="70" :height="100" :alt="item.receiving_driver_approval"> </img>
-        <v-btn dark color="success" text small :href="'/storage/app/public/driverapproval/' + item.receiving_driver_approval" target="_blank">
+        <img :src="'/storage/driverapproval/'+item.receiving_driver_approval" :width="70" :height="100" :alt="item.receiving_driver_approval"> </img>
+        <v-btn dark color="success" text small :href="'/storage/driverapproval/' + item.receiving_driver_approval" target="_blank">
             show
         </v-btn>
     </template>
