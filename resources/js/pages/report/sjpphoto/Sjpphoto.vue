@@ -53,16 +53,26 @@
       :loading="loading"
     >       
     <template v-slot:item.sending_driver_approval="{ item }">
-        <img :src="'/storage/driverapproval/'+item.sending_driver_approval" :width="70" :height="100" :alt="item.sending_driver_approval"> </img>
-        <v-btn dark color="success" text small :href="'/storage/driverapproval/' + item.sending_driver_approval" target="_blank">
-            show
-        </v-btn>
+        <template v-if="item.sending_driver_approval != null ">
+            <img :src="'/storage/driverapproval/'+item.sending_driver_approval" :width="70" :height="100" :alt="item.sending_driver_approval"> </img>
+            <v-btn dark color="success" text small :href="'/storage/driverapproval/' + item.sending_driver_approval" target="_blank">
+                show
+            </v-btn>
+        </template>
+        <template v-if="item.sending_driver_approval == null ">
+            <p> No Sending Photo</p>
+        </template>
     </template>
     <template v-slot:item.receiving_driver_approval="{ item }">
-        <img :src="'/storage/driverapproval/'+item.receiving_driver_approval" :width="70" :height="100" :alt="item.receiving_driver_approval"> </img>
-        <v-btn dark color="success" text small :href="'/storage/driverapproval/' + item.receiving_driver_approval" target="_blank">
-            show
-        </v-btn>
+        <template v-if="item.receiving_driver_approval != null ">
+            <img :src="'/storage/driverapproval/'+item.receiving_driver_approval" :width="70" :height="100" :alt="item.receiving_driver_approval"> </img>
+            <v-btn dark color="success" text small :href="'/storage/driverapproval/' + item.receiving_driver_approval" target="_blank">
+                show
+            </v-btn>
+        </template>
+        <template v-if="item.receiving_driver_approval == null ">
+            <p> No Receiving Photo </p>
+        </template>
     </template>
        
     </v-data-table>

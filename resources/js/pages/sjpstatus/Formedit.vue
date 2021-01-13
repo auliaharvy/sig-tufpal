@@ -159,7 +159,7 @@ export default {
                 good_cement: '',
                 bad_cement: '',
                 note: '',
-                receiving_driver_approval: '',
+                sending_driver_approval: '',
             },
             sjpstatus: {
                 sjp_status_id: '',
@@ -309,7 +309,7 @@ export default {
             form.append('missing_pallet', this.sjpstatus.missing_pallet)
             form.append('good_cement', this.sjpstatus.good_cement)
             form.append('bad_cement', this.sjpstatus.bad_cement)
-            form.append('sending_driver_approval', this.sjpstatus.receiving_driver_approval)
+            form.append('receiving_driver_approval', this.sjpstatus.receiving_driver_approval)
             form.append('note', this.sjpstatus.note)
                 this.updateSjpStatus(form).then(() => {
                     this.sendbackCheck()

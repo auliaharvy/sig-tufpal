@@ -21,6 +21,8 @@ class SjpPhotoController extends Controller
         $sjp = DB::table('all_transaction as a')
         ->where('a.created_at', 'LIKE', '%' . $filter . '%')
         ->where('a.reference_sjp_id', '!=', null )
+        ->where('a.sending_driver_approval', '!=', null )
+        ->orWhere('a.receiving_driver_approval', '!=', null )
         ->join(DB::raw('(SELECT * FROM surat_jalan_pallet )b'),
             function($join){
                 $join->on('a.reference_sjp_id','=','b.sjp_id');

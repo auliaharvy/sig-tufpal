@@ -82,7 +82,7 @@
 
         <v-layout row wrap class="px-5">
             <v-flex class="px-5" xs12 md6 lg6>
-                <div class="form-group" :class="{ 'has-error': errors.sendireceiving_driver_approvalng_driver_approval }">
+                <div class="form-group" :class="{ 'has-error': errors.receiving_driver_approval }">
                     <label for="">Driver Approval</label>
                     <input type="file" class="form-control" accept="image/*" @change="uploadImage($event)" id="file-input">
                     <p class="text-black">Take A Picture Drive Holding Approve Note</p>
@@ -236,7 +236,7 @@ export default {
             form.append('tbr_pallet', this.sjpstatus.tbr_pallet)
             form.append('ber_pallet', this.sjpstatus.ber_pallet)
             form.append('missing_pallet', this.sjpstatus.missing_pallet)
-            form.append('sending_driver_approval', this.sjpstatus.receiving_driver_approval)
+            form.append('receiving_driver_approval', this.sjpstatus.receiving_driver_approval)
             form.append('note', this.sjpstatus.note)
                 this.updateSjpStatussendback(form).then(() => {
                     this.sjpstatus = {
