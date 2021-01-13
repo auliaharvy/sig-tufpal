@@ -28,6 +28,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         $schedule->call('App\Http\Controllers\API\TodayTransactionController@attachment_email')->dailyAt('23:59');
+        $schedule->command('db:dump')->daily();
     }
 
     /**
