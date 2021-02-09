@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/sjpstatus/receive', 'SjpStatusController@receive');
     Route::post('/sjpstatus/receiveapproval', 'SjpStatusController@sendingdriverapproval');
     Route::post('/sjpstatus/receivesendback', 'SjpStatusController@receivesendback');
+    Route::post('/sjpstatus/cancel', 'SjpStatusController@cancel');
 
     Route::resource('pallettransfer', 'PalletTransferController');
     Route::resource('pallettransfersend', 'PallettransfersendController');

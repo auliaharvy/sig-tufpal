@@ -54,7 +54,8 @@
                             <p class="text-green" v-else-if="item.state == 1">Send</p>
                             <p class="text-blue" v-else-if="item.state == 2">Received</p>
                             <p class="text-green" v-else-if="item.state == 3">Send Back</p>
-                            <p class="text-blue" v-else>Send Back Received </p>
+                            <p class="text-blue" v-else-if="item.state == 4">Send Back Received </p>
+                            <p class="text-red" v-else-if="item.state == 6">Sending Cancel </p>
                         </template>
 
                         <!-- <template  class="pa-5" v-slot:item.send="{ item }">

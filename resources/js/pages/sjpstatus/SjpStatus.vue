@@ -37,22 +37,26 @@
                         :search="search"
                         dense
                         >
-                        <template v-slot:item.status_sjps="{ item }">
+                        <template v-slot:[`item.status_sjps`]="{ item }">
                             <!-- <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
                             <v-chip class="label label-success" v-else-if="item.status == 1">Received</v-chip> -->
                             <p class="text-green" v-if="item.status_sjps == 0">Sending</p>
                             <p class="text-blue" v-else-if="item.status_sjps == 1">Received</p>
+                            <p class="text-red" v-else-if="item.status_sjps == 2">Cancel</p>
                         </template>
-                        <template v-slot:item.transaction_id="{ item }">
+                        <template v-slot:[`item.transaction_id`]="{ item }">
                             <!-- <v-chip class="label label-default" v-if="item.status == 0">Sending</v-chip>
                             <v-chip class="label label-success" v-else-if="item.status == 1">Received</v-chip> -->
                             <p class="text-black" v-if="item.transaction_id == 1">SEND</p>
                             <p class="text-black" v-else-if="item.transaction_id == 2">SEND_BACK</p>
                         </template>
 
-                        <template v-if="$can('update sjpstatuss')" v-slot:item.receive="{ item }">
+                        <template v-if="$can('update sjpstatuss')" v-slot:[`item.receive`]="{ item }">
                             <router-link v-if="item.status_sjps == 0 && item.transaction_id == 1 && item.distribution == 0 &&  authenticated.reference_pool_pallet_id == item.destination_pool_pallet_id " :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Receive</v-btn>
+                            </router-link>
+                            <router-link v-if="item.status_sjps == 2 && item.transaction_id == 1 && item.distribution == 0 &&  authenticated.reference_pool_pallet_id == item.departure_pool_pallet_id " :to="{ name: 'sjpstatuss.editsendback', params: {id: item.sjp_status_id} }">
+                                <v-btn color="warning" small>Receive Cancelled SJP</v-btn>
                             </router-link>
                             <router-link v-if="item.status_sjps == 0 && item.transaction_id == 1 && item.distribution == 1  " :to="{ name: 'sjpstatuss.edit', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Receive</v-btn>
@@ -73,7 +77,7 @@
                             </router-link>
                         </template>
 
-                        <template v-if="$can('create sjpstatuss') " v-slot:item.send_back="{ item }">
+                        <template v-if="$can('create sjpstatuss') " v-slot:[`item.send_back`]="{ item }">
                             <router-link v-if="item.transaction_id == 1 && item.status_sjps == 1 && item.is_sendback == 0 && authenticated.reference_pool_pallet_id == item.destination_pool_pallet_id" :to="{ name: 'sjpstatuss.sendback', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Send Back</v-btn>
                             </router-link>
@@ -83,7 +87,7 @@
                             </router-link>
                         </template>
 
-                        <template v-if="$can('update sjpstatuss') " v-slot:item.approval="{ item }">
+                        <template v-if="$can('update sjpstatuss') " v-slot:[`item.approval`]="{ item }">
                             <router-link v-if="item.driver_approve == 0 && authenticated.reference_pool_pallet_id == item.departure_pool_pallet_id" :to="{ name: 'sjpstatussend.approval', params: {id: item.sjp_status_id} }">
                                 <v-btn color="success" small>Sending Approval</v-btn>
                             </router-link>
@@ -93,13 +97,19 @@
                             </router-link>
                         </template>
 
-                        <template v-slot:item.view="{ item }">
+                        <template v-slot:[`item.view`]="{ item }">
                             <router-link :to="{ name: 'sjpstatuss.view', params: {id: item.sjp_status_id} }" >
                                 <v-btn color="success" small>View</v-btn>
                             </router-link>
                         </template>
 
-                        <template v-if="$can('delete sjps')" v-slot:item.delete="{ item }">
+                        <template v-if="$can('delete sjps')" v-slot:[`item.cancel`]="{ item }">
+                            <router-link :to="{ name: 'sjpstatuss.cancel', params: {id: item.sjp_status_id} }" >
+                                <v-btn v-if="authenticated.reference_pool_pallet_id == item.departure_pool_pallet_id && item.status_sjps == 0 && item.transaction_id == 1" color="warning" small>Cancel</v-btn>
+                            </router-link>
+                        </template>
+
+                        <template v-if="$can('delete sjps')" v-slot:[`item.delete`]="{ item }">
                                 <v-btn color="error" @click="deleteSjpStatus(item.sjp_status_id)" small>Delete</v-btn>
                         </template>
                         <!-- <template v-slot:item.image="{ item }">
@@ -166,6 +176,7 @@ export default {
                 // { value: 'approval', text: 'Approval'},
                 { value: 'receive', text: 'Receive'},
                 { value: 'send_back', text: 'Send Back'},
+                { value: 'cancel', text: 'Cancel'},
                 { value: 'delete', text: 'Delete'}
             ],
             search: ''
@@ -210,7 +221,7 @@ export default {
           this.search = decodedString
           this.scanner = false
         },
-        ...mapActions('sjpstatus', ['getSjpStatuss', 'removeSjpStatus']),
+        ...mapActions('sjpstatus', ['getSjpStatuss', 'removeSjpStatus', 'cancelSjpStatus']),
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         deleteSjpStatus(id) {
             this.$swal({
@@ -224,6 +235,22 @@ export default {
             }).then((result) => {
                 if (result.value) {
                     this.removeSjpStatus(id) //JIKA SETUJU MAKA PERMINTAAN HAPUS AKAN DI EKSEKUSI
+                }
+            })
+        },
+
+        cancel(id) {
+            this.$swal({
+                title: 'Are you sure?',
+                text: "This will cancel sending process!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if (result.value) {
+                    this.cancelSjpStatus(id) //JIKA SETUJU MAKA PERMINTAAN HAPUS AKAN DI EKSEKUSI
                 }
             })
         }

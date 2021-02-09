@@ -14,7 +14,7 @@ const state = () => ({
         transaction_id: '',
         sjp_number: '',
         status: '',
-        good_pallet: 0,
+        good_pallet: '',
         tbr_pallet: 0,
         ber_pallet: 0,
         missing_pallet: 0,
@@ -239,7 +239,28 @@ const actions = {
         })
     },
 
-    removeSjpStatus({ dispatch }, payload) {
+    canceljSpStatus({ state, commit}, payload) {
+        commit('isLoading')
+        return new Promise((resolve, reject) => {
+            //MENGIRIMKAN REQUEST KE BACKEND DENGAN DATA YANG DIDAPATKAN DARI STATE CUSTOMER
+            $axios.post(`/sjpstatus/cancel`, state.sjpstatus)
+            .then((response) => {
+                commit('CLEAR_FORM') //BERSIHKAN FORM
+                resolve(response.data)
+            })
+            .catch((error) => {
+                alert(error.response.data.message)
+                //JIKA TERJADI ERROR VALIDASI, ASSIGN ERROR TERSEBUT KE DALAM STATE ERRORS
+                if (error.response.status == 422) {
+                    commit('SET_ERRORS', error.response.data.errors, { root: true })
+                }
+            }).finally(() => {
+                commit('doneLoading')
+            })
+        })
+    },
+
+    removeSjpStatus({ dispatch, commit }, payload) {
         commit('isLoading')
         return new Promise((resolve, reject) => {
             $axios.delete(`/sjpstatus/${payload}`) //KIRIM REQUEST KE SERVER BERDASARKAN PAYLOAD (ID)

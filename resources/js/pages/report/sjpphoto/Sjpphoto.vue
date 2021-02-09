@@ -37,14 +37,13 @@
     <v-card-title>
       SJP PHOTO
       <v-spacer></v-spacer>
-                        <v-text-field
-                            v-model="search"
-                            prepend-icon="mdi-magnify"
-                            label="Search"
-                            single-line
-                            hide-details
-                        ></v-text-field>
-                        </v-card-title>
+        <v-text-field
+        v-model="search"
+        prepend-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+        ></v-text-field>
     </v-card-title>
     <v-data-table
       :headers="headers"
@@ -52,9 +51,9 @@
       :search="search"
       :loading="loading"
     >       
-    <template v-slot:item.sending_driver_approval="{ item }">
+    <template v-slot:[`item.sending_driver_approval`]="{ item }">
         <template v-if="item.sending_driver_approval != null ">
-            <img :src="'/storage/driverapproval/'+item.sending_driver_approval" :width="70" :height="100" :alt="item.sending_driver_approval"> </img>
+            <img :src="'/storage/driverapproval/'+item.sending_driver_approval" :width="70" :height="100" :alt="item.sending_driver_approval" />
             <v-btn dark color="success" text small :href="'/storage/driverapproval/' + item.sending_driver_approval" target="_blank">
                 show
             </v-btn>
@@ -63,9 +62,9 @@
             <p> No Sending Photo</p>
         </template>
     </template>
-    <template v-slot:item.receiving_driver_approval="{ item }">
+    <template v-slot:[`item.receiving_driver_approval`]="{ item }">
         <template v-if="item.receiving_driver_approval != null ">
-            <img :src="'/storage/driverapproval/'+item.receiving_driver_approval" :width="70" :height="100" :alt="item.receiving_driver_approval"> </img>
+            <img :src="'/storage/driverapproval/'+item.receiving_driver_approval" :width="70" :height="100" :alt="item.receiving_driver_approval" />
             <v-btn dark color="success" text small :href="'/storage/driverapproval/' + item.receiving_driver_approval" target="_blank">
                 show
             </v-btn>

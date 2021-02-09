@@ -45,6 +45,7 @@ import CancelSjp from './pages/sjp/Cancel.vue'
 import IndexSjpStatus from './pages/sjpstatus/Index.vue'
 import DataSjpStatus from './pages/sjpstatus/SjpStatus.vue'
 import AddSjpStatus from './pages/sjpstatus/AddSjpStatus.vue'
+import CancelSjpStatus from './pages/sjpstatus/Cancel.vue'
 import SendApprovalSjpStatus from './pages/sjpstatus/SendDriverApproval.vue'
 import ViewSjpStatus from './pages/sjpstatus/View.vue'
 import EditSjpStatus from './pages/sjpstatus/EditSjpStatus.vue'
@@ -237,6 +238,12 @@ const router = new Router({
                     name: 'sjpstatuss.edit',
                     component: EditSjpStatus,
                     meta: { title: 'Edit Sjp' }
+                },
+                {
+                    path: 'cancel/:id',
+                    name: 'sjpstatuss.cancel',
+                    component: CancelSjpStatus,
+                    meta: { title: 'Cancel Sjp Status' }
                 },
                 {
                     path: 'edit2nddist/:id',

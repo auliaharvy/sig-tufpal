@@ -135,6 +135,50 @@ public function index()
         return response()->json(['status' => 'success', 'data' => $data]);
     }
 
+    public function cancel(Request $request)
+    {
+
+        $sjp_id = $request->sjp_id;
+        $sjp_status_id = $request->sjp_status_id;
+        $sjp = DB::table('surat_jalan_pallet')->where('sjp_id',$sjp_id)->first();
+        $update = SjpStatus::find($sjp_status_id);
+        $sjpStatus = SjpStatus::where('sjp_status_id',$sjp_status_id)->first();
+        if (empty($sjpStatus)){
+            return response()->json(['error' => 'Data not found'], 404);
+        }
+        else{
+            $sjp = Sjp::find($sjp_id);
+            $sjp_number = $sjp->sjp_number;
+            DB::beginTransaction();
+            try{
+                $update = SjpStatus::find($sjp_status_id);
+                if($update->status != 0){
+                    return response()->json([
+                        'status' => 'error',
+                        'data' => 'Record Has Been Received',
+                        'message' => 'Record Has Been Received'], 422);
+                }
+                $update->status = 2;
+                $update->save();
+
+                $state = Sjp::find($sjp_id);
+                $state->state=6;
+                $state->save();
+
+                DB::commit();
+                return response()->json(['status' => 'success'], 200);
+
+            }catch (\Exception $e) {
+                DB::rollback();
+                return response()->json([
+                    'status' => 'error',
+                    'data' => $e->getMessage(),
+                    'message' => 'Error SJP Status Cancel Record'], 422);
+                }   
+        }
+        
+    }
+
 
     public function store(Request $request)
     {
@@ -682,7 +726,7 @@ public function index()
                 try{
 
                 $update = SjpStatus::find($sjp_status_id);
-                if($update->status != 0){
+                if($update->status == 1){
                     return response()->json([
                         'status' => 'error',
                         'data' => 'Record Has Been Received',
