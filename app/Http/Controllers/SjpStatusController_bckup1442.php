@@ -165,6 +165,42 @@ public function index()
                 $state->state=6;
                 $state->save();
 
+                // Membuat log All Transaction
+                $reporter = Auth::user()->name;
+                $sjp_number = $sjp->sjp_number;
+                $transporter_id = $sjp->transporter_id;
+                $transporter = Transporter::find($transporter_id);
+                $vehicle_id = $sjp->vehicle_id;
+                $vehicle = Vehicle::find($vehicle_id);
+                $driver_id = $sjp->driver_id;
+                $driver = Driver::find($driver_id);
+                $checker = Auth::user()->name;
+                $departure_id = $sjp->departure_pool_pallet_id;
+                $departure = PoolPallet::find($departure_id);
+                $destination_pool_pallet_id = $sjp->destination_pool_pallet_id;
+                $destination = PoolPallet::find($destination_pool_pallet_id);
+                $alltransaction = Alltransaction::create([
+                    'reference_sjp_id' => $update->sjp_id,
+                    'reference_sjp_status_id' => $sjpStatus->sjp_status_id,
+                    'transaction' => 'Surat Jalan Pallet Cancel',
+                    'no_do' => $sjp->no_do,
+                    'status' => 'CANCELLED',
+                    'sender/reporter' => $reporter,
+                    'departure_pool' => $departure->pool_name,
+                    'destination_pool' => $destination->pool_name,
+                    'transporter' => $transporter->transporter_name,
+                    'vehicle' => $vehicle->vehicle_number,
+                    'driver' => $driver->driver_name,
+                    'good_pallet' => $sjpStatus->good_pallet,
+                    'tbr_pallet' => $sjpStatus->tbr_pallet,
+                    'ber_pallet' => $sjpStatus->ber_pallet,
+                    'missing_pallet' => $sjpStatus->missing_pallet,
+                    'good_cement' => $sjp->product_quantity,
+                    'bad_cement' => 0,
+                    'reason' => $request->reason,
+                    'note' => $request->note,
+                ]);
+
                 DB::commit();
                 return response()->json(['status' => 'success'], 200);
 
