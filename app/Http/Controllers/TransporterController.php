@@ -138,6 +138,7 @@ class TransporterController extends Controller
             $update->transporter_name = $request->transporter_name;
             $update->transporter_code = $request->transporter_code;
             $update->transporter_id = $request->transporter_code;
+            $update->organization_id = $request->organization_id;
             $update->pallet_quota = $request->pallet_quota;
             $update->transporter_address = $request->transporter_address;
             $update->transporter_email = $request->transporter_email;
