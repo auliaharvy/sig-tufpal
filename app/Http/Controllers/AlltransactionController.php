@@ -34,6 +34,7 @@ class AlltransactionController extends Controller
         if($pool_pallet_id != null && $transporter_id == null){
             $pool_pallet = PoolPallet::find($pool_pallet_id);
             $pool_name = $pool_pallet->pool_name;
+            $type_pool_pallet = $pool_pallet->type;
         }elseif($pool_pallet_id == null && $transporter_id != null){
             $transporter = Transporter::find($transporter_id);
             $transporter_name = $transporter->transporter_name;
@@ -42,7 +43,7 @@ class AlltransactionController extends Controller
 
 
         $role = Auth::user()->role;
-        if($pool_name == 'Pool Pallet DLI'){
+        if($type_pool_pallet=="POOL_PALLET_DLI"){
             $alltransaction = DB::table('all_transaction as a')
             ->orderBy('created_at', 'DESC')
             ->leftJoin('surat_jalan_pallet as b', 'a.reference_sjp_id', '=', 'b.sjp_id')
@@ -117,6 +118,7 @@ class AlltransactionController extends Controller
         if($pool_pallet_id != null && $transporter_id == null){
             $pool_pallet = PoolPallet::find($pool_pallet_id);
             $pool_name = $pool_pallet->pool_name;
+            $type_pool_pallet = $pool_pallet->type;
         }elseif($pool_pallet_id == null && $transporter_id != null){
             $transporter = Transporter::find($transporter_id);
             $transporter_name = $transporter->transporter_name;
@@ -125,7 +127,7 @@ class AlltransactionController extends Controller
 
 
         $role = Auth::user()->role;
-        if($pool_name == 'Pool Pallet DLI'){
+        if($type_pool_pallet=="POOL_PALLET_DLI"){
             $alltransaction = DB::table('all_transaction as a')
             ->orderBy('created_at', 'DESC')
             ->leftJoin('surat_jalan_pallet as b', 'a.reference_sjp_id', '=', 'b.sjp_id')
@@ -198,6 +200,7 @@ class AlltransactionController extends Controller
         if($pool_pallet_id != null && $transporter_id == null){
             $pool_pallet = PoolPallet::find($pool_pallet_id);
             $pool_name = $pool_pallet->pool_name;
+            $type_pool_pallet  = $pool_pallet->type;
         }elseif($pool_pallet_id == null && $transporter_id != null){
             $transporter = Transporter::find($transporter_id);
             $transporter_name = $transporter->transporter_name;
@@ -206,7 +209,7 @@ class AlltransactionController extends Controller
 
 
         $role = Auth::user()->role;
-        if($pool_name == 'Pool Pallet DLI')
+        if($type_pool_pallet=="POOL_PALLET_DLI")
         {
             $alltransaction = DB::table('all_transaction as a')
             // ->orderBy('created_at', 'DESC')

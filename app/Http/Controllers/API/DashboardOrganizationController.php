@@ -48,7 +48,7 @@ class DashboardOrganizationController extends Controller
                 // ->join('pool_pallet as c', 'a.destination_pool', '=', 'c.pool_name')
                 ->where('b.organization_id', '=', $organization)
                 ->where('c.organization_id','=', $organization)
-                ->select(DB::raw('date(a.created_at) as date'),DB::raw('SUM(a.good_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as total'))
+                ->select(DB::raw('date(a.created_at) as date'),DB::raw('SUM(a.good_pallet + a.filled_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as total'))
                 ->where('a.created_at', 'LIKE', '%' . $filter . '%')
                 ->where('a.sjp_status', '=', "SEND")
                 ->groupBy(DB::raw('date(a.created_at)'))->get();
@@ -66,7 +66,7 @@ class DashboardOrganizationController extends Controller
                 // ->join('pool_pallet as c', 'a.destination_pool', '=', 'c.pool_name')
                 ->where('b.organization_id', '=', $organization)
                 ->where('c.organization_id','=', $organization)
-                ->select(DB::raw('date(a.created_at) as date'),DB::raw('SUM(a.good_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as total'))
+                ->select(DB::raw('date(a.created_at) as date'),DB::raw('SUM(a.good_pallet + a.filled_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as total'))
                 ->where('a.created_at', 'LIKE', '%' . $filter . '%')
                 ->where('a.sjp_status', '=', "RECEIVE")
                 ->groupBy(DB::raw('date(a.created_at)'))->get();
@@ -95,7 +95,7 @@ class DashboardOrganizationController extends Controller
             $transaction = DB::table('sjp_pallet_send as a')
             // Sjppalletsend::select(DB::raw('date(created_at) as date,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total, departure_pool, destination_pool'))
                 ->join('transporter as b', 'a.transporter', '=', 'b.transporter_name')
-                ->select(DB::raw('date(a.created_at) as date'),DB::raw('SUM(a.good_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as total'))
+                ->select(DB::raw('date(a.created_at) as date'),DB::raw('SUM(a.good_pallet + a.filled_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as total'))
                 ->where('a.created_at', 'LIKE', '%' . $filter . '%')
                 ->where('a.sjp_status', '=', "SEND")
                 ->where('b.organization_id', $organization)
@@ -103,7 +103,7 @@ class DashboardOrganizationController extends Controller
             $transactionreceive = DB::table('sjp_pallet_send as a')
             // Sjppalletsend::select(DB::raw('date(created_at) as date,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total, departure_pool, destination_pool'))
                 ->join('transporter as b', 'a.transporter', '=', 'b.transporter_name')
-                ->select(DB::raw('date(a.created_at) as date'),DB::raw('SUM(a.good_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as total'))
+                ->select(DB::raw('date(a.created_at) as date'),DB::raw('SUM(a.good_pallet + a.filled_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as total'))
                 ->where('a.created_at', 'LIKE', '%' . $filter . '%')
                 ->where('a.sjp_status', '=', "RECEIVE")
                 ->where('b.organization_id', $organization)
@@ -152,7 +152,7 @@ class DashboardOrganizationController extends Controller
                 // ->join('pool_pallet as c', 'a.destination_pool', '=', 'c.pool_name')
                 ->where('b.organization_id', '=', $organization)
                 ->where('c.organization_id','=', $organization)
-                ->select(DB::raw('date(a.created_at) as date'),DB::raw('SUM(a.good_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as total'))
+                ->select(DB::raw('date(a.created_at) as date'),DB::raw('SUM(a.good_pallet + a.filled_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as total'))
                 ->where('a.created_at', 'LIKE', '%' . $filter . '%')
                 ->where('a.sjp_status', '=', "SEND BACK")
                 ->groupBy(DB::raw('date(a.created_at)'))->get();
@@ -170,7 +170,7 @@ class DashboardOrganizationController extends Controller
                 // ->join('pool_pallet as c', 'a.destination_pool', '=', 'c.pool_name')
                 ->where('b.organization_id', '=', $organization)
                 ->where('c.organization_id','=', $organization)
-                ->select(DB::raw('date(a.created_at) as date'),DB::raw('SUM(a.good_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as total'))
+                ->select(DB::raw('date(a.created_at) as date'),DB::raw('SUM(a.good_pallet + a.filled_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as total'))
                 ->where('a.created_at', 'LIKE', '%' . $filter . '%')
                 ->where('a.sjp_status', '=', "RECEIVE SENDBACK")
                 ->groupBy(DB::raw('date(a.created_at)'))->get();
@@ -199,7 +199,7 @@ class DashboardOrganizationController extends Controller
             $transaction = DB::table('sjp_pallet_send as a')
             // Sjppalletsend::select(DB::raw('date(created_at) as date,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total, departure_pool, destination_pool'))
                 ->join('transporter as b', 'a.transporter', '=', 'b.transporter_name')
-                ->select(DB::raw('date(a.created_at) as date'),DB::raw('SUM(a.good_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as total'))
+                ->select(DB::raw('date(a.created_at) as date'),DB::raw('SUM(a.good_pallet + a.filled_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as total'))
                 ->where('a.created_at', 'LIKE', '%' . $filter . '%')
                 ->where('a.sjp_status', '=', "SEND BACK")
                 ->where('b.organization_id', $organization)
@@ -207,7 +207,7 @@ class DashboardOrganizationController extends Controller
             $transactionreceive = DB::table('sjp_pallet_send as a')
             // Sjppalletsend::select(DB::raw('date(created_at) as date,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total, departure_pool, destination_pool'))
                 ->join('transporter as b', 'a.transporter', '=', 'b.transporter_name')
-                ->select(DB::raw('date(a.created_at) as date'),DB::raw('SUM(a.good_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as total'))
+                ->select(DB::raw('date(a.created_at) as date'),DB::raw('SUM(a.good_pallet + a.filled_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as total'))
                 ->where('a.created_at', 'LIKE', '%' . $filter . '%')
                 ->where('a.sjp_status', '=', "RECEIVE SENDBACK")
                 ->where('b.organization_id', $organization)
@@ -238,12 +238,12 @@ class DashboardOrganizationController extends Controller
             $pool_pallet_id = $user_pool_pallet;
             $pool_pallet = PoolPallet::find($pool_pallet_id);
             $organization = $pool_pallet->organization_id;
-            $poolTotal = PoolPallet::select(DB::raw('organization_id,type,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            $poolTotal = PoolPallet::select(DB::raw('organization_id,type,sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->where('organization_id', $organization)
             ->groupBy(DB::raw('type'))
             ->get()
             ->toArray();
-            $transporterTotal = Transporter::select(DB::raw('organization_id,tag as type,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            $transporterTotal = Transporter::select(DB::raw('organization_id,tag as type,sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->where('organization_id', $organization)
             ->groupBy(DB::raw('type'))
             ->get()
@@ -254,12 +254,12 @@ class DashboardOrganizationController extends Controller
             $transporter_id = $user_transporter;
             $transporter = Transporter::find($transporter_id);
             $organization = $transporter->organization_id;
-            $poolTotal = PoolPallet::select(DB::raw('organization_id,type,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            $poolTotal = PoolPallet::select(DB::raw('organization_id,type,sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->where('organization_id', $organization)
             ->groupBy(DB::raw('type'))
             ->get()
             ->toArray();
-            $transporterTotal = Transporter::select(DB::raw('organization_id,tag as type,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            $transporterTotal = Transporter::select(DB::raw('organization_id,tag as type,sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->where('organization_id', $organization)
             ->groupBy(DB::raw('type'))
             ->get()
@@ -298,8 +298,13 @@ class DashboardOrganizationController extends Controller
             // ->groupBy(DB::raw('tag'))
             ->get()
             ->toArray();
+            $filledTotal = PoolPallet::select(DB::raw('organization_id,sum(filled_pallet) as total'))
+            ->where('organization_id', $organization)
+            // ->groupBy(DB::raw('tag'))
+            ->get()
+            ->toArray();
 
-            $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal);
+            $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal,$filledTotal);
         }
         if($user_transporter != null){
             $transporter_id = $user_transporter;
@@ -325,8 +330,13 @@ class DashboardOrganizationController extends Controller
             // ->groupBy(DB::raw('tag'))
             ->get()
             ->toArray();
+            $filledTotal = PoolPallet::select(DB::raw('organization_id,sum(filled_pallet) as total'))
+            ->where('organization_id', $organization)
+            // ->groupBy(DB::raw('tag'))
+            ->get()
+            ->toArray();
 
-            $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal);
+            $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal, $filledTotal);
         }
 
         return $total;
@@ -360,8 +370,13 @@ class DashboardOrganizationController extends Controller
             ->where('organization_id', $organization)
             ->get()
             ->toArray();
+            $filledTotal = Transporter::select(DB::raw('organization_id,sum(filled_pallet) as total'))
+            // ->groupBy(DB::raw('tag'))
+            ->where('organization_id', $organization)
+            ->get()
+            ->toArray();
 
-            $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal);
+            $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal,$filledTotal);
         }
         if($user_transporter != null){
             $transporter_id = $user_transporter;
@@ -387,8 +402,13 @@ class DashboardOrganizationController extends Controller
             ->where('organization_id', $organization)
             ->get()
             ->toArray();
+            $filledTotal = Transporter::select(DB::raw('organization_id,sum(filled_pallet) as total'))
+            // ->groupBy(DB::raw('tag'))
+            ->where('organization_id', $organization)
+            ->get()
+            ->toArray();
 
-            $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal);
+            $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal,$filledTotal);
         }
 
         return $total;
@@ -405,14 +425,14 @@ class DashboardOrganizationController extends Controller
             $poolDetail = PoolPallet::select(DB::raw('organization_id, pool_name,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->groupBy(DB::raw('pool_name'))
             ->where('organization_id', $organization)
-            ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
+            ->where(DB::raw('good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
             ->where('type', '=' , "WAREHOUSE")
             ->get()
             ->toArray();
             $palletIn = DB::table('sjp_status as a')
             ->join('surat_jalan_pallet as b', 'a.sjp_id', '=', 'b.sjp_id')
             ->join('pool_pallet as c', 'b.destination_pool_pallet_id', '=', 'c.pool_pallet_id')
-            ->select('c.pool_name', DB::raw('sum(a.good_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as pallet_in') )
+            ->select('c.pool_name', DB::raw('sum(a.good_pallet + a.filled_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as pallet_in') )
             ->groupBy('c.pool_name')
             ->where('a.transaction_id', 1)
             ->where('a.status', 0)
@@ -421,7 +441,7 @@ class DashboardOrganizationController extends Controller
             $palletOut = DB::table('sjp_status as a')
             ->join('surat_jalan_pallet as b', 'a.sjp_id', '=', 'b.sjp_id')
             ->join('pool_pallet as c', 'b.destination_pool_pallet_id', '=', 'c.pool_pallet_id')
-            ->select('c.pool_name', DB::raw('sum(a.good_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as pallet_out') )
+            ->select('c.pool_name', DB::raw('sum(a.good_pallet + a.filled_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as pallet_out') )
             ->groupBy('c.pool_name')
             ->where('a.transaction_id', 2)
             ->where('a.status', 0)
@@ -432,17 +452,17 @@ class DashboardOrganizationController extends Controller
             $transporter_id = $user_transporter;
             $transporter = Transporter::find($transporter_id);
             $organization = $transporter->organization_id;
-            $poolDetail = PoolPallet::select(DB::raw('organization_id, pool_name,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            $poolDetail = PoolPallet::select(DB::raw('organization_id, pool_name,sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->groupBy(DB::raw('pool_name'))
             ->where('organization_id', $organization)
-            ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
+            ->where(DB::raw('good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
             ->where('type', '=' , "WAREHOUSE")
             ->get()
             ->toArray();
             $palletIn = DB::table('sjp_status as a')
             ->join('surat_jalan_pallet as b', 'a.sjp_id', '=', 'b.sjp_id')
             ->join('pool_pallet as c', 'b.destination_pool_pallet_id', '=', 'c.pool_pallet_id')
-            ->select('c.pool_name', DB::raw('sum(a.good_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as pallet_in') )
+            ->select('c.pool_name', DB::raw('sum(a.good_pallet + a.filled_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as pallet_in') )
             ->groupBy('c.pool_name')
             ->where('a.transaction_id', 1)
             ->where('a.status', 0)
@@ -451,7 +471,7 @@ class DashboardOrganizationController extends Controller
             $palletOut = DB::table('sjp_status as a')
             ->join('surat_jalan_pallet as b', 'a.sjp_id', '=', 'b.sjp_id')
             ->join('pool_pallet as c', 'b.destination_pool_pallet_id', '=', 'c.pool_pallet_id')
-            ->select('c.pool_name', DB::raw('sum(a.good_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as pallet_out') )
+            ->select('c.pool_name', DB::raw('sum(a.good_pallet + a.filled_pallet + a.tbr_pallet + a.ber_pallet + a.missing_pallet) as pallet_out') )
             ->groupBy('c.pool_name')
             ->where('a.transaction_id', 2)
             ->where('a.status', 0)
@@ -472,13 +492,13 @@ class DashboardOrganizationController extends Controller
             $organization = $pool_pallet->organization_id;
             $poolDetail = PoolPallet::select(DB::raw('organization_id, pool_name'))
             ->groupBy(DB::raw('pool_name'))
-            ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
+            ->where(DB::raw('good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
             ->where('type', '=' , "WAREHOUSE")
             ->where('organization_id', $organization)
             ->get();
-            $poolStock = PoolPallet::select(DB::raw('organization_id, pool_name,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            $poolStock = PoolPallet::select(DB::raw('organization_id, pool_name,sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->groupBy(DB::raw('pool_name'))
-            ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
+            ->where(DB::raw('good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
             ->where('type', '=' , "WAREHOUSE")
             ->where('organization_id', $organization)
             ->get();
@@ -487,7 +507,7 @@ class DashboardOrganizationController extends Controller
             ->join('pool_pallet as c', 'a.destination_pool_pallet_id', '=', 'c.pool_pallet_id')
             ->where('a.state', 1)
             ->where('b.status', 0)
-            ->select('c.organization_id','a.departure_pool_pallet_id', 'c.pool_name', 'a.state as state_in', DB::raw('SUM(b.good_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_in'))
+            ->select('c.organization_id','a.departure_pool_pallet_id', 'c.pool_name', 'a.state as state_in', DB::raw('SUM(b.good_pallet + b.filled_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_in'))
             ->where('organization_id', $organization)
             ->groupBy('c.pool_name')
             ->get();
@@ -496,7 +516,7 @@ class DashboardOrganizationController extends Controller
             ->join('pool_pallet as c', 'a.destination_pool_pallet_id', '=', 'c.pool_pallet_id')
             ->where('a.state', 3)
             ->where('b.status', 0)
-            ->select('c.organization_id','a.departure_pool_pallet_id', 'c.pool_name', 'a.state as state_out' ,DB::raw('SUM(b.good_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_out'))
+            ->select('c.organization_id','a.departure_pool_pallet_id', 'c.pool_name', 'a.state as state_out' ,DB::raw('SUM(b.good_pallet + b.filled_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_out'))
             ->where('organization_id', $organization)
             ->groupBy('c.pool_name')
             ->get();
@@ -522,11 +542,11 @@ class DashboardOrganizationController extends Controller
             $organization = $transporter->organization_id;
             $poolDetail = PoolPallet::select(DB::raw('organization_id, pool_name'))
             ->groupBy(DB::raw('pool_name'))
-            ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
+            ->where(DB::raw('good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
             ->where('type', '=' , "WAREHOUSE")
             ->where('organization_id', $organization)
             ->get();
-            $poolStock = PoolPallet::select(DB::raw('organization_id, pool_name,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            $poolStock = PoolPallet::select(DB::raw('organization_id, pool_name,sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->groupBy(DB::raw('pool_name'))
             ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
             ->where('type', '=' , "WAREHOUSE")
@@ -537,7 +557,7 @@ class DashboardOrganizationController extends Controller
             ->join('pool_pallet as c', 'a.destination_pool_pallet_id', '=', 'c.pool_pallet_id')
             ->where('a.state', 1)
             ->where('b.status', 0)
-            ->select('c.organization_id','a.departure_pool_pallet_id', 'c.pool_name', 'a.state as state_in', DB::raw('SUM(b.good_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_in'))
+            ->select('c.organization_id','a.departure_pool_pallet_id', 'c.pool_name', 'a.state as state_in', DB::raw('SUM(b.good_pallet + b.filled_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_in'))
             ->where('organization_id', $organization)
             ->groupBy('c.pool_name')
             ->get();
@@ -546,7 +566,7 @@ class DashboardOrganizationController extends Controller
             ->join('pool_pallet as c', 'a.destination_pool_pallet_id', '=', 'c.pool_pallet_id')
             ->where('a.state', 3)
             ->where('b.status', 0)
-            ->select('c.organization_id','a.departure_pool_pallet_id', 'c.pool_name', 'a.state as state_out' ,DB::raw('SUM(b.good_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_out'))
+            ->select('c.organization_id','a.departure_pool_pallet_id', 'c.pool_name', 'a.state as state_out' ,DB::raw('SUM(b.good_pallet + b.filled_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_out'))
             ->where('organization_id', $organization)
             ->groupBy('c.pool_name')
             ->get();
@@ -582,7 +602,7 @@ class DashboardOrganizationController extends Controller
             ->where('organization_id', $organization)
             ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
             ->get();
-            $transporterStock = Transporter::select(DB::raw('organization_id,transporter_name,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            $transporterStock = Transporter::select(DB::raw('organization_id,transporter_name,sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->groupBy(DB::raw('transporter_name'))
             ->where('organization_id', $organization)
             ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
@@ -592,7 +612,7 @@ class DashboardOrganizationController extends Controller
             ->join('transporter as c', 'a.transporter_id', '=', 'c.transporter_id')
             ->where('a.state', 1)
             ->where('b.status', 0)
-            ->select('c.organization_id','a.transporter_id', 'c.transporter_name', 'a.state as state_in', DB::raw('SUM(b.good_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_send'))
+            ->select('c.organization_id','a.transporter_id', 'c.transporter_name', 'a.state as state_in', DB::raw('SUM(b.good_pallet + b.filled_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_send'))
             ->where('organization_id', $organization)
             ->groupBy('c.transporter_name')
             ->get();
@@ -601,7 +621,7 @@ class DashboardOrganizationController extends Controller
             ->join('transporter as c', 'a.transporter_id', '=', 'c.transporter_id')
             ->where('a.state', 3)
             ->where('b.status', 0)
-            ->select('c.organization_id', 'a.transporter_id', 'c.transporter_name', 'a.state as state_out' ,DB::raw('SUM(b.good_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_sendback'))
+            ->select('c.organization_id', 'a.transporter_id', 'c.transporter_name', 'a.state as state_out' ,DB::raw('SUM(b.good_pallet + b.filled_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_sendback'))
             ->where('organization_id', $organization)
             ->groupBy('c.transporter_name')
             ->get();
@@ -630,7 +650,7 @@ class DashboardOrganizationController extends Controller
             ->where('organization_id', $organization)
             ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
             ->get();
-            $transporterStock = Transporter::select(DB::raw('organization_id,transporter_name,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            $transporterStock = Transporter::select(DB::raw('organization_id,transporter_name,sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->groupBy(DB::raw('transporter_name'))
             ->where('organization_id', $organization)
             ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
@@ -640,7 +660,7 @@ class DashboardOrganizationController extends Controller
             ->join('transporter as c', 'a.transporter_id', '=', 'c.transporter_id')
             ->where('a.state', 1)
             ->where('b.status', 0)
-            ->select('c.organization_id','a.transporter_id', 'c.transporter_name', 'a.state as state_in', DB::raw('SUM(b.good_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_send'))
+            ->select('c.organization_id','a.transporter_id', 'c.transporter_name', 'a.state as state_in', DB::raw('SUM(b.good_pallet + b.filled_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_send'))
             ->where('organization_id', $organization)
             ->groupBy('c.transporter_name')
             ->get();
@@ -649,7 +669,7 @@ class DashboardOrganizationController extends Controller
             ->join('transporter as c', 'a.transporter_id', '=', 'c.transporter_id')
             ->where('a.state', 3)
             ->where('b.status', 0)
-            ->select('c.organization_id', 'a.transporter_id', 'c.transporter_name', 'a.state as state_out' ,DB::raw('SUM(b.good_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_sendback'))
+            ->select('c.organization_id', 'a.transporter_id', 'c.transporter_name', 'a.state as state_out' ,DB::raw('SUM(b.good_pallet + b.filled_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_sendback'))
             ->where('organization_id', $organization)
             ->groupBy('c.transporter_name')
             ->get();
@@ -680,7 +700,7 @@ class DashboardOrganizationController extends Controller
             $pool_pallet_id = $user_pool_pallet;
             $pool_pallet = PoolPallet::find($pool_pallet_id);
             $organization = $pool_pallet->organization_id;
-            $transporterDetail = Transporter::select(DB::raw('organization_id, transporter_name,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            $transporterDetail = Transporter::select(DB::raw('organization_id, transporter_name,sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->groupBy(DB::raw('transporter_name'))
             ->where('organization_id', $organization)
             ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
@@ -691,7 +711,7 @@ class DashboardOrganizationController extends Controller
             $transporter_id = $user_transporter;
             $transporter = Transporter::find($transporter_id);
             $organization = $transporter->organization_id;
-            $transporterDetail = Transporter::select(DB::raw('organization_id, transporter_name,sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            $transporterDetail = Transporter::select(DB::raw('organization_id, transporter_name,sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->groupBy(DB::raw('transporter_name'))
             ->where('organization_id', $organization)
             ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
@@ -710,12 +730,12 @@ class DashboardOrganizationController extends Controller
             $pool_pallet_id = $user_pool_pallet;
             $pool_pallet = PoolPallet::find($pool_pallet_id);
             $organization = $pool_pallet->organization_id;
-            $poolTotal = PoolPallet::select(DB::raw('organization_id, type, sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            $poolTotal = PoolPallet::select(DB::raw('organization_id, type, sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->groupBy(DB::raw('type'))
             ->where('organization_id', $organization)
             ->get()
             ->toArray();
-            $transporterTotal = Transporter::select(DB::raw('organization_id, tag as type, sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            $transporterTotal = Transporter::select(DB::raw('organization_id, tag as type, sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->groupBy(DB::raw('type'))
             ->where('organization_id', $organization)
             ->get()
@@ -732,12 +752,12 @@ class DashboardOrganizationController extends Controller
             $transporter_id = $user_transporter;
             $transporter = Transporter::find($transporter_id);
             $organization = $transporter->organization_id;
-            $poolTotal = PoolPallet::select(DB::raw('organization_id, type, sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            $poolTotal = PoolPallet::select(DB::raw('organization_id, type, sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->groupBy(DB::raw('type'))
             ->where('organization_id', $organization)
             ->get()
             ->toArray();
-            $transporterTotal = Transporter::select(DB::raw('organization_id, tag as type, sum(good_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+            $transporterTotal = Transporter::select(DB::raw('organization_id, tag as type, sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
             ->groupBy(DB::raw('type'))
             ->where('organization_id', $organization)
             ->get()
@@ -783,8 +803,13 @@ class DashboardOrganizationController extends Controller
                 ->where('pool_name', '=', "$poolName")
                 ->get()
                 ->toArray();        
+                $filledTotal = PoolPallet::select(DB::raw('organization_id, sum(filled_pallet) as total'))
+                ->where('organization_id', $organization)
+                ->where('pool_name', '=', "$poolName")
+                ->get()
+                ->toArray();  
 
-                $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal);
+                $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal, $filledTotal);
         }
         if($user_transporter != null){
             $transporter_id = $user_transporter;
@@ -810,9 +835,14 @@ class DashboardOrganizationController extends Controller
                 ->where('organization_id', $organization)
                 ->where('pool_name', '=', "$poolName")
                 ->get()
-                ->toArray();        
+                ->toArray();
+                $filledTotal = PoolPallet::select(DB::raw('organization_id, sum(filled_pallet) as total'))
+                ->where('organization_id', $organization)
+                ->where('pool_name', '=', "$poolName")
+                ->get()
+                ->toArray();      
 
-                $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal);
+                $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal,$filledTotal);
         }
 
         return $total;
@@ -847,8 +877,13 @@ class DashboardOrganizationController extends Controller
                 ->where('transporter_name', '=', "$transporterName")
                 ->get()
                 ->toArray();        
+                $filledTotal = Transporter::select(DB::raw('organization_id, sum(filled_pallet) as total'))
+                ->where('organization_id', $organization)
+                ->where('transporter_name', '=', "$transporterName")
+                ->get()
+                ->toArray(); 
 
-                $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal);
+                $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal, $filledTotal);
         }
         if($user_transporter != null){
             $transporter_id = $user_transporter;
@@ -874,9 +909,14 @@ class DashboardOrganizationController extends Controller
                 ->where('organization_id', $organization)
                 ->where('transporter_name', '=', "$transporterName")
                 ->get()
-                ->toArray();        
+                ->toArray();     
+                $filledTotal = Transporter::select(DB::raw('organization_id, sum(filled_pallet) as total'))
+                ->where('organization_id', $organization)
+                ->where('transporter_name', '=', "$transporterName")
+                ->get()
+                ->toArray();    
 
-                $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal);
+                $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal,$filledTotal);
         }
 
         return $total;

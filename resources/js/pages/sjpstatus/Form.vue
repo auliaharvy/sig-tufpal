@@ -50,10 +50,10 @@
 
         <v-layout row wrap class="px-5">
             <v-flex class="px-5" xs12 md6 lg6>
-                <div class="form-group" :class="{ 'has-error': errors.good_pallet }" :readonly="true">
-                    <label for="">Pallet Quantity / Good Pallet</label>
-                    <input type="text" class="form-control" v-model="sjpstatus.good_pallet" :readonly="true">
-                    <p class="text-danger" v-if="errors.good_pallet">{{ errors.good_pallet[0] }}</p>
+                <div class="form-group" :class="{ 'has-error': errors.filled_pallet }" :readonly="true">
+                    <label for="">Pallet Quantity / Filled Pallet</label>
+                    <input type="text" class="form-control" v-model="sjpstatus.filled_pallet" :readonly="true">
+                    <p class="text-danger" v-if="errors.filled_pallet">{{ errors.filled_pallet[0] }}</p>
                 </div>
             </v-flex>
             <!-- <v-flex class="px-5" xs12 md6 lg6>
@@ -106,7 +106,7 @@ export default {
                 this.sjpstatus.sjp_id =  row.sjp_id
                 this.editSjp(row.sjp_id).then((res) => {
                     let row = res.data
-                    this.sjpstatus.good_pallet =  row.pallet_quantity
+                    this.sjpstatus.filled_pallet =  row.pallet_quantity
                 })
             }),
         this.getSjp(),
@@ -119,10 +119,11 @@ export default {
             sjpstatus: {
                 sjp_status_id: '',
                 sjp_id: '',
-                good_pallet: '',
-                tbr_pallet: '',
-                ber_pallet: '',
-                missing_pallet: '',
+                good_pallet: 0,
+                filled_pallet: '',
+                tbr_pallet: 0,
+                ber_pallet: 0,
+                missing_pallet: 0,
                 note: '',
                 sending_driver_approval: '',
                 receiving_driver_approval: '',
@@ -155,7 +156,7 @@ export default {
                 var data = this.sjpstatus
                 var checkContent = 
                 "<div><strong><span>" + 
-                "| Send Back Good Pallet : <b> " + data.good_pallet + " </b> | </p>" + 
+                "| Send Back Good Pallet : <b> " + data.good_pallet + " </b> | </p>" +
                 "| Send Back TBR Pallet : <b> " + data.tbr_pallet + " </b> | </p>" +
                 "| Send Back BER Pallet : <b> " + data.ber_pallet + " </b> | </p>" +
                 "| Send Back Missing Pallet : <b> " + data.missing_pallet + " </b> | </p>" +
@@ -242,6 +243,7 @@ export default {
             let form = new FormData()
             form.append('sjp_id', this.sjpstatus.sjp_id)
             form.append('good_pallet', this.sjpstatus.good_pallet)
+            form.append('filled_pallet', this.sjpstatus.filled_pallet)
             form.append('sjp_status_id', this.sjpstatus.sjp_status_id)
             form.append('sending_driver_approval', this.sjpstatus.sending_driver_approval)
             form.append('note', this.sjpstatus.note)
@@ -249,6 +251,7 @@ export default {
                     this.sjpstatus = {
                         sjp_id: '',
                         good_pallet: '',
+                        filled_pallet: '',
                         sjp_status_id: '',
                         sending_driver_approval: '',
                         note: '',

@@ -5,7 +5,7 @@
                     <div class="panel">
                         <div class="row">
                                 <v-layout row wrap class="px-5">
-                                    <div v-if="authenticated.reference_pool_pallet_id == 'pooldli' ">
+                                    <div>
                                     <v-btn  class="ma-5" @click.prevent="exportData()">
                                         Download Today Transaction
                                     </v-btn>
@@ -593,7 +593,7 @@
                 });
             },
             labelspallet() {
-                let label = ['Good Pallet','TBR Pallet','BER Pallet','Missing Pallet' ]
+                let label = ['Good Pallet','TBR Pallet','BER Pallet','Missing Pallet', 'Filled Pallet' ]
                 return label
             },
             tonnase_out_data() {

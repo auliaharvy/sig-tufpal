@@ -78,7 +78,7 @@ export default {
         this.editSjpStatus(this.$route.params.id).then((res) => {
                 let row = res.data    
                 this.sjpstatus.sjp_id =  row.sjp_id
-                this.sjpstatus.good_pallet = row.good_pallet
+                this.sjpstatus.good_pallet = row.filled_pallet
                 this.sjpstatus.tbr_pallet = row.tbr_pallet
                 this.sjpstatus.ber_pallet = row.ber_pallet
                 this.sjpstatus.missing_pallet = row.missing_pallet

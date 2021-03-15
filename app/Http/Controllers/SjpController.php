@@ -25,10 +25,13 @@ class SjpController extends Controller
 		//  return $sjp;
         // return response()->json(Sjp::all()->toArray());
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
+        $user_pool_pallet = PoolPallet::find($pool_pallet);
+        $type_pool_pallet = $user_pool_pallet->type;
         $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
+        
         $status = 'OPEN';
-        if($pool_pallet=="pooldli" && $role<6){
+        if($type_pool_pallet=="POOL_PALLET_DLI" && $role<6){
             $sjp = DB::table('surat_jalan_pallet as a')
             ->orderBy('created_at', 'DESC')
             ->join('pool_pallet as b', 'a.destination_pool_pallet_id', '=', 'b.pool_pallet_id')
@@ -96,10 +99,13 @@ class SjpController extends Controller
         $pool_type = $pallet->type;
         $organization_id = $pallet->organization_id;
 
-        if($pool_pallet=='pooldli'){ //jika pengiriman dari pool pallet DLI (Main Distribution)
+        $destination_pool_pallet = PoolPallet::find($request->destination_pool_pallet_id);
+        $destination_pool_type = $destination_pool_pallet->type;
+
+        if($pool_type=='POOL_PALLET_DLI'){ //jika pengiriman dari pool pallet DLI (Main Distribution)
             $distribution = 0;
         }
-        else if($pool_type == 'WAREHOUSE' && $pool_pallet != 'pooldli'){ //pengiriman bukan dari pool pallet DLI (Secondary Distribution)
+        else if($destination_pool_type == 'SHOP'){ //pengiriman bukan dari pool pallet DLI (Secondary Distribution)
             $distribution = 1;
         }
         else if($pool_pallet == $stationnambo ){ //pengiriman dari Station Nambo (Second Distribution Station)
@@ -139,7 +145,7 @@ class SjpController extends Controller
                 $checked_pool_pallet_id = DB::table('pool_pallet')
                     ->where('pool_pallet_id', '=', $request->destination_pool_pallet_id)
                     ->first();
-                if($checked_pool_pallet_id == null && $pool_pallet == 'pooldli'){
+                if($checked_pool_pallet_id == null && $pool_type == 'POOL_PALLET_DLI'){
                     $new_pool_pallet = PoolPallet::create([
                         'pool_pallet_id' => $request->destination_pool_pallet_id,
                         'organization_id' => 1,
@@ -172,7 +178,7 @@ class SjpController extends Controller
                         'pallet_quota' => 100,
                         'created_by' => 'Autocreate in SJP No.Dispatch:'.$request->no_do,
                     ]);
-                }elseif($checked_pool_pallet_id == null && $pool_pallet != 'pooldli'){
+                }elseif($checked_pool_pallet_id == null && $pool_type != 'POOL_PALLET_DLI'){
                     $new_pool_pallet = PoolPallet::create([
                         'pool_pallet_id' => $request->destination_pool_pallet_id,
                         'organization_id' => 1,

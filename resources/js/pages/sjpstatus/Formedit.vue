@@ -51,16 +51,16 @@
 
         <v-layout row wrap class="px-5">
             <v-flex class="px-5" xs6 md3 lg3>
-                <div class="form-group" :class="{ 'has-error': errors.good_pallet }">
-                    <label for="">Good Pallet</label>
-                    <input type="text" class="form-control" v-model="sjpstatus.good_pallet" :readonly="true">
-                    <p class="text-danger" v-if="errors.good_pallet">{{ errors.good_pallet[0] }}</p>
+                <div class="form-group" :class="{ 'has-error': errors.filled_pallet }">
+                    <label for="">Filled Pallet</label>
+                    <input type="text" class="form-control" v-model="sjpstatus.filled_pallet" :readonly="true">
+                    <p class="text-danger" v-if="errors.filled_pallet">{{ errors.filled_pallet[0] }}</p>
                 </div>
             </v-flex>
             <v-flex class="px-5" xs6 md3 lg3>
                 <div class="form-group" :class="{ 'has-error': errors.tbr_pallet }">
                     <label for="">TBR Pallet</label>
-                    <input type="text" class="form-control" v-model="sjpstatus.tbr_pallet" >
+                    <input type="text" class="form-control" v-model="sjpstatus.tbr_pallet" :readonly="true" >
                     <p class="text-danger" v-if="errors.tbr_pallet">{{ errors.tbr_pallet[0] }}</p>
                 </div>
             </v-flex>
@@ -127,6 +127,7 @@ export default {
                 this.sjpstatus.sjp_id =  row.sjp_id
                 this.sjpstatus.sjp_status_id = row.sjp_status_id
                 this.sjpstatus.good_pallet = row.good_pallet
+                this.sjpstatus.filled_pallet = row.filled_pallet
                 this.sjpstatus.tbr_pallet = row.tbr_pallet
                 this.sjpstatus.ber_pallet = row.ber_pallet
                 this.sjpstatus.missing_pallet = row.missing_pallet
@@ -136,6 +137,7 @@ export default {
                 this.sendSjpStatus.sjp_id =  row.sjp_id
                 this.sendSjpStatus.sjp_status_id = row.sjp_status_id
                 this.sendSjpStatus.good_pallet = row.good_pallet
+                this.sendSjpStatus.filled_pallet = row.filled_pallet
                 this.sendSjpStatus.tbr_pallet = row.tbr_pallet
                 this.sendSjpStatus.ber_pallet = row.ber_pallet
                 this.sendSjpStatus.missing_pallet = row.missing_pallet
@@ -153,6 +155,7 @@ export default {
                 sjp_status_id: '',
                 sjp_id: '',
                 good_pallet: '',
+                filled_pallet: '',
                 tbr_pallet: '',
                 ber_pallet: '',
                 missing_pallet: '',
@@ -165,6 +168,7 @@ export default {
                 sjp_status_id: '',
                 sjp_id: '',
                 good_pallet: '',
+                filled_pallet: '',
                 tbr_pallet: '',
                 ber_pallet: '',
                 missing_pallet: '',
@@ -177,6 +181,7 @@ export default {
                 sjp_status_id: '',
                 sjp_id: '',
                 good_pallet: '',
+                filled_pallet: '',
                 tbr_pallet: '',
                 ber_pallet: '',
                 missing_pallet: '',
@@ -228,7 +233,7 @@ export default {
                 var data = this.sjpstatus
                 var checkContent = 
                 "<div><strong><span>Did you want Sendback?" + 
-                "<p> Good Pallet : <b>" + 16 +
+                "<p> Good Pallet : <b>" + this.sendSjpStatus.filled_pallet +
                 "<p> TBR Pallet : <b> " + 0 +
                 "<p> BER Pallet : <b> " + 0 +
                 "<p> Missing Pallet : <b> " + 0 +
@@ -246,7 +251,7 @@ export default {
                     cancelButtonText: 'No!'
                 }).then((result) => {
                     if (result.value) {
-                        this.autoSendback() //JIKA SETUJU MAKA PERMINTAAN HAPUS AKAN DI EKSEKUSI
+                        this.autoSendback() //JIKA SETUJU MAKA PERMINTAAN SENDBACK AKAN DI EKSEKUSI
                     }else{
                         this.$router.push({ name: 'sjpstatuss.sendback', params: {id: this.sjpstatus.sjp_status_id} })
                     }
@@ -257,7 +262,8 @@ export default {
             let form = new FormData()
             form.append('sjp_id', this.sjpstatus.sjp_id)
             form.append('sjp_status_id', this.sjpstatus.sjp_status_id)
-            form.append('good_pallet', this.sendSjpStatus.good_pallet)
+            form.append('good_pallet', this.sendSjpStatus.filled_pallet)
+            form.append('filled_pallet', this.sendSjpStatus.good_pallet)
             form.append('tbr_pallet', this.sendSjpStatus.tbr_pallet)
             form.append('ber_pallet', this.sendSjpStatus.ber_pallet)
             form.append('missing_pallet', this.sendSjpStatus.missing_pallet)
@@ -275,6 +281,7 @@ export default {
                 var checkContent = 
                 "<div><strong><span>" + 
                 "<p> | Send Good Pallet : <b>" + sendData.good_pallet + " </b> | Receive Good Pallet : <b> " + data.good_pallet + " </b> | </p>" + 
+                "<p> | Send Filled Pallet : <b>" + sendData.filled_pallet + " </b> | Receive Filled Pallet : <b> " + data.filled_pallet + " </b> | </p>" + 
                 "<p> | Send TBR Pallet : <b> " + sendData.tbr_pallet  + " </b> | Receive TBR Pallet : <b> " + data.tbr_pallet + " </b> | </p>" +
                 "<p> | Send BER Pallet : <b> " + sendData.ber_pallet  + " </b> | Receive BER Pallet : <b> " + data.ber_pallet + " </b> | </p>" +
                 "<p> | Send Missing Pallet : <b> " + sendData.missing_pallet  + " </b> | Receive Missing Pallet : <b> " + data.missing_pallet + " </b> | </p>" +
@@ -304,6 +311,7 @@ export default {
             form.append('sjp_id', this.sjpstatus.sjp_id)
             form.append('sjp_status_id', this.sjpstatus.sjp_status_id)
             form.append('good_pallet', this.sjpstatus.good_pallet)
+            form.append('filled_pallet', this.sjpstatus.filled_pallet)
             form.append('tbr_pallet', this.sjpstatus.tbr_pallet)
             form.append('ber_pallet', this.sjpstatus.ber_pallet)
             form.append('missing_pallet', this.sjpstatus.missing_pallet)

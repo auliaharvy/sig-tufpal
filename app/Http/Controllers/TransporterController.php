@@ -7,6 +7,7 @@ use App\Http\Resources\SjpStatusCollection;
 use Illuminate\Support\Facades\Auth;
 use App\Transporter;
 use App\SjpStatus;
+use App\PoolPallet;
 use App\Sjp;
 use DB;
 
@@ -17,7 +18,9 @@ class TransporterController extends Controller
         $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
-        if($pool_pallet=='pooldli' && $role < 5){
+        $user_pool_pallet = PoolPallet::find($pool_pallet);
+        $type_pool_pallet = $user_pool_pallet->type;
+        if($type_pool_pallet=="POOL_PALLET_DLI" && $role < 5){
         $transporter = DB::table('transporter as a')
             ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
             ->select('a.*', 'b.organization_name')

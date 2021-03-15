@@ -69,6 +69,7 @@
                  <div class="form-group">
                     <label>Pool Type</label>
                     <select class='form-control' v-model='pool.type'>
+                        <option value='POOL_PALLET_DLI' >Pool Pallet</option>
                         <option value='WAREHOUSE' >Warehouse</option>
                         <option value='SHOP' >Shop</option>
                         <option value='STATION' >Station</option>

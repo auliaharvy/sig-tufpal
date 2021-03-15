@@ -30,9 +30,11 @@ class SjpStatusController extends Controller
 public function index()
     {
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
+        $user_pool_pallet = PoolPallet::find($pool_pallet);
+        $type_pool_pallet = $user_pool_pallet->type;
         $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
-        if($pool_pallet=='pooldli' && $role<5){
+        if($type_pool_pallet=="POOL_PALLET_DLI" && $role<5){
         $sjpstatus = DB::table('sjp_status as a')
         ->join(DB::raw('(SELECT * FROM surat_jalan_pallet WHERE STATUS = "OPEN")d'),
             function($join){
@@ -229,6 +231,7 @@ public function index()
         $pallet = PoolPallet::find($pool_pallet);
         $sjp_number = $sjp->sjp_number;
         $qty_pool = $pallet->good_pallet;
+        $type_pool_pallet = $pallet->type;
         $departure_id = $sjp->departure_pool_pallet_id;
         $transporter_id = $sjp->transporter_id;
         $driver_id = $sjp->driver_id;
@@ -270,7 +273,8 @@ public function index()
                 'checker_send_user_id' => $checker,
                 'checker_receive_user_id' => 5,
                 'sjp_id' => $request->sjp_id,
-                'good_pallet' => $pallet_qty,
+                'good_pallet' => 0,
+                'filled_pallet' => $pallet_qty,
                 'tbr_pallet' => 0,
                 'ber_pallet' => 0,
                 'missing_pallet' => 0,
@@ -324,7 +328,8 @@ public function index()
                     'transporter' => $palletsendtrans->transporter_name,
                     'driver' => $palletsenddriver->driver_name,
                     'vehicle' => $palletsendvehicle->vehicle_number,
-                    'good_pallet' => $pallet_qty,
+                    'good_pallet' => 0,
+                    'filled_pallet' => $pallet_qty,
                     'note' => $request->note,
                     'tbr_pallet' => 0,
                     'ber_pallet' => 0,
@@ -354,7 +359,8 @@ public function index()
                     'transporter' => $palletsendtrans->transporter_name,
                     'driver' => $palletsenddriver->driver_name,
                     'vehicle' => $palletsendvehicle->vehicle_number,
-                    'good_pallet' => $pallet_qty,
+                    'good_pallet' => 0,
+                    'filled_pallet' => $pallet_qty,
                     'note' => $request->note,
                     'tbr_pallet' => 0,
                     'ber_pallet' => 0,
@@ -375,7 +381,8 @@ public function index()
 
                 $transporter_id = $sjp->transporter_id;
                 $InventoryTrans = Transporter::find($transporter_id);
-                $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)+($pallet_qty));
+                $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)+($good_pallet));
+                $InventoryTrans->filled_pallet = (($InventoryTrans->filled_pallet)+($pallet_qty));
                 $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)+($request->tbr_pallet));
                 $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet)); //anggeplah 0
                 $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet)); //anggeplah 0

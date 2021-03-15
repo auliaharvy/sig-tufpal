@@ -30,9 +30,11 @@ class SjpStatusController extends Controller
 public function index()
     {
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
+        $user_pool_pallet = PoolPallet::find($pool_pallet);
+        $type_pool_pallet = $user_pool_pallet->type;
         $transporter = Auth::user()->reference_transporter_id;
         $role = Auth::user()->role;
-        if($pool_pallet=='pooldli' && $role<5){
+        if($type_pool_pallet=="POOL_PALLET_DLI" && $role<5){
         $sjpstatus = DB::table('sjp_status as a')
         ->join(DB::raw('(SELECT * FROM surat_jalan_pallet WHERE STATUS = "OPEN")d'),
             function($join){
@@ -192,6 +194,7 @@ public function index()
                     'vehicle' => $vehicle->vehicle_number,
                     'driver' => $driver->driver_name,
                     'good_pallet' => $sjpStatus->good_pallet,
+                    'filled_pallet' => $sjpStatus->filled_pallet,
                     'tbr_pallet' => $sjpStatus->tbr_pallet,
                     'ber_pallet' => $sjpStatus->ber_pallet,
                     'missing_pallet' => $sjpStatus->missing_pallet,
@@ -229,6 +232,7 @@ public function index()
         $pallet = PoolPallet::find($pool_pallet);
         $sjp_number = $sjp->sjp_number;
         $qty_pool = $pallet->good_pallet;
+        $type_pool_pallet = $pallet->type;
         $departure_id = $sjp->departure_pool_pallet_id;
         $transporter_id = $sjp->transporter_id;
         $driver_id = $sjp->driver_id;
@@ -241,7 +245,7 @@ public function index()
         $checker = Auth::user()->id;
 
         $this->validate($request, [
-            'good_pallet' => 'required|integer|gt:-1|lte:'.$qty_pool,
+            'filled_pallet' => 'required|integer|gt:-1|lte:'.$qty_pool,
             // 'sending_driver_approval' => 'required',
         ]);
         if($qty_pool<$request->good_pallet)
@@ -270,7 +274,8 @@ public function index()
                 'checker_send_user_id' => $checker,
                 'checker_receive_user_id' => 5,
                 'sjp_id' => $request->sjp_id,
-                'good_pallet' => $pallet_qty,
+                'good_pallet' => 0,
+                'filled_pallet' => $pallet_qty,
                 'tbr_pallet' => 0,
                 'ber_pallet' => 0,
                 'missing_pallet' => 0,
@@ -324,7 +329,8 @@ public function index()
                     'transporter' => $palletsendtrans->transporter_name,
                     'driver' => $palletsenddriver->driver_name,
                     'vehicle' => $palletsendvehicle->vehicle_number,
-                    'good_pallet' => $pallet_qty,
+                    'good_pallet' => 0,
+                    'filled_pallet' => $pallet_qty,
                     'note' => $request->note,
                     'tbr_pallet' => 0,
                     'ber_pallet' => 0,
@@ -354,7 +360,8 @@ public function index()
                     'transporter' => $palletsendtrans->transporter_name,
                     'driver' => $palletsenddriver->driver_name,
                     'vehicle' => $palletsendvehicle->vehicle_number,
-                    'good_pallet' => $pallet_qty,
+                    'good_pallet' => 0,
+                    'filled_pallet' => $pallet_qty,
                     'note' => $request->note,
                     'tbr_pallet' => 0,
                     'ber_pallet' => 0,
@@ -365,17 +372,32 @@ public function index()
                     'note' => $request->note
                 ]);
 
-                $departure_id = $sjp->departure_pool_pallet_id;
-                $InventoryDept = PoolPallet::find($departure_id);
-                $InventoryDept->good_pallet = (($InventoryDept->good_pallet)-($pallet_qty));
-                $InventoryDept->tbr_pallet = (($InventoryDept->tbr_pallet)-($request->tbr_pallet));
-                $InventoryDept->ber_pallet = (($InventoryDept->ber_pallet)-($request->ber_pallet));
-                $InventoryDept->missing_pallet = (($InventoryDept->missing_pallet)-($request->missing_pallet));
-                $InventoryDept->save();
+                if($sjp->distribution == 1){
+                    $departure_id = $sjp->departure_pool_pallet_id;
+                    $InventoryDept = PoolPallet::find($departure_id);
+                    $InventoryDept->filled_pallet = (($InventoryDept->filled_pallet)-($pallet_qty));
+                    $InventoryDept->tbr_pallet = (($InventoryDept->tbr_pallet)-($request->tbr_pallet));
+                    $InventoryDept->ber_pallet = (($InventoryDept->ber_pallet)-($request->ber_pallet));
+                    $InventoryDept->missing_pallet = (($InventoryDept->missing_pallet)-($request->missing_pallet));
+                    $InventoryDept->save();
+                }
+
+                if($sjp->distribution == 0){
+                    $departure_id = $sjp->departure_pool_pallet_id;
+                    $InventoryDept = PoolPallet::find($departure_id);
+                    $InventoryDept->good_pallet = (($InventoryDept->good_pallet)-($pallet_qty));
+                    $InventoryDept->tbr_pallet = (($InventoryDept->tbr_pallet)-($request->tbr_pallet));
+                    $InventoryDept->ber_pallet = (($InventoryDept->ber_pallet)-($request->ber_pallet));
+                    $InventoryDept->missing_pallet = (($InventoryDept->missing_pallet)-($request->missing_pallet));
+                    $InventoryDept->save();
+                }
+
+                
 
                 $transporter_id = $sjp->transporter_id;
                 $InventoryTrans = Transporter::find($transporter_id);
-                $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)+($pallet_qty));
+                $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)+($request->good_pallet));
+                $InventoryTrans->filled_pallet = (($InventoryTrans->filled_pallet)+($pallet_qty));
                 $InventoryTrans->tbr_pallet = (($InventoryTrans->tbr_pallet)+($request->tbr_pallet));
                 $InventoryTrans->ber_pallet = (($InventoryTrans->ber_pallet)+($request->ber_pallet)); //anggeplah 0
                 $InventoryTrans->missing_pallet = (($InventoryTrans->missing_pallet)+($request->missing_pallet)); //anggeplah 0
@@ -408,18 +430,32 @@ public function index()
         $sendback = $sjp->is_sendback;
         $departure = PoolPallet::find($departure_id);
         $good_pallet = $departure->good_pallet;
+        $filled_pallet = $departure->filled_pallet;
         $tbr_pallet = $departure->tbr_pallet;
         $ber_pallet = $departure->ber_pallet;
         $missing_pallet = $departure->missing_pallet;
         $total = $good_pallet+$tbr_pallet+$ber_pallet+$missing_pallet;
 
-        $this->validate($request, [
-            'good_pallet' => 'required|integer|gt:-1|lte:'.$good_pallet,
-            'tbr_pallet' => 'required|integer|gt:-1|lte:'.$tbr_pallet,
-            'ber_pallet' => 'required|integer|gt:-1|lte:'.$ber_pallet,
-            'missing_pallet' => 'required|integer|gt:-1|lte:'.$missing_pallet,
-            // 'sending_driver_approval' => 'required | image',
-        ]);
+        if ($distribution == 0){
+            $this->validate($request, [
+                'good_pallet' => 'required|integer|gt:-1|lte:'.$good_pallet,
+                'tbr_pallet' => 'required|integer|gt:-1|lte:'.$tbr_pallet,
+                'ber_pallet' => 'required|integer|gt:-1|lte:'.$ber_pallet,
+                'missing_pallet' => 'required|integer|gt:-1|lte:'.$missing_pallet,
+                // 'sending_driver_approval' => 'required | image',
+            ]);
+        }
+
+        if ($distribution == 1){
+            $this->validate($request, [
+                'good_pallet' => 'required|integer|gt:-1|lte:'.$filled_pallet,
+                'tbr_pallet' => 'required|integer|gt:-1|lte:'.$tbr_pallet,
+                'ber_pallet' => 'required|integer|gt:-1|lte:'.$ber_pallet,
+                'missing_pallet' => 'required|integer|gt:-1|lte:'.$missing_pallet,
+                // 'sending_driver_approval' => 'required | image',
+            ]);
+        }
+        
 
             if ($distribution == 1){
                 $departure_id = $sjp->destination_pool_pallet_id;
@@ -533,12 +569,23 @@ public function index()
                 'note' => $request->note,
             ]);
 
-            $InventoryDept = PoolPallet::find($departure_id);
-            $InventoryDept->good_pallet = (($InventoryDept->good_pallet)-($request->good_pallet));
-            $InventoryDept->tbr_pallet = (($InventoryDept->tbr_pallet)-($request->tbr_pallet));
-            $InventoryDept->ber_pallet = (($InventoryDept->ber_pallet)-($request->ber_pallet));
-            $InventoryDept->missing_pallet = (($InventoryDept->missing_pallet)-($request->missing_pallet));
-            $InventoryDept->save();
+            if($sjp->distribution == 1){
+                $InventoryDept = PoolPallet::find($departure_id);
+                $InventoryDept->filled_pallet = (($InventoryDept->filled_pallet)-($request->good_pallet));
+                $InventoryDept->tbr_pallet = (($InventoryDept->tbr_pallet)-($request->tbr_pallet));
+                $InventoryDept->ber_pallet = (($InventoryDept->ber_pallet)-($request->ber_pallet));
+                $InventoryDept->missing_pallet = (($InventoryDept->missing_pallet)-($request->missing_pallet));
+                $InventoryDept->save();
+            }
+
+            if($sjp->distribution == 0){
+                $InventoryDept = PoolPallet::find($departure_id);
+                $InventoryDept->good_pallet = (($InventoryDept->good_pallet)-($request->good_pallet));
+                $InventoryDept->tbr_pallet = (($InventoryDept->tbr_pallet)-($request->tbr_pallet));
+                $InventoryDept->ber_pallet = (($InventoryDept->ber_pallet)-($request->ber_pallet));
+                $InventoryDept->missing_pallet = (($InventoryDept->missing_pallet)-($request->missing_pallet));
+                $InventoryDept->save();
+            }
 
             $InventoryTrans = Transporter::find($transporter_id);
             $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)+($request->good_pallet));
@@ -573,9 +620,10 @@ public function index()
         $good_cement = $sjp->product_quantity;
         $update = SjpStatus::find($sjp_status_id);
         $good_pallet = $update->good_pallet;
+        $filled_pallet = $update->filled_pallet;
 
         $this->validate($request, [
-            'good_pallet' => 'required|integer|gt:-1|lte:'.$pallet_qty,
+            'filled_pallet' => 'required|integer|gt:-1|lte:'.$pallet_qty,
             'tbr_pallet' => 'required|integer|gt:-1'.$pallet_qty,
             'good_cement' => 'required|integer|gt:-1|lte:'.$good_cement,
             'bad_cement' => 'required|integer|gt:-1|lte:'.$good_cement,
@@ -586,9 +634,9 @@ public function index()
             return response()->json(['error' => 'Data not found'], 404);
         }
         else{
-            $goodpalletrcv = $request->good_pallet;
+            $filled_palletrcv = $request->filled_pallet;
             $tbr_palletrcv = $request->tbr_pallet;
-            if($tbr_palletrcv>($good_pallet-$goodpalletrcv)){
+            if($tbr_palletrcv>($filled_pallet-$filled_palletrcv)){
                 return response()->json([
                     'status' => 'error',
                     'data' => 'the number of pallets received exceeds the sent pallet',
@@ -611,10 +659,12 @@ public function index()
                             'message' => 'Record Has Been Received'], 422);
                     }
                     $good_pallet_awal = $update->good_pallet;
+                    $filled_pallet_awal = $update->filled_pallet;
                     $good_cement_awal = $update->good_cement;
                     $receive = Auth::user()->id;
                     $update->checker_receive_user_id = $receive;
                     $update->good_pallet = $request->good_pallet;
+                    $update->filled_pallet = $request->filled_pallet;
                     $update->tbr_pallet = $request->tbr_pallet;
                     $update->good_cement = $request->good_cement;
                     $update->bad_cement = $request->bad_cement;
@@ -626,12 +676,14 @@ public function index()
                     $update->save();
 
                     $InventoryDest = PoolPallet::find($destination_id);
-                    $InventoryDest->good_pallet = (($InventoryDest->good_pallet)+($request->good_pallet));
+                    // $InventoryDest->good_pallet = (($InventoryDest->good_pallet)+($request->good_pallet));
+                    $InventoryDest->filled_pallet = (($InventoryDest->filled_pallet)+($request->filled_pallet));
                     $InventoryDest->tbr_pallet = (($InventoryDest->tbr_pallet)+($request->tbr_pallet));
                     $InventoryDest->save();
 
                     $InventoryTrans = Transporter::find($transporter_id);
-                    $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($request->good_pallet+$request->tbr_pallet));
+                    // $InventoryTrans->good_pallet = (($InventoryTrans->good_pallet)-($request->good_pallet+$request->tbr_pallet));
+                    $InventoryTrans->filled_pallet = (($InventoryTrans->filled_pallet)-($request->filled_pallet+$request->tbr_pallet));
                     $InventoryTrans->save();
 
                     //membuat log approval
@@ -665,6 +717,7 @@ public function index()
                         'driver' => $palletsenddriver->driver_name,
                         'vehicle' => $palletsendvehicle->vehicle_number,
                         'good_pallet' => $request->good_pallet,
+                        'filled_pallet' => $request->filled_pallet,
                         'note' => $request->note,
                         'tbr_pallet' => $request->tbr_pallet,
                         'ber_pallet' => 0,
@@ -695,6 +748,7 @@ public function index()
                         'driver' => $palletsenddriver->driver_name,
                         'vehicle' => $palletsendvehicle->vehicle_number,
                         'good_pallet' => $request->good_pallet,
+                        'filled_pallet' => $request->filled_pallet,
                         'good_cement' => $request->good_cement,
                         'receiving_driver_approval' => $name,
                         'note' => $request->note,

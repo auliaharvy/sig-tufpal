@@ -570,7 +570,7 @@
                 });
             },
             labelspallet() {
-                let label = ['Good Pallet','TBR Pallet','BER Pallet','Missing Pallet' ]
+                let label = ['Good Pallet','TBR Pallet','BER Pallet','Missing Pallet','Filled Pallet']
                 return label
             },
             tonnase_out_data() {
