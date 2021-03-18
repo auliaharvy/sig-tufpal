@@ -3,6 +3,7 @@ import $axios from '../api.js'
 
 const state = () => ({
     tonnase_out: [],
+    tonnase_out_1: [],
     transactions: [],
     transactionreceive: [],
     transactionssendback: [],
@@ -11,10 +12,12 @@ const state = () => ({
     pallet: [],
     pallettransporter: [],
     poolpalletdetail: [],
+    pooldliinout: [],
     warehouseinout: [],
     transportersendsendback: [],
     transporterdetail: [],
     detailpoolpallet: [], //detail pool pallet satu satu
+    detailpoolpalletdli: [], 
     detailtransporter: [], //detail transporter satu satu
     totalallpallet: '',
 })
@@ -22,6 +25,9 @@ const state = () => ({
 const mutations = {
     ASSIGN_DATA_TONNASE_OUT(state, payload) {
         state.tonnase_out = payload
+    },
+    ASSIGN_DATA_TONNASE_OUT_1(state, payload) {
+        state.tonnase_out_1 = payload
     },
     ASSIGN_DATA_TRANSACTION(state, payload) {
         state.transactions = payload
@@ -41,6 +47,9 @@ const mutations = {
     ASSIGN_DATA_POOL_PALLET_DETAIL(state, payload) {
         state.poolpalletdetail = payload
     },
+    ASSIGN_DATA_POOL_DLI_IN_OUT(state, payload) {
+        state.pooldliinout = payload
+    },
     ASSIGN_DATA_WAREHOUSE_IN_OUT(state, payload) {
         state.warehouseinout = payload
     },
@@ -52,6 +61,9 @@ const mutations = {
     },
     ASSIGN_DATA_DETAIL_POOL_PALLET(state, payload) {
         state.detailpoolpallet = payload
+    },
+    ASSIGN_DATA_DETAIL_POOL_PALLET_DLI(state, payload) {
+        state.detailpoolpalletdli = payload
     },
     ASSIGN_DATA_DETAIL_TRANSPORTER(state, payload) {
         state.detailtransporter = payload
@@ -67,6 +79,15 @@ const actions = {
             $axios.get(`/tonnaseout?month=${payload.month}&year=${payload.year}`)
             .then((response) => {
                 commit('ASSIGN_DATA_TONNASE_OUT', response.data)
+                resolve(response.data)
+            })
+        })
+    },
+    getTonnaseOut1({ commit }, payload) {
+        return new Promise((resolve, reject) => {
+            $axios.get(`/tonnaseout1?month=${payload.month}&year=${payload.year}`)
+            .then((response) => {
+                commit('ASSIGN_DATA_TONNASE_OUT_1', response.data)
                 resolve(response.data)
             })
         })
@@ -143,6 +164,15 @@ const actions = {
             })
         })
     },
+    getChartDataPoolDliInOut({ commit }, payload) {
+        return new Promise((resolve, reject) => {
+            $axios.get(`/pooldliinout`)
+            .then((response) => {
+                commit('ASSIGN_DATA_POOL_DLI_IN_OUT', response.data)
+                resolve(response.data)
+            })
+        })
+    },
     getChartDataTransporterSendSendback({ commit }, payload) {
         return new Promise((resolve, reject) => {
             $axios.get(`/transportersendsendback`)
@@ -166,6 +196,15 @@ const actions = {
             $axios.get(`/detailpoolpallet?detail_pool_name=${payload.detail_pool_name}`)
             .then((response) => {
                 commit('ASSIGN_DATA_DETAIL_POOL_PALLET', response.data)
+                resolve(response.data)
+            })
+        })
+    },
+    getChartDataDetailPoolPalletDli({ commit }, payload) {
+        return new Promise((resolve, reject) => {
+            $axios.get(`/detailpoolpalletdli?detail_pool_dli_name=${payload.detail_pool_dli_name}`)
+            .then((response) => {
+                commit('ASSIGN_DATA_DETAIL_POOL_PALLET_DLI', response.data)
                 resolve(response.data)
             })
         })

@@ -66,6 +66,49 @@
                                     <v-flex class="pa-5" xs12 md9 lg9>
                                     <v-card>
                                         <v-toolbar>
+                                            <v-toolbar-title>Pool Pallet DLI Detail</v-toolbar-title>
+                                        </v-toolbar>
+                                        <div class="panel-body">
+                                            <v-btn class="mx-2">
+                                                <download-excel
+                                                ref="warehouse_detail"
+                                                :data= "pooldliinout"
+                                                :name="poolDliDetailExportName()">
+                                                    Download Data
+                                                </download-excel>
+                                            </v-btn>
+                                            <bar-chart-warehouse v-if="pooldliinout.length > 0"  :data1="datapooldliinoutpalletin" :data2="datapooldliinoutpalletout" :data="datapooldliinoutstock" :options="barChartPoolInOutOptions" :labels="labelspooldliinout"/>
+                                        </div>
+                                    </v-card>
+                                </v-flex>
+                                <v-flex class="pa-5" xs12 md3 lg3>
+                                    <v-card>
+                                        <v-toolbar>
+                                            <v-toolbar-title>
+                                                <v-autocomplete
+                                                :items="labelspooldliinout"
+                                                dense
+                                                solo
+                                                v-model="detail_pool_dli_name"
+                                                item-text="label"
+                                                item-value="label"
+                                                clearable
+                                                >
+                                                </v-autocomplete>
+                                            </v-toolbar-title>
+                                        </v-toolbar>
+                                        <div>
+                                            <pie-chart v-if="datadetailpoolpalletdli.length > 0" :data="datadetailpoolpalletdli" :options="chartOptions" :labels="labelspallet"/>
+                                        </div>
+                                    </v-card>
+                                </v-flex>
+                            </v-layout>
+                        </div>
+                        <div class="row">
+                                <v-layout row wrap class="px-5">
+                                    <v-flex class="pa-5" xs12 md9 lg9>
+                                    <v-card>
+                                        <v-toolbar>
                                             <v-toolbar-title>Warehouse Detail</v-toolbar-title>
                                         </v-toolbar>
                                         <div class="panel-body">
@@ -270,10 +313,12 @@
                                     </v-flex>
                                 </v-layout>
                                 <v-layout row wrap class="px-5">
-                                    <v-flex class="pa-5" xs12 md12 lg12>
+                                    <v-flex class="pa-5" xs12 md6 lg6>
                                         <v-card>
                                             <v-toolbar>
-                                                <v-toolbar-title>Tonnase Out</v-toolbar-title>
+                                                <v-toolbar-title>
+                                                    Tonnase Out Ciwandan
+                                                </v-toolbar-title>
                                             </v-toolbar>
                                             <div class="panel-body">
                                                 <v-btn class="mx-2">
@@ -285,6 +330,26 @@
                                                     </download-excel>
                                                 </v-btn>
                                                 <line-chart-tonnase v-if="tonnase_out.length > 0" :data="tonnase_out_data" :options="barChartOptions" :labels="labelsTonnaseOut"/>
+                                            </div>
+                                        </v-card>
+                                    </v-flex>
+                                    <v-flex class="pa-5" xs12 md6 lg6>
+                                        <v-card>
+                                            <v-toolbar>
+                                                <v-toolbar-title>
+                                                    Tonnase Out bayah
+                                                </v-toolbar-title>
+                                            </v-toolbar>
+                                            <div class="panel-body">
+                                                <v-btn class="mx-2">
+                                                    <download-excel
+                                                    ref="tonnase_out"
+                                                    :data= "tonnase_out_1"
+                                                    :name="tonnaseExportName()">
+                                                    Download Data
+                                                    </download-excel>
+                                                </v-btn>
+                                                <line-chart-tonnase v-if="tonnase_out_1.length > 0" :data="tonnase_out_1_data" :options="barChartOptions" :labels="labelsTonnaseOut1"/>
                                             </div>
                                         </v-card>
                                     </v-flex>
@@ -316,6 +381,10 @@
                 month: this.month,
                 year: this.year
             }),
+            this.getTonnaseOut1({
+                month: this.month,
+                year: this.year
+            }),
             this.getChart2Data({
                 month: this.month,
                 year: this.year
@@ -336,6 +405,9 @@
             this.getChartDataWarehouseInOut().then((res) => {
                 let row = res.data
             }),
+            this.getChartDataPoolDliInOut().then((res) => {
+                let row = res.data
+            }),
             this.getChartDataTransporterSendSendback().then((res) => {
                 let row = res.data
             }),
@@ -350,6 +422,11 @@
             }),
             this.getChartDataDetailPoolPallet({
                 detail_pool_name: this.detail_pool_name,
+            }).then((res) => {
+                let row = res.data
+            }),
+            this.getChartDataDetailPoolPalletDli({
+                detail_pool_dli_name: this.detail_pool_dli_name,
             }).then((res) => {
                 let row = res.data
             }),
@@ -469,8 +546,9 @@
                     responsive: true,
                     maintainAspectRatio: false
                 },
-                detail_pool_name: 'BCTD',
-                detail_transporter_name: 'ANGGADA PERKASA, P.T.',
+                detail_pool_name: 'JATI ASIH WH',
+                detail_pool_dli_name: 'Pool Pallet Ciwandan',
+                detail_transporter_name: 'ARK LOGISTIC',
                 month: moment().format('MM'),
                 year: moment().format('Y'),
                 monthReceive: moment().format('MM'),
@@ -481,6 +559,10 @@
             
             month() {
                 this.getTonnaseOut({
+                    month: this.month,
+                    year: this.year
+                })
+                this.getTonnaseOut1({
                     month: this.month,
                     year: this.year
                 })
@@ -495,6 +577,10 @@
             },
             year() {
                 this.getTonnaseOut({
+                    month: this.month,
+                    year: this.year
+                })
+                this.getTonnaseOut1({
                     month: this.month,
                     year: this.year
                 })
@@ -524,6 +610,11 @@
                     detail_pool_name: this.detail_pool_name
                 })
             },
+            detail_pool_dli_name() {
+                this.getChartDataDetailPoolPalletDli({
+                    detail_pool_dli_name: this.detail_pool_dli_name
+                })
+            },
             detail_transporter_name() {
                 this.getChartDataDetailTransporter({
                     detail_transporter_name: this.detail_transporter_name
@@ -533,6 +624,7 @@
         computed: {
             ...mapState('dashboard', {
                 tonnase_out: state => state.tonnase_out,
+                tonnase_out_1: state => state.tonnase_out_1,
                 transactions: state => state.transactions,
                 transactionssendback: state => state.transactionssendback,
                 globalpallet: state => state.globalpallet,
@@ -542,8 +634,10 @@
                 pallet: state => state.pallet,
                 pallettransporter: state => state.pallettransporter,
                 detailpoolpallet: state => state.detailpoolpallet,
+                detailpoolpalletdli: state => state.detailpoolpalletdli,
                 detailtransporter: state => state.detailtransporter,
                 warehouseinout: state => state.warehouseinout,
+                pooldliinout: state => state.pooldliinout,
                 transportersendsendback: state => state.transportersendsendback,
             }),
             ...mapState('pool', {
@@ -559,6 +653,11 @@
             
             labelsTonnaseOut() {
                 return _.map(this.tonnase_out, function(o) {
+                    return moment(o.date).format('DD')
+                });
+            },
+            labelsTonnaseOut1() {
+                return _.map(this.tonnase_out_1, function(o) {
                     return moment(o.date).format('DD')
                 });
             },
@@ -582,6 +681,11 @@
                     return o.pool_name
                 });
             },
+            labelspooldliinout() {
+                return _.map(this.pooldliinout, function(o) {
+                    return o.pool_name
+                });
+            },
             labelstransportersendsendback() {
                 return _.map(this.transportersendsendback, function(o) {
                     return o.transporter_name
@@ -598,6 +702,11 @@
             },
             tonnase_out_data() {
                 return _.map(this.tonnase_out, function(o) {
+                    return o.tonnase
+                });
+            },
+            tonnase_out_1_data() {
+                return _.map(this.tonnase_out_1, function(o) {
                     return o.tonnase
                 });
             },
@@ -646,6 +755,21 @@
                     return o.pallet_out
                 });
             },
+            datapooldliinoutstock() {
+                return _.map(this.pooldliinout, function(o) {
+                    return o.stock
+                });
+            },
+            datapooldliinoutpalletin() {
+                return _.map(this.pooldliinout, function(o) {
+                    return o.pallet_in
+                });
+            },
+            datapooldliinoutpalletout() {
+                return _.map(this.pooldliinout, function(o) {
+                    return o.pallet_out
+                });
+            },
             datatransportersendsendbackpalletsend() {
                 return _.map(this.transportersendsendback, function(o) {
                     return o.pallet_send
@@ -658,6 +782,11 @@
             },
             datadetailpoolpallet() {
                 return _.map(this.detailpoolpallet, function(o) {
+                    return o.total
+                });
+            },
+            datadetailpoolpalletdli() {
+                return _.map(this.detailpoolpalletdli, function(o) {
                     return o.total
                 });
             },
@@ -686,9 +815,10 @@
             ...mapActions('dashboard', ['getChartData', 'getChart2Data',
                             'getChartDataGlobalPalllet', 'getChartDataPallet',
                             'getChartDataPoolPalletDetail', 'getChartDataTransporterDetail',
-                            'getChartDataPalletTransporter', 'getTotalAllPallet', 'getChartDataDetailPoolPallet',
-                            'getChartDataDetailTransporter','getChartDataWarehouseInOut','getChartDataTransporterSendSendback',
-                            'getTonnaseOut']),
+                            'getChartDataPalletTransporter', 'getTotalAllPallet', 'getChartDataDetailPoolPallet','getChartDataDetailPoolPalletDli',
+                            'getChartDataDetailTransporter','getChartDataWarehouseInOut','getChartDataPoolDliInOut',
+                            'getChartDataTransporterSendSendback',
+                            'getTonnaseOut', 'getTonnaseOut1']),
             ...mapActions('pool', ['getPools', 'removePools']),
             exportData() {
                 window.open(`api/exportalltransactiontoday?api_token=${this.token}`)
@@ -720,6 +850,11 @@
                 var month = this.month
                 var year = this.year
                 return 'Warehouse_Detail_' + month + '_'  + year
+            },
+            poolDliDetailExportName() {
+                var month = this.month
+                var year = this.year
+                return 'pool_dli_' + month + '_'  + year
             },
             warehouseDetailStatusExportName() {
                 var month = this.month

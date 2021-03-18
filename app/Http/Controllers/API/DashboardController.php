@@ -28,6 +28,38 @@ class DashboardController extends Controller
         $parse = Carbon::parse($filter);
         $array_date = range($parse->startOfMonth()->format('d'), $parse->endOfMonth()->format('d'));
         $transaction = Sjp::select(DB::raw('date(created_at) as date, sum(tonnage) as tonnase'))
+        ->where('departure_pool_pallet_id', '=', 'pooldli')
+        ->where('created_at', 'LIKE', '%' . $filter . '%')
+        ->where('status', '!=', 'DRAFT')
+        ->where('distribution', '=', 0)
+        ->groupBy(DB::raw('date(created_at)'))->get();
+        // $transaction = Sjppalletsend::select(DB::raw('date(created_at) as date, floor(sum((good_pallet*2000/good_cement)*good_cement/1000)) as tonnase'))
+        //     ->where('created_at', 'LIKE', '%' . $filter . '%')
+        //     ->where('sjp_status', '=', "SEND")
+        //     ->groupBy(DB::raw('date(created_at)'))->get();
+
+        $data = [];
+        foreach ($array_date as $row) {
+            $f_date = strlen($row) == 1 ? 0 . $row:$row;
+            $date = $filter . '-' . $f_date;
+            $tonnase = $transaction->firstWhere('date', $date);
+            // round($tonnase);
+
+            $data[] = [
+                'date' =>$date,
+                'tonnase' => $tonnase ? $tonnase->tonnase:0,
+                // 'tonnase' => $good_cement ? $good_cement->good_cement:0,
+            ];
+        }
+        return $data;
+    }
+    public function tonnaseOut_1() //grafik send & receive
+    {
+        $filter = request()->year . '-' . request()->month;
+        $parse = Carbon::parse($filter);
+        $array_date = range($parse->startOfMonth()->format('d'), $parse->endOfMonth()->format('d'));
+        $transaction = Sjp::select(DB::raw('date(created_at) as date, sum(tonnage) as tonnase'))
+        ->where('departure_pool_pallet_id', '=', 'bayah')
         ->where('created_at', 'LIKE', '%' . $filter . '%')
         ->where('status', '!=', 'DRAFT')
         ->where('distribution', '=', 0)
@@ -184,6 +216,52 @@ class DashboardController extends Controller
         return $total;
     }
 
+    public function pool_dli_in_out() //grafik warehouse detail
+    {
+        $poolDetail = PoolPallet::select(DB::raw('pool_name'))
+        ->groupBy(DB::raw('pool_name'))
+        ->where(DB::raw('good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
+        ->where('type', '=' , "POOL_PALLET_DLI")
+        ->get();
+        $poolStock = PoolPallet::select(DB::raw('pool_name,sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
+        ->groupBy(DB::raw('pool_name'))
+        ->where(DB::raw('good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
+        ->where('type', '=' , "POOL_PALLET_DLI")
+        ->get();
+        $palletIn = DB::table('surat_jalan_pallet as a')
+        ->join('sjp_status as b', 'a.sjp_id', '=', 'b.sjp_id')
+        ->join('pool_pallet as c', 'a.departure_pool_pallet_id', '=', 'c.pool_pallet_id')
+        ->where('a.state', 1)
+        ->where('b.status', 0)
+        ->select('a.departure_pool_pallet_id', 'c.pool_name', 'a.state as state_in', DB::raw('SUM(b.good_pallet + b.filled_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_in'))
+        ->groupBy('c.pool_name')
+        ->get();
+        $palletOut = DB::table('surat_jalan_pallet as a')
+        ->join('sjp_status as b', 'a.sjp_id', '=', 'b.sjp_id')
+        ->join('pool_pallet as c', 'a.departure_pool_pallet_id', '=', 'c.pool_pallet_id')
+        ->where('a.state', 3)
+        ->where('b.status', 0)
+        ->select('a.departure_pool_pallet_id', 'c.pool_name', 'a.state as state_out' ,DB::raw('SUM(b.good_pallet + b.filled_pallet + b.tbr_pallet + b.ber_pallet + b.missing_pallet) as pallet_out'))
+        ->groupBy('c.pool_name')
+        ->get();
+
+        $data = [];
+        foreach ($poolDetail as $row) {
+            $pool_name = $row->pool_name;
+            $stock = $poolStock->firstWhere('pool_name', $pool_name);
+            $pallet_in = $palletIn->firstWhere('pool_name', $pool_name);
+            $pallet_out = $palletOut->firstWhere('pool_name', $pool_name);
+
+            $data[] = [
+                'pool_name' => $pool_name,
+                'stock' => $stock ? $stock->total:0,
+                'pallet_in' => $pallet_in ? $pallet_in->pallet_in:0,
+                'pallet_out' => $pallet_out ? $pallet_out->pallet_out:0
+            ];
+        }
+        return $data;
+    }
+
     public function poolPalletDetail() //grafik warehouse detail
     {
         $poolDetail = PoolPallet::select(DB::raw('pool_name,sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
@@ -333,6 +411,35 @@ class DashboardController extends Controller
         }
 
         return $sum;
+    }
+
+    public function detailPoolPalletDli() //Grafik Pallet Status (Good, TBR, BER, Missing) di Warehouse
+    {
+        $poolName = request()->detail_pool_dli_name;
+            $goodTotal = PoolPallet::select(DB::raw('sum(good_pallet) as total'))
+            ->where('pool_name', '=', "$poolName")
+            ->get()
+            ->toArray();
+            $tbrTotal = PoolPallet::select(DB::raw('sum(tbr_pallet) as total'))
+            ->where('pool_name', '=', "$poolName")
+            ->get()
+            ->toArray();
+            $berTotal = PoolPallet::select(DB::raw('sum(ber_pallet) as total'))
+            ->where('pool_name', '=', "$poolName")
+            ->get()
+            ->toArray();
+            $missingTotal = PoolPallet::select(DB::raw('sum(missing_pallet) as total'))
+            ->where('pool_name', '=', "$poolName")
+            ->get()
+            ->toArray();
+            $filledTotal = PoolPallet::select(DB::raw('sum(filled_pallet) as total'))
+            ->where('pool_name', '=', "$poolName")
+            ->get()
+            ->toArray();     
+
+            $total = array_merge($goodTotal,$tbrTotal,$berTotal,$missingTotal,$filledTotal);
+
+        return $total;
     }
 
     public function detailPoolPallet() //Grafik Pallet Status (Good, TBR, BER, Missing) di Warehouse

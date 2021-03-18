@@ -79,17 +79,21 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 
     Route::get('tonnaseout', 'API\DashboardController@tonnaseOut');
+    Route::get('tonnaseout1', 'API\DashboardController@tonnaseOut_1');
     Route::get('chart', 'API\DashboardController@chart');
     Route::get('chart2', 'API\DashboardController@chart2');
     Route::get('globalpallet', 'API\DashboardController@globalpallet');
     Route::get('pallet', 'API\DashboardController@pallet');
     Route::get('pallettransporter', 'API\DashboardController@palletTransporter');
     Route::get('poolpalletdetail', 'API\DashboardController@poolPalletDetail');
+    Route::get('poolpalletdlidetail', 'API\DashboardController@poolPalletDliDetail');
     Route::get('warehouseinout', 'API\DashboardController@warehouse_in_out');
+    Route::get('pooldliinout', 'API\DashboardController@pool_dli_in_out');
     Route::get('transportersendsendback', 'API\DashboardController@transporterSendSendback');
     Route::get('transporterdetail', 'API\DashboardController@transporterDetail');
     Route::get('totalallpallet', 'API\DashboardController@totalAllPallet');
     Route::get('detailpoolpallet', 'API\DashboardController@detailPoolPallet');
+    Route::get('detailpoolpalletdli', 'API\DashboardController@detailPoolPalletDli');
     Route::get('detailtransporter', 'API\DashboardController@detailTransporter');
     Route::get('workshop', 'API\DashboardController@workshopInOut');
     Route::get('transportertopool', 'API\DashboardController@transporterToPool');
