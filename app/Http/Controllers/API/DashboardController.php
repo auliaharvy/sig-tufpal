@@ -385,7 +385,7 @@ class DashboardController extends Controller
     {
         $transporterDetail = Transporter::select(DB::raw('transporter_name,sum(good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet) as total'))
         ->groupBy(DB::raw('transporter_name'))
-        ->where(DB::raw('good_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
+        ->where(DB::raw('good_pallet + filled_pallet + tbr_pallet + ber_pallet + missing_pallet') ,  '!=', 0)
         ->get()
         ->toArray();
 
