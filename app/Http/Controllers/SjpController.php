@@ -93,14 +93,21 @@ class SjpController extends Controller
         $now = new DateTime();
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
         $pallet = PoolPallet::find($pool_pallet); //jgn lupa add model poolpallet
-        $qty_pool = $pallet->good_pallet;
         $pallet_qty = $request->tonnage/2;
         $stationnambo = 'stationnambo';
         $pool_type = $pallet->type;
         $organization_id = $pallet->organization_id;
 
+
         $destination_pool_pallet = PoolPallet::find($request->destination_pool_pallet_id);
         $destination_pool_type = $destination_pool_pallet->type;
+
+        if($pool_type=='POOL_PALLET_DLI'){
+            $qty_pool = $pallet->good_pallet;
+        }
+        elseif($pool_type!='POOL_PALLET_DLI'){
+            $qty_pool = $pallet->filled_pallet;
+        }
 
         if($pool_type=='POOL_PALLET_DLI'){ //jika pengiriman dari pool pallet DLI (Main Distribution)
             $distribution = 0;
