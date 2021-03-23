@@ -112,6 +112,9 @@ class SjpController extends Controller
         if($pool_type=='POOL_PALLET_DLI'){ //jika pengiriman dari pool pallet DLI (Main Distribution)
             $distribution = 0;
         }
+        else if($destination_pool_type == 'WAREHOUSE'){ //pengiriman bukan dari pool pallet DLI (Secondary Distribution)
+            $distribution = 0;
+        }
         else if($destination_pool_type == 'SHOP'){ //pengiriman bukan dari pool pallet DLI (Secondary Distribution)
             $distribution = 1;
         }
