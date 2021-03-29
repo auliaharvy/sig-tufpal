@@ -109,10 +109,7 @@ class SjpController extends Controller
             $qty_pool = $pallet->filled_pallet;
         }
 
-        if($pool_type=='POOL_PALLET_DLI'){ //jika pengiriman dari pool pallet DLI (Main Distribution)
-            $distribution = 0;
-        }
-        else if($destination_pool_type == 'WAREHOUSE'){ //pengiriman bukan dari pool pallet DLI (Secondary Distribution)
+        if($destination_pool_type == 'WAREHOUSE'){ //pengiriman bukan dari pool pallet DLI (Secondary Distribution)
             $distribution = 0;
         }
         else if($destination_pool_type == 'SHOP'){ //pengiriman bukan dari pool pallet DLI (Secondary Distribution)
@@ -127,10 +124,6 @@ class SjpController extends Controller
         else if($pool_type == 'STATION' && $pool_pallet != $stationnambo){ //pengiriman dari Station Selain Nambo (Third Distribution Station)
             $distribution = 3;
         }
-        
-        
-
-
 
         $this->validate($request, [
             'destination_pool_pallet_id' => 'required',
