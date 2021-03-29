@@ -52,6 +52,7 @@ class FilledtoGoodPalletController extends Controller
     {
         $this->validate($request, [
             'good_pallet' => 'required|gt:0',
+            'note' => 'required',
         ]);
 
         $pool_pallet_id = auth()->user()->reference_pool_pallet_id;
