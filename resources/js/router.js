@@ -107,6 +107,11 @@ import DataDamagedpallet from './pages/damagedpallet/Damagedpallet.vue'
 import AddDamagedpallet from './pages/damagedpallet/AddDamagedpallet.vue'
 import EditDamagedallet from './pages/damagedpallet/EditDamagedpallet.vue'
 
+import IndexFilledtogood from './pages/filledtogood/Index.vue'
+import DataFilledtogood from './pages/filledtogood/FilledToGood.vue'
+import AddFilledtogood from './pages/filledtogood/AddFilledToGood.vue'
+import EditFilledtogood from './pages/filledtogood/EditFilledToGood.vue'
+
 import IndexRepairedpallet from './pages/repairedpallet/Index.vue'
 import DataRepairedpallet from './pages/repairedpallet/Repairedpallet.vue'
 import AddRepairedpallet from './pages/repairedpallet/AddRepairedpallet.vue'
@@ -378,6 +383,32 @@ const router = new Router({
                     name: 'damagedpallets.edit',
                     component: EditDamagedallet,
                     meta: { title: 'Edit Damaged Pallet' }
+                },
+            ]
+        },
+
+        {
+            path: '/filledtogood',
+            component: IndexFilledtogood,
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: '',
+                    name: 'filledtogoods.data',
+                    component: DataFilledtogood,
+                    meta: { title: 'Manage Filled To Good Pallet' }
+                },
+                {
+                    path: 'add',
+                    name: 'filledtogoods.add',
+                    component: AddFilledtogood,
+                    meta: { title: 'Add Filled To Good Pallet' }
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'filledtogoods.edit',
+                    component: EditFilledtogood,
+                    meta: { title: 'Edit Filled To Good Pallet' }
                 },
             ]
         },

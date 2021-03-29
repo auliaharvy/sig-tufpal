@@ -22,21 +22,19 @@ class FilledtoGoodPalletController extends Controller
             $filled_to_good = DB::table('pallet_filled_to_good as a')
             ->orderBy('created_at', 'DESC')
             ->join('users as b', 'a.reporter_user_id', '=', 'b.id')
-            ->leftJoin('pool_pallet as c', 'a.pool_pallet_id', '=', 'c.pool_pallet_id')
-            ->leftJoin('sjp_status as d', 'a.reference_sjp_status_id', '=', 'd.sjp_status_id')
+            ->join('pool_pallet as c', 'a.pool_pallet_id', '=', 'c.pool_pallet_id')
+            ->join('sjp_status as d', 'a.reference_sjp_status_id', '=', 'd.sjp_status_id')
             ->select('a.*', 'b.name',
-                    'c.pool_name','d.transporter_name', 'd.sjps_number')
+                    'c.pool_name', 'd.sjps_number')
             ->paginate(10000000)
             ->toArray();
         }
         else{
-            $filled_to_good = DB::table('damaged_pallet as a')
+            $filled_to_good = DB::table('pallet_filled_to_good as a')
             ->orderBy('created_at', 'DESC')
             ->join('users as b', 'a.reporter_user_id', '=', 'b.id')
-            ->leftJoin('pool_pallet as c', 'a.pool_pallet_id', '=', 'c.pool_pallet_id')
-            ->leftJoin('sjp_status as d', 'a.reference_sjp_status_id', '=', 'd.sjp_status_id')
-            ->select('a.*', 'b.name',
-                    'c.pool_name','d.transporter_name', 'd.sjps_number')
+            ->join('pool_pallet as c', 'a.pool_pallet_id', '=', 'c.pool_pallet_id')
+            ->select('a.*', 'b.name', 'c.pool_name')
             ->where('a.pool_pallet_id',$pool_pallet)
             ->paginate(10000000)
             ->toArray();
@@ -53,7 +51,7 @@ class FilledtoGoodPalletController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'filled_pallet' => 'required|gt:0',
+            'good_pallet' => 'required|gt:0',
         ]);
 
         $pool_pallet_id = auth()->user()->reference_pool_pallet_id;
@@ -77,7 +75,7 @@ class FilledtoGoodPalletController extends Controller
                 ]);
                     if($pool_pallet_id!=null){
                         $InventoryPool = PoolPallet::find($pool_pallet_id);
-                        $InventoryPool->filled_pallet = (($InventoryPool->filled_pallet)-($request->filled_pallet));
+                        $InventoryPool->filled_pallet = (($InventoryPool->filled_pallet)-($request->good_pallet));
                         $InventoryPool->good_pallet = (($InventoryPool->good_pallet)+($request->good_pallet));
                         $InventoryPool->save();
                     }

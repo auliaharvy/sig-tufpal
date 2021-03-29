@@ -8,7 +8,7 @@ const state = () => ({
     filledtogood: {
         reporter_user_id: '',
         pool_pallet_id: '',
-        fgp_number   : '',
+        ftg_number   : '',
         good_pallet: '',
         note: '',
 
@@ -40,7 +40,7 @@ const mutations = {
         state.filledtogood = {
             reporter_user_id: '',
             pool_pallet_id: '',
-            fgp_number   : '',
+            ftg_number   : '',
             good_pallet: '',
             note: '',
         }

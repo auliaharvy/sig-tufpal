@@ -31,6 +31,7 @@ import bermissingapproved from './stores/bermissingapproved.js'
 import bermissingdisapproved from './stores/bermissingdisapproved.js'
 import newpallet from './stores/Newpallet.js'
 import damagedpallet from './stores/Damagedpallet.js'
+import filledtogood from './stores/Filledtogoodpallet.js'
 import repairedpallet from './stores/Repairedpallet.js'
 import palletmovement from './stores/palletmovement.js'
 import alltransaction from './stores/alltransaction.js'
@@ -82,6 +83,7 @@ const store = new Vuex.Store({
         dispatchdata,
         transporterAdjusment,
         sjpphoto,
+        filledtogood,
     },
     state: {
         token: localStorage.getItem('token'),

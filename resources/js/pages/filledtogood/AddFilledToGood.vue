@@ -6,12 +6,12 @@
         <div class="panel">
             <v-toolbar dark>
                 <h1>
-                    ADD DAMAGED PALLET
+                    ADD FILLED TO GOOD PALLET
                 </h1>
             </v-toolbar>
             <div class="panel-body">
               	<!-- LOAD VIEW DARI FORM.VUE -->
-                <damagedpallet-form></damagedpallet-form>
+                <filledtogood-form></filledtogood-form>
                 <div class="form-group">
                     <v-btn :disabled="loading" :loading="loading" class="success" @click.prevent="submit()">
                         {{ loading ? 'Loading...':'add' }}
@@ -23,30 +23,30 @@
 </template>
 <script>
     import { mapActions, mapState, mapMutations } from 'vuex'
-    import FormDamagedpallet from './Form.vue'
+    import FormFilledToGood from './Form.vue'
     import Loading from 'vue-loading-overlay';
     import 'vue-loading-overlay/dist/vue-loading.css';
 
     export default {
-        name: 'AddDamagedPallet',
+        name: 'Addfilledtogood',
         methods: {
-            ...mapActions('damagedpallet', ['submitDamagedpallet']),
+            ...mapActions('filledtogood', ['submitFilledtogood']),
             //KETIKA TOMBOL DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
             submit() {
                 //MELAKUKAN REQUEST KE SERVER UNTUK MENAMBAHKAN DATA
-                this.submitDamagedpallet().then(() => {
+                this.submitFilledtogood().then(() => {
                     //KEMUDIAN REDIRECT KE HALAMAN LIST CUSTOMERS
-                    this.$router.push({ name: 'damagedpallets.data' })
+                    this.$router.push({ name: 'filledtogoods.data' })
                 })
             },
         },
         computed: {
-        ...mapState('damagedpallet', {
+        ...mapState('filledtogood', {
             loading: state => state.loading //LOAD DATA CUSTOMER DARI STATE CUSTOMER
         }),
         },
         components: {
-            'damagedpallet-form': FormDamagedpallet,
+            'filledtogood-form': FormFilledToGood,
             Loading
         }
     }

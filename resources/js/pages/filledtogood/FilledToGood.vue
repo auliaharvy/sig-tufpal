@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel">
             <div class="panel-heading">
-                <router-link :to="{ name: 'damagedpallets.add' }"><v-btn>Add Damaged Pallet</v-btn></router-link>
+                <router-link :to="{ name: 'filledtogoods.add' }"><v-btn>Add Filled to GOod</v-btn></router-link>
             </div>
             <div class="panel-body">
 
@@ -10,7 +10,7 @@
                 <template>
                     <v-card>
                         <v-card-title>
-                            Damaged Pallet Record
+                            Filled To Good Pallet Record
                             <v-spacer></v-spacer>
                             <v-text-field
                             v-model="search"
@@ -23,7 +23,7 @@
                             <v-data-table
                             :loading="loading"
                             :headers="headers"
-                            :items="damagedpallets.data"
+                            :items="filledtogoods.data"
                             :search="search"
                             dense
                             >
@@ -65,54 +65,52 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
-    name: 'DataDamagedpallet',
+    name: 'DataFilledtogood',
     created() {
-        this.getDamagedpallet() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
+        this.getFilledtogood() //LOAD DATA SJP KETIKA COMPONENT DI-LOAD
     },
     data() {
         return {
             //FIELD YANG AKAN DITAMPILKAN PADA TABLE DIATAS
             headers: [
-                { value: 'dp_number', text: 'DP Number' },
+                { value: 'ftg_number', text: 'FTG Number' },
                 { value: 'name', text: 'Reporter' },
                 { value: 'pool_name', text: 'Pool Pallet' },
-                { value: 'transporter_name', text: 'Transporter' },
-                { value: 'sjps_number', text: 'SJPS Number' },
-                { value: 'tbr_pallet', text: 'TBR Pallet' },
+                { value: 'good_pallet', text: 'Good Pallet' },
                 { value: 'note', text: 'Note' },
             ],
             search: ''
         }
     },
     computed: {
-        ...mapState('damagedpallet', {
-            damagedpallets: state => state.damagedpallets //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
+        ...mapState('filledtogood', {
+            filledtogoods: state => state.filledtogoods //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
-        ...mapState('damagedpallet', {
+        ...mapState('filledtogood', {
             loading: state => state.loading //MENGAMBIL DATA CUSTOMER DARI STATE CUSTOMER
         }),
         //MENGAMBIL DATA PAGE DARI STATE CUSTOMER
         page: {
             get() {
-                return this.$store.state.damagedpallet.page
+                return this.$store.state.filledtogood.page
             },
             set(val) {
-                this.$store.commit('damagedpallet/SET_PAGE', val)
+                this.$store.commit('filledtogood/SET_PAGE', val)
             }
         }
     },
     watch: {
         page() {
-            this.getDamagedpallet() //KETIKA VALUE PAGE TERJADI PERUBAHAN, MAKA REQUEST DATA BARU
+            this.getFilledtogood() //KETIKA VALUE PAGE TERJADI PERUBAHAN, MAKA REQUEST DATA BARU
         },
         search() {
-            this.getDamagedpallet(this.search) //KETIKA VALUE SEARCH TERJADI PERUBAHAN, MAKA REQUEST DATA BARU
+            this.getFilledtogood(this.search) //KETIKA VALUE SEARCH TERJADI PERUBAHAN, MAKA REQUEST DATA BARU
         }
     },
     methods: {
-        ...mapActions('damagedpallet', ['getDamagedpallet', 'removeDamagedpallet']),
+        ...mapActions('filledtogood', ['getFilledtogood', 'removeFilledtogood']),
         //KETIKA TOMBOL HAPUS DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
-        deleteDamagedpallet(id) {
+        deleteFilledtogood(id) {
             this.$swal({
                 title: 'Are you sure?',
                 text: "This will delete record Permanently!",
@@ -123,7 +121,7 @@ export default {
                 confirmButtonText: 'Yes!'
             }).then((result) => {
                 if (result.value) {
-                    this.removeDamagedpallet(id) //JIKA SETUJU MAKA PERMINTAAN HAPUS AKAN DI EKSEKUSI
+                    this.removeFilledtogood(id) //JIKA SETUJU MAKA PERMINTAAN HAPUS AKAN DI EKSEKUSI
                 }
             })
         }

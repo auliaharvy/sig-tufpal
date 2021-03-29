@@ -6,11 +6,11 @@
         <div class="panel">
             <v-toolbar dark>
                 <h1>
-                    EDIT DAMAGED PALLET RECORD
+                    EDIT FILLRD TO GOOD PALLET RECORD
                 </h1>
             </v-toolbar>
             <div class="panel-body">
-                <damagedpallet-form></damagedpallet-form>
+                <filledtogood-form></filledtogood-form>
                 <div class="form-group">
                     <v-btn class="success" @click.prevent="submit">
                         Edit
@@ -22,26 +22,26 @@
 </template>
 <script>
     import { mapActions, mapState } from 'vuex'
-    import FormDamagedpallet from './Form.vue'
+    import FormFilledToGood from './Form.vue'
     import Loading from 'vue-loading-overlay';
     import 'vue-loading-overlay/dist/vue-loading.css';
 
     export default {
         name: 'EditDamagedpallet',
         created() {
-            this.editDamagedpallet(this.$route.params.id) //LOAD SINGLE DATA CUSTOMER BERDASARKAN ID
+            this.editFilledtogood(this.$route.params.id) //LOAD SINGLE DATA CUSTOMER BERDASARKAN ID
         },
         methods: {
-            ...mapActions('damagedpallet', ['editDamagedpallet', 'upadateDamagedpallet']),
+            ...mapActions('filledtogood', ['editFilledtogood', 'updateFilledtogood']),
             submit() {
                 //MENGIRIM PERMINTAAN KE SERVER UNTUK ME-NGUBAH DATA
-                this.upadateDamagedpallet(this.$route.params.id).then(() => {
-                    this.$router.push({ name: 'damagedpallet.data' }) //KETIKA UPDATE BERHASIL, MAKA REDIRECT KE HALAMAN LIST CUSTOMER
+                this.updateFilledtogood(this.$route.params.id).then(() => {
+                    this.$router.push({ name: 'filledtogoods.data' }) //KETIKA UPDATE BERHASIL, MAKA REDIRECT KE HALAMAN LIST CUSTOMER
                 })
             }
         },
         components: {
-            'damagedpallet-form': FormDamagedpallet,
+            'filledtogood-form': FormFilledToGood,
             Loading
         },
     }
