@@ -20,6 +20,7 @@ class PoolController extends Controller
         $pool_pallet = Auth::user()->reference_pool_pallet_id;
         $user_pool_pallet = PoolPallet::find($pool_pallet);
         $type_pool_pallet = $user_pool_pallet->type;
+        $pool_pallet_organization = $user_pool_pallet->organization_id;
         $role = Auth::user()->role;
         if($type_pool_pallet=="POOL_PALLET_DLI" && $role<5){
         $pool = DB::table('pool_pallet as a')
@@ -37,7 +38,7 @@ class PoolController extends Controller
             $pool = DB::table('pool_pallet as a')
             ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
             ->select('a.*', 'b.organization_name')
-            ->where('a.pool_pallet_id',[$pool_pallet])
+            ->where('a.organization_id',[$pool_pallet_organization])
             // ->where('a.good_pallet', '>', 0 )
             // ->orWhere('a.tbr_pallet', '>', 0 )
             // ->orWhere('a.ber_pallet', '>', 0 )
