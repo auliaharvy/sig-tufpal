@@ -312,7 +312,7 @@
                                         </v-card>
                                     </v-flex>
                                 </v-layout>
-                                <v-layout row wrap class="px-5">
+                                <!-- <v-layout row wrap class="px-5">
                                     <v-flex class="pa-5" xs12 md6 lg6>
                                         <v-card>
                                             <v-toolbar>
@@ -353,7 +353,7 @@
                                             </div>
                                         </v-card>
                                     </v-flex>
-                                </v-layout>
+                                </v-layout> -->
                             </div>
                         </div>
                     </div>
