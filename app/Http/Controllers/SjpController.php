@@ -106,7 +106,8 @@ class SjpController extends Controller
             $qty_pool = $pallet->good_pallet;
         }
         elseif($pool_type!='POOL_PALLET_DLI'){
-            $qty_pool = $pallet->filled_pallet;
+            // $qty_pool = $pallet->filled_pallet;
+            $qty_pool = $pallet->good_pallet;
         }
 
         if($destination_pool_type == 'WAREHOUSE'){ //pengiriman bukan dari pool pallet DLI (Secondary Distribution)

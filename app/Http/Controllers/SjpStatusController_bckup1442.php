@@ -24,7 +24,7 @@ use App\Alltransaction;
 use App\ApprovalLog;
 use DB;
 
-class SjpStatusController extends Controller
+class SjpStatusController_backup extends Controller
 {
 
 public function index()

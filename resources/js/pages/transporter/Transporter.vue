@@ -36,7 +36,7 @@
                         dense
                         >
                         <template v-slot:item.total="{ item }">
-                            <v-chip class="label"  color="red"  v-if="item.good_pallet+item.filled_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet > item.pallet_quota">
+                            <!-- <v-chip class="label"  color="red"  v-if="item.good_pallet+item.filled_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet > item.pallet_quota">
                                 {{ item.good_pallet + item.filled_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
                             </v-chip>
                             <v-chip class="label label-success"  v-if="item.good_pallet+item.filled_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet < item.pallet_quota">
@@ -44,6 +44,15 @@
                             </v-chip>
                             <v-chip class="label label-warning"  v-if="item.good_pallet+item.filled_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet == item.pallet_quota">
                                 {{ item.good_pallet + item.filled_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
+                            </v-chip> -->
+                            <v-chip class="label"  color="red"  v-if="item.good_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet > item.pallet_quota">
+                                {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
+                            </v-chip>
+                            <v-chip class="label label-success"  v-if="item.good_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet < item.pallet_quota">
+                                {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
+                            </v-chip>
+                            <v-chip class="label label-warning"  v-if="item.good_pallet+item.tbr_pallet+item.ber_pallet+item.missing_pallet == item.pallet_quota">
+                                {{ item.good_pallet + item.tbr_pallet + item.ber_pallet + item.missing_pallet }}
                             </v-chip>
                         </template>
                         <!-- <template v-slot:item.total="{ item }">
@@ -80,7 +89,7 @@ export default {
                 'Transporter Name' : 'transporter_name',
                 'Transporter Address' : 'transporter_address',
                 'Good Pallet' : 'good_pallet',
-                'Filled Pallet' : 'filled_pallet',
+                // 'Filled Pallet' : 'filled_pallet',
                 'TBR Pallet' : 'tbr_pallet',
                 'BER Pallet' : 'ber_pallet',
                 'Missing Pallet' : 'missing_pallet',
@@ -92,7 +101,7 @@ export default {
                 { value: 'transporter_name', text: 'Transporter Name' },
                 { value: 'transporter_address', text: 'Transporter Address' },
                 { value: 'good_pallet', text: 'Good Pallet' },
-                { value: 'filled_pallet', text: 'Filled Pallet' },
+                // { value: 'filled_pallet', text: 'Filled Pallet' },
                 { value: 'tbr_pallet', text: 'TBR Pallet' },
                 { value: 'ber_pallet', text: 'BER Pallet' },
                 { value: 'missing_pallet', text: 'Missing Pallet' },

@@ -49,21 +49,21 @@
         </v-layout>
 
         <v-layout row wrap class="px-5">
-            <v-flex class="px-5" xs12 md6 lg6>
+            <!-- <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group" :class="{ 'has-error': errors.filled_pallet }" :readonly="true">
                     <label for="">Pallet Quantity / Filled Pallet</label>
                     <input type="text" class="form-control" v-model="sjpstatus.filled_pallet" :readonly="true">
                     <p class="text-danger" v-if="errors.filled_pallet">{{ errors.filled_pallet[0] }}</p>
                 </div>
-            </v-flex>
-            <!-- <v-flex class="px-5" xs12 md6 lg6>
+            </v-flex> -->
+            <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group">
                     <label>Pallet Quantity / Good Pallet</label>
                     <select class='form-control' v-model='sjpstatus.sjp_id' :readonly="true">
                         <option disabled v-for='data in sjps.data' v-bind:key='data.sjp_id' :value='data.sjp_id'>{{ data.pallet_quantity }}</option>
                     </select>
                 </div>
-            </v-flex> -->
+            </v-flex>
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group">
                     <label>Good Cement</label>
@@ -106,7 +106,8 @@ export default {
                 this.sjpstatus.sjp_id =  row.sjp_id
                 this.editSjp(row.sjp_id).then((res) => {
                     let row = res.data
-                    this.sjpstatus.filled_pallet =  row.pallet_quantity
+                    // this.sjpstatus.filled_pallet =  row.pallet_quantity
+                    this.sjpstatus.good_pallet =  row.pallet_quantity
                 })
             }),
         this.getSjp(),
@@ -119,8 +120,8 @@ export default {
             sjpstatus: {
                 sjp_status_id: '',
                 sjp_id: '',
-                good_pallet: 0,
-                filled_pallet: '',
+                good_pallet: '',
+                // filled_pallet: '',
                 tbr_pallet: 0,
                 ber_pallet: 0,
                 missing_pallet: 0,
@@ -243,7 +244,7 @@ export default {
             let form = new FormData()
             form.append('sjp_id', this.sjpstatus.sjp_id)
             form.append('good_pallet', this.sjpstatus.good_pallet)
-            form.append('filled_pallet', this.sjpstatus.filled_pallet)
+            // form.append('filled_pallet', this.sjpstatus.filled_pallet)
             form.append('sjp_status_id', this.sjpstatus.sjp_status_id)
             form.append('sending_driver_approval', this.sjpstatus.sending_driver_approval)
             form.append('note', this.sjpstatus.note)
@@ -251,7 +252,7 @@ export default {
                     this.sjpstatus = {
                         sjp_id: '',
                         good_pallet: '',
-                        filled_pallet: '',
+                        // filled_pallet: '',
                         sjp_status_id: '',
                         sending_driver_approval: '',
                         note: '',

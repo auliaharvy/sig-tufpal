@@ -18,7 +18,7 @@
                             <br>
                             <dt>Pallet</dt>
                             <dd>Good Pallet: {{ good_pallet }} Pallet</dd>
-                            <dd>Filled Pallet: {{ filled_pallet }} Pallet</dd>
+                            <!-- <dd>Filled Pallet: {{ filled_pallet }} Pallet</dd> -->
                             <dd>TBR Pallet: {{ tbr_pallet }} Pallet</dd>
                             <dd>BER Pallet: {{ ber_pallet }} Pallet</dd>
                             <dd>Missing Pallet: {{ missing_pallet }} Pallet</dd>
@@ -66,7 +66,7 @@ import jsPDF from 'jspdf'
                 this.transaction_id =  row.transaction_id
                 this.status =  row.status
                 this.good_pallet =  row.good_pallet
-                this.filled_pallet =  row.filled_pallet
+                // this.filled_pallet =  row.filled_pallet
                 this.ber_pallet = row.ber_pallet
                 this.tbr_pallet = row.tbr_pallet
                 this.missing_pallet =  row.missing_pallet
@@ -110,7 +110,7 @@ import jsPDF from 'jspdf'
                 sjp_number: '',
                 status: '',
                 good_pallet: '',
-                filled_pallet: '',
+                // filled_pallet: '',
                 tbr_pallet: '',
                 ber_pallet: '',
                 missing_pallet: '',

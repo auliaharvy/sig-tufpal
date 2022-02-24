@@ -75,14 +75,14 @@
             </v-card-title>
           </v-card>
         </v-flex>
-        <v-flex xs12 md3 lg3 link >
+        <!-- <v-flex xs12 md3 lg3 link >
           <v-card link router to="/filledtogood" class="text-center ma-3" v-if="$can('read damagedpallet')">
             <v-card-title class="text-center" color="black">
               <v-icon color="black" left>mdi-file-document</v-icon>
               <span right>Filled to Good Pallet</span>
             </v-card-title>
           </v-card>
-        </v-flex>
+        </v-flex> -->
       </v-layout>
 
 
