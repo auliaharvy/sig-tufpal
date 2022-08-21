@@ -12,9 +12,19 @@
             <v-flex class="px-5" xs12 md6 lg6>
                 <div class="form-group">
                     <label>Sendback To</label>
-                    <select class='form-control' v-model='sjpstatus.sjp_id' :readonly="true">
+                    <v-autocomplete
+                        :items="pools.data"
+                        dense
+                        solo
+                        v-model="departure_id"
+                        item-text="pool_name"
+                        item-value="pool_pallet_id"
+                        clearable
+                        >
+                    </v-autocomplete>
+                    <!-- <select class='form-control' v-model='sjpstatus.sjp_id' :readonly="true">
                         <option disabled v-for='data in sjps.data' v-bind:key='data.sjp_id' :value='data.sjp_id'>{{ data.dept_pool }}</option>
-                    </select>
+                    </select> -->
                 </div>
             </v-flex>
         </v-layout>
@@ -83,12 +93,17 @@ export default {
                 this.sjpstatus.ber_pallet = row.ber_pallet
                 this.sjpstatus.missing_pallet = row.missing_pallet
             }),
-        this.getSjp(), 
+        this.getSjp().then((res) => {
+                let row = res.data 
+                this.departure_id = row[0].departure_pool_pallet_id
+            }), 
+        this.getPoolForm(),
         this.getMstTransaction(), 
         this.getUserLogin()
     },
     data() {
         return {
+            departure_id: '',
             sjpstatus: {
                 sjp_status_id: '',
                 sjp_id: '',
@@ -104,6 +119,9 @@ export default {
     },
     computed: {
         ...mapState(['errors']),
+        ...mapState('pool', {
+            pools: state => state.pools
+        }),
         ...mapState('sjp', {
             sjps: state => state.sjps,
             sjp: state => state.sjp
@@ -118,6 +136,7 @@ export default {
     methods: {
         ...mapMutations('sjpstatus', ['CLEAR_FORM']), 
         ...mapActions('sjp', ['getSjp', 'editSjp']),
+        ...mapActions('pool', ['getPoolForm']),
         ...mapActions('sjpstatus', ['editSjpStatus','submitSjpStatussendback']),
         ...mapActions('msttransaction', ['getMstTransaction']),
         ...mapActions('user', ['getUserLogin']),
@@ -155,6 +174,7 @@ export default {
         },
         submit() {
             let form = new FormData()
+            form.append('departure_id', this.departure_id)
             form.append('sjp_id', this.sjpstatus.sjp_id)
             form.append('sjp_status_id', this.sjpstatus.sjp_status_id)
             form.append('good_pallet', this.sjpstatus.good_pallet)
