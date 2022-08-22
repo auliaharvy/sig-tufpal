@@ -25,6 +25,7 @@ class TransporterController extends Controller
             ->join('organization as b', 'a.organization_id', '=', 'b.organization_id')
             ->select('a.*', 'b.organization_name')
             ->where('a.good_pallet', '>', 0 )
+            ->orWhere('a.filled_pallet', '>', 0 )
             ->orWhere('a.tbr_pallet', '>', 0 )
             ->orWhere('a.ber_pallet', '>', 0 )
             ->orWhere('a.missing_pallet', '>', 0 )
